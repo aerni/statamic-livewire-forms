@@ -1,0 +1,26 @@
+{
+    "name": "aerni/livewire-forms",
+    "description": "Use Statamic forms with Laravel Livewire",
+    "require": {
+        "php": "^7.4 || ^8.0",
+        "laravel/framework": "^8.0",
+        "statamic/cms": "^3.0",
+        "jonassiewertsen/statamic-livewire": "^2.4"
+    },
+    "autoload": {
+        "psr-4": {
+            "Aerni\\LivewireForms\\": "src"
+        }
+    },
+    "extra": {
+        "statamic": {
+            "name": "Livewire Forms",
+            "description": "Livewire Forms"
+        },
+        "laravel": {
+            "providers": [
+                "Aerni\\LivewireForms\\ServiceProvider"
+            ]
+        }
+    }
+}
