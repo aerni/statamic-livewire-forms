@@ -35,7 +35,17 @@ class StatamicForm extends Component
 
     protected function statamicForm()
     {
-        return Form::find($this->handle);
+        if (! $this->handle) {
+            throw new \Exception('The form handle is missing. Please make sure to add it to the form tag.');
+        }
+
+        $form = Form::find($this->handle);
+
+        if (! $form) {
+            throw new \Exception("Form with handle [{$this->handle}] cannot be found.");
+        }
+
+        return $form;
     }
 
     protected function formProperties(): Collection
