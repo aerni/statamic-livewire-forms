@@ -1,6 +1,6 @@
 <?php
 
-namespace Johncarter\StatamicLivewireForms\Http\Livewire;
+namespace Aerni\LivewireForms\Http\Livewire;
 
 use Illuminate\Support\Facades\URL;
 use Livewire\Component;
