@@ -5,13 +5,13 @@ namespace Aerni\LivewireForms\Http\Livewire;
 use Illuminate\Support\Facades\URL;
 use Livewire\Component;
 use Statamic\Events\SubmissionCreated;
-use Statamic\Facades\Form;
+use Statamic\Facades\Form as StatamicForm;
 use Statamic\Facades\Site;
 use Statamic\Forms\SendEmails;
 use Illuminate\Support\Str;
 use Illuminate\Support\MessageBag;
 
-class LivewireForm extends Component
+class Form extends Component
 {
     public $handle;
     public $view;
@@ -61,7 +61,7 @@ class LivewireForm extends Component
 
     private function getForm()
     {
-        $this->form = Form::find($this->handle);
+        $this->form = StatamicForm::find($this->handle);
     }
 
     protected function rules()
