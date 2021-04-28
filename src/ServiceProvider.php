@@ -1,24 +1,21 @@
 <?php
 
-namespace Aerni\LivewireForms;
+namespace Aerni\StatamicLivewireForms;
 
-use Aerni\LivewireForms\Commands\MakeViewCommand;
-use Aerni\LivewireForms\Http\Livewire\Form;
+use Aerni\StatamicLivewireForms\Http\Livewire\StatamicForm;
 use Livewire\Livewire;
 use Statamic\Providers\AddonServiceProvider;
 
 class ServiceProvider extends AddonServiceProvider
 {
+    protected $commands = [
+        Commands\MakeStatamicLivewireForm::class,
+    ];
+
     public function boot()
     {
         parent::boot();
 
-        Livewire::component('form', Form::class);
-
-        if ($this->app->runningInConsole()) {
-            $this->commands([
-                MakeViewCommand::class,
-            ]);
-        }
+        Livewire::component('statamic-form', StatamicForm::class);
     }
 }

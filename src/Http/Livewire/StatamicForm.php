@@ -1,0 +1,132 @@
+<?php
+
+namespace Aerni\StatamicLivewireForms\Http\Livewire;
+
+use Livewire\Component;
+use Statamic\Facades\Site;
+use Illuminate\Support\Str;
+use Statamic\Forms\SendEmails;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\URL;
+use Statamic\Events\SubmissionCreated;
+use Statamic\Facades\Form;
+
+class StatamicForm extends Component
+{
+    protected $form;
+
+    public $data;
+    public $handle;
+    public $success;
+    public $success_message;
+    public $redirect;
+
+    public function mount(): void
+    {
+        $this->form = $this->statamicForm();
+        $this->data = $this->formProperties();
+    }
+
+    public function hydrate(): void
+    {
+        // Need this because $form is a protected property and doesn't persist between requests.
+        $this->form = $this->statamicForm();
+    }
+
+    protected function statamicForm()
+    {
+        return Form::find($this->handle);
+    }
+
+    protected function formProperties(): Collection
+    {
+        return $this->fields()->mapWithKeys(function ($field) {
+            $genericDefault = $field->type === 'checkboxes' ? [] : null;
+            return [$field->handle => $field->default ?? $genericDefault];
+        });
+    }
+
+    protected function fields(): Collection
+    {
+        return $this->form->fields()
+            ->map(function ($field) {
+                return (object) [
+                    'label' => $field->get('display'),
+                    'handle' => $field->handle(),
+                    'key' => 'data.' . $field->handle(),
+                    'type' => $this->assignFieldType($field->get('type')),
+                    'input_type' => $field->get('input_type'),
+                    'default' => $field->get('default'),
+                    'placeholder' => $field->get('placeholder'),
+                    'autocomplete' => $field->get('autocomplete'),
+                ];
+            });
+    }
+
+    protected function assignFieldType(string $type): string
+    {
+        $types = [
+            'text' => 'input',
+            'textarea' => 'textarea',
+            'integer' => 'input',
+            'checkboxes' => 'checkbox',
+            'radio' => 'radio',
+            'select' => 'select',
+            'assets' => 'file',
+        ];
+
+        return $types[$type] ?? 'input';
+    }
+
+    protected function rules(): array
+    {
+        return $this->form->blueprint()->fields()->all()->mapWithKeys(function ($field) {
+            return ['data.' . $field->handle() => collect($field->rules())->flatten()];
+        })->toArray();
+    }
+
+    protected function validationAttributes(): array
+    {
+        return $this->form->blueprint()->fields()->all()->mapWithKeys(function ($field) {
+            return ['data.' . $field->handle() => $field->display()];
+        })->toArray();
+    }
+
+    public function submit(): void
+    {
+        $this->validate();
+        $this->handleFormSubmission();
+        $this->successResponse();
+    }
+
+    protected function handleFormSubmission(): void
+    {
+        $submission = $this->form->makeSubmission()->data($this->data);
+
+        if ($this->form->store()) {
+            $submission->save();
+        }
+
+        $site = Site::findByUrl(URL::previous());
+
+        SubmissionCreated::dispatch($submission);
+        SendEmails::dispatch($submission, $site);
+    }
+
+    protected function successResponse()
+    {
+        if ($this->redirect) {
+            return redirect()->to($this->redirect);
+        }
+
+        $this->reset('data');
+        $this->success = true;
+    }
+
+    public function render()
+    {
+        return view('livewire.' . Str::slug($this->handle), [
+            'fields' => $this->fields()
+        ]);
+    }
+}

@@ -1,5 +1,5 @@
 {
-    "name": "aerni/livewire-forms",
+    "name": "aerni/statamic-livewire-forms",
     "description": "Use Statamic forms with Laravel Livewire",
     "require": {
         "php": "^7.4 || ^8.0",
@@ -9,17 +9,17 @@
     },
     "autoload": {
         "psr-4": {
-            "Aerni\\LivewireForms\\": "src"
+            "Aerni\\StatamicLivewireForms\\": "src"
         }
     },
     "extra": {
         "statamic": {
-            "name": "Livewire Forms",
-            "description": "Livewire Forms"
+            "name": "Statamic Livewire Forms",
+            "description": "Statamic Livewire Forms"
         },
         "laravel": {
             "providers": [
-                "Aerni\\LivewireForms\\ServiceProvider"
+                "Aerni\\StatamicLivewireForms\\ServiceProvider"
             ]
         }
     }
