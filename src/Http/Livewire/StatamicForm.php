@@ -5,11 +5,12 @@ namespace Aerni\StatamicLivewireForms\Http\Livewire;
 use Livewire\Component;
 use Statamic\Facades\Form;
 use Statamic\Facades\Site;
-use Statamic\Forms\SendEmails;
-use Statamic\Events\SubmissionCreated;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
+use Statamic\Forms\SendEmails;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\Lang;
+use Statamic\Events\SubmissionCreated;
 
 class StatamicForm extends Component
 {
@@ -62,7 +63,7 @@ class StatamicForm extends Component
         return $this->form->fields()
             ->map(function ($field) {
                 return (object) [
-                    'label' => $field->get('display'),
+                    'label' => $this->assignFieldLabel($field),
                     'handle' => $field->handle(),
                     'key' => 'data.' . $field->handle(),
                     'type' => $this->assignFieldType($field->get('type')),
@@ -72,6 +73,15 @@ class StatamicForm extends Component
                     'autocomplete' => $field->get('autocomplete'),
                 ];
             });
+    }
+
+    protected function assignFieldLabel($field): string
+    {
+        if (Lang::has('statamic-livewire-forms::forms.' . $field->handle())) {
+            return Lang::get('statamic-livewire-forms::forms.' . $field->handle());
+        };
+
+        return $field->get('display');
     }
 
     protected function assignFieldType(string $type): string
