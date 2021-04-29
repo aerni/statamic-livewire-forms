@@ -21,9 +21,5 @@ class ServiceProvider extends AddonServiceProvider
         $this->publishes([
             __DIR__.'/../resources/views' => resource_path('views/vendor/statamic-livewire-forms'),
         ], 'statamic-livewire-forms-views');
-
-        $this->publishes([
-            __DIR__.'/../resources/lang' => resource_path('lang/vendor/statamic-livewire-forms'),
-        ], 'statamic-livewire-forms-lang');
     }
 }
