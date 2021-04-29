@@ -31,6 +31,7 @@ class StatamicForm extends Component
     {
         // Need this because $form is a protected property and doesn't persist between requests.
         $this->form = $this->statamicForm();
+        $this->success = false;
     }
 
     protected function statamicForm()
