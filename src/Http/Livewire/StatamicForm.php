@@ -134,7 +134,7 @@ class StatamicForm extends Component
             return redirect()->to($this->redirect);
         }
 
-        $this->reset('data');
+        $this->data = $this->formProperties();
         $this->honeypot = null;
         $this->success = true;
     }
