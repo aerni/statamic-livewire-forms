@@ -66,7 +66,7 @@ class StatamicForm extends Component
                     'handle' => $field->handle(),
                     'key' => 'data.' . $field->handle(),
                     'type' => $this->assignFieldType($field->get('type')),
-                    'input_type' => $field->get('input_type'),
+                    'input_type' => $this->assignFieldInputType($field->get('type'), $field->get('input_type')),
                     'default' => $field->get('default'),
                     'placeholder' => $field->get('placeholder'),
                     'autocomplete' => $field->get('autocomplete'),
@@ -87,6 +87,15 @@ class StatamicForm extends Component
         ];
 
         return $types[$type] ?? 'input';
+    }
+
+    protected function assignFieldInputType(string $fieldType, ?string $intputType): string
+    {
+        $types = [
+            'integer' => 'number',
+        ];
+
+        return $types[$fieldType] ?? $intputType;
     }
 
     protected function rules(): array
