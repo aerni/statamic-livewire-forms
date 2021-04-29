@@ -20,7 +20,6 @@ class StatamicForm extends Component
     public $handle;
     public $success;
     public $redirect;
-    public $honeypot; // TODO: Make honeypot field name dynamic. Take the name from the form config.
 
     public function mount(): void
     {
@@ -55,7 +54,7 @@ class StatamicForm extends Component
         return $this->fields()->mapWithKeys(function ($field) {
             $genericDefault = $field->type === 'checkboxes' ? [] : null;
             return [$field->handle => $field->default ?? $genericDefault];
-        });
+        })->put($this->form->honeypot(), null);
     }
 
     protected function fields(): Collection
@@ -108,6 +107,14 @@ class StatamicForm extends Component
         return $types[$fieldType] ?? $intputType;
     }
 
+    protected function honeypot(): object
+    {
+        return (object) [
+            'handle' => $this->form->honeypot(),
+            'key' => 'data.' . $this->form->honeypot(),
+        ];
+    }
+
     protected function rules(): array
     {
         return $this->form->blueprint()->fields()->all()->mapWithKeys(function ($field) {
@@ -131,7 +138,7 @@ class StatamicForm extends Component
 
     protected function handleFormSubmission(): void
     {
-        if ($this->honeypot) {
+        if ($this->data[$this->form->honeypot()]) {
             return;
         };
 
@@ -154,14 +161,14 @@ class StatamicForm extends Component
         }
 
         $this->data = $this->formProperties();
-        $this->honeypot = null;
         $this->success = true;
     }
 
     public function render()
     {
         return view('livewire.' . Str::slug($this->handle), [
-            'fields' => $this->fields()
+            'fields' => $this->fields(),
+            'honeypot' => $this->honeypot(),
         ]);
     }
 }
