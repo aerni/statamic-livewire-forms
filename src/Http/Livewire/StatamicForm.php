@@ -70,6 +70,7 @@ class StatamicForm extends Component
                     'default' => $field->get('default'),
                     'placeholder' => $field->get('placeholder'),
                     'autocomplete' => $field->get('autocomplete'),
+                    'width' => $field->get('width') ?? 100,
                 ];
             });
     }
