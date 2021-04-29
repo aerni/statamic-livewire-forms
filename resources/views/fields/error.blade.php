@@ -1,5 +1,3 @@
 @error($field->key)
-    <div>
-        <p>{{ $message }}</p>
-    </div>
+    <p class="" id="{{ $field->handle }}-error">{{ $message }}</p>
 @enderror
