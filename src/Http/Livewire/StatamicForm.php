@@ -19,6 +19,7 @@ class StatamicForm extends Component
     public $handle;
     public $success;
     public $redirect;
+    public $honeypot;
 
     public function mount(): void
     {
@@ -110,6 +111,10 @@ class StatamicForm extends Component
 
     protected function handleFormSubmission(): void
     {
+        if ($this->honeypot) {
+            return;
+        };
+
         $submission = $this->form->makeSubmission()->data($this->data);
 
         if ($this->form->store()) {
@@ -129,6 +134,7 @@ class StatamicForm extends Component
         }
 
         $this->reset('data');
+        $this->honeypot = null;
         $this->success = true;
     }
 

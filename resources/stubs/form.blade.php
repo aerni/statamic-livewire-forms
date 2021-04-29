@@ -2,6 +2,7 @@
     <form wire:submit.prevent="submit">
         @include('statamic-livewire-forms::fields')
         @include('statamic-livewire-forms::fields.submit')
+        @include('statamic-livewire-forms::fields.honeypot')
         @include('statamic-livewire-forms::errors')
         @include('statamic-livewire-forms::success')
     </form>
