@@ -18,7 +18,6 @@ class StatamicForm extends Component
     public $data;
     public $handle;
     public $success;
-    public $success_message;
     public $redirect;
 
     public function mount(): void

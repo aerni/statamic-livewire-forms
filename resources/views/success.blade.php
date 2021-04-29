@@ -1,5 +1,5 @@
 @if($success)
     <div>
-        <p>{{ $success_message }}</p>
+        <p>@lang('statamic-livewire-forms::forms.success_message')</p>
     </div>
 @endif
