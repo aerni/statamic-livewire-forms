@@ -3,13 +3,13 @@
 namespace Aerni\StatamicLivewireForms\Http\Livewire;
 
 use Livewire\Component;
-use Statamic\Facades\Site;
-use Illuminate\Support\Str;
-use Statamic\Forms\SendEmails;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\URL;
-use Statamic\Events\SubmissionCreated;
 use Statamic\Facades\Form;
+use Statamic\Facades\Site;
+use Statamic\Forms\SendEmails;
+use Statamic\Events\SubmissionCreated;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\URL;
 
 class StatamicForm extends Component
 {
