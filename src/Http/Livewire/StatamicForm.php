@@ -19,7 +19,7 @@ class StatamicForm extends Component
     public $handle;
     public $success;
     public $redirect;
-    public $honeypot;
+    public $honeypot; // TODO: Make honeypot field name dynamic. Take the name from the form config.
 
     public function mount(): void
     {
