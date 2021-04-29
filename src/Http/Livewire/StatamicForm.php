@@ -138,9 +138,9 @@ class StatamicForm extends Component
 
     protected function handleFormSubmission(): void
     {
-        if ($this->data[$this->form->honeypot()]) {
+        if ($this->isSpam()) {
             return;
-        };
+        }
 
         $submission = $this->form->makeSubmission()->data($this->data);
 
@@ -162,6 +162,11 @@ class StatamicForm extends Component
 
         $this->data = $this->formProperties();
         $this->success = true;
+    }
+
+    protected function isSpam(): bool
+    {
+        return (bool) $this->data[$this->form->honeypot()];
     }
 
     public function render()
