@@ -1,4 +1,9 @@
 <div style="display: none">
+
+    <label for="{{ $honeypot->handle }}">
+        {{ $honeypot->label }}
+    </label>
+
     <input
         type="text"
         name="{{ $honeypot->handle }}"
@@ -7,4 +12,5 @@
         tabindex="-1"
         autocomplete="off"
     />
+
 </div>

@@ -110,6 +110,7 @@ class StatamicForm extends Component
     protected function honeypot(): object
     {
         return (object) [
+            'label' => Str::ucfirst($this->form->honeypot()),
             'handle' => $this->form->honeypot(),
             'key' => 'data.' . $this->form->honeypot(),
         ];
