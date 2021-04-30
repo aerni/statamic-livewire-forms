@@ -33,25 +33,36 @@ class MakeStatamicLivewireForm extends Command
      */
     public function handle(): void
     {
+        $this->chooseForm();
+        $this->createView();
+    }
+
+    protected function chooseForm(): void
+    {
         $forms = Form::all();
 
         $formTitles = $forms->map(function ($form) {
             return $form->title();
         })->toArray();
 
-        $chosenForm = $this->choice('Select a form to create a view for:', $formTitles, 0);
+        $formChoice = $this->choice('Select a form to create a view for:', $formTitles, 0);
 
-        $form = $forms->filter(function ($form) use ($chosenForm) {
-            return $form->title() === $chosenForm;
+        $chosenForm = $forms->filter(function ($form) use ($formChoice) {
+            return $form->title() === $formChoice;
         })->first();
 
+        $this->form = $chosenForm;
+    }
+
+    protected function createView(): void
+    {
         File::ensureDirectoryExists(resource_path('views/livewire'));
 
-        $path = resource_path('views/livewire/' . Str::slug($form->handle()) . '.blade.php');
+        $path = resource_path('views/livewire/' . Str::slug($this->form->handle()) . '.blade.php');
 
         if (!File::exists($path) || $this->confirm("A view for this form already exists. Do you want to overwrite it?")) {
-            $formStub = File::get(__DIR__ . '/../../resources/stubs/form.blade.php');
-            File::put($path, $formStub);
+            $stub = File::get(__DIR__ . '/../../resources/stubs/form.blade.php');
+            File::put($path, $stub);
             $this->line("<info>[✓]</info> The view was successfully created: <comment>{$this->getRelativePath($path)}</comment>");
         }
     }
