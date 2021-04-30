@@ -2,6 +2,7 @@
 
 namespace Aerni\StatamicLivewireForms\Http\Livewire;
 
+use Aerni\StatamicLivewireForms\Traits\FollowsRules;
 use Livewire\Component;
 use Statamic\Facades\Form;
 use Statamic\Facades\Site;
@@ -14,6 +15,8 @@ use Statamic\Events\SubmissionCreated;
 
 class StatamicForm extends Component
 {
+    use FollowsRules;
+
     protected $form;
 
     public $data;
@@ -32,6 +35,11 @@ class StatamicForm extends Component
         // Need this because $form is a protected property and doesn't persist between requests.
         $this->form = $this->statamicForm();
         $this->success = false;
+    }
+
+    public function updated($field): void
+    {
+        $this->validateOnly($field, $this->realtimeRules($field));
     }
 
     protected function statamicForm()
@@ -71,6 +79,8 @@ class StatamicForm extends Component
                     'placeholder' => $field->get('placeholder'),
                     'autocomplete' => $field->get('autocomplete'),
                     'width' => $field->get('width') ?? 100,
+                    'rules' => collect($field->rules())->flatten()->toArray(),
+                    'realtime' => $field->get('realtime'),
                 ];
             });
     }
@@ -115,13 +125,6 @@ class StatamicForm extends Component
             'handle' => $this->form->honeypot(),
             'key' => 'data.' . $this->form->honeypot(),
         ];
-    }
-
-    protected function rules(): array
-    {
-        return $this->form->blueprint()->fields()->all()->mapWithKeys(function ($field) {
-            return ['data.' . $field->handle() => collect($field->rules())->flatten()];
-        })->toArray();
     }
 
     protected function validationAttributes(): array
