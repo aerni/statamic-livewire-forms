@@ -64,7 +64,10 @@ trait GetsFormFields
     protected function assignFieldInputType(string $fieldType, ?string $intputType): ?string
     {
         $types = [
+            'assets' => 'file',
+            'checkboxes' => 'checkbox',
             'integer' => 'number',
+            'radio' => 'radio',
         ];
 
         return $types[$fieldType] ?? $intputType;
