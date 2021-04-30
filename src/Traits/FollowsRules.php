@@ -6,7 +6,7 @@ use Illuminate\Support\Str;
 
 trait FollowsRules
 {
-    public function rules(): array
+    protected function rules(): array
     {
         return $this->fields()->mapWithKeys(function ($field) {
             return [$field->key => $field->rules];
