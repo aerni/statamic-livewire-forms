@@ -12,6 +12,10 @@ class ServiceProvider extends AddonServiceProvider
         Commands\MakeStatamicLivewireForm::class,
     ];
 
+    protected $tags = [
+        Tags\Errors::class,
+    ];
+
     public function boot()
     {
         parent::boot();
