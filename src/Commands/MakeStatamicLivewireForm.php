@@ -2,11 +2,12 @@
 
 namespace Aerni\StatamicLivewireForms\Commands;
 
-use Statamic\Console\RunsInPlease;
 use Statamic\Facades\Form;
-use Illuminate\Console\Command;
 use Illuminate\Support\Str;
+use Illuminate\Console\Command;
+use Statamic\Console\RunsInPlease;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 
 class MakeStatamicLivewireForm extends Command
 {
@@ -68,6 +69,11 @@ class MakeStatamicLivewireForm extends Command
         if (!File::exists($path) || $this->confirm("A view for this form already exists. Do you want to overwrite it?")) {
             File::put($path, $stub);
             $this->line("<info>[✓]</info> The view was successfully created: <comment>{$this->getRelativePath($path)}</comment>");
+        }
+
+        if ($this->confirm('Do you want to publish the form field views? This will override previously published views.')) {
+            File::copyDirectory(__DIR__ . '/../../resources/views/' . Str::lower($engine), resource_path('views/vendor/statamic-livewire-forms'));
+            $this->line("<info>[✓]</info> The field views were successfully created: <comment>{$this->getRelativePath($path)}</comment>");
         }
     }
 
