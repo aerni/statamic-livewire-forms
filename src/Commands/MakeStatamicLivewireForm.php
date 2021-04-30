@@ -57,9 +57,12 @@ class MakeStatamicLivewireForm extends Command
 
     protected function createView(): void
     {
-        $stub = File::get(__DIR__ . '/../../resources/stubs/form.blade.php');
+        $engine = $this->choice('Select your prefered templating engine', ['Antlers', 'Blade'], 0);
+        $extension = ($engine === 'Antlers') ? '.antlers.html' : '.blade.php';
 
-        $path = resource_path('views/livewire/' . Str::slug($this->form->handle()) . '.blade.php');
+        $stub = File::get(__DIR__ . '/../../resources/stubs/form' . $extension);
+
+        $path = resource_path('views/livewire/' . Str::slug($this->form->handle()) . $extension);
         File::ensureDirectoryExists(resource_path('views/livewire'));
 
         if (!File::exists($path) || $this->confirm("A view for this form already exists. Do you want to overwrite it?")) {
