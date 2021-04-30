@@ -24,6 +24,7 @@ trait GetsFormFields
                     'width' => $field->get('width') ?? 100,
                     'rules' => collect($field->rules())->flatten()->toArray(),
                     'realtime' => $field->get('realtime'),
+                    'error' => $this->getFieldError('data.' . $field->handle()),
                 ];
             });
     }
@@ -71,5 +72,14 @@ trait GetsFormFields
         ];
 
         return $types[$fieldType] ?? $intputType;
+    }
+
+    protected function getFieldError(string $field): ?string
+    {
+        if (! $this->getErrorBag()->has($field)) {
+            return null;
+        }
+
+        return $this->getErrorBag()->first($field);
     }
 }
