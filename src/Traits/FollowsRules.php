@@ -17,20 +17,23 @@ trait FollowsRules
     {
         $field = $this->fields()[Str::remove('data.', $field)];
 
-        // Don't validate in realtime if the key is not set
-        if (! $field->realtime) {
+        // Get the realtime validation config from the form blueprint or global config.
+        $realtime = $field->realtime ?? config('statamic-livewire-forms.realtime');
+
+        // Disable realtime validation if "realtime: false".
+        if (! $realtime) {
             return [$field->key => []];
         }
 
-        // Use regular validation rules if "realtime: true"
-        if ($field->realtime === true) {
+        // Use regular validation rules if "realtime: true".
+        if ($realtime === true) {
             return [$field->key => $field->rules];
         }
 
-        // Make sure to always get an array of realtime rules
-        $realtimeRules = is_array($field->realtime) ? $field->realtime : explode('|', $field->realtime);
+        // Make sure to always get an array of realtime rules.
+        $realtimeRules = is_array($realtime) ? $realtime : explode('|', $realtime);
 
-        // Remove any realtime rules that are not part of the field rules
+        // Remove any realtime rules that are not part of the validation rules.
         $realtimeRules = array_intersect($realtimeRules, $field->rules);
 
         return [$field->key => $realtimeRules];
