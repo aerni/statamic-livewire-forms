@@ -61,10 +61,10 @@ class StatamicForm extends Component
     {
         $this->validate();
         $this->submitStatamicForm();
-        $this->successResponse();
+        $this->success();
     }
 
-    protected function successResponse()
+    protected function success()
     {
         if ($this->redirect) {
             return redirect()->to($this->redirect);
