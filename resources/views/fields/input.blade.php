@@ -1,8 +1,8 @@
-<label for="{{ $field['handle'] }}" class="">
+<label for="{{ $field['handle'] }}">
     {{ $field['label'] }}
 </label>
 
-<div class="">
+<div>
     <input
         id="{{ $field['handle'] }}"
         name="{{ $field['handle'] }}"
