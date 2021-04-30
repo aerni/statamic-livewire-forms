@@ -49,13 +49,13 @@ trait GetsFormFields
     protected function assignFieldType(string $type): string
     {
         $types = [
-            'text' => 'input',
-            'textarea' => 'textarea',
-            'integer' => 'input',
+            'assets' => 'file',
             'checkboxes' => 'checkbox',
+            'integer' => 'input',
             'radio' => 'radio',
             'select' => 'select',
-            'assets' => 'file',
+            'text' => 'input',
+            'textarea' => 'textarea',
         ];
 
         return $types[$type] ?? 'input';
