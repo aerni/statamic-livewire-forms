@@ -17,8 +17,10 @@ trait FollowsRules
     {
         $field = $this->fields()[Str::remove('data.', $field)];
 
-        // Get the realtime validation config from the form blueprint or global config.
-        $realtime = $field->realtime ?? config('statamic-livewire-forms.realtime');
+        // Get the realtime validation config from the field, form blueprint or global config.
+        $realtime = $field->realtime
+            ?? $this->form->blueprint()->contents()['sections']['main']['realtime']
+            ?? config('statamic-livewire-forms.realtime');
 
         // Disable realtime validation if "realtime: false".
         if (! $realtime) {
