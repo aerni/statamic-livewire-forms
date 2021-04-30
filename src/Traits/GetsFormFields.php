@@ -61,7 +61,7 @@ trait GetsFormFields
         return $types[$type] ?? 'input';
     }
 
-    protected function assignFieldInputType(string $fieldType, ?string $intputType): string
+    protected function assignFieldInputType(string $fieldType, ?string $intputType): ?string
     {
         $types = [
             'integer' => 'number',
