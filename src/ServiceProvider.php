@@ -16,7 +16,7 @@ class ServiceProvider extends AddonServiceProvider
     {
         parent::boot();
 
-        Livewire::component('statamic-form', StatamicForm::class);
+        Livewire::component('form', StatamicForm::class);
 
         $this->publishes([
             __DIR__.'/../resources/views' => resource_path('views/vendor/statamic-livewire-forms'),
