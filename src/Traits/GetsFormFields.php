@@ -12,7 +12,7 @@ trait GetsFormFields
     {
         return $this->form->fields()
             ->map(function ($field) {
-                return (object) [
+                return [
                     'label' => $this->assignFieldLabel($field),
                     'handle' => $field->handle(),
                     'key' => 'data.' . $field->handle(),
@@ -28,9 +28,9 @@ trait GetsFormFields
             });
     }
 
-    protected function honeypot(): object
+    protected function honeypot(): array
     {
-        return (object) [
+        return [
             'label' => Str::ucfirst($this->form->honeypot()),
             'handle' => $this->form->honeypot(),
             'key' => 'data.' . $this->form->honeypot(),

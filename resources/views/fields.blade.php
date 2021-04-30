@@ -8,7 +8,7 @@
             {{ $field->width === 75 ? 'md:col-span-9' : '' }}
             {{ $field->width === 100 ? 'md:col-span-12' : '' }}"
         ">
-            @include('statamic-livewire-forms::fields.' . $field->type)
+            @include('statamic-livewire-forms::fields.' . $field['type'])
         </div>
     @endforeach
 </div>

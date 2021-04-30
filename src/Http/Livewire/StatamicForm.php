@@ -43,8 +43,8 @@ class StatamicForm extends Component
     {
         return
             $this->fields()->mapWithKeys(function ($field) {
-                $genericDefault = $field->type === 'checkboxes' ? [] : null;
-                return [$field->handle => $field->default ?? $genericDefault];
+                $genericDefault = $field['type'] === 'checkboxes' ? [] : null;
+                return [$field['handle'] => $field['default'] ?? $genericDefault];
             })
             ->put($this->form->honeypot(), null)
             ->toArray();
