@@ -1,0 +1,9 @@
+{{ if {errors} }}
+    <div>
+        <ul>
+            {{ errors }}
+                <li>{{ value }}</li>
+            {{ /errors }}
+        </ul>
+    </div>
+{{ /if }}
