@@ -1,22 +1,22 @@
-<label for="{{ handle }}" class="block text-sm font-normal text-white">
-    {{ label }}
+<label for="{{ handle ?? fields[field].handle }}" class="block text-sm font-normal text-white">
+    {{ label ?? fields[field].label }}
 </label>
 
 <div class="mt-1">
     <input
-        id="{{ handle }}"
-        name="{{ handle }}"
-        type="{{ input_type }}"
-        autocomplete="{{ autocomplete }}"
-        placeholder="{{ placeholder }}"
-        wire:model.lazy="{{ key }}"
+        id="{{ handle ?? fields[field].handle }}"
+        name="{{ handle ?? fields[field].handle }}"
+        type="{{ input_type ?? fields[field].input_type }}"
+        autocomplete="{{ autocomplete ?? fields[field].autocomplete }}"
+        placeholder="{{ placeholder ?? fields[field].placeholder }}"
+        wire:model.lazy="{{ key ?? fields[field].key }}"
 
-        {{ if ! error }}
+        {{ if ! error ?? fields[field].error }}
             class="block w-full px-4 py-3 placeholder-gray-300 border-white rounded-md text-blue-dark focus:outline-none focus:ring-blue focus:ring-2 focus:border-blue"
         {{ else }}
             class="block w-full px-4 py-3 text-red-500 placeholder-red-300 border-red-300 rounded-md focus:text-blue-dark focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500"
             aria-invalid="true"
-            aria-describedby="{{ handle }}-error"
+            aria-describedby="{{ handle ?? fields[field].handle }}-error"
         {{ /if }}
     />
 </div>
