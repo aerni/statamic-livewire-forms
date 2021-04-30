@@ -7,7 +7,6 @@ use Aerni\StatamicLivewireForms\Traits\GetsFormFields;
 use Aerni\StatamicLivewireForms\Traits\HandlesStatamicForm;
 use Livewire\Component;
 use Illuminate\Support\Str;
-use Illuminate\Support\Collection;
 
 class StatamicForm extends Component
 {
@@ -38,12 +37,15 @@ class StatamicForm extends Component
         $this->validateOnly($field, $this->realtimeRules($field));
     }
 
-    protected function formProperties(): Collection
+    protected function formProperties(): array
     {
-        return $this->fields()->mapWithKeys(function ($field) {
-            $genericDefault = $field->type === 'checkboxes' ? [] : null;
-            return [$field->handle => $field->default ?? $genericDefault];
-        })->put($this->form->honeypot(), null);
+        return
+            $this->fields()->mapWithKeys(function ($field) {
+                $genericDefault = $field->type === 'checkboxes' ? [] : null;
+                return [$field->handle => $field->default ?? $genericDefault];
+            })
+            ->put($this->form->honeypot(), null)
+            ->toArray();
     }
 
     protected function validationAttributes(): array
