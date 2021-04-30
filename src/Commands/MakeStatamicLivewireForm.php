@@ -80,7 +80,7 @@ class MakeStatamicLivewireForm extends Command
     protected function createComponent(): void
     {
         if ($this->confirm('Do you want to create a Livewire component to customize the defaut behaviour?')) {
-            $stub = File::get(__DIR__ . '/../../resources/stubs/component.stub');
+            $stub = File::get(__DIR__ . '/../../resources/stubs/component.php');
             $stub = str_replace('DummyComponent', Str::studly($this->form->handle()), $stub);
 
             $path = app_path('Http/Livewire/' . Str::studly($this->form->handle()) . '.php');
