@@ -3,19 +3,15 @@
 namespace Aerni\StatamicLivewireForms\Http\Livewire;
 
 use Aerni\StatamicLivewireForms\Traits\FollowsRules;
+use Aerni\StatamicLivewireForms\Traits\HandlesStatamicForm;
 use Livewire\Component;
-use Statamic\Facades\Form;
-use Statamic\Facades\Site;
 use Illuminate\Support\Str;
-use Statamic\Forms\SendEmails;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Lang;
-use Statamic\Events\SubmissionCreated;
 
 class StatamicForm extends Component
 {
-    use FollowsRules;
+    use FollowsRules, HandlesStatamicForm;
 
     protected $form;
 
@@ -40,21 +36,6 @@ class StatamicForm extends Component
     public function updated($field): void
     {
         $this->validateOnly($field, $this->realtimeRules($field));
-    }
-
-    protected function statamicForm()
-    {
-        if (! $this->handle) {
-            throw new \Exception('The form handle is missing. Please make sure to add it to the form tag.');
-        }
-
-        $form = Form::find($this->handle);
-
-        if (! $form) {
-            throw new \Exception("Form with handle [{$this->handle}] cannot be found.");
-        }
-
-        return $form;
     }
 
     protected function formProperties(): Collection
@@ -137,26 +118,8 @@ class StatamicForm extends Component
     public function submit(): void
     {
         $this->validate();
-        $this->handleFormSubmission();
+        $this->submitStatamicForm();
         $this->successResponse();
-    }
-
-    protected function handleFormSubmission(): void
-    {
-        if ($this->isSpam()) {
-            return;
-        }
-
-        $submission = $this->form->makeSubmission()->data($this->data);
-
-        if ($this->form->store()) {
-            $submission->save();
-        }
-
-        $site = Site::findByUrl(URL::previous());
-
-        SubmissionCreated::dispatch($submission);
-        SendEmails::dispatch($submission, $site);
     }
 
     protected function successResponse()
@@ -167,11 +130,6 @@ class StatamicForm extends Component
 
         $this->data = $this->formProperties();
         $this->success = true;
-    }
-
-    protected function isSpam(): bool
-    {
-        return (bool) $this->data[$this->form->honeypot()];
     }
 
     public function render()
