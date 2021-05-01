@@ -1,4 +1,4 @@
-<label for="{{ handle ?? fields[field].handle }}" class="block text-sm font-normal text-white">
+<label for="{{ handle ?? fields[field].handle }}" class="block text-sm font-medium text-gray-700">
     {{ label ?? fields[field].label }}
 </label>
 
@@ -12,13 +12,13 @@
         wire:model.lazy="{{ key ?? fields[field].key }}"
 
         {{ if ! error ?? fields[field].error }}
-            class="block w-full px-4 py-3 placeholder-gray-300 border-white rounded-md text-blue-dark focus:outline-none focus:ring-blue focus:ring-2 focus:border-blue"
+            class="block w-full placeholder-gray-300 border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
         {{ else }}
-            class="block w-full px-4 py-3 text-red-500 placeholder-red-300 border-red-300 rounded-md focus:text-blue-dark focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500"
+            class="block w-full text-red-800 placeholder-red-300 border-red-300 rounded-md focus:ring-red-500 focus:border-red-500 sm:text-sm"
             aria-invalid="true"
             aria-describedby="{{ handle ?? fields[field].handle }}-error"
         {{ /if }}
     />
 </div>
 
-{{ partial:vendor/statamic-livewire-forms/fields/error }}
+{{ partial src="statamic-livewire-forms::fields/error" }}
