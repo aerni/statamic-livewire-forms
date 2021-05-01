@@ -8,20 +8,19 @@ class Errors extends Tags
 {
     protected static $handle = 'errors';
 
-    public function index()
+    public function any(): bool
+    {
+        return $this->context['errors']->getBag('default')->isNotEmpty();
+    }
+
+    public function all(): string
     {
         $errorBag = $this->context['errors']->getBag('default');
 
-        if ($errorBag->isEmpty()) {
-            return false;
-        }
-
         foreach ($errorBag->all() as $error) {
-            $errors[]['value'] = $error;
+            $errors[]['error'] = $error;
         }
 
-        return ($this->content === '') // If this is a single tag ...
-            ? true // ... just output a boolean.
-            : $this->parseLoop($errors); // Otherwise, parse the content loop.
+        return $this->parseLoop($errors);
     }
 }

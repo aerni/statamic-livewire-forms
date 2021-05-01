@@ -1,9 +1,9 @@
-{{ if {errors} }}
+{{ if {errors:any} }}
     <div>
         <ul>
-            {{ errors }}
-                <li>{{ value }}</li>
-            {{ /errors }}
+            {{ errors:all }}
+                <li>{{ error }}</li>
+            {{ /errors:all }}
         </ul>
     </div>
 {{ /if }}
