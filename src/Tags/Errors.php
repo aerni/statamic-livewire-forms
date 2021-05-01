@@ -13,6 +13,11 @@ class Errors extends Tags
         return $this->context['errors']->getBag('default')->isNotEmpty();
     }
 
+    public function count(): int
+    {
+        return $this->context['errors']->getBag('default')->count();
+    }
+
     public function all(): string
     {
         $errorBag = $this->context['errors']->getBag('default');
