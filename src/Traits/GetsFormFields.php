@@ -40,10 +40,20 @@ trait GetsFormFields
 
     protected function assignFieldLabel($field): string
     {
-        if (Lang::has('statamic-livewire-forms::forms.' . $field->handle())) {
-            return Lang::get('statamic-livewire-forms::forms.' . $field->handle());
+        $formTranslation = "forms.{$this->handle}.{$field->handle()}";
+        $defaultTranslation = "forms.default.{$field->handle()}";
+
+        // Get label from specific form translations
+        if (Lang::has($formTranslation)) {
+            return Lang::get($formTranslation);
         };
 
+        // Get label form default translations
+        if (Lang::has($defaultTranslation)) {
+            return Lang::get($defaultTranslation);
+        };
+
+        // Fallback to field display
         return $field->get('display');
     }
 
