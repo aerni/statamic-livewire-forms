@@ -22,6 +22,9 @@ class ServiceProvider extends AddonServiceProvider
 
         Livewire::component('form', StatamicForm::class);
 
+        $this->loadViewsFrom(__DIR__.'/../resources/views/antlers', 'statamic-livewire-forms');
+        $this->loadViewsFrom(__DIR__.'/../resources/views/blade', 'statamic-livewire-forms');
+
         $this->publishes([
             __DIR__.'/../resources/views/antlers' => resource_path('views/vendor/statamic-livewire-forms'),
         ], 'statamic-livewire-forms-antlers');
