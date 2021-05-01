@@ -7,7 +7,6 @@ use Illuminate\Support\Str;
 use Illuminate\Console\Command;
 use Statamic\Console\RunsInPlease;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Storage;
 
 class MakeStatamicLivewireForm extends Command
 {
@@ -35,7 +34,8 @@ class MakeStatamicLivewireForm extends Command
     public function handle(): void
     {
         $this->chooseForm();
-        $this->createView();
+        $this->createLivewireView();
+        $this->publishFormViews();
         $this->createComponent();
     }
 
@@ -47,7 +47,7 @@ class MakeStatamicLivewireForm extends Command
             return $form->title();
         })->toArray();
 
-        $formChoice = $this->choice('Select a form to create a view for:', $formTitles, 0);
+        $formChoice = $this->choice('Select a form to create a Livewire view for:', $formTitles, 0);
 
         $chosenForm = $forms->filter(function ($form) use ($formChoice) {
             return $form->title() === $formChoice;
@@ -56,24 +56,58 @@ class MakeStatamicLivewireForm extends Command
         $this->form = $chosenForm;
     }
 
-    protected function createView(): void
+    protected function createLivewireView(): void
     {
-        $engine = $this->choice('Select your preferred templating engine', ['Antlers', 'Blade'], 0);
-        $extension = ($engine === 'Antlers') ? '.antlers.html' : '.blade.php';
+        $this->engine = $this->choice('Select your preferred templating engine', ['Antlers', 'Blade'], 0);
+        $this->extension = ($this->engine === 'Antlers') ? '.antlers.html' : '.blade.php';
 
-        $stub = File::get(__DIR__ . '/../../resources/stubs/form' . $extension);
+        $stub = File::get(__DIR__ . '/../../resources/stubs/form' . $this->extension);
 
-        $path = resource_path('views/livewire/' . Str::slug($this->form->handle()) . $extension);
-        File::ensureDirectoryExists(resource_path('views/livewire'));
+        $filename = Str::slug($this->form->handle()) . $this->extension;
+        $path = resource_path('views/livewire/' . $filename);
 
-        if (!File::exists($path) || $this->confirm("A view for this form already exists. Do you want to overwrite it?")) {
+        if (!File::exists($path) || $this->confirm("The Livewire view <comment>$filename</comment> already exists. Overwrite?")) {
+            File::ensureDirectoryExists(resource_path('views/livewire'));
             File::put($path, $stub);
-            $this->line("<info>[✓]</info> The view was successfully created: <comment>{$this->getRelativePath($path)}</comment>");
+            $this->line("<info>[✓]</info> The Livewire view was successfully created: <comment>{$this->getRelativePath($path)}</comment>");
+        }
+    }
+
+    protected function publishFormViews(): void
+    {
+        $choice = $this->choice('Do you want to publish the default form field views?', ['Yes', 'Yes (overwrite existing ones)', 'No'], 0);
+
+        $originalPath = __DIR__ . '/../../resources/views/' . Str::lower($this->engine);
+        $destinationPath = resource_path('views/vendor/statamic-livewire-forms');
+
+        if ($choice === 'Yes') {
+            $originalFiles = collect(File::allFiles($originalPath))->map(function ($file) {
+                if (Str::contains($this->extension, $file->getExtension())) {
+                    return $file->getFilename();
+                }
+            });
+
+            $destinationFiles = collect(File::allFiles($destinationPath))->map(function ($file) {
+                if (Str::contains($this->extension, $file->getExtension())) {
+                    return $file->getFilename();
+                }
+            });
+
+            $filesToCopy = $originalFiles->diff($destinationFiles)->toArray();
+
+            foreach (File::allFiles($originalPath) as $file) {
+                if (in_array($file->getFilename(), $filesToCopy)) {
+                    File::copy($file->getPathname(), "$destinationPath/{$file->getFilename()}");
+                }
+            }
+
+            $this->line("<info>[✓]</info> The form field views were successfully published: <comment>{$this->getRelativePath($destinationPath)}</comment>");
         }
 
-        if ($this->confirm('Do you want to publish the form field views? This will override previously published views.')) {
-            File::copyDirectory(__DIR__ . '/../../resources/views/' . Str::lower($engine), resource_path('views/vendor/statamic-livewire-forms'));
-            $this->line("<info>[✓]</info> The field views were successfully created: <comment>{$this->getRelativePath($path)}</comment>");
+        if ($choice === 'Yes (overwrite existing ones)') {
+            File::ensureDirectoryExists($destinationPath);
+            File::copyDirectory($originalPath, $destinationPath);
+            $this->line("<info>[✓]</info> The default form field views have been successfully published: <comment>{$this->getRelativePath($destinationPath)}</comment>");
         }
     }
 
