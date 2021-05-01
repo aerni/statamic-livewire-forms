@@ -58,7 +58,7 @@ class MakeStatamicLivewireForm extends Command
 
     protected function createView(): void
     {
-        $engine = $this->choice('Select your prefered templating engine', ['Antlers', 'Blade'], 0);
+        $engine = $this->choice('Select your preferred templating engine', ['Antlers', 'Blade'], 0);
         $extension = ($engine === 'Antlers') ? '.antlers.html' : '.blade.php';
 
         $stub = File::get(__DIR__ . '/../../resources/stubs/form' . $extension);
