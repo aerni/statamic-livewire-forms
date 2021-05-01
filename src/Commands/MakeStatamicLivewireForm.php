@@ -75,31 +75,14 @@ class MakeStatamicLivewireForm extends Command
 
     protected function publishFormViews(): void
     {
-        if ($this->confirm('Do you want to publish the form field views?')) {
-            $originalPath = __DIR__ . '/../../resources/views/' . Str::lower($this->engine);
-            $destinationPath = resource_path('views/vendor/statamic-livewire-forms');
+        if ($this->confirm('Do you want to publish the default form views?')) {
+            $this->callSilently('vendor:publish', [
+                '--tag' => 'statamic-livewire-forms-' . Str::lower($this->engine)
+            ]);
 
-            $originalFiles = collect(File::allFiles($originalPath))->map(function ($file) {
-                if (Str::contains($this->extension, $file->getExtension())) {
-                    return $file->getFilename();
-                }
-            });
+            $path = resource_path('views/vendor/statamic-livewire-forms');
 
-            $destinationFiles = collect(File::allFiles($destinationPath))->map(function ($file) {
-                if (Str::contains($this->extension, $file->getExtension())) {
-                    return $file->getFilename();
-                }
-            });
-
-            $filesToCopy = $originalFiles->diff($destinationFiles)->toArray();
-
-            foreach (File::allFiles($originalPath) as $file) {
-                if (in_array($file->getFilename(), $filesToCopy)) {
-                    File::copy($file->getPathname(), "$destinationPath/{$file->getFilename()}");
-                }
-            }
-
-            $this->line("<info>[✓]</info> The form field views were successfully published: <comment>{$this->getRelativePath($destinationPath)}</comment>");
+            $this->line("<info>[✓]</info> The default form views were successfully published: <comment>{$this->getRelativePath($path)}</comment>");
         }
     }
 
