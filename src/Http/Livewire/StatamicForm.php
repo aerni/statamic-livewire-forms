@@ -52,8 +52,8 @@ class StatamicForm extends Component
 
     protected function validationAttributes(): array
     {
-        return $this->form->blueprint()->fields()->all()->mapWithKeys(function ($field) {
-            return ['data.' . $field->handle() => $field->display()];
+        return $this->fields()->mapWithKeys(function ($field) {
+            return [$field['key'] => $field['label']];
         })->toArray();
     }
 
