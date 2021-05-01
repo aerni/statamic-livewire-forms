@@ -75,12 +75,10 @@ class MakeStatamicLivewireForm extends Command
 
     protected function publishFormViews(): void
     {
-        $choice = $this->choice('Do you want to publish the default form field views?', ['Yes', 'Yes (overwrite existing ones)', 'No'], 0);
+        if ($this->confirm('Do you want to publish the form field views?')) {
+            $originalPath = __DIR__ . '/../../resources/views/' . Str::lower($this->engine);
+            $destinationPath = resource_path('views/vendor/statamic-livewire-forms');
 
-        $originalPath = __DIR__ . '/../../resources/views/' . Str::lower($this->engine);
-        $destinationPath = resource_path('views/vendor/statamic-livewire-forms');
-
-        if ($choice === 'Yes') {
             $originalFiles = collect(File::allFiles($originalPath))->map(function ($file) {
                 if (Str::contains($this->extension, $file->getExtension())) {
                     return $file->getFilename();
@@ -102,12 +100,6 @@ class MakeStatamicLivewireForm extends Command
             }
 
             $this->line("<info>[✓]</info> The form field views were successfully published: <comment>{$this->getRelativePath($destinationPath)}</comment>");
-        }
-
-        if ($choice === 'Yes (overwrite existing ones)') {
-            File::ensureDirectoryExists($destinationPath);
-            File::copyDirectory($originalPath, $destinationPath);
-            $this->line("<info>[✓]</info> The default form field views have been successfully published: <comment>{$this->getRelativePath($destinationPath)}</comment>");
         }
     }
 
