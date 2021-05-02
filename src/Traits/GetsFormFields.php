@@ -14,10 +14,13 @@ trait GetsFormFields
             ->map(function ($field) {
                 return [
                     'label' => $this->assignFieldLabel($field),
+                    'instructions' => $field->get('instructions'),
                     'handle' => $field->handle(),
                     'key' => 'data.' . $field->handle(),
                     'type' => $this->assignFieldType($field->get('type')),
                     'input_type' => $this->assignFieldInputType($field->get('type'), $field->get('input_type')),
+                    'options' => $field->get('options'),
+                    'inline' => $field->get('inline'),
                     'default' => $field->get('default'),
                     'placeholder' => $field->get('placeholder'),
                     'autocomplete' => $field->get('autocomplete'),
@@ -25,6 +28,7 @@ trait GetsFormFields
                     'rules' => collect($field->rules())->flatten()->toArray(),
                     'realtime' => $field->get('realtime'),
                     'error' => $this->getFieldError('data.' . $field->handle()),
+                    'show_label' => $field->get('show_label'),
                 ];
             });
     }
@@ -61,7 +65,7 @@ trait GetsFormFields
     {
         $types = [
             'assets' => 'file',
-            'checkboxes' => 'checkbox',
+            'checkboxes' => 'checkboxes',
             'integer' => 'input',
             'radio' => 'radio',
             'select' => 'select',
