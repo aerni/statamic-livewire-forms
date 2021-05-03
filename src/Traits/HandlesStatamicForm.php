@@ -13,14 +13,14 @@ trait HandlesStatamicForm
 {
     protected function statamicForm(): StatamicForm
     {
-        if (! $this->handle) {
+        if (! $this->formHandle) {
             throw new \Exception('The form handle is missing. Please make sure to add it to the form tag.');
         }
 
-        $form = Form::find($this->handle);
+        $form = Form::find($this->formHandle);
 
         if (! $form) {
-            throw new \Exception("Form with handle [{$this->handle}] cannot be found.");
+            throw new \Exception("Form with handle [{$this->formHandle}] cannot be found.");
         }
 
         return $form;

@@ -14,13 +14,14 @@ class StatamicForm extends Component
 
     protected $form;
 
+    public $formHandle;
     public $data;
-    public $handle;
     public $success;
     public $redirect;
 
-    public function mount(): void
+    public function mount($form): void
     {
+        $this->formHandle = $form;
         $this->form = $this->statamicForm();
         $this->data = $this->formProperties();
     }
@@ -84,7 +85,7 @@ class StatamicForm extends Component
 
     public function render()
     {
-        return view('livewire.' . Str::slug($this->handle), [
+        return view('livewire.' . Str::slug($this->formHandle), [
             'fields' => $this->fields(),
             'honeypot' => $this->honeypot(),
         ]);

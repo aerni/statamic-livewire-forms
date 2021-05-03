@@ -44,7 +44,7 @@ trait GetsFormFields
 
     protected function assignFieldLabel($field): string
     {
-        $formTranslation = "forms.{$this->handle}.{$field->handle()}";
+        $formTranslation = "forms.{$this->formHandle}.{$field->handle()}";
         $defaultTranslation = "forms.default.{$field->handle()}";
 
         // Get label from specific form translations
