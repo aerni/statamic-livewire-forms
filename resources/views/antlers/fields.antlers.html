@@ -1,13 +1,31 @@
-{{ fields }}
+{{ if field }}
+
     <div class="
         col-span-1
-        {{ width === 25 ?= 'md:col-span-3' }}
-        {{ width === 33 ?= 'md:col-span-4' }}
-        {{ width === 50 ?= 'md:col-span-6' }}
-        {{ width === 66 ?= 'md:col-span-8' }}
-        {{ width === 75 ?= 'md:col-span-9' }}
-        {{ width === 100 ?= 'md:col-span-12' }}"
+        {{ fields[field].width === 25 ?= 'md:col-span-3' }}
+        {{ fields[field].width === 33 ?= 'md:col-span-4' }}
+        {{ fields[field].width === 50 ?= 'md:col-span-6' }}
+        {{ fields[field].width === 66 ?= 'md:col-span-8' }}
+        {{ fields[field].width === 75 ?= 'md:col-span-9' }}
+        {{ fields[field].width === 100 ?= 'md:col-span-12' }}"
     ">
-        {{ partial src="statamic-livewire-forms::fields/{type}" }}
+        {{ partial src="statamic-livewire-forms::fields/{fields[field].type}" }}
     </div>
-{{ /fields }}
+
+{{ else }}
+
+    {{ fields }}
+        <div class="
+            col-span-1
+            {{ width === 25 ?= 'md:col-span-3' }}
+            {{ width === 33 ?= 'md:col-span-4' }}
+            {{ width === 50 ?= 'md:col-span-6' }}
+            {{ width === 66 ?= 'md:col-span-8' }}
+            {{ width === 75 ?= 'md:col-span-9' }}
+            {{ width === 100 ?= 'md:col-span-12' }}"
+        ">
+            {{ partial src="statamic-livewire-forms::fields/{type}" }}
+        </div>
+    {{ /fields }}
+
+{{ /if }}
