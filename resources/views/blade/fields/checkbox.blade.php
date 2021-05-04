@@ -17,7 +17,10 @@
         />
     </div>
     <div class="ml-3 text-sm">
-        <label for="{{ $field['handle'] }}.{{ $option }}" class="font-medium {{ $errors->has($field['key']) ? 'text-red-700' : 'text-gray-700'}}">
+        <label
+            for="{{ $field['handle'] }}.{{ $option }}"
+            class="font-medium {{ $errors->has($field['key']) ? 'text-red-700' : 'text-gray-700'}}"
+        >
             {{ $label }}
         </label>
     </div>
