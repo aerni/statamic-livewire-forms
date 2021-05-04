@@ -1,6 +1,6 @@
 <?php
 
-namespace Aerni\StatamicLivewireForms\Traits;
+namespace Aerni\LivewireForms\Traits;
 
 use Illuminate\Support\Str;
 
@@ -20,7 +20,7 @@ trait FollowsRules
         // Get the realtime validation config from the field, form blueprint or global config.
         $realtime = $field['realtime']
             ?? $this->form->blueprint()->contents()['sections']['main']['realtime']
-            ?? config('statamic-livewire-forms.realtime');
+            ?? config('livewire-forms.realtime');
 
         // Disable realtime validation if "realtime: false".
         if (! $realtime) {

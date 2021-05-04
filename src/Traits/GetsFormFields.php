@@ -1,6 +1,6 @@
 <?php
 
-namespace Aerni\StatamicLivewireForms\Traits;
+namespace Aerni\LivewireForms\Traits;
 
 use Illuminate\Support\Str;
 use Illuminate\Support\Collection;

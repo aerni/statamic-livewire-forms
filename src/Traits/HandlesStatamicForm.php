@@ -1,6 +1,6 @@
 <?php
 
-namespace Aerni\StatamicLivewireForms\Traits;
+namespace Aerni\LivewireForms\Traits;
 
 use Statamic\Facades\Form;
 use Statamic\Facades\Site;

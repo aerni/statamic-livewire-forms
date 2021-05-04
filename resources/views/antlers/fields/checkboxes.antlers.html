@@ -9,15 +9,15 @@
         <div class="{{ inline || fields[field].inline ? 'items-center space-x-6' : 'flex-col justify-center space-y-4' }} flex">
             {{ if options }}
                 {{ foreach:options as="option|label" }}
-                    {{ partial src="statamic-livewire-forms::fields/checkbox" }}
+                    {{ partial src="livewire-forms::fields/checkbox" }}
                 {{ /foreach:options }}
             {{ elseif fields[field].options }}
                 {{ foreach :array="fields[field].options" as="option|label" }}
-                    {{ partial src="statamic-livewire-forms::fields/checkbox" }}
+                    {{ partial src="livewire-forms::fields/checkbox" }}
                 {{ /foreach }}
             {{ /if }}
         </div>
 
-        {{ partial src="statamic-livewire-forms::fields/error" }}
+        {{ partial src="livewire-forms::fields/error" }}
     </div>
 </fieldset>

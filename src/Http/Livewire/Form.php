@@ -1,14 +1,14 @@
 <?php
 
-namespace Aerni\StatamicLivewireForms\Http\Livewire;
+namespace Aerni\LivewireForms\Http\Livewire;
 
-use Aerni\StatamicLivewireForms\Traits\FollowsRules;
-use Aerni\StatamicLivewireForms\Traits\GetsFormFields;
-use Aerni\StatamicLivewireForms\Traits\HandlesStatamicForm;
+use Aerni\LivewireForms\Traits\FollowsRules;
+use Aerni\LivewireForms\Traits\GetsFormFields;
+use Aerni\LivewireForms\Traits\HandlesStatamicForm;
 use Livewire\Component;
 use Illuminate\Support\Str;
 
-class StatamicForm extends Component
+class Form extends Component
 {
     use FollowsRules, GetsFormFields, HandlesStatamicForm;
 

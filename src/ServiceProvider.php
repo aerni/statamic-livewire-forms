@@ -1,15 +1,15 @@
 <?php
 
-namespace Aerni\StatamicLivewireForms;
+namespace Aerni\LivewireForms;
 
-use Aerni\StatamicLivewireForms\Http\Livewire\StatamicForm;
+use Aerni\LivewireForms\Http\Livewire\Form;
 use Livewire\Livewire;
 use Statamic\Providers\AddonServiceProvider;
 
 class ServiceProvider extends AddonServiceProvider
 {
     protected $commands = [
-        Commands\MakeStatamicLivewireForm::class,
+        Commands\MakeLivewireForm::class,
     ];
 
     protected $tags = [
@@ -21,17 +21,17 @@ class ServiceProvider extends AddonServiceProvider
     {
         parent::boot();
 
-        Livewire::component('form', StatamicForm::class);
+        Livewire::component('form', Form::class);
 
-        $this->loadViewsFrom(__DIR__.'/../resources/views/antlers', 'statamic-livewire-forms');
-        $this->loadViewsFrom(__DIR__.'/../resources/views/blade', 'statamic-livewire-forms');
-
-        $this->publishes([
-            __DIR__.'/../resources/views/antlers' => resource_path('views/vendor/statamic-livewire-forms'),
-        ], 'statamic-livewire-forms-antlers');
+        $this->loadViewsFrom(__DIR__.'/../resources/views/antlers', 'livewire-forms');
+        $this->loadViewsFrom(__DIR__.'/../resources/views/blade', 'livewire-forms');
 
         $this->publishes([
-            __DIR__.'/../resources/views/blade' => resource_path('views/vendor/statamic-livewire-forms'),
-        ], 'statamic-livewire-forms-blade');
+            __DIR__.'/../resources/views/antlers' => resource_path('views/vendor/livewire-forms'),
+        ], 'livewire-forms-antlers');
+
+        $this->publishes([
+            __DIR__.'/../resources/views/blade' => resource_path('views/vendor/livewire-forms'),
+        ], 'livewire-forms-blade');
     }
 }

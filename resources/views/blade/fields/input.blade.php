@@ -22,4 +22,4 @@
     />
 </div>
 
-@include('statamic-livewire-forms::fields.error')
+@include('livewire-forms::fields.error')

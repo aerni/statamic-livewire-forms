@@ -1,6 +1,6 @@
 <?php
 
-namespace Aerni\StatamicLivewireForms\Tags;
+namespace Aerni\LivewireForms\Tags;
 
 use Statamic\Tags\Iterate as BaseIterate;
 
@@ -11,14 +11,6 @@ class Iterate extends BaseIterate
         return $this->wildcard($this->params->get('array'));
     }
 
-    /**
-     * Maps to the {{ iterate:fieldname }} tag.
-     *
-     * Also maps to {{ foreach:fieldname }}.
-     * It's called Iterate because foreach is a reserved word. Thanks PHP.
-     *
-     * @return mixed
-     */
     public function wildcard($tag)
     {
         [$keyKey, $valueKey] = $this->getKeyNames();

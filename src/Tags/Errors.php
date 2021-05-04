@@ -1,6 +1,6 @@
 <?php
 
-namespace Aerni\StatamicLivewireForms\Tags;
+namespace Aerni\LivewireForms\Tags;
 
 use Statamic\Tags\Tags;
 

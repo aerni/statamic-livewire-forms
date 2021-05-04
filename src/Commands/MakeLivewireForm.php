@@ -1,6 +1,6 @@
 <?php
 
-namespace Aerni\StatamicLivewireForms\Commands;
+namespace Aerni\LivewireForms\Commands;
 
 use Statamic\Facades\Form;
 use Illuminate\Support\Str;
@@ -8,7 +8,7 @@ use Illuminate\Console\Command;
 use Statamic\Console\RunsInPlease;
 use Illuminate\Support\Facades\File;
 
-class MakeStatamicLivewireForm extends Command
+class MakeLivewireForm extends Command
 {
     use RunsInPlease;
 

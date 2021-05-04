@@ -8,7 +8,7 @@
             </div>
           <div class="ml-3">
                 <h3 class="text-sm font-medium text-green-800">
-                    @lang('statamic-livewire-forms::forms.success_message')
+                    @lang('livewire-forms::forms.success_message')
                 </h3>
             </div>
         </div>

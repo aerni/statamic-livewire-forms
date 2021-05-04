@@ -8,10 +8,10 @@
     <div>
         <div class="{{ $field['inline'] ? 'items-center space-x-6' : 'flex-col justify-center space-y-4' }} flex">
             @foreach ($field['options'] as $option => $label)
-                @include('statamic-livewire-forms::fields/checkbox')
+                @include('livewire-forms::fields/checkbox')
             @endforeach
         </div>
 
-        @include('statamic-livewire-forms::fields.error')
+        @include('livewire-forms::fields.error')
     </div>
 </fieldset>

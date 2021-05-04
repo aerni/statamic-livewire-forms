@@ -9,9 +9,9 @@
             <div class="ml-3">
                 <h3 class="text-sm font-medium text-red-700">
                     @if ($errors->count() === 1)
-                        @lang('statamic-livewire-forms::forms.has_error', ['count' => $errors->count()])
+                        @lang('livewire-forms::forms.has_error', ['count' => $errors->count()])
                     @else
-                        @lang('statamic-livewire-forms::forms.has_errors', ['count' => $errors->count()])
+                        @lang('livewire-forms::forms.has_errors', ['count' => $errors->count()])
                     @endif
                 </h3>
                 <div class="mt-2 text-sm text-red-600">

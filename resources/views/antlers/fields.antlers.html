@@ -9,7 +9,7 @@
         {{ fields[field].width === 75 ?= 'md:col-span-9' }}
         {{ fields[field].width === 100 ?= 'md:col-span-12' }}"
     ">
-        {{ partial src="statamic-livewire-forms::fields/{fields[field].type}" }}
+        {{ partial src="livewire-forms::fields/{fields[field].type}" }}
     </div>
 
 {{ else }}
@@ -24,7 +24,7 @@
             {{ width === 75 ?= 'md:col-span-9' }}
             {{ width === 100 ?= 'md:col-span-12' }}"
         ">
-            {{ partial src="statamic-livewire-forms::fields/{type}" }}
+            {{ partial src="livewire-forms::fields/{type}" }}
         </div>
     {{ /fields }}
 
