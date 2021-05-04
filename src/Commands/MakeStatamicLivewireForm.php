@@ -17,14 +17,14 @@ class MakeStatamicLivewireForm extends Command
      *
      * @var string
      */
-    protected $signature = 'make:statamic-livewire-form';
+    protected $signature = 'livewire-form:make';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    public $description = 'Create Livewire views for your Statamic forms';
+    public $description = 'Create a new Livewire form view';
 
     /**
      * Execute the console command.
