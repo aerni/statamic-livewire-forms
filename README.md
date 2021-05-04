@@ -1,63 +1,137 @@
-# Livewire Statamic Forms
+![Statamic](https://flat.badgen.net/badge/Statamic/3.0+/FF269E) ![Packagist version](https://flat.badgen.net/packagist/v/aerni/livewire-forms/latest) ![Packagist Total Downloads](https://flat.badgen.net/packagist/dt/aerni/livewire-forms) ![License](https://flat.badgen.net/github/license/aerni/statamic-livewire-forms)
 
-This addon allows you to submit forms in Statamic CMS using Laravel Livewire.
+# Livewire Forms
+This addon allows you to use Statamic forms with Laravel Livewire.
+
+## Features
+- Use your Statamic forms with Laravel Livewire
+- Use your Statamic form blueprint as a form builder
+- Realtime validation
+- No more dealing with Front End Validation libraries
+- Support for Antlers and Blade
+- Honeypot field for Spam protection
+- No redirects and pageloads
+- Prestyled fields ready to go
 
 ## Installation
-
-Install the package via composer:
+Install the addon using Composer:
 
 ```bash
 composer require aerni/livewire-forms
 ```
 
-## Usage
+Publish the config of the package:
+
+```bash
+php please vendor:publish --tag=livewire-forms-config
+```
+
+The following config will be published to `config/livewire-forms.php`:
+
+```php
+return [
+
+    /*
+    |--------------------------------------------------------------------------
+    | Realtime Validation
+    |--------------------------------------------------------------------------
+    |
+    | A boolean to globally enable/disable realtime validation.
+    |
+    */
+
+    'realtime' => true,
+
+];
+```
+
+## Configuration
+XXX
+
+## Basic Usage
 
 Include Livewire styles and scripts:
 
 ```html
 <html>
-<head>
-    <!-- /... -->
-    {{ livewire:styles }}
-</head>
-<body>
+    <head>
+        {{ livewire:styles }}
+    </head>
 
-    <!-- /... -->
-    {{ livewire:scripts }}
-</body>
+    <body>
+        {{ livewire:scripts }}
+    </body>
 </html>
 ```
 
-Run command to generate the view:
+### Create Form
+
+Create a Livewire form view with this command and follow the instructions. The form view comes configured, styled, and is ready to go. You're free to change it however you'd like.
 
 ```bash
-php artisan make:statamic-livewire-form-view
+php please livewire-form:make
 ```
 
-Or, create the view manually in `/resources/views/livewire/form-view.blade.php`.
+### Render Form
 
-Bind properties in the view like this:
-```html
-<input autocomplete="name" type="text" wire:model.lazy="fields.name" />
-@error('fields.name')<div>{{ $message }}</div>@enderror
-```
-
-Embed the livewire component in your template:
+Include the Livewire form component in your template and provide the handle of the Statamic form. This will automatically load the corresponding form view in `views/livewire/my-form-handle.{antlers.html|blade.php}`.
 
 ```html
-{{ livewire:livewire-form handle="contact_form" }}
+<!-- Antlers -->
+{{ livewire:form form="contact" }}
+
+<!-- Blade -->
+<livewire:form form="contact">
 ```
-If no `view` parameter is set, the component will default to the kebab case of the form handle e.g. `/resources/views/livewire/contact-form.blade.php`
 
-## Notes & Limitations
-- Only tested with text and textarea form fieldtypes.
-- Not tested on multisites
-- Not tested using any [static caching strategies](https://statamic.dev/static-caching#caching-strategies).
+You can also dynamically render a form that was selected via the Form Fieldtype:
 
-## Changelog
+```html
+<!-- Antlers -->
+{{ livewire:form :form="fieldtype:handle" }}
 
-Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed recently.
+<!-- Blade -->
+<livewire:form :form="fieldtype:handle">
+```
 
-## License
+### Change View
 
-The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
+You can include a single field like this:
+
+```html
+<!-- Antlers -->
+{{ partial src="livewire-forms::fields" field="name" }}
+
+<!-- Blade -->
+@include('livewire-forms::fields', [
+    'field' => $fields['name'],
+])
+```
+
+### Realtime Validation
+
+You can configure realtime validation on three levels:
+1. In the global config at `config/livewire-forms.php`
+2. On the form blueprint
+3. On the form field
+
+
+**Form Blueprint**
+```yaml
+sections:
+  main:
+    display: Main
+    fields:
+      -
+        handle: email
+        field:
+          input_type: email
+          antlers: false
+          display: Email
+          type: text
+          icon: text
+          listable: hidden
+          validate:
+            - required
+            - email
+```
