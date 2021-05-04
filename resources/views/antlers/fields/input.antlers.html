@@ -11,7 +11,7 @@
         placeholder="{{ placeholder ?? fields[field].placeholder }}"
         wire:model.lazy="{{ key ?? fields[field].key }}"
 
-        {{ if ! error ?? fields[field].error }}
+        {{ if ! (error ?? fields[field].error) }}
             class="block w-full placeholder-gray-300 border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
         {{ else }}
             class="block w-full text-red-800 placeholder-red-300 border-red-300 rounded-md focus:ring-red-500 focus:border-red-500 sm:text-sm"
