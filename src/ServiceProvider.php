@@ -14,6 +14,7 @@ class ServiceProvider extends AddonServiceProvider
 
     protected $tags = [
         Tags\Errors::class,
+        Tags\Iterate::class
     ];
 
     public function boot()
