@@ -77,10 +77,10 @@ class MakeLivewireForm extends Command
     {
         if ($this->confirm('Do you want to publish the default form views?')) {
             $this->callSilently('vendor:publish', [
-                '--tag' => 'statamic-livewire-forms-' . Str::lower($this->engine)
+                '--tag' => 'livewire-forms-' . Str::lower($this->engine)
             ]);
 
-            $path = resource_path('views/vendor/statamic-livewire-forms');
+            $path = resource_path('views/vendor/livewire-forms');
 
             $this->line("<info>[✓]</info> The default form views were successfully published: <comment>{$this->getRelativePath($path)}</comment>");
         }
