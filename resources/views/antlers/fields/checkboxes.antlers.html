@@ -8,7 +8,7 @@
         </div>
     {{ /if }}
     <div>
-        <div class="{{ inline || fields[field].inline ? 'items-center space-x-6' : 'flex-col justify-center space-y-4' }} flex">
+        <div class="{{ inline || fields[field].inline ? 'items-center space-x-6' : 'flex-col justify-center space-y-3' }} flex">
             {{ if options }}
                 {{ foreach:options as="option|label" }}
                     {{ partial src="livewire-forms::fields/checkbox" }}

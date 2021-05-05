@@ -8,7 +8,7 @@
         </div>
     @endif
     <div>
-        <div class="{{ $field['inline'] ? 'items-center space-x-6' : 'flex-col justify-center space-y-4' }} flex">
+        <div class="{{ $field['inline'] ? 'items-center space-x-6' : 'flex-col justify-center space-y-3' }} flex">
             @foreach ($field['options'] as $option => $label)
                 @include('livewire-forms::fields/checkbox')
             @endforeach
