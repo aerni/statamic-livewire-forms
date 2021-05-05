@@ -19,7 +19,7 @@ trait GetsFormFields
                     'key' => 'data.' . $field->handle(),
                     'type' => $this->assignFieldType($field->get('type')),
                     'input_type' => $this->assignFieldInputType($field->get('type'), $field->get('input_type')),
-                    'options' => $field->get('options'),
+                    'options' => $this->getFieldOptions($field),
                     'inline' => $field->get('inline'),
                     'default' => $field->get('default'),
                     'placeholder' => $field->get('placeholder'),
@@ -42,6 +42,28 @@ trait GetsFormFields
         ];
     }
 
+    protected function getFieldOptions($field): array
+    {
+        $options = collect($field->get('options'))->map(function ($option, $key) use ($field) {
+            $formTranslation = "forms.{$this->formHandle}.{$field->handle()}.options.{$key}";
+            $defaultTranslation = "forms.default.{$field->handle()}.options.{$key}";
+
+            // Get label from specific form translations
+            if (Lang::has($formTranslation)) {
+                return Lang::get($formTranslation);
+            };
+
+            // Get label form default translations
+            if (Lang::has($defaultTranslation)) {
+                return Lang::get($defaultTranslation);
+            };
+
+            return $option;
+        });
+
+        return $options->toArray();
+    }
+
     protected function assignFieldLabel($field): string
     {
         $formTranslation = "forms.{$this->formHandle}.{$field->handle()}";
@@ -49,12 +71,14 @@ trait GetsFormFields
 
         // Get label from specific form translations
         if (Lang::has($formTranslation)) {
-            return Lang::get($formTranslation);
+            $translation = Lang::get($formTranslation);
+            return is_array($translation) ? $translation['display'] : $translation;
         };
 
         // Get label form default translations
         if (Lang::has($defaultTranslation)) {
-            return Lang::get($defaultTranslation);
+            $translation = Lang::get($defaultTranslation);
+            return is_array($translation) ? $translation['display'] : $translation;
         };
 
         // Fallback to field display
