@@ -1,7 +1,7 @@
 <fieldset>
     @if ($field['show_label'])
         <div class="mb-4">
-            <legend class="text-base font-medium text-gray-900">{{ $field['label'] }}</legend>
+            <legend class="text-sm font-medium text-gray-700">{{ $field['label'] }}</legend>
             <p class="text-sm text-gray-500">{{ $field['instructions'] }}</p>
         </div>
     @endif
