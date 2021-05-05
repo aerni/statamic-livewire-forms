@@ -1,4 +1,4 @@
-@if ($field)
+@if (isset($field))
 
     <div class="
         col-span-1
