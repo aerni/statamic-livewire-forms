@@ -4,7 +4,6 @@ namespace Aerni\LivewireForms\Traits;
 
 use Illuminate\Support\Str;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Lang;
 
 trait GetsFormFields
 {
@@ -13,16 +12,16 @@ trait GetsFormFields
         return $this->form->fields()
             ->map(function ($field) {
                 return [
-                    'label' => $this->assignFieldLabel($field),
-                    'instructions' => $field->get('instructions'),
+                    'label' => __($field->get('display')),
+                    'instructions' => __($field->get('instructions')),
                     'handle' => $field->handle(),
                     'key' => 'data.' . $field->handle(),
                     'type' => $this->assignFieldType($field->get('type')),
                     'input_type' => $this->assignFieldInputType($field->get('type'), $field->get('input_type')),
-                    'options' => $this->getFieldOptions($field),
+                    'options' => $this->getTranslatedFieldOptions($field),
                     'inline' => $field->get('inline'),
                     'default' => $field->get('default'),
-                    'placeholder' => $field->get('placeholder'),
+                    'placeholder' => __($field->get('placeholder')),
                     'autocomplete' => $field->get('autocomplete'),
                     'width' => $field->get('width') ?? 100,
                     'rules' => collect($field->rules())->flatten()->toArray(),
@@ -42,47 +41,11 @@ trait GetsFormFields
         ];
     }
 
-    protected function getFieldOptions($field): array
+    protected function getTranslatedFieldOptions($field): array
     {
-        $options = collect($field->get('options'))->map(function ($option, $key) use ($field) {
-            $formTranslation = "forms.{$this->formHandle}.{$field->handle()}.options.{$key}";
-            $defaultTranslation = "forms.default.{$field->handle()}.options.{$key}";
-
-            // Get label from specific form translations
-            if (Lang::has($formTranslation)) {
-                return Lang::get($formTranslation);
-            };
-
-            // Get label form default translations
-            if (Lang::has($defaultTranslation)) {
-                return Lang::get($defaultTranslation);
-            };
-
-            return $option;
-        });
-
-        return $options->toArray();
-    }
-
-    protected function assignFieldLabel($field): string
-    {
-        $formTranslation = "forms.{$this->formHandle}.{$field->handle()}";
-        $defaultTranslation = "forms.default.{$field->handle()}";
-
-        // Get label from specific form translations
-        if (Lang::has($formTranslation)) {
-            $translation = Lang::get($formTranslation);
-            return is_array($translation) ? $translation['display'] : $translation;
-        };
-
-        // Get label form default translations
-        if (Lang::has($defaultTranslation)) {
-            $translation = Lang::get($defaultTranslation);
-            return is_array($translation) ? $translation['display'] : $translation;
-        };
-
-        // Fallback to field display
-        return $field->get('display');
+        return collect($field->get('options'))->map(function ($option) {
+            return __($option);
+        })->toArray();
     }
 
     protected function assignFieldType(string $type): string

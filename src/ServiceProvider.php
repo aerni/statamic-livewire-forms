@@ -23,6 +23,8 @@ class ServiceProvider extends AddonServiceProvider
 
         Livewire::component('form', Form::class);
 
+        $this->loadJsonTranslationsFrom(__DIR__.'/../resources/lang');
+
         $this->loadViewsFrom(__DIR__.'/../resources/views/antlers', 'livewire-forms');
         $this->loadViewsFrom(__DIR__.'/../resources/views/blade', 'livewire-forms');
 

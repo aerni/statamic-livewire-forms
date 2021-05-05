@@ -8,11 +8,7 @@
             </div>
             <div class="ml-3">
                 <h3 class="text-sm font-medium text-red-700">
-                    @if ($errors->count() === 1)
-                        @lang('livewire-forms::forms.error_message')
-                    @else
-                        @lang('livewire-forms::forms.errors_message', ['count' => $errors->count()])
-                    @endif
+                    @choice('There was an error with your submission:|There were :count errors with your submission:', $errors->count())
                 </h3>
                 <div class="mt-2 text-sm text-red-600">
                     <ul class="pl-5 space-y-1 list-disc">
