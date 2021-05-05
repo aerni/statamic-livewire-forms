@@ -28,7 +28,7 @@ trait GetsFormFields
                     'rules' => collect($field->rules())->flatten()->toArray(),
                     'realtime' => $field->get('realtime'),
                     'error' => $this->getFieldError('data.' . $field->handle()),
-                    'show_label' => $field->get('show_label'),
+                    'show_label' => $field->get('show_label') ?? true,
                 ];
             });
     }
