@@ -22,7 +22,7 @@ trait GetsFormFields
                     'inline' => $field->get('inline'),
                     'default' => $field->get('default'),
                     'placeholder' => __($field->get('placeholder')),
-                    'autocomplete' => $field->get('autocomplete'),
+                    'autocomplete' => $field->get('autocomplete') ?? 'off',
                     'width' => $field->get('width') ?? 100,
                     'rules' => collect($field->rules())->flatten()->toArray(),
                     'realtime' => $field->get('realtime'),
