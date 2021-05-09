@@ -50,13 +50,26 @@ class Form extends Component
             ->toArray();
     }
 
-    protected function assignFieldProperty(array $field): ?array
+    protected function assignFieldProperty(array $field)
     {
         if ($field['type'] === 'checkboxes') {
             return (count($field['options']) > 1) ? [] : null;
         }
 
+        if ($field['type'] === 'select') {
+            return $this->getDefaultSelectValue($field);
+        }
+
         return null;
+    }
+
+    protected function getDefaultSelectValue(array $field): string
+    {
+        if (! isset($field['default'])) {
+            return array_key_first($field['options']);
+        }
+
+        return $field['default'];
     }
 
     protected function validationAttributes(): array
