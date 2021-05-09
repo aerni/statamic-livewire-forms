@@ -26,13 +26,20 @@ trait HandlesStatamicForm
         return $form;
     }
 
+    protected function preProcess(array $data): array
+    {
+        return $data;
+    }
+
     protected function submitStatamicForm(): void
     {
         if ($this->isSpam()) {
             return;
         }
 
-        $submission = $this->form->makeSubmission()->data($this->data);
+        $data = $this->preProcess($this->data);
+
+        $submission = $this->form->makeSubmission()->data($data);
 
         if ($this->form->store()) {
             $submission->save();
