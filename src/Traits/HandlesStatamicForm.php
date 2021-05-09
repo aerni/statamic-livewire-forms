@@ -2,6 +2,7 @@
 
 namespace Aerni\LivewireForms\Traits;
 
+use Statamic\Support\Str;
 use Statamic\Facades\Form;
 use Statamic\Facades\Site;
 use Statamic\Forms\SendEmails;
@@ -28,7 +29,15 @@ trait HandlesStatamicForm
 
     protected function preProcess(array $data): array
     {
-        return $data;
+        return collect($data)->map(function ($value, $key) {
+            $field = collect($this->fields()->get($key));
+
+            if ($field->get('cast_booleans')) {
+                return Str::toBool($value);
+            }
+
+            return $value;
+        })->toArray();
     }
 
     protected function submitStatamicForm(): void

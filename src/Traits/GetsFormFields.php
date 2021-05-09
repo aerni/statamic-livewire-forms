@@ -28,6 +28,7 @@ trait GetsFormFields
                     'realtime' => $field->get('realtime'),
                     'error' => $this->getFieldError('data.' . $field->handle()),
                     'show_label' => $field->get('show_label') ?? true,
+                    'cast_booleans' => $field->get('cast_booleans') ?? false,
                 ];
             });
     }
