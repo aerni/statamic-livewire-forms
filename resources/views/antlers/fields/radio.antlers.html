@@ -3,7 +3,7 @@
         <input
             id="{{ handle ?? fields[field].handle }}.{{ option ?? fields[field].option }}"
             name="{{ handle ?? fields[field].handle }}"
-            value="{{ label ?? fields[field].label }}"
+            value="{{ option ?? fields[field].option }}"
             type="radio"
             wire:model.lazy="{{ key ?? fields[field].key }}"
 

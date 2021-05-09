@@ -3,7 +3,7 @@
         <input
             id="{{ $field['handle'] }}.{{ $option }}"
             name="{{ $field['handle'] }}"
-            value="{{ $label }}"
+            value="{{ $option }}"
             type="checkbox"
             wire:model.lazy="{{ $field['key'] }}"
 
