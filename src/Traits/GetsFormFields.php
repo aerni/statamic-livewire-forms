@@ -54,7 +54,7 @@ trait GetsFormFields
             'assets' => 'file',
             'checkboxes' => 'checkboxes',
             'integer' => 'input',
-            'radio' => 'radio',
+            'radio' => 'radios',
             'select' => 'select',
             'text' => 'input',
             'textarea' => 'textarea',
