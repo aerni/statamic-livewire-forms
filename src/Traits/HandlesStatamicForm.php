@@ -36,6 +36,10 @@ trait HandlesStatamicForm
                 return Str::toBool($value);
             }
 
+            if ($field->get('input_type') === 'number') {
+                return (int) $value;
+            }
+
             return $value;
         })->toArray();
     }
