@@ -17,7 +17,7 @@ class MakeLivewireForm extends Command
      *
      * @var string
      */
-    protected $signature = 'livewire-form:make';
+    protected $signature = 'make:livewire-form';
 
     /**
      * The console command description.
