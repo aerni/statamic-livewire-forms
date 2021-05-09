@@ -69,7 +69,7 @@ Include Livewire styles and scripts:
 Create a Livewire form view with this command and follow the instructions. The form view comes configured, styled, and is ready to go. You're free to change it however you'd like.
 
 ```bash
-php please livewire-form:make
+php please make:livewire-form
 ```
 
 ### Render Form
