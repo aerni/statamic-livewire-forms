@@ -1,4 +1,4 @@
-<div class="{{ $field['inline'] ? 'inline-flex' : 'flex' }} items-start">
+<div class="flex items-start">
     <div class="flex items-center h-5">
         <input
             id="{{ $field['handle'] }}.{{ $option }}"
