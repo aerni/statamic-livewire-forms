@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\URL;
 use Statamic\Events\SubmissionCreated;
 use Statamic\Forms\Form as StatamicForm;
 use Statamic\Exceptions\SilentFormFailureException;
+use Statamic\Forms\Submission;
 
 trait HandlesStatamicForm
 {
@@ -46,23 +47,23 @@ trait HandlesStatamicForm
         })->toArray();
     }
 
-    protected function submitStatamicForm(): void
+    protected function getFormSubmission(): Submission
     {
-        // Throw a silent failure if a bot filled the honeypot.
-        if ($this->isSpam()) {
-            throw new SilentFormFailureException;
-            // TODO: Return success even when its Spam to trick bots.
-        }
+        return $this->form->makeSubmission()
+            ->data($this->normalizeData($this->data));
+    }
 
-        $data = $this->normalizeData($this->data);
-        $submission = $this->form->makeSubmission()->data($data);
+    protected function submitStatamicForm()
+    {
+        $submission = $this->getFormSubmission();
 
-        $this->emit('formSubmitted');
-        $formSubmittedEvent = FormSubmitted::dispatch($submission);
+        try {
+            throw_if($this->isSpam(), new SilentFormFailureException);
 
-        // Throw a silent failure if an event listener returns false.
-        if ($formSubmittedEvent === false) {
-            throw new SilentFormFailureException;
+            $this->emit('formSubmitted');
+            throw_if(FormSubmitted::dispatch($submission) === false, new SilentFormFailureException);
+        } catch (SilentFormFailureException $e) {
+            return $this->success();
         }
 
         if ($this->form->store()) {
@@ -75,6 +76,18 @@ trait HandlesStatamicForm
         SubmissionCreated::dispatch($submission);
 
         SendEmails::dispatch($submission, $site);
+
+        return $this->success();
+    }
+
+    protected function success()
+    {
+        if ($this->redirect) {
+            return redirect()->to($this->redirect);
+        }
+
+        $this->data = $this->hydrateFormData();
+        $this->success = true;
     }
 
     protected function isSpam(): bool

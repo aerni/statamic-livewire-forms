@@ -94,17 +94,6 @@ class Form extends Component
     {
         $this->validate();
         $this->submitStatamicForm();
-        $this->success();
-    }
-
-    protected function success()
-    {
-        if ($this->redirect) {
-            return redirect()->to($this->redirect);
-        }
-
-        $this->data = $this->hydrateFormData();
-        $this->success = true;
     }
 
     public function render()
