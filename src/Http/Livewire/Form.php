@@ -5,8 +5,9 @@ namespace Aerni\LivewireForms\Http\Livewire;
 use Aerni\LivewireForms\Traits\FollowsRules;
 use Aerni\LivewireForms\Traits\GetsFormFields;
 use Aerni\LivewireForms\Traits\HandlesStatamicForm;
-use Livewire\Component;
 use Illuminate\Support\Str;
+use Livewire\Component;
+use Statamic\Fields\Field;
 
 class Form extends Component
 {
@@ -42,34 +43,44 @@ class Form extends Component
 
     protected function hydrateFormData(): array
     {
-        return
-            $this->fields()->mapWithKeys(function ($field) {
-                return [$field['handle'] => $this->assignFieldProperty($field)];
-            })
-            ->put($this->form->honeypot(), null)
-            ->toArray();
+        return $this->form->fields()->mapWithKeys(function ($field) {
+            return [$field->handle() => $this->assignDefaultFieldValue($field)];
+        })
+        ->put($this->form->honeypot(), null)
+        ->toArray();
     }
 
-    protected function assignFieldProperty(array $field)
+    protected function assignDefaultFieldValue(Field $field)
     {
-        if ($field['type'] === 'checkboxes') {
-            return (count($field['options']) > 1) ? [] : null;
+        if ($field->type() === 'checkboxes') {
+            return $this->getDefaultCheckboxValue($field);
         }
 
-        if ($field['type'] === 'select') {
+        if ($field->type() === 'select') {
             return $this->getDefaultSelectValue($field);
         }
 
-        return null;
+        // Make sure to always return the first array value
+        // if someone set the default to an array instead of a string/integer.
+        return array_first((array) $field->defaultValue());
     }
 
-    protected function getDefaultSelectValue(array $field): string
+    protected function getDefaultCheckboxValue(Field $field)
     {
-        if (! isset($field['default'])) {
-            return array_key_first($field['options']);
-        }
+        $default = $field->defaultValue();
+        $options = $field->get('options');
 
-        return $field['default'];
+        return (count($options) > 1)
+            ? (array) $default
+            : array_first((array) $default);
+    }
+
+    protected function getDefaultSelectValue(Field $field): string
+    {
+        $default = $field->defaultValue();
+        $options = $field->get('options');
+
+        return $default ?? array_key_first($options);
     }
 
     protected function validationAttributes(): array
