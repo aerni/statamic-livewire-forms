@@ -23,7 +23,7 @@ class Form extends Component
     {
         $this->formHandle = $form;
         $this->form = $this->statamicForm();
-        $this->data = $this->formProperties();
+        $this->data = $this->hydrateFormData();
     }
 
     public function hydrate(): void
@@ -40,7 +40,7 @@ class Form extends Component
         $this->validateOnly($field, $this->realtimeRules($field));
     }
 
-    protected function formProperties(): array
+    protected function hydrateFormData(): array
     {
         return
             $this->fields()->mapWithKeys(function ($field) {
@@ -92,7 +92,7 @@ class Form extends Component
             return redirect()->to($this->redirect);
         }
 
-        $this->data = $this->formProperties();
+        $this->data = $this->hydrateFormData();
         $this->success = true;
     }
 
