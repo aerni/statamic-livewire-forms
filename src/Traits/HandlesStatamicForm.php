@@ -48,12 +48,13 @@ trait HandlesStatamicForm
 
     protected function submitStatamicForm(): void
     {
+        // Throw a silent failure if a bot filled the honeypot.
         if ($this->isSpam()) {
-            return;
+            throw new SilentFormFailureException;
+            // TODO: Return success even when its Spam to trick bots.
         }
 
         $data = $this->normalizeData($this->data);
-
         $submission = $this->form->makeSubmission()->data($data);
 
         $this->emit('formSubmitted');
