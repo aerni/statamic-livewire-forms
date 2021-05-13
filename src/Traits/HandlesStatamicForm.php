@@ -27,7 +27,7 @@ trait HandlesStatamicForm
         return $form;
     }
 
-    protected function preProcess(array $data): array
+    protected function normalizeData(array $data): array
     {
         return collect($data)->map(function ($value, $key) {
             $field = collect($this->fields()->get($key));
@@ -50,7 +50,7 @@ trait HandlesStatamicForm
             return;
         }
 
-        $data = $this->preProcess($this->data);
+        $data = $this->normalizeData($this->data);
 
         $submission = $this->form->makeSubmission()->data($data);
 
