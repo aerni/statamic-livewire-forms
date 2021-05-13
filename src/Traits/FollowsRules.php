@@ -15,6 +15,11 @@ trait FollowsRules
 
     protected function realtimeRules($field): array
     {
+        // Don't validate the honeypot.
+        if ($field === $this->honeypot()['key']) {
+            return [$this->honeypot()['key'] => []];
+        };
+
         $field = $this->fields()[Str::remove('data.', $field)];
 
         // Get the realtime validation config from the field, form blueprint or global config.
