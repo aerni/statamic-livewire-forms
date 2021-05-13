@@ -6,9 +6,11 @@ use Statamic\Support\Str;
 use Statamic\Facades\Form;
 use Statamic\Facades\Site;
 use Statamic\Forms\SendEmails;
+use Statamic\Events\FormSubmitted;
 use Illuminate\Support\Facades\URL;
 use Statamic\Events\SubmissionCreated;
 use Statamic\Forms\Form as StatamicForm;
+use Statamic\Exceptions\SilentFormFailureException;
 
 trait HandlesStatamicForm
 {
@@ -54,13 +56,23 @@ trait HandlesStatamicForm
 
         $submission = $this->form->makeSubmission()->data($data);
 
+        $this->emit('formSubmitted');
+        $formSubmittedEvent = FormSubmitted::dispatch($submission);
+
+        // Throw a silent failure if an event listener returns false.
+        if ($formSubmittedEvent === false) {
+            throw new SilentFormFailureException;
+        }
+
         if ($this->form->store()) {
             $submission->save();
         }
 
         $site = Site::findByUrl(URL::previous());
 
+        $this->emit('submissionCreated');
         SubmissionCreated::dispatch($submission);
+
         SendEmails::dispatch($submission, $site);
     }
 
