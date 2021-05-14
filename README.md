@@ -162,10 +162,7 @@ sections:
 ```
 
 ### 3. On the form field
-You have to options when configuring realtime validation on a specific field.
-
-#### Option 1
-Use a boolean to enable/disable realtime validation for the field
+A boolean to enable/disable realtime validation for the field:
 
 ```yaml
 # resources/blueprints/forms/contact.yaml
@@ -184,8 +181,7 @@ sections:
           realtime: true
 ```
 
-#### Option 2
-Provide an array with the rules you want to validate in realtime.
+Sometimes you may want to only validate certain rules in realtime. You may provide an array with the rules you want to validate in realtime instead of a boolean:
 
 ```yaml
 # resources/blueprints/forms/contact.yaml
@@ -213,9 +209,9 @@ This addon provides multiple configuration options for your form fields.
 
 Use these options to change how your field values will be saved.
 
-| Parameter       | Type      | Supported by          | Description                |
-| :-------------- | :-------- | :-------------------- | :------------------------- |
-| `cast_booleans` | `boolean` | All fieldtypes        | Save the value as a boolean |
+| Parameter       | Type      | Supported by          | Description                       |
+| :-------------- | :-------- | :-------------------- | :-------------------------------- |
+| `cast_booleans` | `boolean` | All fieldtypes        | Save the field value as a boolean |
 
 ### Layout specific
 
