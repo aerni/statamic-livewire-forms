@@ -153,6 +153,7 @@ sections:
 
 ```json
 // resources/lang/de.json
+
 {
     "Colors": "Farben",
     "What is your favorite color?": "Was ist deine Lieblingsfarbe?",
