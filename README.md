@@ -278,3 +278,10 @@ public function handle(SubmissionCreated $event)
     })
 </script>
 ```
+
+## License
+Livewire Forms is **commercial software** but has an open-source codebase. If you want to use it in production, you'll need to [buy a license from the Statamic Marketplace](https://statamic.com/addons/aerni/livewire-forms).
+>Livewire Forms is **NOT** free software.
+
+## Credits
+Developed by[ Michael Aerni](https://www.michaelaerni.ch)
