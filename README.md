@@ -10,6 +10,7 @@ This addon allows you to submit your Statamic forms with Laravel Livewire.
 - No redirects after the form was submitted
 - Honeypot field for simple and effective spam prevention
 - Use your Statamic form blueprint as a form builder
+- Multi-site support; translate your form labels, instructions, placeholders, etc.
 - Configured and styled form views in Antlers and Blade
 
 ## Installation
