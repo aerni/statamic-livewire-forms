@@ -1,26 +1,48 @@
 {
     "name": "aerni/livewire-forms",
-    "description": "Use Statamic forms with Laravel Livewire",
+    "description": "A Statamic forms framework for Laravel Livewire",
+    "keywords": [
+        "statamic",
+        "livewire",
+        "forms"
+    ],
+    "homepage": "https://github.com/aerni/statamic-livewire-forms",
+    "license": "proprietary",
+    "authors": [
+        {
+            "name": "Michael Aerni",
+            "email": "hello@michaelaerni.ch",
+            "homepage": "https://www.michaelaerni.ch",
+            "role": "Developer"
+        }
+    ],
     "require": {
         "php": "^7.4 || ^8.0",
         "laravel/framework": "^8.0",
         "statamic/cms": "^3.0",
-        "jonassiewertsen/statamic-livewire": "^2.4"
+        "jonassiewertsen/statamic-livewire": "^2.5"
     },
     "autoload": {
         "psr-4": {
             "Aerni\\LivewireForms\\": "src"
         }
     },
+    "config": {
+        "optimize-autoloader": true,
+        "preferred-install": "dist",
+        "sort-packages": true
+    },
     "extra": {
         "statamic": {
             "name": "Livewire Forms",
-            "description": "Livewire Forms"
+            "description": "A Statamic forms framework for Laravel Livewire"
         },
         "laravel": {
             "providers": [
                 "Aerni\\LivewireForms\\ServiceProvider"
             ]
         }
-    }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
 }
