@@ -160,16 +160,6 @@ sections:
 }
 ```
 
-```html
-<!-- Antlers -->
-{{ partial src="livewire-forms::fields" field="name" }}
-
-<!-- Blade -->
-@include('livewire-forms::fields', [
-    'field' => $fields['name'],
-])
-```
-
 ## Realtime validation
 
 You can configure realtime validation on three levels. In the config file, on the form, and on the form field. Each level will override the configuration of the previous level.
