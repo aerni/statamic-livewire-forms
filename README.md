@@ -6,7 +6,7 @@ This addon allows you to use Statamic forms with Laravel Livewire.
 ## Features
 - Use your Statamic forms with Laravel Livewire
 - Use your Statamic form blueprint as a form builder
-- Realtime validation
+- Realtime validation with fine-grained control for each field
 - No more dealing with Front End Validation libraries
 - Support for Antlers and Blade
 - Honeypot field for Spam protection
@@ -47,34 +47,49 @@ return [
 
 ## Configuration
 XXX
+Add @tailwindcss/forms
 
-## Basic Usage
+## Basic usage
 
-Include Livewire styles and scripts:
+### Include Livewire
+
+Add the Livewire `styles` in the `head`, and the `scripts` at the bottom of the `body` in your template.
 
 ```html
-<html>
-    <head>
-        {{ livewire:styles }}
-    </head>
+<head>
+    <!-- Antlers -->
+    {{ livewire:styles }}
 
-    <body>
-        {{ livewire:scripts }}
-    </body>
-</html>
+    <!-- Blade -->
+    @livewireStyles
+</head>
+
+<body>
+    <!-- Antlers -->
+    {{ livewire:scripts }}
+
+    <!-- Blade -->
+    @livewireScripts
+</body>
 ```
 
-### Create Form
+### Create a Statamic form
 
-Create a Livewire form view with this command and follow the instructions. The form view comes configured, styled, and is ready to go. You're free to change it however you'd like.
+Go ahead and create a Statamic form in the Control Panel.
+
+### Create a Livewire form view
+
+Run the following command and follow the instructions to create a Livewire view for your Statamic form. The view will be published to `views/livewire/my-form-handle.{antlers.html|blade.php}`.
 
 ```bash
 php please make:livewire-form
 ```
 
-### Render Form
+You may choose to publish the default form views to change the markup and styling of the form fields. The views will be published to `views/vendor/livewire-forms`.
 
-Include the Livewire form component in your template and provide the handle of the Statamic form. This will automatically load the corresponding form view in `views/livewire/my-form-handle.{antlers.html|blade.php}`.
+### Render the form
+
+Include the Livewire form component in your template and provide the handle of the Statamic form. This will automatically load the corresponding form view.
 
 ```html
 <!-- Antlers -->
@@ -84,19 +99,19 @@ Include the Livewire form component in your template and provide the handle of t
 <livewire:form form="contact">
 ```
 
-You can also dynamically render a form that was selected via the Form Fieldtype:
+You can also dynamically render a form that was selected via Statamic's `form` fieldtype:
 
 ```html
 <!-- Antlers -->
-{{ livewire:form :form="fieldtype:handle" }}
+{{ livewire:form :form="field:handle" }}
 
 <!-- Blade -->
-<livewire:form :form="fieldtype:handle">
+<livewire:form :form="field:handle">
 ```
 
-### Change View
+## Customize the form view
 
-You can include a single field like this:
+Sometimes you need more control over your form, eg. to group specific fields in a `<fieldset>`. You can include single fields like this:
 
 ```html
 <!-- Antlers -->
@@ -108,16 +123,54 @@ You can include a single field like this:
 ])
 ```
 
-### Realtime Validation
+## Form configuration
 
-You can configure realtime validation on three levels:
-1. In the global config at `config/livewire-forms.php`
-2. On the form blueprint
-3. On the form field
+This addon provides multiple configuration options for your form fields.
 
+```
+show_label
+cast_booleans
+honeypot
+```
 
-**Form Blueprint**
+### Realtime validation
+
+You can configure realtime validation on three levels. In the config file, on the form, and on the form field. Each level will override the configuration of the previous level.
+
+#### 1. In the config
+A boolean to globally enable/disable realtime validation.
+
+```php
+// config/livewire-forms.php
+
+'realtime' => true,
+```
+
+#### 2. On the form
+A boolean to enable/disable realtime validation for a specific form.
+
 ```yaml
+# resources/blueprints/forms/contact.yaml
+
+sections:
+  main:
+    display: Main
+    realtime: false
+    fields:
+      -
+        handle: email
+        ...
+```
+
+#### 3. On the form field
+You have to options when configuring realtime validation on a specific field.
+
+**Option 1**
+Use a boolean to enable/disable realtime validation for the field
+
+```yaml
+# resources/blueprints/forms/contact.yaml
+
 sections:
   main:
     display: Main
@@ -125,13 +178,30 @@ sections:
       -
         handle: email
         field:
-          input_type: email
-          antlers: false
-          display: Email
-          type: text
-          icon: text
-          listable: hidden
+          ...
           validate:
             - required
             - email
+          realtime: true
+```
+
+**Option 2**
+Provide an array with the rules you want to validate in realtime.
+
+```yaml
+# resources/blueprints/forms/contact.yaml
+
+sections:
+  main:
+    display: Main
+    fields:
+      -
+        handle: email
+        field:
+          ...
+          validate:
+            - required
+            - email
+          realtime:
+            - required
 ```
