@@ -133,6 +133,42 @@ Sometimes you need more control over the markup of your form, eg. to group speci
 ])
 ```
 
+## Translating your fields
+
+You can translate your field labels, instructions, options and placeholders using JSON files. Create a translation file for each language you want to translate, eg. `resources/lang/de.json`.
+
+### Example
+```yaml
+# resources/blueprints/forms/contact.yaml
+
+sections:
+  main:
+    display: Main
+    fields:
+      -
+        display: Colors
+        placeholder: 'What is your favorite color?'
+        ...
+```
+
+```json
+// resources/lang/de.json
+{
+    "Colors": "Farben",
+    "What is your favorite color?": "Was ist deine Lieblingsfarbe?",
+}
+```
+
+```html
+<!-- Antlers -->
+{{ partial src="livewire-forms::fields" field="name" }}
+
+<!-- Blade -->
+@include('livewire-forms::fields', [
+    'field' => $fields['name'],
+])
+```
+
 ## Realtime validation
 
 You can configure realtime validation on three levels. In the config file, on the form, and on the form field. Each level will override the configuration of the previous level.
