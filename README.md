@@ -206,25 +206,15 @@ sections:
 
 This addon provides multiple configuration options for your form fields.
 
-### Data specific
-
-Use these options to change how your field values will be saved.
-
-| Parameter       | Type      | Supported by          | Description                       |
-| :-------------- | :-------- | :-------------------- | :-------------------------------- |
-| `cast_booleans` | `boolean` | All fieldtypes        | Save the field value as a boolean |
-
-### Layout specific
-
-Use these options to change how your fields render on the front-end.
-
-| Parameter       | Type      | Supported by          | Description                |
-| :-------------- | :-------- | :-------------------- | :------------------------- |
-| `width`         | `integer` | All fieldtypes        | Set the desired width of the field. |
-| `show_label`    | `boolean` | `checkboxes`, `radio` | Set to `false` to hide the field's label and instructions. This can be useful for single checkboxes, eg. `Accept terms and conditions`. |
-| `inline`        | `boolean` | `checkboxes`, `radio` | Set to `true` to display the fields inline |
-
-> **Important:** These options may not work correctly if you changed the default form views.
+| Parameter       | Type                                    | Supported by          | Description                |
+| :-------------- | :-------------------------------------- | :-------------------- | :------------------------- |
+| `autocomplete`  | `string`                                | `input`               | Set the field's [autocomplete](https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/autocomplete) attribute |
+| `cast_booleans` | `boolean`                               | All fieldtypes        | Save the field value as a boolean |
+| `default`       | `array`, `boolean`, `integer`, `string` | All fieldtypes        | Set the field's default value |
+| `inline`        | `boolean`                               | `checkboxes`, `radio` | Set to `true` to display the fields inline |
+| `placeholder`   | `string`                                | `input`, `textarea`   | Set the field's placeholder value |
+| `show_label`    | `boolean`                               | `checkboxes`, `radio` | Set to `false` to hide the field's label and instructions. This can be useful for single checkboxes, eg. `Accept terms and conditions`. |
+| `width`         | `integer`                               | All fieldtypes        | Set the desired width of the field. |
 
 ## Events
 
