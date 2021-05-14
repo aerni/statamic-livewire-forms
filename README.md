@@ -8,10 +8,9 @@ This addon allows you to submit your Statamic forms with Laravel Livewire.
 - No need for a client-side form validation library
 - One source of truth for your validation rules
 - No redirects after the form was submitted
-- Honeypot field for a simple and effective spam prevention
+- Honeypot field for simple and effective spam prevention
 - Use your Statamic form blueprint as a form builder
-- Configured and styled form views ready to go
-- Support for Antlers and Blade
+- Configured and styled form views in Antlers and Blade
 
 ## Installation
 Install the addon using Composer:
@@ -57,7 +56,7 @@ php please vendor:publish --tag=livewire-forms-blade
 
 The views will be published to `views/vendor/livewire-forms`.
 
-The default form views are styled with [Tailwind CSS](https://tailwindcss.com/). If you want to use the default styling, you need a working Tailwind setup with the [@tailwindcss/forms](https://github.com/tailwindlabs/tailwindcss-forms) plugin.
+> **Important:** The default form views are styled with [Tailwind CSS](https://tailwindcss.com/). If you want to use the default styling, you need a working Tailwind setup with the [@tailwindcss/forms](https://github.com/tailwindlabs/tailwindcss-forms) plugin.
 
 ## Basic usage
 
@@ -228,4 +227,4 @@ Use these options to change how your fields render on the front-end.
 | `show_label`    | `boolean` | `checkboxes`, `radio` | Set to `false` to hide the field's label and instructions. This can be useful for single checkboxes, eg. `Accept terms and conditions`. |
 | `inline`        | `boolean` | `checkboxes`, `radio` | Set to `true` to display the fields inline |
 
-> Important: These options may not work correctly if you changed the default form views.
+> **Important:** These options may not work correctly if you changed the default form views.
