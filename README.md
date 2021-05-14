@@ -51,33 +51,37 @@ Add @tailwindcss/forms
 
 ## Basic usage
 
-### Include Livewire
+### 1. Include Livewire
 
-Add the Livewire `styles` in the `head`, and the `scripts` at the bottom of the `body` in your template.
+Add the Livewire `styles` in the `head`, and the `scripts` before the closing `body` tag in your template.
 
-```html
+**Antlers**
+```php
 <head>
-    <!-- Antlers -->
     {{ livewire:styles }}
+</head>
 
-    <!-- Blade -->
+<body>
+    {{ livewire:scripts }}
+</body>
+```
+
+**Blade**
+```php
+<head>
     @livewireStyles
 </head>
 
 <body>
-    <!-- Antlers -->
-    {{ livewire:scripts }}
-
-    <!-- Blade -->
     @livewireScripts
 </body>
 ```
 
-### Create a Statamic form
+### 2. Create a Statamic form
 
 Go ahead and create a Statamic form in the Control Panel.
 
-### Create a Livewire form view
+### 3. Create a Livewire form view
 
 Run the following command and follow the instructions to create a Livewire view for your Statamic form. The view will be published to `views/livewire/my-form-handle.{antlers.html|blade.php}`.
 
@@ -87,25 +91,29 @@ php please make:livewire-form
 
 You may choose to publish the default form views to change the markup and styling of the form fields. The views will be published to `views/vendor/livewire-forms`.
 
-### Render the form
+### 4. Render the form
 
 Include the Livewire form component in your template and provide the handle of the Statamic form. This will automatically load the corresponding form view.
 
-```html
-<!-- Antlers -->
+**Antlers**
+```php
 {{ livewire:form form="contact" }}
+```
 
-<!-- Blade -->
+**Blade**
+```php
 <livewire:form form="contact">
 ```
 
 You can also dynamically render a form that was selected via Statamic's `form` fieldtype:
 
-```html
-<!-- Antlers -->
+**Antlers**
+```php
 {{ livewire:form :form="field:handle" }}
+```
 
-<!-- Blade -->
+**Blade**
+```php
 <livewire:form :form="field:handle">
 ```
 
@@ -113,11 +121,13 @@ You can also dynamically render a form that was selected via Statamic's `form` f
 
 Sometimes you need more control over your form, eg. to group specific fields in a `<fieldset>`. You can include single fields like this:
 
-```html
-<!-- Antlers -->
+**Antlers**
+```php
 {{ partial src="livewire-forms::fields" field="name" }}
+```
 
-<!-- Blade -->
+**Blade**
+```php
 @include('livewire-forms::fields', [
     'field' => $fields['name'],
 ])
@@ -166,6 +176,7 @@ sections:
 You have to options when configuring realtime validation on a specific field.
 
 **Option 1**
+
 Use a boolean to enable/disable realtime validation for the field
 
 ```yaml
@@ -186,6 +197,7 @@ sections:
 ```
 
 **Option 2**
+
 Provide an array with the rules you want to validate in realtime.
 
 ```yaml
