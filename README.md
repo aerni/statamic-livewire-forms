@@ -51,69 +51,60 @@ Add @tailwindcss/forms
 
 ## Basic usage
 
-### 1. Include Livewire
+### 1. Create a Statamic form
+
+Go ahead and create a Statamic form in the Control Panel.
+### 2. Include Livewire
 
 Add the Livewire `styles` in the `head`, and the `scripts` before the closing `body` tag in your template.
 
-**Antlers**
-```php
+```html
 <head>
+    <!-- Antlers -->
     {{ livewire:styles }}
-</head>
 
-<body>
-    {{ livewire:scripts }}
-</body>
-```
-
-**Blade**
-```php
-<head>
+    <!-- Blade -->
     @livewireStyles
 </head>
 
 <body>
+    <!-- Antlers -->
+    {{ livewire:scripts }}
+
+    <!-- Blade -->
     @livewireScripts
 </body>
 ```
 
-### 2. Create a Statamic form
-
-Go ahead and create a Statamic form in the Control Panel.
-
 ### 3. Create a Livewire form view
 
-Run the following command and follow the instructions to create a Livewire view for your Statamic form. The view will be published to `views/livewire/my-form-handle.{antlers.html|blade.php}`.
+Run the following command and follow the instructions to create a Livewire view for your Statamic form:
 
 ```bash
 php please make:livewire-form
 ```
 
-You may choose to publish the default form views to change the markup and styling of the form fields. The views will be published to `views/vendor/livewire-forms`.
+The form view will be published to `views/livewire/my-form-handle.{antlers.html|blade.php}`. You may also choose to publish the default form views to change the markup and styling of the form fields. The views will be published to `views/vendor/livewire-forms`.
 
 ### 4. Render the form
 
 Include the Livewire form component in your template and provide the handle of the Statamic form. This will automatically load the corresponding form view.
 
-**Antlers**
-```php
+```html
+<!-- Antlers -->
 {{ livewire:form form="contact" }}
-```
 
-**Blade**
-```php
+<!-- Blade -->
 <livewire:form form="contact">
 ```
 
 You can also dynamically render a form that was selected via Statamic's `form` fieldtype:
 
-**Antlers**
-```php
+```html
+<!-- Antlers -->
 {{ livewire:form :form="field:handle" }}
-```
 
-**Blade**
-```php
+<!-- Blade -->
 <livewire:form :form="field:handle">
 ```
 
@@ -121,13 +112,11 @@ You can also dynamically render a form that was selected via Statamic's `form` f
 
 Sometimes you need more control over your form, eg. to group specific fields in a `<fieldset>`. You can include single fields like this:
 
-**Antlers**
-```php
+```html
+<!-- Antlers -->
 {{ partial src="livewire-forms::fields" field="name" }}
-```
 
-**Blade**
-```php
+<!-- Blade -->
 @include('livewire-forms::fields', [
     'field' => $fields['name'],
 ])
@@ -176,7 +165,6 @@ sections:
 You have to options when configuring realtime validation on a specific field.
 
 **Option 1**
-
 Use a boolean to enable/disable realtime validation for the field
 
 ```yaml
@@ -197,7 +185,6 @@ sections:
 ```
 
 **Option 2**
-
 Provide an array with the rules you want to validate in realtime.
 
 ```yaml
