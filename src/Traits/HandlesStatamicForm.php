@@ -58,10 +58,15 @@ trait HandlesStatamicForm
         $submission = $this->getFormSubmission();
 
         try {
-            throw_if($this->isSpam(), new SilentFormFailureException);
+            if ($this->isSpam()) {
+                throw new SilentFormFailureException;
+            }
 
             $this->emit('formSubmitted');
-            throw_if(FormSubmitted::dispatch($submission) === false, new SilentFormFailureException);
+
+            if (FormSubmitted::dispatch($submission) === false) {
+                throw new SilentFormFailureException;
+            }
         } catch (SilentFormFailureException $e) {
             return $this->success();
         }
