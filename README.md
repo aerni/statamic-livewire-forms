@@ -224,3 +224,57 @@ Use these options to change how your fields render on the front-end.
 | `inline`        | `boolean` | `checkboxes`, `radio` | Set to `true` to display the fields inline |
 
 > **Important:** These options may not work correctly if you changed the default form views.
+
+## Events
+
+This addon dispatches the following [Statamic](https://statamic.dev/extending/events) and [Livewire](https://laravel-livewire.com/docs/2.x/events) events.
+
+### FormSubmitted
+
+Dispatched when a Form is submitted on the front-end, before the Submission is created.
+
+#### Statamic
+
+`Statamic\Events\FormSubmitted`
+
+```php
+public function handle(FormSubmitted $event)
+{
+    $event->submission; // The Submission object
+}
+```
+
+#### Livewire
+
+```html
+<script>
+    Livewire.on('formSubmitted', () => {
+        ...
+    })
+</script>
+```
+
+### SubmissionCreated
+
+Dispatched after a form submission has been created. This happens after has a form has been submitted on the front-end.
+
+#### Statamic
+
+`Statamic\Events\SubmissionCreated`
+
+```php
+public function handle(SubmissionCreated $event)
+{
+    $event->submission;
+}
+```
+
+#### Livewire
+
+```html
+<script>
+    Livewire.on('submissionCreated', () => {
+        ...
+    })
+</script>
+```
