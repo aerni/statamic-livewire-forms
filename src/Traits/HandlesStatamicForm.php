@@ -70,11 +70,10 @@ trait HandlesStatamicForm
             $submission->save();
         }
 
-        $site = Site::findByUrl(URL::previous());
-
         $this->emit('submissionCreated');
         SubmissionCreated::dispatch($submission);
 
+        $site = Site::findByUrl(URL::previous());
         SendEmails::dispatch($submission, $site);
 
         return $this->success();
