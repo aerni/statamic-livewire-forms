@@ -1,7 +1,7 @@
 ![Statamic](https://flat.badgen.net/badge/Statamic/3.0+/FF269E) ![Packagist version](https://flat.badgen.net/packagist/v/aerni/livewire-forms/latest) ![Packagist Total Downloads](https://flat.badgen.net/packagist/dt/aerni/livewire-forms)
 
 # Livewire Forms
-This addon allows you to submit your Statamic forms with Laravel Livewire.
+This addon provides a powerful Statamic forms framework for Laravel Livewire. No more submitting your form with AJAX or dealing with funky client-side validation libraries. Livewire Forms is a powerhourse that will make your life soooo much easier!
 
 ## Features
 - Realtime validation with fine-grained control over each field
