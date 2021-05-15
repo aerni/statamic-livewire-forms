@@ -1,7 +1,7 @@
 ![Statamic](https://flat.badgen.net/badge/Statamic/3.0+/FF269E) ![Packagist version](https://flat.badgen.net/packagist/v/aerni/livewire-forms/latest) ![Packagist Total Downloads](https://flat.badgen.net/packagist/dt/aerni/livewire-forms)
 
 # Livewire Forms
-This addon provides a powerful Statamic forms framework for Laravel Livewire. No more submitting your form with AJAX or dealing with funky client-side validation libraries. Livewire Forms is a powerhourse that will make your life soooo much easier!
+This addon provides a powerful Statamic forms framework for Laravel Livewire. No more submitting your form with AJAX or dealing with funky client-side validation libraries. Livewire Forms is a powerhouse that will make your life soooo much easier!
 
 ## Features
 - Realtime validation with fine-grained control over each field
@@ -135,7 +135,7 @@ Sometimes you need more control over the markup of your form, eg. to group speci
 
 ## Translating your fields
 
-You can translate your field labels, instructions, options and placeholders using JSON files. Create a translation file for each language you want to translate, eg. `resources/lang/de.json`.
+You can translate your field labels, instructions, options, and placeholders using JSON files. Create a translation file for each language you want to translate, e.g. `resources/lang/de.json`.
 
 ### Example
 ```yaml
@@ -249,7 +249,7 @@ This addon dispatches the following [Statamic](https://statamic.dev/extending/ev
 
 ### FormSubmitted
 
-Dispatched when a Form is submitted on the front-end, before the Submission is created.
+Dispatched when a Form is submitted on the front-end before the Submission is created.
 
 #### Statamic
 
