@@ -231,7 +231,7 @@ sections:
 
 ## Form field configuration
 
-This addon provides multiple configuration options for your form fields.
+There are multiple configuration options for your form fields:
 
 | Parameter       | Type                                    | Supported by          | Description                |
 | :-------------- | :-------------------------------------- | :-------------------- | :------------------------- |
@@ -245,7 +245,7 @@ This addon provides multiple configuration options for your form fields.
 
 ## Events
 
-This addon dispatches the following [Statamic](https://statamic.dev/extending/events) and [Livewire](https://laravel-livewire.com/docs/2.x/events) events.
+This addon dispatches the following Events. Learn more about [Statamic Events](https://statamic.dev/extending/events) and [Livewire Events](https://laravel-livewire.com/docs/2.x/events) events. 
 
 ### FormSubmitted
 
@@ -264,12 +264,14 @@ public function handle(FormSubmitted $event)
 
 #### Livewire
 
-```html
-<script>
-    Livewire.on('formSubmitted', () => {
-        ...
-    })
-</script>
+`formSubmitted`
+
+```js
+// JavaScript Example
+
+Livewire.on('formSubmitted', () => {
+    ...
+})
 ```
 
 ### SubmissionCreated
@@ -289,12 +291,14 @@ public function handle(SubmissionCreated $event)
 
 #### Livewire
 
-```html
-<script>
-    Livewire.on('submissionCreated', () => {
-        ...
-    })
-</script>
+`submissionCreated`
+
+```js
+// JavaScript Example
+
+Livewire.on('submissionCreated', () => {
+    ...
+})
 ```
 
 ## License
