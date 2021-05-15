@@ -16,7 +16,6 @@
             aria-describedby="{{ handle ?? fields[field].handle }}-error"
         {{ /if }}
     >
-
         {{ if options }}
             {{ foreach:options as="option|label" }}
                 <option value="{{ option }}">{{ label }}</option>
