@@ -89,7 +89,7 @@ Add the Livewire `styles` in the `head`, and the `scripts` before the closing `b
 
 ### 3. Create a Livewire form view
 
-Run the following command and follow the instructions to create a Livewire view for your Statamic form. The form view will be published to `views/livewire/my-form-handle.{antlers.html|blade.php}`.
+Run the following command and follow the instructions to create a Livewire view for your Statamic form. The form view will be published to `views/livewire/forms/my-form-handle.{antlers.html|blade.php}`.
 
 ```bash
 php please make:livewire-form
@@ -129,14 +129,14 @@ You may also use the same view for every form by passing the name of the view to
 <livewire:form :form="field:handle" view="default">
 ```
 
-The view is expected to be in the `views/livewire` directory. But you may specify a subdirectory like so:
+The view is expected to be in the `views/livewire/forms` directory. But you may specify a subdirectory like so:
 
 ```html
 <!-- Antlers -->
-{{ livewire:form :form="field:handle" view="forms/default" }}
+{{ livewire:form :form="field:handle" view="contact/default" }}
 
 <!-- Blade -->
-<livewire:form :form="field:handle" view="forms/default">
+<livewire:form :form="field:handle" view="contact/default">
 ```
 
 ## Customizing the form view
