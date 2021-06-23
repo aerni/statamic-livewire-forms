@@ -119,6 +119,26 @@ You can also dynamically render a form that was selected via Statamic's `form` f
 <livewire:form :form="field:handle">
 ```
 
+You may also use the same view for every form by passing the name of the view to the `view` parameter:
+
+```html
+<!-- Antlers -->
+{{ livewire:form :form="field:handle" view="default" }}
+
+<!-- Blade -->
+<livewire:form :form="field:handle" view="default">
+```
+
+The view is expected to be in the `views/livewire` directory. But you may specify a subdirectory like so:
+
+```html
+<!-- Antlers -->
+{{ livewire:form :form="field:handle" view="forms/default" }}
+
+<!-- Blade -->
+<livewire:form :form="field:handle" view="forms/default">
+```
+
 ## Customizing the form view
 
 Sometimes you need more control over the markup of your form, eg. to group specific fields in a `<fieldset>`. You can include single fields like this:
@@ -245,7 +265,7 @@ There are multiple configuration options for your form fields:
 
 ## Events
 
-This addon dispatches the following Events. Learn more about [Statamic Events](https://statamic.dev/extending/events) and [Livewire Events](https://laravel-livewire.com/docs/2.x/events) events. 
+This addon dispatches the following Events. Learn more about [Statamic Events](https://statamic.dev/extending/events) and [Livewire Events](https://laravel-livewire.com/docs/2.x/events) events.
 
 ### FormSubmitted
 
