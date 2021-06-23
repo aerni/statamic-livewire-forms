@@ -100,7 +100,7 @@ class Form extends Component
 
     public function render()
     {
-        return view('livewire.' . $this->view, [
+        return view('livewire/forms.' . $this->view, [
             'fields' => $this->fields(),
             'honeypot' => $this->honeypot(),
         ]);

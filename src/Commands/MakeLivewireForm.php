@@ -64,10 +64,10 @@ class MakeLivewireForm extends Command
         $stub = File::get(__DIR__ . '/../../resources/stubs/form' . $this->extension);
 
         $filename = Str::slug($this->form->handle()) . $this->extension;
-        $path = resource_path('views/livewire/' . $filename);
+        $path = resource_path('views/livewire/forms/' . $filename);
 
         if (!File::exists($path) || $this->confirm("The Livewire view <comment>$filename</comment> already exists. Overwrite?")) {
-            File::ensureDirectoryExists(resource_path('views/livewire'));
+            File::ensureDirectoryExists(resource_path('views/livewire/forms'));
             File::put($path, $stub);
             $this->line("<info>[✓]</info> The Livewire view was successfully created: <comment>{$this->getRelativePath($path)}</comment>");
         }
