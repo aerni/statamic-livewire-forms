@@ -94,6 +94,7 @@ class Form extends Component
 
     public function submit(): void
     {
+        // TODO: Validate that ReCAPTCHA has been filled.
         $this->validate();
         $this->submitStatamicForm();
     }

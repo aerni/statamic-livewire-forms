@@ -2,8 +2,12 @@
 
 namespace Aerni\LivewireForms;
 
-use Aerni\LivewireForms\Http\Livewire\Form;
 use Livewire\Livewire;
+use Aerni\LivewireForms\Facades\Captcha;
+use Illuminate\Support\Facades\Validator;
+use Aerni\LivewireForms\Captcha\ReCaptcha;
+use Aerni\LivewireForms\Http\Livewire\Form;
+use Aerni\LivewireForms\Captcha\BaseCaptcha;
 use Statamic\Providers\AddonServiceProvider;
 
 class ServiceProvider extends AddonServiceProvider
@@ -14,7 +18,8 @@ class ServiceProvider extends AddonServiceProvider
 
     protected $tags = [
         Tags\Errors::class,
-        Tags\Iterate::class
+        Tags\Iterate::class,
+        Tags\Captcha::class,
     ];
 
     public function boot()
@@ -35,5 +40,16 @@ class ServiceProvider extends AddonServiceProvider
         $this->publishes([
             __DIR__.'/../resources/views/blade' => resource_path('views/vendor/livewire-forms'),
         ], 'livewire-forms-blade');
+
+        Validator::extend('captcha', function ($attribute, $value) {
+            return Captcha::verify($value, $app['request']->getClientIp());
+        });
+    }
+
+    public function register()
+    {
+        $this->app->bind(BaseCaptcha::class, function () {
+            return new ReCaptcha();
+        });
     }
 }
