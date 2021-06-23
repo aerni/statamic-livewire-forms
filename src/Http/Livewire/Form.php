@@ -16,13 +16,15 @@ class Form extends Component
     protected $form;
 
     public $formHandle;
+    public $view;
     public $data;
     public $success;
     public $redirect;
 
-    public function mount($form): void
+    public function mount($form, $view = null): void
     {
         $this->formHandle = $form;
+        $this->view = $view ?? Str::slug($this->formHandle);
         $this->form = $this->statamicForm();
         $this->data = $this->hydrateFormData();
     }
@@ -98,7 +100,7 @@ class Form extends Component
 
     public function render()
     {
-        return view('livewire.' . Str::slug($this->formHandle), [
+        return view('livewire.' . $this->view, [
             'fields' => $this->fields(),
             'honeypot' => $this->honeypot(),
         ]);
