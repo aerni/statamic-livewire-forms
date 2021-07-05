@@ -8,6 +8,6 @@ class Captcha extends Facade
 {
     protected static function getFacadeAccessor()
     {
-        return \Aerni\LivewireForms\Captcha\BaseCaptcha::class;
+        return \Aerni\LivewireForms\Captcha\ReCaptcha::class;
     }
 }

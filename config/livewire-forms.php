@@ -15,26 +15,17 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | ReCAPTCHA Configuration
+    | Captcha Configuration
     |--------------------------------------------------------------------------
     |
-    | To configure correctly please visit https://developers.google.com/recaptcha/docs/start
+    | Add the credentials for your captcha.
+    | This addon currently only supports Google reCAPTCHA v2 (checkbox).
     |
     */
 
     'captcha' => [
-        // 'service' => 'Recaptcha', // options: Recaptcha / Hcaptcha
-        'key' => env('CAPTCHA_KEY', ''),
-        'secret' => env('CAPTCHA_SECRET', ''),
-        // 'collections' => [],
-        // 'forms' => [],
-        // 'user_login' => false,
-        // 'user_registration' => false,
-        // 'error_message' => 'Captcha failed.',
-        'disclaimer' => '',
-        'invisible' => false,
-        'hide_badge' => false,
-        // 'enable_api_routes' => false,
+        'key' => env('CAPTCHA_KEY'),
+        'secret' => env('CAPTCHA_SECRET')
     ],
 
 ];

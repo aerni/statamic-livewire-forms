@@ -10,15 +10,23 @@ trait FollowsRules
     {
         return $this->fields()->mapWithKeys(function ($field) {
             return [$field['key'] => $field['rules']];
-        })->toArray();
+        })
+        ->put('data.captcha', ['required', 'captcha'])
+        ->toArray();
     }
 
     protected function realtimeRules($field): array
     {
+        // TODO: Validate honeypot but with this rule: https://laravel.com/docs/8.x/validation#rule-prohibited
         // Don't validate the honeypot.
         if ($field === $this->honeypot()['key']) {
             return [$this->honeypot()['key'] => []];
         };
+
+        // Don't use realtime validation for the captcha.
+        if ($field === 'data.captcha') {
+            return ['data.captcha' => []];
+        }
 
         $field = $this->fields()[Str::remove('data.', $field)];
 

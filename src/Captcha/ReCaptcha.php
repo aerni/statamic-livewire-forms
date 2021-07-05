@@ -2,40 +2,83 @@
 
 namespace Aerni\LivewireForms\Captcha;
 
-use Aerni\LivewireForms\Captcha\BaseCaptcha;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Cache;
 
-class ReCaptcha extends BaseCaptcha
+class ReCaptcha
 {
-    public function getResponseToken()
+    /**
+     * Verify the captcha's response.
+     */
+    public function verifyResponse(string $response, string $clientIp): bool
     {
-        return request('g-recaptcha-response');
+        /**
+         * The captcha's response can only be verified once.
+         * If the user verify's the captcha but the validation of the form fails for some other reason
+         * we need to return the cached response rather than trying to verify it again.
+         */
+        if (Cache::has("captcha:response:{$response}")) {
+            return $this->isValid($response);
+        }
+
+        $verifiedResponse = Http::asForm()->post($this->verificationUrl(), [
+            'secret' => $this->secret(),
+            'response' => $response,
+            'remoteip' => $clientIp,
+        ])->json();
+
+        Cache::put("captcha:response:{$response}", $verifiedResponse);
+
+        return $this->isValid($response);
     }
 
-    public function getVerificationUrl()
+    /**
+    * Check if the verified response is valid.
+    */
+    public function isValid(string $response): bool
+    {
+        $verifiedResponse = Cache::get("captcha:response:{$response}");
+
+        if (is_null($verifiedResponse)) {
+            return false;
+        }
+
+        if ($verifiedResponse['success'] !== true) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Get the captcha's site key.
+     */
+    public function key(): string
+    {
+        return config('livewire-forms.captcha.key');
+    }
+
+    /**
+     * Get the captcha's secret key.
+     */
+    public function secret(): string
+    {
+        return config('livewire-forms.captcha.secret');
+    }
+
+    /**
+     * Render the captcha's head view.
+     */
+    public function head(): string
+    {
+        return view('livewire-forms::head')->render();
+    }
+
+    /**
+     * Get the URL that's used to verify the captcha.
+     */
+    public function verificationUrl(): string
     {
         return 'https://www.google.com/recaptcha/api/siteverify';
-    }
-
-    public function getDefaultDisclaimer()
-    {
-        return 'This site is protected by reCAPTCHA and the Google [Privacy Policy](https://policies.google.com/privacy) and [Terms of Service](https://policies.google.com/terms) apply.';
-    }
-
-    public function renderIndexTag()
-    {
-        $attributes = $this->buildAttributes([
-            'data-sitekey' => $this->getSiteKey(),
-            'data-size' => config('livewire-forms.captcha.invisible') ? 'invisible' : '',
-        ]);
-
-        return "<div class=\"g-recaptcha\" {$attributes}></div>";
-    }
-
-    public function renderHeadTag()
-    {
-        return view('livewire-forms::recaptcha.head', [
-            'invisible' => config('livewire-forms.captcha.invisible'),
-            'hide_badge' => config('livewire-forms.captcha.hide_badge'),
-        ])->render();
     }
 }
