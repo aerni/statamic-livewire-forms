@@ -19,7 +19,7 @@ return [
     |--------------------------------------------------------------------------
     |
     | Add the credentials for your captcha.
-    | This addon currently only supports Google reCAPTCHA v2 (checkbox).
+    | This addon currently supports Google reCAPTCHA v2 (checkbox).
     |
     */
 
