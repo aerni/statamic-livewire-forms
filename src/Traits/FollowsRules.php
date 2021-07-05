@@ -8,17 +8,31 @@ trait FollowsRules
 {
     protected function rules(): array
     {
-        return $this->fields()->mapWithKeys(function ($field) {
+        $rules = $this->fields()->mapWithKeys(function ($field) {
             return [$field['key'] => $field['rules']];
-        })->toArray();
+        });
+
+        if ($this->withCaptcha()) {
+            $rules->put('captcha', ['required', 'captcha']);
+        }
+
+        return $rules->toArray();
     }
 
     protected function realtimeRules($field): array
     {
+        // TODO: Validate honeypot but with this rule: https://laravel.com/docs/8.x/validation#rule-prohibited
         // Don't validate the honeypot.
         if ($field === $this->honeypot()['key']) {
             return [$this->honeypot()['key'] => []];
         };
+
+        // Don't use realtime validation for the captcha.
+        if ($this->withCaptcha()) {
+            if ($field === 'captcha') {
+                return ['captcha' => []];
+            }
+        }
 
         $field = $this->fields()[Str::remove('data.', $field)];
 

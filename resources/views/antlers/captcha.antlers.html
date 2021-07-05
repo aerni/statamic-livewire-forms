@@ -1,0 +1,25 @@
+{{ if withCaptcha }}
+
+    {{ section:captcha }}
+        <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    {{ /section:captcha }}
+
+    <div
+        class="g-recaptcha"
+        data-sitekey="{{ captcha:key }}"
+        data-callback="setResponseToken"
+        data-expired-callback="resetResponseToken"
+        wire:ignore
+    ></div>
+
+    <script>
+        function setResponseToken(token) {
+            {{ livewire:this set="('captcha', token)" }}
+        }
+
+        function resetResponseToken() {
+            {{ livewire:this set="('captcha', null)" }}
+        }
+    </script>
+
+{{ /if }}

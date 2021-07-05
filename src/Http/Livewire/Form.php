@@ -2,22 +2,24 @@
 
 namespace Aerni\LivewireForms\Http\Livewire;
 
+use Livewire\Component;
+use Statamic\Fields\Field;
+use Illuminate\Support\Str;
 use Aerni\LivewireForms\Traits\FollowsRules;
 use Aerni\LivewireForms\Traits\GetsFormFields;
 use Aerni\LivewireForms\Traits\HandlesStatamicForm;
-use Illuminate\Support\Str;
-use Livewire\Component;
-use Statamic\Fields\Field;
+use Aerni\LivewireForms\Traits\WithCaptcha;
 
 class Form extends Component
 {
-    use FollowsRules, GetsFormFields, HandlesStatamicForm;
+    use FollowsRules, GetsFormFields, HandlesStatamicForm, WithCaptcha;
 
     protected $form;
 
     public $formHandle;
     public $view;
     public $data;
+    public $captcha;
     public $success;
     public $redirect;
 
@@ -27,6 +29,17 @@ class Form extends Component
         $this->view = $view ?? Str::slug($this->formHandle);
         $this->form = $this->statamicForm();
         $this->data = $this->hydrateFormData();
+    }
+
+    protected function messages(): array
+    {
+        $messages = collect();
+
+        if ($this->withCaptcha()) {
+            $messages = $messages->merge($this->captchaValidationMessages());
+        }
+
+        return $messages->toArray();
     }
 
     public function hydrate(): void
@@ -103,6 +116,7 @@ class Form extends Component
         return view('livewire/forms.' . $this->view, [
             'fields' => $this->fields(),
             'honeypot' => $this->honeypot(),
+            'withCaptcha' => $this->withCaptcha(),
         ]);
     }
 }

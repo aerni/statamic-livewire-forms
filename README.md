@@ -9,6 +9,7 @@ This addon provides a powerful Statamic forms framework for Laravel Livewire. No
 - One source of truth for your validation rules
 - No redirects after the form was submitted
 - Honeypot field for simple and effective spam prevention
+- Google reCAPTCHA v2
 - Use your Statamic form blueprint as a form builder
 - Multi-site support; translate your form labels, instructions, placeholders, etc.
 - Configured and styled form views in Antlers and Blade
@@ -42,6 +43,21 @@ return [
 
     'realtime' => true,
 
+    /*
+    |--------------------------------------------------------------------------
+    | Captcha Configuration
+    |--------------------------------------------------------------------------
+    |
+    | Add the credentials for your captcha.
+    | This addon currently supports Google reCAPTCHA v2 (checkbox).
+    |
+    */
+
+    'captcha' => [
+        'key' => env('CAPTCHA_KEY'),
+        'secret' => env('CAPTCHA_SECRET')
+    ],
+
 ];
 ```
 
@@ -65,7 +81,7 @@ The views will be published to `views/vendor/livewire-forms`.
 
 Go ahead and create a Statamic form in the Control Panel.
 
-### 2. Include Livewire
+### 2. Include Styles and Scripts
 
 Add the Livewire `styles` in the `head`, and the `scripts` before the closing `body` tag in your template.
 
@@ -86,6 +102,19 @@ Add the Livewire `styles` in the `head`, and the `scripts` before the closing `b
     @livewireScripts
 </body>
 ```
+
+If you want to use `Google reCAPTCHA v2` you also need to add the following to the `head`.
+
+```html
+<head>
+    <!-- Antlers -->
+    {{ captcha:head }}
+
+    <!-- Blade -->
+    @captchaHead
+</head>
+```
+
 
 ### 3. Create a Livewire form view
 
@@ -178,6 +207,23 @@ sections:
     "Colors": "Farben",
     "What is your favorite color?": "Was ist deine Lieblingsfarbe?",
 }
+```
+
+## Captcha
+
+You can activate the captcha on a per form basis. Simply set the `captcha` boolean on the form blueprint to `true`.
+
+```yaml
+# resources/blueprints/forms/contact.yaml
+
+sections:
+  main:
+    display: Main
+    captcha: true
+    fields:
+      -
+        handle: email
+        ...
 ```
 
 ## Realtime validation
