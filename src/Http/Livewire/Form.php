@@ -5,14 +5,14 @@ namespace Aerni\LivewireForms\Http\Livewire;
 use Livewire\Component;
 use Statamic\Fields\Field;
 use Illuminate\Support\Str;
-use Aerni\LivewireForms\Facades\Captcha;
 use Aerni\LivewireForms\Traits\FollowsRules;
 use Aerni\LivewireForms\Traits\GetsFormFields;
 use Aerni\LivewireForms\Traits\HandlesStatamicForm;
+use Aerni\LivewireForms\Traits\WithCaptcha;
 
 class Form extends Component
 {
-    use FollowsRules, GetsFormFields, HandlesStatamicForm;
+    use FollowsRules, GetsFormFields, HandlesStatamicForm, WithCaptcha;
 
     protected $form;
 
@@ -31,10 +31,16 @@ class Form extends Component
         $this->data = $this->hydrateFormData();
     }
 
-    protected $messages = [
-        'captcha.required' => 'The reCAPTCHA field is required.',
-        'captcha.captcha' => 'The reCAPTCHA challenge was not successful.',
-    ];
+    protected function messages(): array
+    {
+        $messages = collect();
+
+        if ($this->withCaptcha()) {
+            $messages = $messages->merge($this->captchaValidationMessages());
+        }
+
+        return $messages->toArray();
+    }
 
     public function hydrate(): void
     {
@@ -110,6 +116,7 @@ class Form extends Component
         return view('livewire/forms.' . $this->view, [
             'fields' => $this->fields(),
             'honeypot' => $this->honeypot(),
+            'withCaptcha' => $this->withCaptcha(),
         ]);
     }
 }

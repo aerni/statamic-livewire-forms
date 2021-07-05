@@ -1,17 +1,21 @@
-<div
-    class="g-recaptcha"
-    data-sitekey="@captchaKey"
-    data-callback="setResponseToken"
-    data-expired-callback="resetResponseToken"
-    wire:ignore
-></div>
+@if($withCaptcha)
 
-<script>
-    function setResponseToken(token) {
-        @this.set('captcha', token)
-    }
+    <div
+        class="g-recaptcha"
+        data-sitekey="@captchaKey"
+        data-callback="setResponseToken"
+        data-expired-callback="resetResponseToken"
+        wire:ignore
+    ></div>
 
-    function resetResponseToken() {
-        @this.set('captcha', null)
-    }
-</script>
+    <script>
+        function setResponseToken(token) {
+            @this.set('captcha', token)
+        }
+
+        function resetResponseToken() {
+            @this.set('captcha', null)
+        }
+    </script>
+
+@endif

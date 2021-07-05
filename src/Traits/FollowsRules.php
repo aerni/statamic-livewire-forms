@@ -8,11 +8,15 @@ trait FollowsRules
 {
     protected function rules(): array
     {
-        return $this->fields()->mapWithKeys(function ($field) {
+        $rules = $this->fields()->mapWithKeys(function ($field) {
             return [$field['key'] => $field['rules']];
-        })
-        ->put('captcha', ['required', 'captcha'])
-        ->toArray();
+        });
+
+        if ($this->withCaptcha()) {
+            $rules->put('captcha', ['required', 'captcha']);
+        }
+
+        return $rules->toArray();
     }
 
     protected function realtimeRules($field): array
@@ -24,8 +28,10 @@ trait FollowsRules
         };
 
         // Don't use realtime validation for the captcha.
-        if ($field === 'captcha') {
-            return ['captcha' => []];
+        if ($this->withCaptcha()) {
+            if ($field === 'captcha') {
+                return ['captcha' => []];
+            }
         }
 
         $field = $this->fields()[Str::remove('data.', $field)];
