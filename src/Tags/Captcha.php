@@ -14,4 +14,12 @@ class Captcha extends Tags
     {
         return CaptchaFacade::head();
     }
+
+    /**
+     * Get the captcha's key.
+     */
+    public function key(): string
+    {
+        return CaptchaFacade::key();
+    }
 }
