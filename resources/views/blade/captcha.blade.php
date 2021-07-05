@@ -1,5 +1,9 @@
 @if($withCaptcha)
 
+    @section('captcha')
+        <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    @endsection
+
     <div
         class="g-recaptcha"
         data-sitekey="@captchaKey"
