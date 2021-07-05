@@ -19,6 +19,7 @@ class Form extends Component
     public $formHandle;
     public $view;
     public $data;
+    public $captcha;
     public $success;
     public $redirect;
 
@@ -31,8 +32,8 @@ class Form extends Component
     }
 
     protected $messages = [
-        'data.captcha.required' => 'The reCAPTCHA field is required.',
-        'data.captcha.captcha' => 'The reCAPTCHA challenge was not successful.',
+        'captcha.required' => 'The reCAPTCHA field is required.',
+        'captcha.captcha' => 'The reCAPTCHA challenge was not successful.',
     ];
 
     public function hydrate(): void
@@ -55,7 +56,6 @@ class Form extends Component
             return [$field->handle() => $this->assignDefaultFieldValue($field)];
         })
         ->put($this->form->honeypot(), null)
-        ->put('captcha', null)
         ->toArray();
     }
 

@@ -8,10 +8,10 @@
 
 <script>
     function setResponseToken(token) {
-        @this.set('data.captcha', token)
+        @this.set('captcha', token)
     }
 
     function resetResponseToken() {
-        @this.set('data.captcha', null)
+        @this.set('captcha', null)
     }
 </script>

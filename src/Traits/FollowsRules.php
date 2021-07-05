@@ -11,7 +11,7 @@ trait FollowsRules
         return $this->fields()->mapWithKeys(function ($field) {
             return [$field['key'] => $field['rules']];
         })
-        ->put('data.captcha', ['required', 'captcha'])
+        ->put('captcha', ['required', 'captcha'])
         ->toArray();
     }
 
@@ -24,8 +24,8 @@ trait FollowsRules
         };
 
         // Don't use realtime validation for the captcha.
-        if ($field === 'data.captcha') {
-            return ['data.captcha' => []];
+        if ($field === 'captcha') {
+            return ['captcha' => []];
         }
 
         $field = $this->fields()[Str::remove('data.', $field)];
