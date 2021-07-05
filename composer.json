@@ -20,7 +20,7 @@
         "php": "^7.4 || ^8.0",
         "laravel/framework": "^8.0",
         "statamic/cms": "^3.0",
-        "jonassiewertsen/statamic-livewire": "^2.5"
+        "jonassiewertsen/statamic-livewire": "^2.6"
     },
     "autoload": {
         "psr-4": {
