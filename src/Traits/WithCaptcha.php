@@ -12,8 +12,8 @@ trait WithCaptcha
     protected function captchaValidationMessages(): array
     {
         return [
-            'captcha.required' => 'The reCAPTCHA field is required.',
-            'captcha.captcha' => 'The reCAPTCHA challenge was not successful.',
+            'captcha.required' => __('The reCAPTCHA field is required.'),
+            'captcha.captcha' => __('The reCAPTCHA challenge was not successful.'),
         ];
     }
 }

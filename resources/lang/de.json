@@ -1,5 +1,8 @@
 {
     "Send": "Senden",
     "The form was successfully submitted!": "Das Formular wurde erfolgreich gesendet!",
-    "There was an error with your submission:|There were :count errors with your submission:": "Beim Übermitteln des Formulars ist ein Fehler aufgetreten:|Beim Übermitteln des Formulars sind :count Fehler aufgetreten:"
+    "There was an error with your submission:|There were :count errors with your submission:": "Beim Übermitteln des Formulars ist ein Fehler aufgetreten:|Beim Übermitteln des Formulars sind :count Fehler aufgetreten:",
+
+    "The reCAPTCHA field is required.": "Das reCAPTCHA-Feld wird benötigt.",
+    "The reCAPTCHA challenge was not successful.": "Die reCAPTCHA-Herausforderung war nicht erfolgreich."
 }
