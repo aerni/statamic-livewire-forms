@@ -7,17 +7,17 @@
     <div
         class="g-recaptcha"
         data-sitekey="@captchaKey"
-        data-callback="setResponseToken"
-        data-expired-callback="resetResponseToken"
+        data-callback="setResponseToken_{@captchaId}"
+        data-expired-callback="resetResponseToken_{@captchaId}"
         wire:ignore
     ></div>
 
     <script>
-        function setResponseToken(token) {
+        function setResponseToken_{@captchaId}(token) {
             @this.set('captcha', token)
         }
 
-        function resetResponseToken() {
+        function resetResponseToken_{@captchaId}() {
             @this.set('captcha', null)
         }
     </script>

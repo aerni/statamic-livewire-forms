@@ -22,4 +22,12 @@ class Captcha extends Tags
     {
         return CaptchaFacade::key();
     }
+
+    /**
+     * Get the unique ID of this captcha.
+     */
+    public function id(): string
+    {
+        return $this->context->get('_instance')->id;
+    }
 }

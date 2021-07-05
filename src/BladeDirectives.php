@@ -21,4 +21,12 @@ class BladeDirectives
     {
         return Captcha::key();
     }
+
+    /**
+     * Get the unique ID of this captcha.
+     */
+    public static function captchaId(): string
+    {
+        return "{{ \$_instance->id }}";
+    }
 }
