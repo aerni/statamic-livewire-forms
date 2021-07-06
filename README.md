@@ -8,8 +8,7 @@ This addon provides a powerful Statamic forms framework for Laravel Livewire. No
 - No need for a client-side form validation library
 - One source of truth for your validation rules
 - No redirects after the form was submitted
-- Honeypot field for simple and effective spam prevention
-- Google reCAPTCHA v2
+- Spam protection with a simple honeypot field and optional Google reCAPTCHA v2
 - Use your Statamic form blueprint as a form builder
 - Multi-site support; translate your form labels, instructions, placeholders, etc.
 - Configured and styled form views in Antlers and Blade
