@@ -39,7 +39,7 @@ trait FollowsRules
         // Get the realtime validation config from the field, form blueprint or global config.
         $realtime = $field['realtime']
             ?? $this->form->blueprint()->contents()['sections']['main']['realtime']
-            ?? config('livewire-forms.realtime');
+            ?? config('livewire-forms.realtime', true);
 
         // Disable realtime validation if "realtime: false".
         if (! $realtime) {
