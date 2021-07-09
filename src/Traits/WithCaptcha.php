@@ -6,7 +6,8 @@ trait WithCaptcha
 {
     protected function withCaptcha(): bool
     {
-        return $this->form->blueprint()->contents()['sections']['main']['captcha'] ?? false;
+        return $this->form->blueprint()->contents()['sections']['main']['captcha']
+            ?? config('livewire-forms.captcha.enabled', false);
     }
 
     protected function captchaValidationMessages(): array

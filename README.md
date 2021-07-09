@@ -53,6 +53,7 @@ return [
     */
 
     'captcha' => [
+        'enabled' => false,
         'key' => env('CAPTCHA_KEY'),
         'secret' => env('CAPTCHA_SECRET')
     ],
@@ -210,7 +211,21 @@ sections:
 
 ## Captcha
 
-You can activate the captcha on a per form basis. Simply set the `captcha` boolean on the form blueprint to `true`.
+You can configure the captcha on two levels. In the config file and on the form itself. The config on the form will override the global config.
+
+### 1. In the config
+A boolean to globally enable/disable the captcha.
+
+```php
+// config/livewire-forms.php
+
+'captcha' => [
+    'enabled' => true,
+]
+```
+
+### 2. On the form
+A boolean to enable/disable the captcha for a specific form.
 
 ```yaml
 # resources/blueprints/forms/contact.yaml
