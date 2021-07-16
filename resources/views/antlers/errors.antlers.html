@@ -1,4 +1,4 @@
-{{ if {errors:any} }}
+{{ if {livewire_forms:errors} }}
     <div class="col-span-1 p-4 rounded-md md:col-span-12 bg-red-50">
         <div class="flex">
             <div class="flex-shrink-0">
@@ -8,13 +8,13 @@
             </div>
             <div class="ml-3">
                 <h3 class="text-sm font-medium text-red-700">
-                    {{ trans_choice key="There was an error with your submission:|There were :count errors with your submission:" count="{errors:count}" }}
+                    {{ trans_choice key="There was an error with your submission:|There were :count errors with your submission:" count="{livewire_forms:errors_count}" }}
                 </h3>
                 <div class="mt-2 text-sm text-red-600">
                     <ul class="pl-5 space-y-1 list-disc">
-                        {{ errors:all }}
+                        {{ livewire_forms:errors }}
                             <li>{{ error }}</li>
-                        {{ /errors:all }}
+                        {{ /livewire_forms:errors }}
                     </ul>
                 </div>
             </div>
