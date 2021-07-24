@@ -320,7 +320,7 @@ There are multiple configuration options for your form fields:
 | `default`       | `array`, `boolean`, `integer`, `string` | All fieldtypes        | Set the field's default value |
 | `inline`        | `boolean`                               | `checkboxes`, `radio` | Set to `true` to display the fields inline |
 | `placeholder`   | `string`                                | `input`, `textarea`   | Set the field's placeholder value |
-| `show_label`    | `boolean`                               | `checkboxes`, `radio` | Set to `false` to hide the field's label and instructions. This can be useful for single checkboxes, eg. `Accept terms and conditions`. |
+| `show_label`    | `boolean`                               | All fieldtypes        | Set to `false` to hide the field's label and instructions. This can be useful for single checkboxes, eg. `Accept terms and conditions`. |
 | `width`         | `integer`                               | All fieldtypes        | Set the desired width of the field. |
 
 ## Events

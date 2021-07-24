@@ -1,8 +1,15 @@
-<label for="{{ handle ?? fields[field].handle }}" class="block text-sm font-medium text-gray-700">
-    {{ label ?? fields[field].label }}
-</label>
+{{ if show_label ?? fields[field].show_label }}
+    <div class="mb-1">
+        <label for="{{ handle ?? fields[field].handle }}" class="block font-medium text-gray-700 {{ instructions || fields[field].instructions ? 'text-base' : 'text-sm' }}">
+            {{ label ?? fields[field].label }}
+        </label>
+        {{ if instructions || fields[field].instructions }}
+            <p class="mb-4 text-sm text-gray-500">{{ instructions ?? fields[field].instructions }}</p>
+        {{ /if }}
+    </div>
+{{ /if }}
 
-<div class="mt-1">
+<div>
     <select
         id="{{ handle ?? fields[field].handle }}"
         name="{{ handle ?? fields[field].handle }}"

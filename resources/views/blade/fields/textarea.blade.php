@@ -1,8 +1,12 @@
-<label for="{{ $field['handle'] }}" class="block text-sm font-medium text-gray-700">
-    {{ $field['label'] }}
-</label>
+@if ($field['show_label'])
+    <div class="mb-1">
+        <label for="{{ $field['handle'] }}" class="block text-sm font-medium text-gray-700">
+            {{ $field['label'] }}
+        </label>
+    </div>
+@endif
 
-<div class="mt-1">
+<div>
     <textarea
         id="{{ $field['handle'] }}"
         name="{{ $field['handle'] }}"
