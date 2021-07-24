@@ -61,7 +61,13 @@ return [
 ];
 ```
 
-Publish the form views to customize the styling to your liking (optional):
+### Default form views
+
+The default form views are styled with [Tailwind CSS](https://tailwindcss.com/). If you want to use the default styling, you need a working Tailwind setup with the [@tailwindcss/forms](https://github.com/tailwindlabs/tailwindcss-forms) plugin.
+
+### Publish form views
+
+You can also publish the form views to make the markup and styling your own:
 
 ```bash
 # Publish the Antlers views
@@ -73,7 +79,7 @@ php please vendor:publish --tag=livewire-forms-blade
 
 The views will be published to `views/vendor/livewire-forms`.
 
-> **Important:** The default form views are styled with [Tailwind CSS](https://tailwindcss.com/). If you want to use the default styling, you need a working Tailwind setup with the [@tailwindcss/forms](https://github.com/tailwindlabs/tailwindcss-forms) plugin.
+> **Warning:** Future releases might introduce new functionality and come with updated views. If you choose to publish the views you are on your own and have to manually update views yourself.
 
 ## Basic usage
 
