@@ -38,6 +38,7 @@ class ServiceProvider extends AddonServiceProvider
     {
         $this->loadViewsFrom(__DIR__.'/../resources/views/antlers', 'livewire-forms');
         $this->loadViewsFrom(__DIR__.'/../resources/views/blade', 'livewire-forms');
+        $this->loadViewsFrom(__DIR__.'/../resources/views/captcha', 'livewire-forms');
     }
 
     protected function registerTranslations()
