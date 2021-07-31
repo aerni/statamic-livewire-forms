@@ -116,7 +116,7 @@ class Form extends Component
         return view('livewire/forms.' . $this->view, [
             'fields' => $this->fields(),
             'honeypot' => $this->honeypot(),
-            'withCaptcha' => $this->withCaptcha(),
+            'with_captcha' => $this->withCaptcha(),
         ]);
     }
 }
