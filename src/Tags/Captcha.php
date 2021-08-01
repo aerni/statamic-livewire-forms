@@ -12,6 +12,14 @@ class Captcha extends Tags
      */
     public function scripts(): string
     {
-        return CaptchaFacade::scripts();
+        /**
+         * There is an open issue preventing the Antlers parser from dynamically rendering the scripts section.
+         * Until this issue is resolved, we have to load the scripts even if they are not needed on a particular view.
+         * See: https://github.com/statamic/cms/issues/3286
+         */
+        return '<script src="https://www.google.com/recaptcha/api.js" async defer></script>';
+
+        // TODO: Use this when the section issue is resolved.
+        // return CaptchaFacade::scripts();
     }
 }
