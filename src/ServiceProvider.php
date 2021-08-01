@@ -59,9 +59,8 @@ class ServiceProvider extends AddonServiceProvider
 
     protected function registerBladeDirectives()
     {
-        Blade::directive('captchaHead', [BladeDirectives::class, 'captchaHead']);
+        Blade::directive('captchaScripts', [BladeDirectives::class, 'captchaScripts']);
         Blade::directive('captchaKey', [BladeDirectives::class, 'captchaKey']);
-        Blade::directive('captchaId', [BladeDirectives::class, 'captchaId']);
     }
 
     protected function registerValidators()

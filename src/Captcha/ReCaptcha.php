@@ -3,6 +3,7 @@
 namespace Aerni\LivewireForms\Captcha;
 
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Cache;
 
 class ReCaptcha
@@ -67,11 +68,11 @@ class ReCaptcha
     }
 
     /**
-     * Render the captcha's head view.
+     * Render the captcha's scripts view.
      */
-    public function head(): string
+    public function scripts()
     {
-        return view('livewire-forms::head')->render();
+        return view('livewire-forms::scripts')->render();
     }
 
     /**

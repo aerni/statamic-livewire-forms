@@ -7,11 +7,11 @@ use Aerni\LivewireForms\Facades\Captcha;
 class BladeDirectives
 {
     /**
-     * Get the rendered captcha head view.
+     * Get the rendered captcha scripts view.
      */
-    public static function captchaHead(): string
+    public static function captchaScripts(): string
     {
-        return Captcha::head();
+        return '{!! \Aerni\LivewireForms\Facades\Captcha::scripts() !!}';
     }
 
     /**
@@ -20,13 +20,5 @@ class BladeDirectives
     public static function captchaKey(): string
     {
         return Captcha::key();
-    }
-
-    /**
-     * Get the unique ID of this captcha.
-     */
-    public static function captchaId(): string
-    {
-        return "{{ \$_instance->id }}";
     }
 }

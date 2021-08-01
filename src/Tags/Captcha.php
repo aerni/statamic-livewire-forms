@@ -8,26 +8,10 @@ use Aerni\LivewireForms\Facades\Captcha as CaptchaFacade;
 class Captcha extends Tags
 {
     /**
-     * Get the rendered captcha head view.
+     * Get the rendered captcha scripts view.
      */
-    public function head(): string
+    public function scripts(): string
     {
-        return CaptchaFacade::head();
-    }
-
-    /**
-     * Get the captcha's key.
-     */
-    public function key(): string
-    {
-        return CaptchaFacade::key();
-    }
-
-    /**
-     * Get the unique ID of this captcha.
-     */
-    public function id(): string
-    {
-        return $this->context->get('_instance')->id;
+        return CaptchaFacade::scripts();
     }
 }
