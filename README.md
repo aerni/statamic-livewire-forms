@@ -109,18 +109,17 @@ Add the Livewire `styles` in the `head`, and the `scripts` before the closing `b
 </body>
 ```
 
-If you want to use `Google reCAPTCHA v2` you also need to add the following to the `head`.
+If you want to use `Google reCAPTCHA v2` you also need to add the captcha scripts before the closing `body` tag in your template.
 
 ```html
-<head>
+<body>
     <!-- Antlers -->
-    {{ captcha:head }}
+    {{ captcha:scripts }}
 
     <!-- Blade -->
-    @captchaHead
-</head>
+    @captchaScripts
+</body>
 ```
-
 
 ### 3. Create a Livewire form view
 
