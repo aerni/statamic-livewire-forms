@@ -109,18 +109,6 @@ Add the Livewire `styles` in the `head`, and the `scripts` before the closing `b
 </body>
 ```
 
-If you want to use `Google reCAPTCHA v2` you also need to add the captcha scripts before the closing `body` tag in your template.
-
-```html
-<body>
-    <!-- Antlers -->
-    {{ captcha:scripts }}
-
-    <!-- Blade -->
-    @captchaScripts
-</body>
-```
-
 ### 3. Create a Livewire form view
 
 Run the following command and follow the instructions to create a Livewire view for your Statamic form. The form view will be published to `views/livewire/forms/my-form-handle.{antlers.html|blade.php}`.

@@ -68,14 +68,6 @@ class ReCaptcha
     }
 
     /**
-     * Render the captcha's scripts view.
-     */
-    public function scripts()
-    {
-        return view('livewire-forms::scripts')->render();
-    }
-
-    /**
      * Get the URL that's used to verify the captcha.
      */
     public function verificationUrl(): string

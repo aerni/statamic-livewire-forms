@@ -19,7 +19,6 @@ class ServiceProvider extends AddonServiceProvider
     protected $tags = [
         Tags\LivewireForms::class,
         Tags\Iterate::class,
-        Tags\Captcha::class,
     ];
 
     public function boot()
@@ -59,7 +58,6 @@ class ServiceProvider extends AddonServiceProvider
 
     protected function registerBladeDirectives()
     {
-        Blade::directive('captchaScripts', [BladeDirectives::class, 'captchaScripts']);
         Blade::directive('captchaKey', [BladeDirectives::class, 'captchaKey']);
     }
 
