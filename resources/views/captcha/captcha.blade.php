@@ -8,6 +8,10 @@
         wire:ignore
     ></div>
 
+    @error('captcha')
+        <p class="mt-2 text-sm text-red-600" id="captcha-error">{{ $message }}</p>
+    @enderror
+
     <script>
         function setResponseToken_{{ $_instance->id }}(token) {
             @this.set('captcha', token)
