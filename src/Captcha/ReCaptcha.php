@@ -3,7 +3,6 @@
 namespace Aerni\LivewireForms\Captcha;
 
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Cache;
 
 class ReCaptcha
@@ -36,7 +35,7 @@ class ReCaptcha
     /**
     * Check if the verified response is valid.
     */
-    public function isValid(string $response): bool
+    protected function isValid(string $response): bool
     {
         $verifiedResponse = Cache::get("captcha:response:{$response}");
 
@@ -62,7 +61,7 @@ class ReCaptcha
     /**
      * Get the captcha's secret key.
      */
-    public function secret(): string
+    protected function secret(): string
     {
         return config('livewire-forms.captcha.secret');
     }
@@ -70,7 +69,7 @@ class ReCaptcha
     /**
      * Get the URL that's used to verify the captcha.
      */
-    public function verificationUrl(): string
+    protected function verificationUrl(): string
     {
         return 'https://www.google.com/recaptcha/api/siteverify';
     }
