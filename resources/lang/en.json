@@ -1,3 +1,5 @@
 {
-    "The reCAPTCHA challenge was not successful.": "The reCAPTCHA challenge was not successful."
+    "Send": "Send",
+    "The form was successfully submitted!": "The form was successfully submitted!",
+    "There was an error with your submission:|There were :count errors with your submission:": "There was an error with your submission:|There were :count errors with your submission:"
 }
