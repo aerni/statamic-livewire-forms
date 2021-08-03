@@ -32,7 +32,7 @@ trait GetsFormFields
                 ];
             })->reject(function ($field, $handle) {
                 return $this->duplicateCaptchaFields()->contains($handle);
-            });
+            })->merge($this->honeypotField());
     }
 
     protected function captchaFields(): Collection
@@ -47,12 +47,19 @@ trait GetsFormFields
         return $this->captchaFields()->slice(1)->keys();
     }
 
-    protected function honeypot(): array
+    protected function honeypotField(): array
     {
+        $field = $this->form->honeypot();
+
         return [
-            'label' => Str::ucfirst($this->form->honeypot()),
-            'handle' => "{$this->id}_{$this->form->honeypot()}",
-            'key' => 'data.' . $this->form->honeypot(),
+            $field => [
+                'label' => Str::ucfirst($field),
+                'handle' => "{$this->id}_{$field}",
+                'key' => 'data.' . $field,
+                'type' => 'honeypot',
+                'width' => 100,
+                'rules' => [],
+            ]
         ];
     }
 

@@ -15,15 +15,14 @@ trait FollowsRules
 
     protected function realtimeRules($field): array
     {
-        // TODO: Validate honeypot but with this rule: https://laravel.com/docs/8.x/validation#rule-prohibited
-        // Don't validate the honeypot.
-        if ($field === $this->honeypot()['key']) {
-            return [$this->honeypot()['key'] => []];
+        $field = $this->fields()->get(Str::remove('data.', $field));
+
+        // Don't use realtime validation for the honeypot.
+        if ($field['type'] === 'honeypot') {
+            return [$field['key'] => []];
         };
 
-        $field = $this->fields()[Str::remove('data.', $field)];
-
-        // Don't use real-time validation for the captcha.
+        // Don't use realtime validation for the captcha.
         if ($field['type'] === 'captcha') {
             return [$field['key'] => []];
         }
@@ -38,7 +37,7 @@ trait FollowsRules
             return [$field['key'] => []];
         }
 
-        // Use regular validation rules if "realtime: true".
+        // Use the field validation rules if "realtime: true".
         if ($realtime === true) {
             return [$field['key'] => $field['rules']];
         }

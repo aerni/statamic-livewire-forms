@@ -4,6 +4,7 @@ namespace Aerni\LivewireForms\Http\Livewire;
 
 use Livewire\Component;
 use Statamic\Fields\Field;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Aerni\LivewireForms\Traits\FollowsRules;
 use Aerni\LivewireForms\Traits\GetsFormFields;
@@ -46,10 +47,17 @@ class Form extends Component
     protected function hydrateFormData(): array
     {
         return $this->form->fields()->mapWithKeys(function ($field) {
+            /**
+             * Don't reset the captcha after the form has been submitted.
+             * The captcha will expire and reset itself after a while.
+             */
+            if ($field->type() === 'captcha') {
+                return [$field->handle() => Arr::get($this->data, $field->handle())];
+            }
+
+            // Set the default field values according to the form blueprint.
             return [$field->handle() => $this->assignDefaultFieldValue($field)];
-        })
-        ->put($this->form->honeypot(), null)
-        ->toArray();
+        })->put($this->form->honeypot(), null)->toArray();
     }
 
     protected function assignDefaultFieldValue(Field $field)
@@ -104,7 +112,6 @@ class Form extends Component
     {
         return view('livewire/forms.' . $this->view, [
             'fields' => $this->fields(),
-            'honeypot' => $this->honeypot(),
         ]);
     }
 }

@@ -1,14 +1,14 @@
 <div class="hidden col-span-1">
 
-    <label for="{{ $honeypot['handle'] }}">
-        {{ $honeypot['label'] }}
+    <label for="{{ $field['handle'] }}">
+        {{ $field['label'] }}
     </label>
 
     <input
         type="text"
-        name="{{ $honeypot['handle'] }}"
-        id="{{ $honeypot['handle'] }}"
-        wire:model.defer="{{ $honeypot['key'] }}"
+        name="{{ $field['handle'] }}"
+        id="{{ $field['handle'] }}"
+        wire:model.defer="{{ $field['key'] }}"
         tabindex="-1"
         autocomplete="off"
     />

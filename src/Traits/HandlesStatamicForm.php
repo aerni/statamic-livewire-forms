@@ -35,6 +35,16 @@ trait HandlesStatamicForm
         return collect($data)->map(function ($value, $key) {
             $field = collect($this->fields()->get($key));
 
+            // Make sure to not include the honeypot in the form submission data.
+            if ($field->get('type') === 'honeypot') {
+                return null;
+            }
+
+            // Make sure to not include the captcha in the form submission data.
+            if ($field->get('type') === 'captcha') {
+                return null;
+            }
+
             if ($field->get('cast_booleans')) {
                 return Str::toBool($value);
             }
@@ -44,10 +54,7 @@ trait HandlesStatamicForm
             }
 
             return $value;
-        })->reject(function ($value, $fieldHandle) {
-            // Make sure to not include the captcha in the form submission data.
-            return $this->captchaFields()->first()->handle() === $fieldHandle;
-        })->toArray();
+        })->filter()->toArray();
     }
 
     protected function getFormSubmission(): Submission
