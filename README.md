@@ -53,7 +53,6 @@ return [
     */
 
     'captcha' => [
-        'enabled' => false,
         'key' => env('CAPTCHA_KEY'),
         'secret' => env('CAPTCHA_SECRET')
     ],
@@ -204,21 +203,9 @@ sections:
 
 ## Captcha
 
-You can configure the captcha on two levels. In the config file and on the form itself. The config on the form will override the global config.
+This addon provides a `captcha` fieldtype that you can add to your form blueprint. You can add the fieldtype either through the form blueprint builder in the Control Panel or directly to your blueprint file. This addon currently only supports Google reCAPTCHA v2 (checkbox).
 
-### 1. In the config
-A boolean to globally enable/disable the captcha.
-
-```php
-// config/livewire-forms.php
-
-'captcha' => [
-    'enabled' => true,
-]
-```
-
-### 2. On the form
-A boolean to enable/disable the captcha for a specific form.
+>**Note:** Make sure to set your captcha key and secret in the addon's config.
 
 ```yaml
 # resources/blueprints/forms/contact.yaml
@@ -226,11 +213,14 @@ A boolean to enable/disable the captcha for a specific form.
 sections:
   main:
     display: Main
-    captcha: true
     fields:
       -
-        handle: email
-        ...
+        handle: captcha
+        field:
+          display: reCAPTCHA
+          type: captcha
+          icon: lock
+          instructions: 'Please verify that you''re human.'
 ```
 
 ## Realtime validation
