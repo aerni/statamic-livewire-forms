@@ -205,7 +205,7 @@ sections:
 
 This addon provides a `captcha` fieldtype that you can add to your form blueprint. You can add the fieldtype either through the form blueprint builder in the Control Panel or directly to your blueprint file. This addon currently only supports Google reCAPTCHA v2 (checkbox).
 
->**Note:** Make sure to set your captcha key and secret in the addon's config.
+>**Note:** Make sure to add your captcha key and secret in your `.env` file.
 
 ```yaml
 # resources/blueprints/forms/contact.yaml
