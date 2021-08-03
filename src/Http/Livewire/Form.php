@@ -95,13 +95,6 @@ class Form extends Component
         return $default ?? array_key_first($options);
     }
 
-    protected function validationAttributes(): array
-    {
-        return $this->fields()->mapWithKeys(function ($field) {
-            return [$field['key'] => $field['label']];
-        })->toArray();
-    }
-
     public function submit(): void
     {
         $this->validate();

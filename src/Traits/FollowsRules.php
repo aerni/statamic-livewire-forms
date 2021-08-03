@@ -50,4 +50,11 @@ trait FollowsRules
 
         return [$field['key'] => $realtimeRules];
     }
+
+    protected function validationAttributes(): array
+    {
+        return $this->fields()->mapWithKeys(function ($field) {
+            return [$field['key'] => $field['label']];
+        })->toArray();
+    }
 }
