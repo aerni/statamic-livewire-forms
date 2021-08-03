@@ -60,29 +60,7 @@ return [
 ];
 ```
 
-### Default form views
-
-The default form views are styled with [Tailwind CSS](https://tailwindcss.com/). If you want to use the default styling, you need a working Tailwind setup with the [@tailwindcss/forms](https://github.com/tailwindlabs/tailwindcss-forms) plugin.
-
-### Publish form views
-
-You can also publish the form views to make the markup and styling your own:
-
-```bash
-php please vendor:publish --tag=livewire-forms-views
-```
-
-The views will be published to `views/vendor/livewire-forms`.
-
-> **Warning:** Future releases might introduce new functionality and come with updated views. If you choose to publish the views you are on your own and have to manually update views yourself.
-
-## Basic usage
-
-### 1. Create a Statamic form
-
-Go ahead and create a Statamic form in the Control Panel.
-
-### 2. Include Styles and Scripts
+### Include Styles and Scripts
 
 Add the Livewire `styles` in the `head`, and the `scripts` before the closing `body` tag in your template.
 
@@ -104,7 +82,27 @@ Add the Livewire `styles` in the `head`, and the `scripts` before the closing `b
 </body>
 ```
 
-### 3. Create a Livewire form view
+### Default form views
+
+The default form views are styled with [Tailwind CSS](https://tailwindcss.com/). If you want to use the default styling, you need a working Tailwind setup with the [@tailwindcss/forms](https://github.com/tailwindlabs/tailwindcss-forms) plugin.
+
+### Publish form views
+
+You can publish the default form views to make the markup and styling your own. The views will be published to `views/vendor/livewire-forms`.
+
+```bash
+php please vendor:publish --tag=livewire-forms-views
+```
+
+> **Note:** It's very likely that future releases will introduce changes to the views. If you choose to publish the views you are on your own and have to manually update the views yourself.
+
+## Basic usage
+
+### 1. Create a Statamic form
+
+Go ahead and create a Statamic form in the Control Panel.
+
+### 2. Create a Livewire form view
 
 Run the following command and follow the instructions to create a Livewire view for your Statamic form. The form view will be published to `views/livewire/forms/my-form-handle.blade.php`.
 
@@ -112,9 +110,7 @@ Run the following command and follow the instructions to create a Livewire view 
 php please make:livewire-form
 ```
 
-You may also choose to publish the default form views to change the markup and styling of the form fields. The views will be published to `views/vendor/livewire-forms`.
-
-### 4. Render the form
+### 3. Render the form
 
 Include the Livewire form component in your template and provide the handle of the Statamic form. This will automatically load the corresponding form view.
 
@@ -126,7 +122,7 @@ Include the Livewire form component in your template and provide the handle of t
 <livewire:form form="contact">
 ```
 
-You can also dynamically render a form that was selected via Statamic's `form` fieldtype:
+You can also dynamically render a form that was selected via Statamic's Form fieldtype:
 
 ```html
 <!-- Antlers -->
@@ -195,7 +191,7 @@ sections:
 
 ## Captcha
 
-This addon provides a `captcha` fieldtype that you can add to your form blueprint. You can add the fieldtype either through the form blueprint builder in the Control Panel or directly to your blueprint file. This addon currently only supports Google reCAPTCHA v2 (checkbox).
+This addon comes with a `Captcha` fieldtype that lets you add a `Google reCAPTCHA v2 (checkbox)` captcha to your form. You can add the field either through the form blueprint builder in the Control Panel or directly to your form blueprint file.
 
 >**Note:** Make sure to add your captcha key and secret in your `.env` file.
 
