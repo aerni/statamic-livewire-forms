@@ -16,6 +16,10 @@ class ServiceProvider extends AddonServiceProvider
         Commands\MakeLivewireForm::class,
     ];
 
+    protected $fieldtypes = [
+        Fieldtypes\Captcha::class,
+    ];
+
     protected $tags = [
         Tags\LivewireForms::class,
         Tags\Iterate::class,
@@ -65,7 +69,9 @@ class ServiceProvider extends AddonServiceProvider
     {
         Validator::extend('captcha', function ($attribute, $value) {
             return Captcha::verifyResponse($value, request()->getClientIp());
-        });
+        }, __('The reCAPTCHA challenge was not successful.'));
+
+        // TODO: Get translation from a php file.
     }
 
     protected function registerLivewireComponents()

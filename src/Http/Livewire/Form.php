@@ -8,18 +8,16 @@ use Illuminate\Support\Str;
 use Aerni\LivewireForms\Traits\FollowsRules;
 use Aerni\LivewireForms\Traits\GetsFormFields;
 use Aerni\LivewireForms\Traits\HandlesStatamicForm;
-use Aerni\LivewireForms\Traits\WithCaptcha;
 
 class Form extends Component
 {
-    use FollowsRules, GetsFormFields, HandlesStatamicForm, WithCaptcha;
+    use FollowsRules, GetsFormFields, HandlesStatamicForm;
 
     protected $form;
 
     public $formHandle;
     public $view;
     public $data;
-    public $captcha;
     public $success;
     public $redirect;
 
@@ -29,17 +27,6 @@ class Form extends Component
         $this->view = $view ?? Str::slug($this->formHandle);
         $this->form = $this->statamicForm();
         $this->data = $this->hydrateFormData();
-    }
-
-    protected function messages(): array
-    {
-        $messages = collect();
-
-        if ($this->withCaptcha()) {
-            $messages = $messages->merge($this->captchaValidationMessages());
-        }
-
-        return $messages->toArray();
     }
 
     public function hydrate(): void
@@ -75,8 +62,10 @@ class Form extends Component
             return $this->getDefaultSelectValue($field);
         }
 
-        // Make sure to always return the first array value
-        // if someone set the default to an array instead of a string/integer.
+        /**
+         * Make sure to always return the first array value if someone set the default value
+         * to an array instead of a string or integer.
+        */
         return array_first((array) $field->defaultValue());
     }
 
@@ -116,7 +105,6 @@ class Form extends Component
         return view('livewire/forms.' . $this->view, [
             'fields' => $this->fields(),
             'honeypot' => $this->honeypot(),
-            'with_captcha' => $this->withCaptcha(),
         ]);
     }
 }

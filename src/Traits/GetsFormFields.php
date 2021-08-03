@@ -30,7 +30,21 @@ trait GetsFormFields
                     'show_label' => $field->get('show_label') ?? true,
                     'cast_booleans' => $field->get('cast_booleans') ?? false,
                 ];
+            })->reject(function ($field, $handle) {
+                return $this->duplicateCaptchaFields()->contains($handle);
             });
+    }
+
+    protected function captchaFields(): Collection
+    {
+        return $this->form->fields()->filter(function ($field) {
+            return $field->type() === 'captcha';
+        });
+    }
+
+    protected function duplicateCaptchaFields(): Collection
+    {
+        return $this->captchaFields()->slice(1)->keys();
     }
 
     protected function honeypot(): array
@@ -53,6 +67,7 @@ trait GetsFormFields
     {
         $types = [
             'assets' => 'file',
+            'captcha' => 'captcha',
             'checkboxes' => 'checkboxes',
             'integer' => 'input',
             'radio' => 'radios',

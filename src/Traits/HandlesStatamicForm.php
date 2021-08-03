@@ -44,6 +44,9 @@ trait HandlesStatamicForm
             }
 
             return $value;
+        })->reject(function ($value, $fieldHandle) {
+            // Make sure to not include the captcha in the form submission data.
+            return $this->captchaFields()->first()->handle() === $fieldHandle;
         })->toArray();
     }
 

@@ -8,15 +8,9 @@ trait FollowsRules
 {
     protected function rules(): array
     {
-        $rules = $this->fields()->mapWithKeys(function ($field) {
+        return $this->fields()->mapWithKeys(function ($field) {
             return [$field['key'] => $field['rules']];
-        });
-
-        if ($this->withCaptcha()) {
-            $rules->put('captcha', ['required', 'captcha']);
-        }
-
-        return $rules->toArray();
+        })->toArray();
     }
 
     protected function realtimeRules($field): array
@@ -27,14 +21,12 @@ trait FollowsRules
             return [$this->honeypot()['key'] => []];
         };
 
-        // Don't use realtime validation for the captcha.
-        if ($this->withCaptcha()) {
-            if ($field === 'captcha') {
-                return ['captcha' => []];
-            }
-        }
-
         $field = $this->fields()[Str::remove('data.', $field)];
+
+        // Don't use real-time validation for the captcha.
+        if ($field['type'] === 'captcha') {
+            return [$field['key'] => []];
+        }
 
         // Get the realtime validation config from the field, form blueprint or global config.
         $realtime = $field['realtime']
