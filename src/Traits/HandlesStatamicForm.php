@@ -100,7 +100,7 @@ trait HandlesStatamicForm
             return redirect()->to($this->redirect);
         }
 
-        $this->data = $this->hydrateFormData();
+        $this->data = $this->hydrateData();
         $this->success = true;
     }
 

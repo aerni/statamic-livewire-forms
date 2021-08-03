@@ -3,16 +3,15 @@
 namespace Aerni\LivewireForms\Http\Livewire;
 
 use Livewire\Component;
-use Statamic\Fields\Field;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Aerni\LivewireForms\Traits\FollowsRules;
 use Aerni\LivewireForms\Traits\GetsFormFields;
 use Aerni\LivewireForms\Traits\HandlesStatamicForm;
+use Aerni\LivewireForms\Traits\HydratesData;
 
 class Form extends Component
 {
-    use FollowsRules, GetsFormFields, HandlesStatamicForm;
+    use FollowsRules, GetsFormFields, HandlesStatamicForm, HydratesData;
 
     protected $form;
 
@@ -27,7 +26,7 @@ class Form extends Component
         $this->formHandle = $form;
         $this->view = $view ?? Str::slug($this->formHandle);
         $this->form = $this->statamicForm();
-        $this->data = $this->hydrateFormData();
+        $this->data = $this->hydrateData();
     }
 
     public function hydrate(): void
@@ -42,57 +41,6 @@ class Form extends Component
     public function updated($field): void
     {
         $this->validateOnly($field, $this->realtimeRules($field));
-    }
-
-    protected function hydrateFormData(): array
-    {
-        return $this->form->fields()->mapWithKeys(function ($field) {
-            /**
-             * Don't reset the captcha after the form has been submitted.
-             * The captcha will expire and reset itself after a while.
-             */
-            if ($field->type() === 'captcha') {
-                return [$field->handle() => Arr::get($this->data, $field->handle())];
-            }
-
-            // Set the default field values according to the form blueprint.
-            return [$field->handle() => $this->assignDefaultFieldValue($field)];
-        })->put($this->form->honeypot(), null)->toArray();
-    }
-
-    protected function assignDefaultFieldValue(Field $field)
-    {
-        if ($field->type() === 'checkboxes') {
-            return $this->getDefaultCheckboxValue($field);
-        }
-
-        if ($field->type() === 'select') {
-            return $this->getDefaultSelectValue($field);
-        }
-
-        /**
-         * Make sure to always return the first array value if someone set the default value
-         * to an array instead of a string or integer.
-        */
-        return array_first((array) $field->defaultValue());
-    }
-
-    protected function getDefaultCheckboxValue(Field $field)
-    {
-        $default = $field->defaultValue();
-        $options = $field->get('options');
-
-        return (count($options) > 1)
-            ? (array) $default
-            : array_first((array) $default);
-    }
-
-    protected function getDefaultSelectValue(Field $field): string
-    {
-        $default = $field->defaultValue();
-        $options = $field->get('options');
-
-        return $default ?? array_key_first($options);
     }
 
     public function submit(): void
