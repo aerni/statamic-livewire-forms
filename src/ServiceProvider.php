@@ -20,28 +20,15 @@ class ServiceProvider extends AddonServiceProvider
         Fieldtypes\Captcha::class,
     ];
 
-    protected $tags = [
-        Tags\LivewireForms::class,
-        Tags\Iterate::class,
-    ];
-
     public function boot()
     {
         parent::boot();
 
-        $this->registerViews();
         $this->registerTranslations();
         $this->registerPublishables();
         $this->registerBladeDirectives();
         $this->registerValidators();
         $this->registerLivewireComponents();
-    }
-
-    protected function registerViews()
-    {
-        $this->loadViewsFrom(__DIR__.'/../resources/views/antlers', 'livewire-forms');
-        $this->loadViewsFrom(__DIR__.'/../resources/views/blade', 'livewire-forms');
-        $this->loadViewsFrom(__DIR__.'/../resources/views/captcha', 'livewire-forms');
     }
 
     protected function registerTranslations()
@@ -52,12 +39,8 @@ class ServiceProvider extends AddonServiceProvider
     protected function registerPublishables()
     {
         $this->publishes([
-            __DIR__.'/../resources/views/antlers' => resource_path('views/vendor/livewire-forms'),
-        ], 'livewire-forms-antlers');
-
-        $this->publishes([
-            __DIR__.'/../resources/views/blade' => resource_path('views/vendor/livewire-forms'),
-        ], 'livewire-forms-blade');
+            __DIR__.'/../resources/views' => resource_path('views/vendor/livewire-forms'),
+        ], 'livewire-forms-views');
     }
 
     protected function registerBladeDirectives()

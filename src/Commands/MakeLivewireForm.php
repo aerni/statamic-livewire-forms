@@ -35,7 +35,6 @@ class MakeLivewireForm extends Command
     {
         $this->chooseForm();
         $this->createLivewireView();
-        $this->publishFormViews();
         // $this->createComponent();
     }
 
@@ -58,31 +57,15 @@ class MakeLivewireForm extends Command
 
     protected function createLivewireView(): void
     {
-        $this->engine = $this->choice('Select your preferred templating engine', ['Antlers', 'Blade'], 0);
-        $this->extension = ($this->engine === 'Antlers') ? '.antlers.html' : '.blade.php';
+        $stub = File::get(__DIR__ . '/../../resources/stubs/form.blade.php');
 
-        $stub = File::get(__DIR__ . '/../../resources/stubs/form' . $this->extension);
-
-        $filename = Str::slug($this->form->handle()) . $this->extension;
+        $filename = Str::slug($this->form->handle()) . '.blade.php';
         $path = resource_path('views/livewire/forms/' . $filename);
 
         if (!File::exists($path) || $this->confirm("The Livewire view <comment>$filename</comment> already exists. Overwrite?")) {
             File::ensureDirectoryExists(resource_path('views/livewire/forms'));
             File::put($path, $stub);
-            $this->line("<info>[✓]</info> The Livewire view was successfully created: <comment>{$this->getRelativePath($path)}</comment>");
-        }
-    }
-
-    protected function publishFormViews(): void
-    {
-        if ($this->confirm('Do you want to publish the default form views?')) {
-            $this->callSilently('vendor:publish', [
-                '--tag' => 'livewire-forms-' . Str::lower($this->engine)
-            ]);
-
-            $path = resource_path('views/vendor/livewire-forms');
-
-            $this->line("<info>[✓]</info> The default form views were successfully published: <comment>{$this->getRelativePath($path)}</comment>");
+            $this->line("<info>[✓]</info> The form view was successfully created: <comment>{$this->getRelativePath($path)}</comment>");
         }
     }
 

@@ -11,7 +11,7 @@ This addon provides a powerful Statamic forms framework for Laravel Livewire. No
 - Spam protection with a simple honeypot field and optional Google reCAPTCHA v2
 - Use your Statamic form blueprint as a form builder
 - Multi-site support; translate your form labels, instructions, placeholders, etc.
-- Configured and styled form views in Antlers and Blade
+- Configured and styled form views
 
 ## Installation
 Install the addon using Composer:
@@ -69,11 +69,7 @@ The default form views are styled with [Tailwind CSS](https://tailwindcss.com/).
 You can also publish the form views to make the markup and styling your own:
 
 ```bash
-# Publish the Antlers views
-php please vendor:publish --tag=livewire-forms-antlers
-
-# Publish the Blade views
-php please vendor:publish --tag=livewire-forms-blade
+php please vendor:publish --tag=livewire-forms-views
 ```
 
 The views will be published to `views/vendor/livewire-forms`.
@@ -110,7 +106,7 @@ Add the Livewire `styles` in the `head`, and the `scripts` before the closing `b
 
 ### 3. Create a Livewire form view
 
-Run the following command and follow the instructions to create a Livewire view for your Statamic form. The form view will be published to `views/livewire/forms/my-form-handle.{antlers.html|blade.php}`.
+Run the following command and follow the instructions to create a Livewire view for your Statamic form. The form view will be published to `views/livewire/forms/my-form-handle.blade.php`.
 
 ```bash
 php please make:livewire-form
@@ -165,10 +161,6 @@ The view is expected to be in the `views/livewire/forms` directory. But you may 
 Sometimes you need more control over the markup of your form, eg. to group specific fields in a `<fieldset>`. You can include single fields like this:
 
 ```html
-<!-- Antlers -->
-{{ partial src="livewire-forms::fields" field="name" }}
-
-<!-- Blade -->
 @include('livewire-forms::fields', [
     'field' => $fields['name'],
 ])
