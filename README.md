@@ -61,7 +61,7 @@ return [
 
 Add the Livewire `styles` in the `head`, and the `scripts` before the closing `body` tag in your template:
 
-```html
+```blade
 <head>
     <!-- Antlers -->
     {{ livewire:styles }}
@@ -113,7 +113,7 @@ php please make:livewire-form
 
 Include the Livewire form component in your template and provide the handle of the Statamic form. This will automatically load the corresponding form view.
 
-```html
+```blade
 <!-- Antlers -->
 {{ livewire:form form="contact" }}
 
@@ -123,7 +123,7 @@ Include the Livewire form component in your template and provide the handle of t
 
 You can also dynamically render a form that was selected via Statamic's Form fieldtype:
 
-```html
+```blade
 <!-- Antlers -->
 {{ livewire:form :form="field:handle" }}
 
@@ -133,7 +133,7 @@ You can also dynamically render a form that was selected via Statamic's Form fie
 
 You may also use the same view for every form by passing the name of the view to the `view` parameter:
 
-```html
+```blade
 <!-- Antlers -->
 {{ livewire:form :form="field:handle" view="default" }}
 
@@ -143,7 +143,7 @@ You may also use the same view for every form by passing the name of the view to
 
 The view is expected to be in the `views/livewire/forms` directory. But you may specify a subdirectory like so:
 
-```html
+```blade
 <!-- Antlers -->
 {{ livewire:form :form="field:handle" view="contact/default" }}
 
@@ -151,14 +151,30 @@ The view is expected to be in the `views/livewire/forms` directory. But you may 
 <livewire:form :form="field:handle" view="contact/default">
 ```
 
-## Customizing the form view
+## Customizing the form component view
 
-Sometimes you need more control over the markup of your form, eg. to group specific fields in a `<fieldset>`. You can include single fields like this:
+Sometimes you need more control over the markup of your form, eg. to group specific fields in a `<fieldset>`. To import a single field you can pass the field's handle to the `livewire-forms::fields` view as a parameter:
 
-```html
-@include('livewire-forms::fields', [
-    'field' => $fields['name'],
-])
+```blade
+<form wire:submit.prevent="submit" class="w-full max-w-2xl">
+    <div class="grid grid-cols-1 gap-8 md:grid-cols-12">
+        <fieldset>
+            <div class="mb-3">
+                <legend class="text-base font-medium text-gray-700">Personal Information</legend>
+            </div>
+            @include('livewire-forms::fields', [
+                'field' => $fields['name'],
+            ])
+            @include('livewire-forms::fields', [
+                'field' => $fields['email'],
+            ])
+        </fieldset>
+
+        @include('livewire-forms::submit')
+        @include('livewire-forms::errors')
+        @include('livewire-forms::success')
+    </div>
+</form>
 ```
 
 ## Translating your fields
