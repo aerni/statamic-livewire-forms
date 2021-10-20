@@ -18,11 +18,19 @@ class BladeDirectives
     /**
      * Get a single field by its handle.
      */
-    public static function field(string $handle): string
+    public static function field(string $expression): string
     {
+        $variables = explode(', ', $expression);
+
+        $handle = $variables[0];
+        $rawField = isset($variables[1]) ? 'true' : 'false';
+
         return Blade::compileString("
             @if (isset(\$fields[$handle]))
-                @include('livewire-forms::field', ['field' => \$fields[$handle]])
+                @include('livewire-forms::field', [
+                    'field' => \$fields[$handle],
+                    'rawField' => $rawField,
+                ])
             @endif
         ");
     }
