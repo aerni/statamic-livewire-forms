@@ -21,7 +21,7 @@ class BladeDirectives
     public static function field(string $handle): string
     {
         return Blade::compileString("
-            @if (isset(\$fields))
+            @if (isset(\$fields[$handle]))
                 @include('livewire-forms::field', ['field' => \$fields[$handle]])
             @endif
         ");
