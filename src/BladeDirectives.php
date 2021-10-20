@@ -18,7 +18,7 @@ class BladeDirectives
     /**
      * Get a single field by its handle.
      */
-    public static function field(string $expression): string
+    public static function formfield(string $expression): string
     {
         $variables = explode(', ', $expression);
 
