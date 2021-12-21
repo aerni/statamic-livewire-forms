@@ -2,6 +2,7 @@
 
 namespace Aerni\LivewireForms\Traits;
 
+use Statamic\Fields\Field;
 use Illuminate\Support\Str;
 use Illuminate\Support\Collection;
 
@@ -29,6 +30,7 @@ trait GetsFormFields
                     'error' => $this->getFieldError('data.' . $field->handle()),
                     'show_label' => $field->get('show_label') ?? true,
                     'cast_booleans' => $field->get('cast_booleans') ?? false,
+                    'show' => $this->shouldShowField($field),
                 ];
             })->reject(function ($field, $handle) {
                 return $this->duplicateCaptchaFields()->contains($handle);
@@ -105,5 +107,50 @@ trait GetsFormFields
         }
 
         return $this->getErrorBag()->first($field);
+    }
+
+    protected function shouldShowField(Field $field): bool
+    {
+        $conditions = collect($field->get('if'));
+
+        // Always show the field if there are no conditions.
+        if ($conditions->isEmpty()) {
+            return true;
+        }
+
+        // Determine if the field should be shown or not.
+        $conditions = $conditions->map(function ($condition, $field) {
+            [$operator, $actualValue] = explode(' ', $condition);
+
+            $expectedValue = collect($this->data)->get($field);
+
+            return $this->evaluateCondition($actualValue, $operator, $expectedValue);
+        });
+
+        return $conditions->count() === $conditions->filter()->count();
+    }
+
+    protected function evaluateCondition(string $actualValue, string $operator, string $expectedValue): bool
+    {
+        switch ($operator) {
+            case "equals":
+                return $actualValue == $expectedValue;
+            case "not":
+                return $actualValue != $expectedValue;
+            case "===":
+                return $actualValue === $expectedValue;
+            case "!==":
+                return $actualValue !== $expectedValue;
+            case ">":
+                return $actualValue > $expectedValue;
+            case ">=":
+                return $actualValue >= $expectedValue;
+            case "<":
+                return $actualValue <  $expectedValue;
+            case "<=":
+                return $actualValue <= $expectedValue;
+            default:
+                return false;
+        }
     }
 }
