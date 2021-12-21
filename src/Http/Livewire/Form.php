@@ -2,26 +2,28 @@
 
 namespace Aerni\LivewireForms\Http\Livewire;
 
-use Livewire\Component;
-use Illuminate\Support\Str;
 use Aerni\LivewireForms\Traits\FollowsRules;
 use Aerni\LivewireForms\Traits\GetsFormFields;
 use Aerni\LivewireForms\Traits\HandlesStatamicForm;
 use Aerni\LivewireForms\Traits\HydratesData;
+use Illuminate\Support\Str;
+use Livewire\Component;
+use Statamic\Forms\Form as StatamicForm;
 
 class Form extends Component
 {
     use FollowsRules, GetsFormFields, HandlesStatamicForm, HydratesData;
 
-    protected $form;
+    protected StatamicForm $form;
 
-    public $formHandle;
-    public $view;
-    public $data;
-    public $success;
-    public $redirect;
+    public string $formHandle;
+    public string $view;
+    public array $data;
 
-    public function mount($form, $view = null): void
+    public bool $success = false;
+    public bool $redirect = false;
+
+    public function mount(string $form, string $view = null): void
     {
         $this->formHandle = $form;
         $this->view = $view ?? Str::slug($this->formHandle);
