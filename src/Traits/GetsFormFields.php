@@ -111,46 +111,67 @@ trait GetsFormFields
 
     protected function shouldShowField(Field $field): bool
     {
-        $conditions = collect($field->get('if'));
+        [$type, $conditions] = $this->getConditions($field);
 
-        // Always show the field if there are no conditions.
         if ($conditions->isEmpty()) {
             return true;
         }
 
-        // Determine if the field should be shown or not.
         $conditions = $conditions->map(function ($condition, $field) {
-            [$operator, $actualValue] = explode(' ', $condition);
+            [$operator, $expectedValue] = explode(' ', $condition);
 
-            $expectedValue = collect($this->data)->get($field);
+            $actualValue = collect($this->data)->get($field);
 
             return $this->evaluateCondition($actualValue, $operator, $expectedValue);
         });
 
-        return $conditions->count() === $conditions->filter()->count();
+        return $this->evaluateConditions($type, $conditions);
     }
 
-    protected function evaluateCondition(string $actualValue, string $operator, string $expectedValue): bool
+    protected function getConditions(Field $field): array
     {
-        switch ($operator) {
-            case "equals":
-                return $actualValue == $expectedValue;
-            case "not":
-                return $actualValue != $expectedValue;
-            case "===":
-                return $actualValue === $expectedValue;
-            case "!==":
-                return $actualValue !== $expectedValue;
-            case ">":
-                return $actualValue > $expectedValue;
-            case ">=":
-                return $actualValue >= $expectedValue;
-            case "<":
-                return $actualValue <  $expectedValue;
-            case "<=":
-                return $actualValue <= $expectedValue;
-            default:
-                return false;
-        }
+        $conditions = array_filter([
+            'if' => $field->get('if'),
+            'if_any' => $field->get('if_any'),
+            'unless' => $field->get('unless'),
+            'unless_any' => $field->get('unless_any'),
+        ]);
+
+        return [
+            array_key_first($conditions),
+            collect(array_first($conditions)),
+        ];
+    }
+
+    protected function evaluateConditions(string $conditionsType, Collection $conditions): bool
+    {
+        return match ($conditionsType) {
+            'if' => $conditions->count() === $conditions->filter()->count(),
+            'if_any' => $conditions->filter()->isNotEmpty(),
+            'unless' => $conditions->filter()->isEmpty(),
+            'unless_any' => $conditions->count() !== $conditions->filter()->count(),
+            default => false,
+        };
+    }
+
+    protected function evaluateCondition(string|array|null $actualValue, string $operator, string $expectedValue): bool
+    {
+        return match ($operator) {
+            'equals' => $actualValue == $expectedValue,
+            'not' => $actualValue != $expectedValue,
+            'contains' => is_array($actualValue)
+                ? ! array_diff(explode(',', $expectedValue), $actualValue)
+                : Str::contains($actualValue, $expectedValue),
+            'contains_any' => is_array($actualValue)
+                ? (bool) array_intersect(explode(',', $expectedValue), $actualValue)
+                : Str::contains($actualValue, explode(',', $expectedValue)),
+            '===' => $actualValue === $expectedValue,
+            '!==' => $actualValue !== $expectedValue,
+            '>' => $actualValue > $expectedValue,
+            '>=' => $actualValue >= $expectedValue,
+            '<' => $actualValue < $expectedValue,
+            '<=' => $actualValue <= $expectedValue,
+            default => false,
+        };
     }
 }
