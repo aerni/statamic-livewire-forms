@@ -18,7 +18,7 @@ class Form extends Component
 
     public string $formHandle;
     public string $view;
-    public array $data;
+    public array $data = [];
 
     public bool $success = false;
     public bool $redirect = false;
