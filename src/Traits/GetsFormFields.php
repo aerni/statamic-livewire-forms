@@ -61,6 +61,7 @@ trait GetsFormFields
                 'type' => 'honeypot',
                 'width' => 100,
                 'rules' => [],
+                'show' => false,
             ]
         ];
     }
