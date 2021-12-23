@@ -1,7 +1,7 @@
 ![Statamic](https://flat.badgen.net/badge/Statamic/3.0+/FF269E) ![Packagist version](https://flat.badgen.net/packagist/v/aerni/livewire-forms/latest) ![Packagist Total Downloads](https://flat.badgen.net/packagist/dt/aerni/livewire-forms)
 
 # Livewire Forms
-This addon provides a powerful Statamic forms framework for Laravel Livewire. No more submitting your form with AJAX or dealing with funky client-side validation libraries. Livewire Forms is a powerhouse that will make your life soooo much easier!
+This addon provides a powerful framework to use Statamic forms with Laravel Livewire. No more submitting your form with AJAX or dealing with funky client-side validation libraries. Livewire Forms is a powerhouse that will make your life soooo much easier!
 
 ## Features
 - Realtime validation with fine-grained control over each field
@@ -9,6 +9,7 @@ This addon provides a powerful Statamic forms framework for Laravel Livewire. No
 - One source of truth for your validation rules
 - Spam protection with Google reCAPTCHA v2 and honeypot field
 - Use your Statamic form blueprints as a form builder
+- Support for display conditions set in your form blueprint
 - Multi-site support; translate your form labels, instructions, placeholders, etc.
 - Configured and styled form views
 
@@ -153,28 +154,33 @@ The view is expected to be in the `views/livewire/forms` directory. But you may 
 
 ## Customizing the form component view
 
-Sometimes you need more control over the markup of your form, eg. to group specific fields in a `<fieldset>`. To import a single field you can pass the field's handle to the `livewire-forms::fields` view as a parameter:
+Sometimes you need more control over the markup of your form, eg. to group specific fields in a `<fieldset>`. You can render a single field by passing its handle to the `@formField` directive.
 
 ```blade
 <form wire:submit.prevent="submit" class="w-full max-w-2xl">
     <div class="grid grid-cols-1 gap-8 md:grid-cols-12">
+    
         <fieldset>
             <div class="mb-3">
                 <legend class="text-base font-medium text-gray-700">Personal Information</legend>
             </div>
-            @include('livewire-forms::fields', [
-                'field' => $fields['name'],
-            ])
-            @include('livewire-forms::fields', [
-                'field' => $fields['email'],
-            ])
+            
+            @formField('name')
+            @formField('email')
         </fieldset>
 
-        @include('livewire-forms::submit')
-        @include('livewire-forms::errors')
-        @include('livewire-forms::success')
+        @formFields
+        @formSubmit
+        @formErrors
+        @formSuccess
     </div>
 </form>
+```
+
+You may also render the blank field view without the field layout wrapper by passing a second parameter:
+
+```blade
+@formField('name', true)
 ```
 
 ## Translating your fields
