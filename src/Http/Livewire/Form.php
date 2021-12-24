@@ -9,7 +9,6 @@ use Aerni\LivewireForms\Form\Fields;
 use Statamic\Forms\Form as StatamicForm;
 use Aerni\LivewireForms\Traits\FollowsRules;
 use Aerni\LivewireForms\Traits\HydratesData;
-use Aerni\LivewireForms\Traits\GetsFormFields;
 use Aerni\LivewireForms\Traits\HandlesStatamicForm;
 
 class Form extends Component
@@ -17,7 +16,6 @@ class Form extends Component
     use FollowsRules, HandlesStatamicForm, HydratesData;
 
     protected StatamicForm $form;
-    public Collection $fields;
 
     public string $formHandle;
     public string $view;
@@ -31,7 +29,6 @@ class Form extends Component
         $this->formHandle = $form;
         $this->view = $view ?? Str::slug($this->formHandle);
         $this->form = $this->statamicForm();
-        $this->fields = Fields::make($this->form);
         $this->data = $this->hydrateData();
     }
 
@@ -42,6 +39,11 @@ class Form extends Component
 
         // Reset success if the user keeps on interacting with the form after it has been submitted.
         $this->success = false;
+    }
+
+    public function getFieldsProperty(): Fields
+    {
+        return Fields::make($this->form);
     }
 
     public function updated($field): void
@@ -58,7 +60,7 @@ class Form extends Component
     public function render()
     {
         return view('livewire/forms.' . $this->view, [
-            'fields' => $this->fields,
+            'fields' => $this->fields->all(),
         ]);
     }
 }

@@ -19,9 +19,19 @@ class Fields
         $this->id = Str::random(9);
     }
 
-    public static function make(Form $form): Collection
+    public static function make(Form $form): self
     {
-        return (new static($form))->process()->fields;
+        return (new static($form))->process();
+    }
+
+    public function all(): array
+    {
+        return $this->fields->all();
+    }
+
+    public function get(string $field): array
+    {
+        return $this->fields->get($field);
     }
 
     protected function process(): self
@@ -190,5 +200,58 @@ class Fields
             '<=' => $actualValue <= $expectedValue,
             default => false,
         };
+    }
+
+    public function validationRules(): array
+    {
+        return $this->fields->mapWithKeys(function ($field) {
+            return [$field['key'] => $field['rules']];
+        })->toArray();
+    }
+
+    public function validationAttributes(): array
+    {
+        return $this->fields->mapWithKeys(function ($field) {
+            return [$field['key'] => $field['label']];
+        })->toArray();
+    }
+
+    public function realtimeValidationRules(string $field): array
+    {
+        $field = $this->fields->firstWhere('key', $field);
+
+        // Don't use realtime validation for the honeypot.
+        if ($field['type'] === 'honeypot') {
+            return [$field['key'] => []];
+        };
+
+        // Don't use realtime validation for the captcha.
+        if ($field['type'] === 'captcha') {
+            return [$field['key'] => []];
+        }
+
+        // Get the realtime validation config from the field, form blueprint or global config.
+        $realtime = $field['realtime']
+            // Would like to get the realtime config from the form config instead of the form blueprint, but there's currently no way to access custom data.
+            ?? $this->form->blueprint()->contents()['sections']['main']['realtime']
+            ?? config('livewire-forms.realtime', true);
+
+        // Disable realtime validation if "realtime: false".
+        if (! $realtime) {
+            return [$field['key'] => []];
+        }
+
+        // Use the field validation rules if "realtime: true".
+        if ($realtime === true) {
+            return [$field['key'] => $field['rules']];
+        }
+
+        // Make sure to always get an array of realtime rules.
+        $realtimeRules = is_array($realtime) ? $realtime : explode('|', $realtime);
+
+        // Remove any realtime rules that are not part of the validation rules.
+        $realtimeRules = array_intersect($realtimeRules, $field['rules']);
+
+        return [$field['key'] => $realtimeRules];
     }
 }
