@@ -29,6 +29,7 @@ trait FollowsRules
 
         // Get the realtime validation config from the field, form blueprint or global config.
         $realtime = $field['realtime']
+            // Would like to get the realtime config from the form config instead of the form blueprint, but there's currently no way to access custom data.
             ?? $this->form->blueprint()->contents()['sections']['main']['realtime']
             ?? config('livewire-forms.realtime', true);
 
