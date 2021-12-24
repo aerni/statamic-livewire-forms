@@ -8,14 +8,14 @@ trait FollowsRules
 {
     protected function rules(): array
     {
-        return $this->fields()->mapWithKeys(function ($field) {
+        return $this->fields->mapWithKeys(function ($field) {
             return [$field['key'] => $field['rules']];
         })->toArray();
     }
 
     protected function realtimeRules($field): array
     {
-        $field = $this->fields()->get(Str::remove('data.', $field));
+        $field = $this->fields->get(Str::remove('data.', $field));
 
         // Don't use realtime validation for the honeypot.
         if ($field['type'] === 'honeypot') {
@@ -53,7 +53,7 @@ trait FollowsRules
 
     protected function validationAttributes(): array
     {
-        return $this->fields()->mapWithKeys(function ($field) {
+        return $this->fields->mapWithKeys(function ($field) {
             return [$field['key'] => $field['label']];
         })->toArray();
     }

@@ -1,69 +1,94 @@
 <?php
 
-namespace Aerni\LivewireForms\Traits;
+namespace Aerni\LivewireForms\Form;
 
+use Statamic\Forms\Form;
 use Statamic\Fields\Field;
 use Illuminate\Support\Str;
 use Illuminate\Support\Collection;
 
-trait GetsFormFields
+class Fields
 {
-    protected function fields(): Collection
+    protected Form $form;
+    protected string $id;
+    protected Collection $fields;
+
+    public function __construct(Form $form)
     {
-        return $this->form->fields()
-            ->map(function ($field) {
-                return [
-                    'label' => __($field->get('display')),
-                    'instructions' => __($field->get('instructions')),
-                    'handle' => "{$this->id}_{$field->handle()}",
-                    'key' => 'data.' . $field->handle(),
-                    'type' => $this->assignFieldType($field->get('type')),
-                    'input_type' => $this->assignFieldInputType($field->get('type'), $field->get('input_type')),
-                    'options' => $this->getTranslatedFieldOptions($field),
-                    'inline' => $field->get('inline'),
-                    'default' => $field->get('default'),
-                    'placeholder' => __($field->get('placeholder')),
-                    'autocomplete' => $field->get('autocomplete') ?? 'off',
-                    'width' => $field->get('width') ?? 100,
-                    'rules' => collect($field->rules())->flatten()->toArray(),
-                    'realtime' => $field->get('realtime'),
-                    'error' => $this->getFieldError('data.' . $field->handle()),
-                    'show_label' => $field->get('show_label') ?? true,
-                    'cast_booleans' => $field->get('cast_booleans') ?? false,
-                    'show' => $this->shouldShowField($field),
-                ];
-            })->reject(function ($field, $handle) {
-                return $this->duplicateCaptchaFields()->contains($handle);
-            })->merge($this->honeypotField());
+        $this->form = $form;
+        $this->id = Str::random(9);
     }
 
-    protected function captchaFields(): Collection
+    public static function make(Form $form): Collection
     {
-        return $this->form->fields()->filter(function ($field) {
-            return $field->type() === 'captcha';
+        return (new static($form))->process()->fields;
+    }
+
+    protected function process(): self
+    {
+        return $this
+            ->preProcess()
+            ->removeDuplicateCaptchaFields()
+            ->addHoneypotField();
+    }
+
+    protected function preProcess(): self
+    {
+        $this->fields = $this->form->fields()->map(function ($field) {
+            return [
+                'label' => __($field->get('display')),
+                'instructions' => __($field->get('instructions')),
+                'handle' => "{$this->id}_{$field->handle()}",
+                'key' => 'data.' . $field->handle(),
+                'type' => $this->assignFieldType($field->get('type')),
+                'input_type' => $this->assignFieldInputType($field->get('type'), $field->get('input_type')),
+                'options' => $this->getTranslatedFieldOptions($field),
+                'inline' => $field->get('inline'),
+                'default' => $field->get('default'),
+                'placeholder' => __($field->get('placeholder')),
+                'autocomplete' => $field->get('autocomplete') ?? 'off',
+                'width' => $field->get('width') ?? 100,
+                'rules' => collect($field->rules())->flatten()->toArray(),
+                'realtime' => $field->get('realtime'),
+                'show_label' => $field->get('show_label') ?? true,
+                'cast_booleans' => $field->get('cast_booleans') ?? false,
+                'show' => $this->shouldShowField($field),
+            ];
         });
+
+        return $this;
     }
 
-    protected function duplicateCaptchaFields(): Collection
+    protected function removeDuplicateCaptchaFields(): self
     {
-        return $this->captchaFields()->slice(1)->keys();
+        $duplicates = $this->fields->filter(function ($field) {
+            return $field['type'] === 'captcha';
+        })->slice(1);
+
+        $this->fields = $this->fields->reject(function ($field) use ($duplicates) {
+            return $duplicates->contains($field);
+        });
+
+        return $this;
     }
 
-    protected function honeypotField(): array
+    protected function addHoneypotField(): self
     {
-        $field = $this->form->honeypot();
+        $handle = $this->form->honeypot();
 
-        return [
-            $field => [
-                'label' => Str::ucfirst($field),
-                'handle' => "{$this->id}_{$field}",
-                'key' => 'data.' . $field,
+        $this->fields = $this->fields->merge([
+            $handle => [
+                'label' => Str::ucfirst($handle),
+                'handle' => "{$this->id}_{$handle}",
+                'key' => 'data.' . $handle,
                 'type' => 'honeypot',
                 'width' => 100,
                 'rules' => [],
                 'show' => false,
             ]
-        ];
+        ]);
+
+        return $this;
     }
 
     protected function getTranslatedFieldOptions($field): array
@@ -99,15 +124,6 @@ trait GetsFormFields
         ];
 
         return $types[$fieldType] ?? $intputType;
-    }
-
-    protected function getFieldError(string $field): ?string
-    {
-        if (! $this->getErrorBag()->has($field)) {
-            return null;
-        }
-
-        return $this->getErrorBag()->first($field);
     }
 
     protected function shouldShowField(Field $field): bool

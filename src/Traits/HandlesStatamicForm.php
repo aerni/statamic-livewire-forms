@@ -33,7 +33,7 @@ trait HandlesStatamicForm
     protected function normalizeData(array $data): array
     {
         return collect($data)->map(function ($value, $key) {
-            $field = collect($this->fields()->get($key));
+            $field = collect($this->fields->get($key));
 
             // Make sure to not include the honeypot in the form submission data.
             if ($field->get('type') === 'honeypot') {
