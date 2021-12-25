@@ -9,19 +9,16 @@ use Illuminate\Support\Collection;
 
 class Fields
 {
-    protected Form $form;
-    protected string $id;
     protected Collection $fields;
 
-    public function __construct(Form $form)
+    public function __construct(protected Form $form, protected string $id)
     {
-        $this->form = $form;
-        $this->id = Str::random(9);
+        //
     }
 
-    public static function make(Form $form): self
+    public static function make(Form $form, string $id): self
     {
-        return (new static($form))->process();
+        return (new static($form, $id))->process();
     }
 
     public function all(): array

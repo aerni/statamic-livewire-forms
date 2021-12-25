@@ -38,7 +38,7 @@ class Form extends Component
 
     public function getFieldsProperty(): Fields
     {
-        return Fields::make($this->form);
+        return Fields::make($this->form, $this->id);
     }
 
     public function updated($field): void
