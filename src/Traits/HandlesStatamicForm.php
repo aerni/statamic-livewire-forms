@@ -101,7 +101,7 @@ trait HandlesStatamicForm
         }
 
         $this->data = $this->hydrateData();
-        $this->success = true;
+        session()->flash('success');
     }
 
     protected function isSpam(): bool

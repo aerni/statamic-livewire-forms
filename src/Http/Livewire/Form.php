@@ -21,7 +21,6 @@ class Form extends Component
     public string $view;
     public array $data = [];
 
-    public bool $success = false;
     public bool $redirect = false;
 
     public function mount(string $form, string $view = null): void
@@ -37,8 +36,6 @@ class Form extends Component
         // Need this because $form is a protected property and doesn't persist between requests.
         $this->form = $this->statamicForm();
 
-        // Reset success if the user keeps on interacting with the form after it has been submitted.
-        $this->success = false;
     }
 
     public function getFieldsProperty(): Fields
