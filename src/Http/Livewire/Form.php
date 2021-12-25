@@ -2,41 +2,32 @@
 
 namespace Aerni\LivewireForms\Http\Livewire;
 
-use Livewire\Component;
-use Illuminate\Support\Str;
 use Aerni\LivewireForms\Form\Fields;
-use Statamic\Facades\Form as StatamicForm;
 use Aerni\LivewireForms\Traits\FollowsRules;
-use Aerni\LivewireForms\Traits\HandlesStatamicForm;
+use Aerni\LivewireForms\Traits\HandlesFormSubmission;
+use Illuminate\Support\Str;
+use Illuminate\View\View;
+use Livewire\Component;
 
 class Form extends Component
 {
-    use FollowsRules, HandlesStatamicForm;
+    use FollowsRules, HandlesFormSubmission;
 
     public string $handle;
     public string $view;
-    public array $data = [];
+    public array $data;
 
     public function mount(string $form, string $view = null): void
     {
         $this->handle = $form;
-        $this->view = $view ?? Str::slug($this->handle);
+        $this->view = $view ?? Str::slug($form);
         $this->data = $this->fields->defaultValues();
     }
 
-    public function getFormProperty()
+    public function getFormProperty(): \Statamic\Forms\Form
     {
-        if (! $this->handle) {
-            throw new \Exception('The form handle is missing. Please make sure to add it to the form tag.');
-        }
-
-        $form = StatamicForm::find($this->handle);
-
-        if (! $form) {
-            throw new \Exception("Form with handle [{$this->handle}] cannot be found.");
-        }
-
-        return $form;
+        return \Statamic\Facades\Form::find($this->handle)
+            ?? throw new \Exception("Form with handle [{$this->handle}] cannot be found.");
     }
 
     public function getFieldsProperty(): Fields
@@ -44,20 +35,9 @@ class Form extends Component
         return Fields::make($this->form, $this->id);
     }
 
-    public function updated($field): void
+    public function render(): View
     {
-        $this->validateOnly($field, $this->realtimeRules($field));
-    }
-
-    public function submit(): void
-    {
-        $this->validate();
-        $this->submitStatamicForm();
-    }
-
-    public function render()
-    {
-        return view('livewire/forms.' . $this->view, [
+        return view("livewire/forms.{$this->view}", [
             'fields' => $this->fields->all(),
         ]);
     }

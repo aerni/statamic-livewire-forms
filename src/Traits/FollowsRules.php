@@ -4,6 +4,11 @@ namespace Aerni\LivewireForms\Traits;
 
 trait FollowsRules
 {
+    public function updated(string $field): void
+    {
+        $this->validateOnly($field, $this->realtimeRules($field));
+    }
+
     protected function rules(): array
     {
         return $this->fields->validationRules();

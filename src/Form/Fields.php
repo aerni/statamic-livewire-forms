@@ -2,10 +2,10 @@
 
 namespace Aerni\LivewireForms\Form;
 
-use Statamic\Forms\Form;
-use Statamic\Fields\Field;
-use Illuminate\Support\Str;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
+use Statamic\Fields\Field;
+use Statamic\Forms\Form;
 
 class Fields
 {
@@ -110,6 +110,7 @@ class Fields
         return match ($field->type()) {
             'checkboxes' => $this->getDefaultCheckboxValue($field),
             'select' => $this->getDefaultSelectValue($field),
+
             /**
              * Make sure to always return the first array value if someone set the default value
              * to an array instead of a string or integer.
