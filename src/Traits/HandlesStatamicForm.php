@@ -96,9 +96,6 @@ trait HandlesStatamicForm
 
     protected function success()
     {
-        if ($this->redirect) {
-            return redirect()->to($this->redirect);
-        }
 
         $this->data = $this->hydrateData();
         session()->flash('success');

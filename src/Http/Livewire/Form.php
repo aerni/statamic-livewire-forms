@@ -21,8 +21,6 @@ class Form extends Component
     public string $view;
     public array $data = [];
 
-    public bool $redirect = false;
-
     public function mount(string $form, string $view = null): void
     {
         $this->formHandle = $form;
