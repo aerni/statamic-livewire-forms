@@ -3,44 +3,28 @@
 namespace Aerni\LivewireForms\Traits;
 
 use Statamic\Support\Str;
-use Statamic\Facades\Form;
 use Statamic\Facades\Site;
+use Illuminate\Support\Arr;
 use Statamic\Forms\SendEmails;
+use Statamic\Forms\Submission;
 use Statamic\Events\FormSubmitted;
 use Illuminate\Support\Facades\URL;
 use Statamic\Events\SubmissionCreated;
-use Statamic\Forms\Form as StatamicForm;
 use Statamic\Exceptions\SilentFormFailureException;
-use Statamic\Forms\Submission;
 
 trait HandlesStatamicForm
 {
-    protected function statamicForm(): StatamicForm
-    {
-        if (! $this->formHandle) {
-            throw new \Exception('The form handle is missing. Please make sure to add it to the form tag.');
-        }
-
-        $form = Form::find($this->formHandle);
-
-        if (! $form) {
-            throw new \Exception("Form with handle [{$this->formHandle}] cannot be found.");
-        }
-
-        return $form;
-    }
-
-    protected function normalizeData(array $data): array
+    protected function normalizeDataForSubmission(array $data): array
     {
         return collect($data)->map(function ($value, $key) {
             $field = collect($this->fields->get($key));
 
-            // Make sure to not include the honeypot in the form submission data.
+            // We don't want to submit the honeypot value.
             if ($field->get('type') === 'honeypot') {
                 return null;
             }
 
-            // Make sure to not include the captcha in the form submission data.
+            // We don't want to submit the captcha value.
             if ($field->get('type') === 'captcha') {
                 return null;
             }
@@ -60,7 +44,7 @@ trait HandlesStatamicForm
     protected function getFormSubmission(): Submission
     {
         return $this->form->makeSubmission()
-            ->data($this->normalizeData($this->data));
+            ->data($this->normalizeDataForSubmission($this->data));
     }
 
     protected function submitStatamicForm()
@@ -96,13 +80,17 @@ trait HandlesStatamicForm
 
     protected function success()
     {
+        /**
+         * Merge the current data with the default values instead of resetting it.
+         * This way we can preserve the captch and honeypot data.
+         */
+        $this->data = array_merge($this->data, $this->fields->defaultValues());
 
-        $this->data = $this->hydrateData();
         session()->flash('success');
     }
 
     protected function isSpam(): bool
     {
-        return (bool) $this->data[$this->form->honeypot()];
+        return (bool) Arr::get($this->data, $this->form->honeypot());
     }
 }

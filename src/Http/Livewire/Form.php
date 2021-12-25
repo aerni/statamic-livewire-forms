@@ -4,36 +4,39 @@ namespace Aerni\LivewireForms\Http\Livewire;
 
 use Livewire\Component;
 use Illuminate\Support\Str;
-use Illuminate\Support\Collection;
 use Aerni\LivewireForms\Form\Fields;
-use Statamic\Forms\Form as StatamicForm;
+use Statamic\Facades\Form as StatamicForm;
 use Aerni\LivewireForms\Traits\FollowsRules;
-use Aerni\LivewireForms\Traits\HydratesData;
 use Aerni\LivewireForms\Traits\HandlesStatamicForm;
 
 class Form extends Component
 {
-    use FollowsRules, HandlesStatamicForm, HydratesData;
+    use FollowsRules, HandlesStatamicForm;
 
-    protected StatamicForm $form;
-
-    public string $formHandle;
+    public string $handle;
     public string $view;
     public array $data = [];
 
     public function mount(string $form, string $view = null): void
     {
-        $this->formHandle = $form;
-        $this->view = $view ?? Str::slug($this->formHandle);
-        $this->form = $this->statamicForm();
-        $this->data = $this->hydrateData();
+        $this->handle = $form;
+        $this->view = $view ?? Str::slug($this->handle);
+        $this->data = $this->fields->defaultValues();
     }
 
-    public function hydrate(): void
+    public function getFormProperty()
     {
-        // Need this because $form is a protected property and doesn't persist between requests.
-        $this->form = $this->statamicForm();
+        if (! $this->handle) {
+            throw new \Exception('The form handle is missing. Please make sure to add it to the form tag.');
+        }
 
+        $form = StatamicForm::find($this->handle);
+
+        if (! $form) {
+            throw new \Exception("Form with handle [{$this->handle}] cannot be found.");
+        }
+
+        return $form;
     }
 
     public function getFieldsProperty(): Fields

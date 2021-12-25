@@ -21,12 +21,12 @@ class Fields
         return (new static($form, $id))->process();
     }
 
-    public function all(): array
+    public function all(): Collection
     {
-        return $this->fields->all();
+        return $this->fields;
     }
 
-    public function get(string $field): array
+    public function get(string $field): ?array
     {
         return $this->fields->get($field);
     }
@@ -51,7 +51,7 @@ class Fields
                 'input_type' => $this->assignFieldInputType($field->get('type'), $field->get('input_type')),
                 'options' => $this->getTranslatedFieldOptions($field),
                 'inline' => $field->get('inline'),
-                'default' => $field->get('default'),
+                'default' => $this->getDefaultFieldValue($field),
                 'placeholder' => __($field->get('placeholder')),
                 'autocomplete' => $field->get('autocomplete') ?? 'off',
                 'width' => $field->get('width') ?? 100,
@@ -66,24 +66,25 @@ class Fields
         return $this;
     }
 
+    protected function captcha(): Collection
+    {
+        return $this->fields->where('type', 'captcha');
+    }
+
     protected function removeDuplicateCaptchaFields(): self
     {
-        $duplicates = $this->fields->filter(function ($field) {
-            return $field['type'] === 'captcha';
-        })->slice(1);
+        $duplicates = $this->captcha()->slice(1)->keys();
 
-        $this->fields = $this->fields->reject(function ($field) use ($duplicates) {
-            return $duplicates->contains($field);
-        });
+        $this->fields = $this->fields->except($duplicates);
 
         return $this;
     }
 
-    protected function addHoneypotField(): self
+    protected function honeypot(): array
     {
         $handle = $this->form->honeypot();
 
-        $this->fields = $this->fields->merge([
+        return [
             $handle => [
                 'label' => Str::ucfirst($handle),
                 'handle' => "{$this->id}_{$handle}",
@@ -92,10 +93,47 @@ class Fields
                 'width' => 100,
                 'rules' => [],
                 'show' => false,
+                'default' => null,
             ]
-        ]);
+        ];
+    }
+
+    protected function addHoneypotField(): self
+    {
+        $this->fields = $this->fields->merge($this->honeypot());
 
         return $this;
+    }
+
+    protected function getDefaultFieldValue(Field $field)
+    {
+        return match ($field->type()) {
+            'checkboxes' => $this->getDefaultCheckboxValue($field),
+            'select' => $this->getDefaultSelectValue($field),
+            /**
+             * Make sure to always return the first array value if someone set the default value
+             * to an array instead of a string or integer.
+            */
+            default => array_first((array) $field->defaultValue()),
+        };
+    }
+
+    protected function getDefaultCheckboxValue(Field $field)
+    {
+        $default = $field->defaultValue();
+        $options = $field->get('options');
+
+        return (count($options) > 1)
+            ? (array) $default
+            : array_first((array) $default);
+    }
+
+    protected function getDefaultSelectValue(Field $field): string
+    {
+        $default = $field->defaultValue();
+        $options = $field->get('options');
+
+        return $default ?? array_key_first($options);
     }
 
     protected function getTranslatedFieldOptions($field): array
@@ -197,6 +235,20 @@ class Fields
             '<=' => $actualValue <= $expectedValue,
             default => false,
         };
+    }
+
+    public function defaultValues(): array
+    {
+        /**
+         * When submitting a form, we need to preserve the captcha response on the Livewire component
+         * until the captcha expires itself. Otherwise we will get a `The Captcha field is required.`
+         * error (when submitting the form again without reloading the page) because the response value is missing.
+         */
+        $captcha = $this->captcha()->keys()->first();
+
+        return $this->fields->mapWithKeys(function ($field, $handle) {
+            return [$handle => $field['default']];
+        })->except($captcha)->toArray();
     }
 
     public function validationRules(): array
