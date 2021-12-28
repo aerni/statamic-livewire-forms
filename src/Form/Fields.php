@@ -66,6 +66,7 @@ class Fields
                 'show_label' => $field->get('show_label') ?? true,
                 'cast_booleans' => $field->get('cast_booleans') ?? false,
                 'show' => $this->shouldShowField($field),
+                'group' => $field->get('group') ?? 'undefined',
             ];
         });
 

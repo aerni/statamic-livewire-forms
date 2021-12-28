@@ -26,6 +26,28 @@ class BladeDirectives
     }
 
     /**
+     * Get all fields of a group.
+     */
+    public static function formGroups(): string
+    {
+        return Blade::compileString("
+            @include('livewire-forms::groups')
+        ");
+    }
+
+    /**
+     * Get all fields of a group.
+     */
+    public static function formGroup(string $expression): string
+    {
+        return Blade::compileString("
+            @include('livewire-forms::group', [
+                'group' => $expression,
+            ])
+        ");
+    }
+
+    /**
      * Get a single form field by its handle.
      */
     public static function formField(string $expression): string
