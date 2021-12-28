@@ -17,7 +17,7 @@
     wire:ignore
 ></div>
 
-@include('livewire-forms::fields.error')
+@include('livewire-forms::error')
 
 <script>
     function setResponseToken_{{ $_instance->id }}(token) {

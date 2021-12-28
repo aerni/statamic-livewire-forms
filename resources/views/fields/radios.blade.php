@@ -14,6 +14,6 @@
             @endforeach
         </div>
 
-        @include('livewire-forms::fields.error')
+        @include('livewire-forms::error')
     </div>
 </fieldset>

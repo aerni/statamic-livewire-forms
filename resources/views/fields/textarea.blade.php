@@ -24,4 +24,4 @@
     ></textarea>
 </div>
 
-@include('livewire-forms::fields.error')
+@include('livewire-forms::error')
