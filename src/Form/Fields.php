@@ -92,7 +92,7 @@ class Fields
                 'type' => 'honeypot',
                 'width' => 100,
                 'rules' => [],
-                'show' => false,
+                'show' => true,
                 'default' => null,
             ]
         ];
