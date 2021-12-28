@@ -12,14 +12,14 @@ class Fields
     protected Collection $fields;
     protected array $honeypot;
 
-    public function __construct(protected Form $form, protected string $id)
+    public function __construct(protected Form $form, protected string $id, protected array $data)
     {
         //
     }
 
-    public static function make(Form $form, string $id): self
+    public static function make(Form $form, string $id, array $data): self
     {
-        return (new static($form, $id))->process();
+        return (new static($form, $id, $data))->process();
     }
 
     public function all(): Collection
@@ -94,7 +94,6 @@ class Fields
         $this->honeypot = [
             'label' => Str::ucfirst($handle),
             'handle' => "{$this->id}_{$handle}",
-            // TODO: Add ID. Also to fields. And change all views.
             'key' => 'data.' . $handle,
         ];
 

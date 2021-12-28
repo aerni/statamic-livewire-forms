@@ -15,7 +15,7 @@ class Form extends Component
 
     public string $handle;
     public string $view;
-    public array $data;
+    public array $data = [];
 
     public function mount(string $form, string $view = null): void
     {
@@ -32,7 +32,7 @@ class Form extends Component
 
     public function getFieldsProperty(): Fields
     {
-        return Fields::make($this->form, $this->id);
+        return Fields::make($this->form, $this->id, $this->data);
     }
 
     public function render(): View
