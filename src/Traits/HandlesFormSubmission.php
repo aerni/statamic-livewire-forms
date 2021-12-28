@@ -57,8 +57,8 @@ trait HandlesFormSubmission
         return collect($data)->map(function ($value, $key) {
             $field = $this->fields->get($key);
 
-            // We don't want to submit the honeypot value.
-            if ($field['type'] === 'honeypot') {
+            // We want to return nothing if the field can't be found (e.g. honeypot).
+            if (is_null($field)) {
                 return null;
             }
 

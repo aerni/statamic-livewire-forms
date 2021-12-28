@@ -10,6 +10,7 @@ use Statamic\Forms\Form;
 class Fields
 {
     protected Collection $fields;
+    protected array $honeypot;
 
     public function __construct(protected Form $form, protected string $id)
     {
@@ -29,6 +30,11 @@ class Fields
     public function get(string $field): ?array
     {
         return $this->fields->get($field);
+    }
+
+    public function honeypot(): array
+    {
+        return $this->honeypot;
     }
 
     protected function process(): self
@@ -80,27 +86,16 @@ class Fields
         return $this;
     }
 
-    protected function honeypot(): array
+    protected function addHoneypotField(): self
     {
         $handle = $this->form->honeypot();
 
-        return [
-            $handle => [
-                'label' => Str::ucfirst($handle),
-                'handle' => "{$this->id}_{$handle}",
-                'key' => 'data.' . $handle,
-                'type' => 'honeypot',
-                'width' => 100,
-                'rules' => [],
-                'show' => true,
-                'default' => null,
-            ]
+        $this->honeypot = [
+            'label' => Str::ucfirst($handle),
+            'handle' => "{$this->id}_{$handle}",
+            // TODO: Add ID. Also to fields. And change all views.
+            'key' => 'data.' . $handle,
         ];
-    }
-
-    protected function addHoneypotField(): self
-    {
-        $this->fields = $this->fields->merge($this->honeypot());
 
         return $this;
     }
@@ -268,12 +263,12 @@ class Fields
 
     public function realtimeValidationRules(string $field): array
     {
-        $field = $this->fields->firstWhere('key', $field);
+        $field = $this->fields->firstWhere('key', $field) ?? $field;
 
-        // Don't use realtime validation for the honeypot.
-        if ($field['type'] === 'honeypot') {
-            return [$field['key'] => []];
-        };
+        // Don't use realtime validation if the field can't be found (e.g. honeypot).
+        if (is_string($field)) {
+            return [$field => []];
+        }
 
         // Don't use realtime validation for the captcha.
         if ($field['type'] === 'captcha') {

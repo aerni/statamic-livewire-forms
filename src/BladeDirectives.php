@@ -46,6 +46,16 @@ class BladeDirectives
     }
 
     /**
+     * Get the honeypot field.
+     */
+    public static function formHoneypot(): string
+    {
+        return Blade::compileString("
+            @include('livewire-forms::honeypot')
+        ");
+    }
+
+    /**
      * Get the form submit button.
      */
     public static function formSubmit(): string
