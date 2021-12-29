@@ -58,11 +58,11 @@ class Fields
                 'handle' => $field->handle(),
                 'id' => "{$this->id}_{$field->handle()}",
                 'key' => 'data.' . $field->handle(),
-                'type' => $this->assignFieldType($field->get('type')),
-                'input_type' => $this->assignFieldInputType($field->get('type'), $field->get('input_type')),
-                'options' => $this->getTranslatedFieldOptions($field),
+                'type' => $this->getType($field),
+                'input_type' => $this->getInputType($field),
+                'options' => $this->getOptions($field),
                 'inline' => $field->get('inline'),
-                'default' => $this->getDefaultFieldValue($field),
+                'default' => $this->getDefaultValue($field),
                 'placeholder' => __($field->get('placeholder')),
                 'autocomplete' => $field->get('autocomplete') ?? 'off',
                 'width' => $field->get('width') ?? 100,
@@ -92,7 +92,7 @@ class Fields
         return $this;
     }
 
-    protected function getDefaultFieldValue(StatamicField $field)
+    protected function getDefaultValue(StatamicField $field): array|string|null
     {
         return match ($field->type()) {
             'checkboxes' => $this->getDefaultCheckboxValue($field),
@@ -106,7 +106,7 @@ class Fields
         };
     }
 
-    protected function getDefaultCheckboxValue(StatamicField $field)
+    protected function getDefaultCheckboxValue(StatamicField $field): array|string
     {
         $default = $field->defaultValue();
         $options = $field->get('options');
@@ -124,16 +124,16 @@ class Fields
         return $default ?? array_key_first($options);
     }
 
-    protected function getTranslatedFieldOptions($field): array
+    protected function getOptions(StatamicField $field): array
     {
-        return collect($field->get('options'))->map(function ($option) {
-            return __($option);
-        })->toArray();
+        return collect($field->get('options'))
+            ->map(fn ($option) => __($option))
+            ->toArray();
     }
 
-    protected function assignFieldType(string $type): string
+    protected function getType(StatamicField $field): string
     {
-        $types = [
+        return match ($field->type()) {
             'assets' => 'file',
             'captcha' => 'captcha',
             'checkboxes' => 'checkboxes',
@@ -142,21 +142,20 @@ class Fields
             'select' => 'select',
             'text' => 'input',
             'textarea' => 'textarea',
-        ];
-
-        return $types[$type] ?? 'input';
+            default => 'input',
+        };
     }
 
-    protected function assignFieldInputType(string $fieldType, ?string $intputType): ?string
+    protected function getInputType(StatamicField $field): string
     {
-        $types = [
+        return match ($field->type()) {
             'assets' => 'file',
             'checkboxes' => 'checkbox',
             'integer' => 'number',
             'radio' => 'radio',
-        ];
-
-        return $types[$fieldType] ?? $intputType;
+            'text' => $field->get('input_type') ?? 'text',
+            default => 'text',
+        };
     }
 
     protected function shouldShowField(StatamicField $field): bool

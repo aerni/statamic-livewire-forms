@@ -4,7 +4,7 @@
             id="{{ $field->id }}.{{ $option }}"
             name="{{ $field->id }}"
             value="{{ $option }}"
-            type="radio"
+            type="{{ $field->input_type }}"
             wire:model.lazy="{{ $field->key }}"
 
             @if (! $errors->has($field->key))
