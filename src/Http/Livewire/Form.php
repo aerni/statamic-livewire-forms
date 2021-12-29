@@ -26,7 +26,33 @@ class Form extends Component
     {
         $this->handle = $form;
         $this->view = $view ?? Str::slug($form);
+
+        $this->initializeForm();
+    }
+
+    protected function initializeForm(): self
+    {
+        return $this
+            ->beforeFormHydration()
+            ->hydrateForm()
+            ->afterFormHydration();
+    }
+
+    protected function beforeFormHydration(): self
+    {
+        return $this;
+    }
+
+    protected function hydrateForm(): self
+    {
         $this->data = $this->fields->defaultValues();
+
+        return $this;
+    }
+
+    protected function afterFormHydration(): self
+    {
+        return $this;
     }
 
     public function getFormProperty(): \Statamic\Forms\Form
