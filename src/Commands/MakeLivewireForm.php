@@ -35,7 +35,7 @@ class MakeLivewireForm extends Command
     {
         $this->chooseForm();
         $this->createLivewireView();
-        // $this->createComponent();
+        $this->createComponent();
     }
 
     protected function chooseForm(): void
@@ -69,21 +69,21 @@ class MakeLivewireForm extends Command
         }
     }
 
-    // protected function createComponent(): void
-    // {
-    //     if ($this->confirm('Do you want to create a Livewire component to customize the defaut behaviour?')) {
-    //         $stub = File::get(__DIR__ . '/../../resources/stubs/component.php');
-    //         $stub = str_replace('DummyComponent', Str::studly($this->form->handle()), $stub);
+    protected function createComponent(): void
+    {
+        if ($this->confirm('Would you like to create a Livewire component to customize the default Form component behaviour?')) {
+            $stub = File::get(__DIR__ . '/../../resources/stubs/form.php');
+            $stub = str_replace('DummyForm', Str::studly($this->form->handle()), $stub);
 
-    //         $path = app_path('Http/Livewire/' . Str::studly($this->form->handle()) . '.php');
-    //         File::ensureDirectoryExists(app_path('Http/Livewire'));
+            $path = app_path('Http/Livewire/' . Str::studly($this->form->handle()) . '.php');
+            File::ensureDirectoryExists(app_path('Http/Livewire'));
 
-    //         if (!File::exists($path) || $this->confirm("A component for this form already exists. Do you want to overwrite it?")) {
-    //             File::put($path, $stub);
-    //             $this->line("<info>[✓]</info> The Livewire component was successfully created: <comment>{$this->getRelativePath($path)}</comment>");
-    //         }
-    //     }
-    // }
+            if (!File::exists($path) || $this->confirm("A component for this form already exists. Do you want to overwrite it?")) {
+                File::put($path, $stub);
+                $this->line("<info>[✓]</info> The Livewire component was successfully created: <comment>{$this->getRelativePath($path)}</comment>");
+            }
+        }
+    }
 
     protected function getRelativePath($path): string
     {
