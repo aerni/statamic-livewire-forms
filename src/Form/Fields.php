@@ -2,22 +2,22 @@
 
 namespace Aerni\LivewireForms\Form;
 
-use Illuminate\Support\Collection;
+use Statamic\Forms\Form as StatamicForm;
+use Statamic\Fields\Field as StatamicField;
 use Illuminate\Support\Str;
-use Statamic\Fields\Field;
-use Statamic\Forms\Form;
+use Illuminate\Support\Collection;
+use Aerni\LivewireForms\Form\Field;
 
 class Fields
 {
     protected Collection $fields;
-    protected array $honeypot;
 
-    public function __construct(protected Form $form, protected string $id, protected array $data)
+    public function __construct(protected StatamicForm $form, protected string $id, protected array $data)
     {
         //
     }
 
-    public static function make(Form $form, string $id, array $data): self
+    public static function make(StatamicForm $form, string $id, array $data): self
     {
         return (new static($form, $id, $data))->process();
     }
@@ -27,31 +27,36 @@ class Fields
         return $this->fields;
     }
 
-    public function get(string $field): ?array
+    public function get(string $field): ?Field
     {
         return $this->fields->get($field);
     }
 
-    public function honeypot(): array
+    public function groups(): Collection
     {
-        return $this->honeypot;
+        return $this->fields->groupBy(fn ($field) => $field->group);
+    }
+
+    public function group(string $group): Collection
+    {
+        return $this->groups()->only($group);
     }
 
     protected function process(): self
     {
         return $this
             ->preProcess()
-            ->removeDuplicateCaptchaFields()
-            ->addHoneypotField();
+            ->removeDuplicateCaptchaFields();
     }
 
     protected function preProcess(): self
     {
         $this->fields = $this->form->fields()->map(function ($field) {
-            return [
+            return new Field([
                 'label' => __($field->get('display')),
                 'instructions' => __($field->get('instructions')),
-                'handle' => "{$this->id}_{$field->handle()}",
+                'handle' => $field->handle(),
+                'id' => "{$this->id}_{$field->handle()}",
                 'key' => 'data.' . $field->handle(),
                 'type' => $this->assignFieldType($field->get('type')),
                 'input_type' => $this->assignFieldInputType($field->get('type'), $field->get('input_type')),
@@ -67,7 +72,7 @@ class Fields
                 'cast_booleans' => $field->get('cast_booleans') ?? false,
                 'show' => $this->shouldShowField($field),
                 'group' => $field->get('group') ?? 'undefined',
-            ];
+            ]);
         });
 
         return $this;
@@ -87,20 +92,7 @@ class Fields
         return $this;
     }
 
-    protected function addHoneypotField(): self
-    {
-        $handle = $this->form->honeypot();
-
-        $this->honeypot = [
-            'label' => Str::ucfirst($handle),
-            'handle' => "{$this->id}_{$handle}",
-            'key' => 'data.' . $handle,
-        ];
-
-        return $this;
-    }
-
-    protected function getDefaultFieldValue(Field $field)
+    protected function getDefaultFieldValue(StatamicField $field)
     {
         return match ($field->type()) {
             'checkboxes' => $this->getDefaultCheckboxValue($field),
@@ -114,7 +106,7 @@ class Fields
         };
     }
 
-    protected function getDefaultCheckboxValue(Field $field)
+    protected function getDefaultCheckboxValue(StatamicField $field)
     {
         $default = $field->defaultValue();
         $options = $field->get('options');
@@ -124,7 +116,7 @@ class Fields
             : array_first((array) $default);
     }
 
-    protected function getDefaultSelectValue(Field $field): string
+    protected function getDefaultSelectValue(StatamicField $field): string
     {
         $default = $field->defaultValue();
         $options = $field->get('options');
@@ -167,7 +159,7 @@ class Fields
         return $types[$fieldType] ?? $intputType;
     }
 
-    protected function shouldShowField(Field $field): bool
+    protected function shouldShowField(StatamicField $field): bool
     {
         [$type, $conditions] = $this->getConditions($field);
 
@@ -186,7 +178,7 @@ class Fields
         return $this->evaluateConditions($type, $conditions);
     }
 
-    protected function getConditions(Field $field): array
+    protected function getConditions(StatamicField $field): array
     {
         $conditions = array_filter([
             'if' => $field->get('if'),
@@ -243,21 +235,21 @@ class Fields
         $captcha = $this->captcha()->keys()->first();
 
         return $this->fields->mapWithKeys(function ($field, $handle) {
-            return [$handle => $field['default']];
+            return [$handle => $field->default];
         })->except($captcha)->toArray();
     }
 
     public function validationRules(): array
     {
         return $this->fields->mapWithKeys(function ($field) {
-            return [$field['key'] => $field['rules']];
+            return [$field->key => $field->rules];
         })->toArray();
     }
 
     public function validationAttributes(): array
     {
         return $this->fields->mapWithKeys(function ($field) {
-            return [$field['key'] => $field['label']];
+            return [$field->key => $field->label];
         })->toArray();
     }
 
@@ -271,32 +263,32 @@ class Fields
         }
 
         // Don't use realtime validation for the captcha.
-        if ($field['type'] === 'captcha') {
-            return [$field['key'] => []];
+        if ($field->type === 'captcha') {
+            return [$field->key => []];
         }
 
         // Get the realtime validation config from the field, form blueprint or global config.
-        $realtime = $field['realtime']
+        $realtime = $field->realtime
             // Would like to get the realtime config from the form config instead of the form blueprint, but there's currently no way to access custom data.
             ?? $this->form->blueprint()->contents()['sections']['main']['realtime']
             ?? config('livewire-forms.realtime', true);
 
         // Disable realtime validation if "realtime: false".
         if (! $realtime) {
-            return [$field['key'] => []];
+            return [$field->key => []];
         }
 
         // Use the field validation rules if "realtime: true".
         if ($realtime === true) {
-            return [$field['key'] => $field['rules']];
+            return [$field->key => $field->rules];
         }
 
         // Make sure to always get an array of realtime rules.
         $realtimeRules = is_array($realtime) ? $realtime : explode('|', $realtime);
 
         // Remove any realtime rules that are not part of the validation rules.
-        $realtimeRules = array_intersect($realtimeRules, $field['rules']);
+        $realtimeRules = array_intersect($realtimeRules, $field->rules);
 
-        return [$field['key'] => $realtimeRules];
+        return [$field->key => $realtimeRules];
     }
 }

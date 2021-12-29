@@ -1,3 +1,3 @@
-@foreach ($fields->groupBy('group') as $group => $fields)
+@foreach ($this->fields->groups() as $group => $fields)
     @include('livewire-forms::group')
 @endforeach

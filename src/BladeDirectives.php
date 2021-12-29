@@ -58,9 +58,9 @@ class BladeDirectives
         $rawField = isset($variables[1]) ? 'true' : 'false';
 
         return Blade::compileString("
-            @if (isset(\$fields[$handle]))
+            @if (\$this->fields->get($handle))
                 @include('livewire-forms::field', [
-                    'field' => \$fields[$handle],
+                    'field' => \$this->fields->get($handle),
                     'rawField' => $rawField,
                 ])
             @endif
