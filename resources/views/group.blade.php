@@ -1,11 +1,12 @@
 @foreach ($fields->groupBy('group')->only($group) as $fields)
-    <fieldset class="col-span-1 md:col-span-12">
-        <div class="mb-3">
-            <legend class="text-base font-medium text-gray-700">{{ __("forms.$group.title") }}</legend>
+    <div class="col-span-1 pt-8 border-t border-gray-200 first:pt-0 first:border-t-0 md:col-span-12">
+        <div>
+            <h3 class="text-lg font-medium leading-6 text-gray-900">{{ __("livewire-forms.$handle.$group.title") }}</h3>
+            <p class="mt-1 text-sm text-gray-500">{{ __("livewire-forms.$handle.$group.description") }}</p>
         </div>
 
-        <div class="grid grid-cols-1 gap-8 md:grid-cols-12">
+        <div class="grid grid-cols-1 gap-8 mt-6 md:grid-cols-12">
             @formFields
         </div>
-    </fieldset>
+    </div>
 @endforeach
