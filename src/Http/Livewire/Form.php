@@ -174,6 +174,9 @@ class Form extends Component
          */
         $this->data = array_merge($this->data, $this->fields->defaultValues());
 
+        // Process the field conditions using the newly reset data.
+        $this->fields->data($this->data)->processFieldConditions();
+
         session()->flash('success');
     }
 }

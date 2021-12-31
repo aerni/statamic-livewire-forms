@@ -24,6 +24,13 @@ class Fields
         return (new static($form, $id, $data))->boot();
     }
 
+    public function data(array $data): self
+    {
+        $this->data = $data;
+
+        return $this;
+    }
+
     public function all(): Collection
     {
         return $this->fields;
