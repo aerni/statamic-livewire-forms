@@ -69,7 +69,7 @@ class Fields
     protected function bootModels(): self
     {
         $this->fields = $this->form->fields()->map(function ($field) {
-            $class = array_get(Models::all(), get_class($field->fieldtype()));
+            $class = Models::get($field->handle()) ?? Models::get(get_class($field->fieldtype()));
 
             return $class ? $class::make($field, $this->id) : null;
         })->filter();

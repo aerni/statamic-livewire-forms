@@ -13,10 +13,13 @@ use Illuminate\Support\Facades\URL;
 use Aerni\LivewireForms\Form\Fields;
 use Aerni\LivewireForms\Form\Honeypot;
 use Statamic\Events\SubmissionCreated;
+use Aerni\LivewireForms\Facades\Models;
 use Statamic\Exceptions\SilentFormFailureException;
 
 class Form extends Component
 {
+    protected array $models = [];
+
     public string $handle;
     public string $view;
     public array $data = [];
@@ -32,9 +35,17 @@ class Form extends Component
     protected function initializeForm(): self
     {
         return $this
+            ->registerModels()
             ->beforeFormHydration()
             ->hydrateForm()
             ->afterFormHydration();
+    }
+
+    protected function registerModels(): self
+    {
+        Models::register($this->models);
+
+        return $this;
     }
 
     protected function beforeFormHydration(): self
