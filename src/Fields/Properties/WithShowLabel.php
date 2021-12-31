@@ -6,7 +6,7 @@ use Statamic\Support\Str;
 
 trait WithShowLabel
 {
-    public function showLabel(): bool
+    public function showLabelProperty(): bool
     {
         $showLabel = $this->field->get('show_label') ?? true;
 

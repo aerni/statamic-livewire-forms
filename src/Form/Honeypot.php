@@ -2,18 +2,25 @@
 
 namespace Aerni\LivewireForms\Form;
 
+use Aerni\LivewireForms\Traits\WithConfig;
 use Illuminate\Support\Str;
-use Aerni\LivewireForms\Form\Field;
 
 class Honeypot
 {
-    public static function make(string $handle, string $id): Field
+    use WithConfig;
+
+    public function __construct(string $handle, string $id)
     {
-        return new Field([
+        $this->config([
             'handle' => $handle,
-            'label' => Str::ucfirst($handle),
             'id' => "{$id}_{$handle}",
             'key' => "data.{$handle}",
+            'label' => Str::ucfirst($handle),
         ]);
+    }
+
+    public static function make(string $handle, string $id): self
+    {
+        return new static($handle, $id);
     }
 }

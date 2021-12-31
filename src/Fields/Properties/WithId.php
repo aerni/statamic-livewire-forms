@@ -4,8 +4,8 @@ namespace Aerni\LivewireForms\Fields\Properties;
 
 trait WithId
 {
-    public function id(): string
+    public function idProperty(): string
     {
-        return uniqid() . '_' . $this->field->handle();
+        return "{$this->id}_{$this->field->handle()}";
     }
 }

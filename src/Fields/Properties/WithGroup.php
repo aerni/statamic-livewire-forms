@@ -4,7 +4,7 @@ namespace Aerni\LivewireForms\Fields\Properties;
 
 trait WithGroup
 {
-    public function group(): string
+    public function groupProperty(): string
     {
         return $this->field->get('group') ?? 'undefined';
     }

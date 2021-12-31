@@ -7,7 +7,6 @@ use Aerni\LivewireForms\Fields\Properties\WithCastBooleans;
 use Aerni\LivewireForms\Fields\Properties\WithInline;
 use Aerni\LivewireForms\Fields\Properties\WithOptions;
 use Aerni\LivewireForms\Fields\Properties\WithInstructions;
-use Aerni\LivewireForms\Fields\Properties\WithLabel;
 use Aerni\LivewireForms\Fields\Properties\WithShowLabel;
 
 class Radio extends Field
@@ -15,7 +14,6 @@ class Radio extends Field
     use WithCastBooleans,
         WithInline,
         WithInstructions,
-        WithLabel,
         WithOptions,
         WithShowLabel;
 }

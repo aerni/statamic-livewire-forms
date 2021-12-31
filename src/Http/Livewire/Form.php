@@ -8,7 +8,6 @@ use Statamic\Facades\Site;
 use Illuminate\Support\Arr;
 use Statamic\Forms\SendEmails;
 use Statamic\Events\FormSubmitted;
-use Aerni\LivewireForms\Form\Field;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\URL;
 use Aerni\LivewireForms\Form\Fields;
@@ -66,7 +65,7 @@ class Form extends Component
         return Fields::make($this->form, $this->id, $this->data);
     }
 
-    public function getHoneypotProperty(): Field
+    public function getHoneypotProperty(): Honeypot
     {
         return Honeypot::make($this->form->honeypot(), $this->id);
     }

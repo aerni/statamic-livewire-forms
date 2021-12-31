@@ -4,7 +4,7 @@ namespace Aerni\LivewireForms\Fields\Properties;
 
 trait WithAutocomplete
 {
-    public function autocomplete(): string
+    public function autocompleteProperty(): string
     {
         return $this->field->get('autocomplete') ?? 'off';
     }

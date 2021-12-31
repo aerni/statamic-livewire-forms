@@ -4,7 +4,7 @@ namespace Aerni\LivewireForms\Fields\Properties;
 
 trait WithDefault
 {
-    public function default(): array|string|null
+    public function defaultProperty(): array|string|null
     {
         return match ($this->field->type()) {
             'checkboxes' => $this->getDefaultCheckboxValue(),

@@ -4,7 +4,7 @@ namespace Aerni\LivewireForms\Fields\Properties;
 
 trait WithHandle
 {
-    public function handle(): string
+    public function handleProperty(): string
     {
         return $this->field->handle();
     }

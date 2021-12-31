@@ -6,7 +6,7 @@ use Statamic\Support\Str;
 
 trait WithCastBooleans
 {
-    public function castBooleans(): bool
+    public function castBooleansProperty(): bool
     {
         return Str::toBool($this->field->get('cast_booleans'));
     }

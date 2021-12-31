@@ -4,7 +4,7 @@ namespace Aerni\LivewireForms\Fields\Properties;
 
 trait WithRules
 {
-    public function rules(): array
+    public function rulesProperty(): array
     {
         return array_flatten($this->field->rules());
     }

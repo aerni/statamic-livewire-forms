@@ -4,7 +4,7 @@ namespace Aerni\LivewireForms\Fields\Properties;
 
 trait WithType
 {
-    public function type(): string
+    public function typeProperty(): string
     {
         return match ($this->field->type()) {
             'assets' => 'file',
