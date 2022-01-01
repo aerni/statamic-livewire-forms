@@ -7,8 +7,8 @@ trait WithDefault
     public function defaultProperty(): array|string|null
     {
         return match ($this->field->type()) {
-            'checkboxes' => $this->getDefaultCheckboxValue(),
-            'select' => $this->getDefaultSelectValue(),
+            'checkboxes' => $this->defaultCheckboxValue(),
+            'select' => $this->defaultSelectValue(),
 
             /**
              * Make sure to always return the first array value if someone set the default
