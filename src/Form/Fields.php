@@ -13,6 +13,7 @@ use Statamic\Forms\Form as StatamicForm;
 class Fields
 {
     protected Collection $fields;
+    protected $hydratedCallbacks = [];
 
     public function __construct(protected StatamicForm $form, protected string $id, protected array $data)
     {
@@ -21,7 +22,7 @@ class Fields
 
     public static function make(StatamicForm $form, string $id, array $data): self
     {
-        return (new static($form, $id, $data))->boot();
+        return new static($form, $id, $data);
     }
 
     public function data(array $data): self
@@ -58,15 +59,32 @@ class Fields
         return $this->groups()->only($group);
     }
 
-    protected function boot(): self
+    public function hydrate(): self
     {
         return $this
-            ->bootModels()
+            ->hydrateFields()
             ->processFieldConditions()
-            ->removeDuplicateCaptchaFields();
+            ->removeDuplicateCaptchaFields()
+            ->runHydratedCallbacks();
     }
 
-    protected function bootModels(): self
+    protected function runHydratedCallbacks(): self
+    {
+        foreach ($this->hydratedCallbacks as $callback) {
+            $callback($this);
+        }
+
+        return $this;
+    }
+
+    public function hydrated(\Closure $callback): self
+    {
+        $this->hydratedCallbacks[] = $callback;
+
+        return $this;
+    }
+
+    protected function hydrateFields(): self
     {
         $this->fields = $this->form->fields()->map(function ($field) {
             $class = Models::get($field->handle()) ?? Models::get(get_class($field->fieldtype()));

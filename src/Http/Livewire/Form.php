@@ -28,17 +28,13 @@ class Form extends Component
     {
         $this->handle = $form;
         $this->view = $view ?? Str::slug($form);
-
-        $this->initializeForm();
     }
 
-    protected function initializeForm(): self
+    public function booted(): void
     {
-        return $this
+        $this
             ->registerModels()
-            ->beforeFormHydration()
-            ->hydrateForm()
-            ->afterFormHydration();
+            ->hydrateData();
     }
 
     protected function registerModels(): self
@@ -48,21 +44,16 @@ class Form extends Component
         return $this;
     }
 
-    protected function beforeFormHydration(): self
-    {
-        return $this;
-    }
-
-    protected function hydrateForm(): self
+    protected function hydrateData(): self
     {
         $this->data = $this->fields->defaultValues();
 
         return $this;
     }
 
-    protected function afterFormHydration(): self
+    protected function hydratedFields(Fields $fields): void
     {
-        return $this;
+        //
     }
 
     public function getFormProperty(): \Statamic\Forms\Form
@@ -73,7 +64,9 @@ class Form extends Component
 
     public function getFieldsProperty(): Fields
     {
-        return Fields::make($this->form, $this->id, $this->data);
+        return Fields::make($this->form, $this->id, $this->data)
+            ->hydrated(fn ($fields) => $this->hydratedFields($fields))
+            ->hydrate();
     }
 
     public function getHoneypotProperty(): Honeypot
