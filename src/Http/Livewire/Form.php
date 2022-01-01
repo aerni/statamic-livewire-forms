@@ -13,7 +13,6 @@ use Illuminate\Support\Facades\URL;
 use Aerni\LivewireForms\Form\Fields;
 use Aerni\LivewireForms\Form\Honeypot;
 use Statamic\Events\SubmissionCreated;
-use Aerni\LivewireForms\Facades\Models;
 use Statamic\Exceptions\SilentFormFailureException;
 
 class Form extends Component
@@ -32,16 +31,7 @@ class Form extends Component
 
     public function booted(): void
     {
-        $this
-            ->registerModels()
-            ->hydrateData();
-    }
-
-    protected function registerModels(): self
-    {
-        Models::register($this->models);
-
-        return $this;
+        $this->hydrateData();
     }
 
     protected function hydrateData(): self
@@ -65,6 +55,7 @@ class Form extends Component
     public function getFieldsProperty(): Fields
     {
         return Fields::make($this->form, $this->id, $this->data)
+            ->models($this->models)
             ->hydrated(fn ($fields) => $this->hydratedFields($fields))
             ->hydrate();
     }

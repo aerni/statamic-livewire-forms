@@ -12,17 +12,25 @@ use Statamic\Forms\Form as StatamicForm;
 
 class Fields
 {
+    protected Collection $models;
     protected Collection $fields;
     protected $hydratedCallbacks = [];
 
     public function __construct(protected StatamicForm $form, protected string $id, protected array $data)
     {
-        //
+        $this->models = Models::all();
     }
 
     public static function make(StatamicForm $form, string $id, array $data): self
     {
         return new static($form, $id, $data);
+    }
+
+    public function models(array $models): self
+    {
+        $this->models = $this->models->merge($models);
+
+        return $this;
     }
 
     public function data(array $data): self
@@ -87,7 +95,7 @@ class Fields
     protected function hydrateFields(): self
     {
         $this->fields = $this->form->fields()->map(function ($field) {
-            $class = Models::get($field->handle()) ?? Models::get(get_class($field->fieldtype()));
+            $class = $this->models->get($field->handle()) ?? $this->models->get(get_class($field->fieldtype()));
 
             return $class ? $class::make($field, $this->id) : null;
         })->filter();
