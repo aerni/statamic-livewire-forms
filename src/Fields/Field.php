@@ -5,7 +5,6 @@ namespace Aerni\LivewireForms\Fields;
 use ReflectionClass;
 use ReflectionMethod;
 use Statamic\Support\Str;
-use Illuminate\Support\Collection;
 use Statamic\Fields\Field as StatamicField;
 use Aerni\LivewireForms\Traits\WithConfig;
 use Aerni\LivewireForms\Fields\Properties\WithId;
@@ -47,18 +46,15 @@ class Field
 
     protected function boot(): self
     {
-        $baseProperties = $this->getPropertiesFromTraitMethods(get_parent_class($this));
-        $classProperties = $this->getPropertiesFromTraitMethods(get_class($this));
+        $properties = $this->getProperties(get_class($this));
 
-        $allProperties = $baseProperties->merge($classProperties)->sortKeys()->toArray();
-
-        return $this->config($allProperties);
+        return $this->config($properties);
     }
 
-    protected function getPropertiesFromTraitMethods(string $class): Collection
+    protected function getProperties(string $class): array
     {
-        return collect((new ReflectionClass($class))->getTraits())->flatMap(function ($trait) {
-            return collect($trait->getMethods())->mapWithKeys(function ($method) {
+        return collect((new ReflectionClass($class))->getMethods())
+            ->mapWithKeys(function ($method) {
                 if (! Str::contains($method->name, 'Property')) {
                     return [];
                 }
@@ -67,7 +63,6 @@ class Field
                 $value = (new ReflectionMethod($this, $method->name))->invoke($this);
 
                 return [$key => $value];
-            });
-        });
+            })->toArray();
     }
 }
