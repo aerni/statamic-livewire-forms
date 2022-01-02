@@ -19,4 +19,12 @@ class Select extends Field
     {
         return 'livewire-forms::fields.select';
     }
+
+    public function defaultProperty(): string
+    {
+        $default = $this->field->defaultValue();
+        $options = $this->field->get('options');
+
+        return $default ?? array_key_first($options);
+    }
 }
