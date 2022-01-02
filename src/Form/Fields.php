@@ -28,7 +28,7 @@ class Fields
 
     public function models(array $models): self
     {
-        $this->models = $this->models->merge($models);
+        $this->models = collect($models);
 
         return $this;
     }

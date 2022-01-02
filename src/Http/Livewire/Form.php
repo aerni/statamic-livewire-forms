@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\URL;
 use Aerni\LivewireForms\Form\Fields;
 use Aerni\LivewireForms\Form\Honeypot;
 use Statamic\Events\SubmissionCreated;
+use Aerni\LivewireForms\Facades\Models;
 use Statamic\Exceptions\SilentFormFailureException;
 
 class Form extends Component
@@ -46,6 +47,11 @@ class Form extends Component
         //
     }
 
+    protected function models(): array
+    {
+        return Models::all()->merge($this->models)->toArray();
+    }
+
     public function getFormProperty(): \Statamic\Forms\Form
     {
         return \Statamic\Facades\Form::find($this->handle)
@@ -55,7 +61,7 @@ class Form extends Component
     public function getFieldsProperty(): Fields
     {
         return Fields::make($this->form, $this->id, $this->data)
-            ->models($this->models)
+            ->models($this->models())
             ->hydrated(fn ($fields) => $this->hydratedFields($fields))
             ->hydrate();
     }
