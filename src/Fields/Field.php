@@ -18,6 +18,7 @@ use Aerni\LivewireForms\Fields\Properties\WithHandle;
 use Aerni\LivewireForms\Fields\Properties\WithDefault;
 use Aerni\LivewireForms\Fields\Properties\WithRealtime;
 use Aerni\LivewireForms\Fields\Properties\WithConditions;
+use Aerni\LivewireForms\Fields\Properties\WithView;
 
 class Field
 {
@@ -31,7 +32,7 @@ class Field
         WithLabel,
         WithRealtime,
         WithRules,
-        WithType,
+        WithView,
         WithWidth;
 
     public function __construct(protected StatamicField $field, protected string $id)
