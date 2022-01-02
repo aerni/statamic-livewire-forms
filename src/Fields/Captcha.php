@@ -12,4 +12,9 @@ class Captcha extends Field
     use WithInstructions,
         WithLabel,
         WithShowLabel;
+
+    public function viewProperty(): string
+    {
+        return 'livewire-forms::fields.captcha';
+    }
 }

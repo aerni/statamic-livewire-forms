@@ -14,4 +14,9 @@ class Select extends Field
         WithInstructions,
         WithOptions,
         WithShowLabel;
+
+    public function viewProperty(): string
+    {
+        return 'livewire-forms::fields.select';
+    }
 }

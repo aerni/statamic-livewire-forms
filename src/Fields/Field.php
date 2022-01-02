@@ -20,7 +20,7 @@ use Aerni\LivewireForms\Fields\Properties\WithRealtime;
 use Aerni\LivewireForms\Fields\Properties\WithConditions;
 use Aerni\LivewireForms\Fields\Properties\WithView;
 
-class Field
+abstract class Field
 {
     use WithConfig,
         WithConditions,

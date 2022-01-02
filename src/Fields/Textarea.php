@@ -14,4 +14,9 @@ class Textarea extends Field
         WithInstructions,
         WithPlaceholder,
         WithShowLabel;
+
+    public function viewProperty(): string
+    {
+        return 'livewire-forms::fields.textarea';
+    }
 }
