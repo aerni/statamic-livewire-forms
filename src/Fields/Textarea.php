@@ -15,8 +15,8 @@ class Textarea extends Field
         WithPlaceholder,
         WithShowLabel;
 
-    public function viewProperty(): string
+    public function view(): string
     {
-        return 'livewire-forms::fields.textarea';
+        return 'fields.textarea';
     }
 }

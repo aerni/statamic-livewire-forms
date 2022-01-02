@@ -15,8 +15,8 @@ class Input extends Field
         WithPlaceholder,
         WithShowLabel;
 
-    public function viewProperty(): string
+    public function view(): string
     {
-        return 'livewire-forms::fields.input';
+        return 'fields.input';
     }
 }

@@ -17,9 +17,9 @@ class Checkbox extends Field
         WithOptions,
         WithShowLabel;
 
-    public function viewProperty(): string
+    public function view(): string
     {
-        return 'livewire-forms::fields.checkboxes';
+        return 'fields.checkboxes';
     }
 
     public function defaultProperty(): array|string

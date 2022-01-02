@@ -15,9 +15,9 @@ class Select extends Field
         WithOptions,
         WithShowLabel;
 
-    public function viewProperty(): string
+    public function view(): string
     {
-        return 'livewire-forms::fields.select';
+        return 'fields.select';
     }
 
     public function defaultProperty(): string

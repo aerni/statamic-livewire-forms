@@ -17,8 +17,8 @@ class Radio extends Field
         WithOptions,
         WithShowLabel;
 
-    public function viewProperty(): string
+    public function view(): string
     {
-        return 'livewire-forms::fields.radios';
+        return 'fields.radios';
     }
 }

@@ -5,11 +5,12 @@ namespace Aerni\LivewireForms\Fields;
 use ReflectionClass;
 use ReflectionMethod;
 use Statamic\Support\Str;
-use Statamic\Fields\Field as StatamicField;
 use Aerni\LivewireForms\Traits\WithConfig;
+use Statamic\Fields\Field as StatamicField;
 use Aerni\LivewireForms\Fields\Properties\WithId;
 use Aerni\LivewireForms\Fields\Properties\WithKey;
 use Aerni\LivewireForms\Fields\Properties\WithType;
+use Aerni\LivewireForms\Fields\Properties\WithView;
 use Aerni\LivewireForms\Fields\Properties\WithGroup;
 use Aerni\LivewireForms\Fields\Properties\WithLabel;
 use Aerni\LivewireForms\Fields\Properties\WithRules;
@@ -18,7 +19,6 @@ use Aerni\LivewireForms\Fields\Properties\WithHandle;
 use Aerni\LivewireForms\Fields\Properties\WithDefault;
 use Aerni\LivewireForms\Fields\Properties\WithRealtime;
 use Aerni\LivewireForms\Fields\Properties\WithConditions;
-use Aerni\LivewireForms\Fields\Properties\WithView;
 
 abstract class Field
 {
@@ -35,17 +35,17 @@ abstract class Field
         WithView,
         WithWidth;
 
-    public function __construct(protected StatamicField $field, protected string $id)
+    public function __construct(protected StatamicField $field, protected string $id, protected string $theme)
     {
         //
     }
 
-    public static function make(StatamicField $field, string $id): self
+    public static function make(StatamicField $field, string $id, string $theme): self
     {
-        return (new static($field, $id))->hydrate();
+        return (new static($field, $id, $theme))->hydrate();
     }
 
-    protected function hydrate(): self
+    public function hydrate(): self
     {
         $properties = $this->hydrateProperties(get_class($this));
 

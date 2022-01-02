@@ -14,6 +14,7 @@ class Fields
 {
     protected Collection $models;
     protected Collection $fields;
+    protected string $theme;
     protected $hydratedCallbacks = [];
 
     public function __construct(protected StatamicForm $form, protected string $id, protected array $data)
@@ -29,6 +30,13 @@ class Fields
     public function models(array $models): self
     {
         $this->models = collect($models);
+
+        return $this;
+    }
+
+    public function theme(string $theme): self
+    {
+        $this->theme = $theme;
 
         return $this;
     }
@@ -97,7 +105,9 @@ class Fields
         $this->fields = $this->form->fields()->map(function ($field) {
             $class = $this->models->get($field->handle()) ?? $this->models->get(get_class($field->fieldtype()));
 
-            return $class ? $class::make($field, $this->id) : null;
+            return $class
+                ? $class::make($field, $this->id, $this->theme)
+                : null;
         })->filter();
 
         return $this;

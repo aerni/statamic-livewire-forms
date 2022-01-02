@@ -8,6 +8,7 @@ use Statamic\Facades\Site;
 use Illuminate\Support\Arr;
 use Statamic\Forms\SendEmails;
 use Statamic\Events\FormSubmitted;
+use Aerni\LivewireForms\Form\Theme;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\URL;
 use Aerni\LivewireForms\Form\Fields;
@@ -22,12 +23,15 @@ class Form extends Component
 
     public string $handle;
     public string $view;
+    public string $theme;
+
     public array $data = [];
 
-    public function mount(string $form, string $view = null): void
+    public function mount(string $form, string $view = null, string $theme = null): void
     {
         $this->handle = $form;
         $this->view = $view ?? Str::slug($form);
+        $this->theme = Theme::root($theme);
     }
 
     public function booted(): void
@@ -62,6 +66,7 @@ class Form extends Component
     {
         return Fields::make($this->form, $this->id, $this->data)
             ->models($this->models())
+            ->theme($this->theme)
             ->hydrated(fn ($fields) => $this->hydratedFields($fields))
             ->hydrate();
     }
@@ -79,7 +84,7 @@ class Form extends Component
 
     public function render(): View
     {
-        return view("livewire/forms.{$this->view}");
+        return view("livewire.forms.{$this->view}");
     }
 
     protected function updated(string $field): void
