@@ -41,17 +41,17 @@ class Field
 
     public static function make(StatamicField $field, string $id): self
     {
-        return (new static($field, $id))->boot();
+        return (new static($field, $id))->hydrate();
     }
 
-    protected function boot(): self
+    protected function hydrate(): self
     {
-        $properties = $this->getProperties(get_class($this));
+        $properties = $this->hydrateProperties(get_class($this));
 
         return $this->config($properties);
     }
 
-    protected function getProperties(string $class): array
+    protected function hydrateProperties(string $class): array
     {
         return collect((new ReflectionClass($class))->getMethods())
             ->mapWithKeys(function ($method) {
