@@ -30,12 +30,12 @@ class Form extends Component
     {
         $this
             ->initializeProperties()
-            ->initializeComputedProperties();
+            ->hydrateData();
     }
 
-    public function booted(): void
+    public function boot(): void
     {
-        $this->hydrateData();
+        $this->initializeComputedProperties();
     }
 
     protected function initializeProperties(): self
