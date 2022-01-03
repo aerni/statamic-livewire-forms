@@ -26,7 +26,7 @@ class Checkbox extends Field
     public function defaultProperty(): array|string
     {
         $default = $this->field->defaultValue();
-        $options = $this->field->get('options');
+        $options = $this->optionsProperty();
 
         return (count($options) > 1)
             ? (array) $default

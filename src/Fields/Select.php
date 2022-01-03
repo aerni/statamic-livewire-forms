@@ -24,7 +24,7 @@ class Select extends Field
     public function defaultProperty(): string
     {
         $default = $this->field->defaultValue();
-        $options = $this->field->get('options');
+        $options = $this->optionsProperty();
 
         return $default ?? array_key_first($options);
     }
