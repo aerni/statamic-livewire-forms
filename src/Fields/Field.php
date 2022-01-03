@@ -35,14 +35,14 @@ abstract class Field
         WithView,
         WithWidth;
 
-    public function __construct(protected StatamicField $field, protected string $id, protected string $theme)
+    public function __construct(protected StatamicField $field, protected string $id)
     {
         //
     }
 
-    public static function make(StatamicField $field, string $id, string $theme): self
+    public static function make(StatamicField $field, string $id): self
     {
-        return (new static($field, $id, $theme))->hydrate();
+        return (new static($field, $id))->hydrate();
     }
 
     public function hydrate(): self

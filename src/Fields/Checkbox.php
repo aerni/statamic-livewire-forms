@@ -17,7 +17,7 @@ class Checkbox extends Field
         WithOptions,
         WithShowLabel;
 
-    public function view(): string
+    public function viewProperty(): string
     {
         return 'fields.checkboxes';
     }

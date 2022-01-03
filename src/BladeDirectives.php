@@ -21,7 +21,7 @@ class BladeDirectives
     public static function formFields(): string
     {
         return Blade::compileString("
-            @include('livewire-forms::fields')
+            @include(\$this->view->get('fields'))
         ");
     }
 
@@ -31,7 +31,7 @@ class BladeDirectives
     public static function formGroups(): string
     {
         return Blade::compileString("
-            @include('livewire-forms::groups')
+            @include(\$this->view->get('groups'))
         ");
     }
 
@@ -41,7 +41,7 @@ class BladeDirectives
     public static function formGroup(string $expression): string
     {
         return Blade::compileString("
-            @include('livewire-forms::group', [
+            @include(\$this->view->get('group'), [
                 'group' => $expression,
             ])
         ");
@@ -59,7 +59,7 @@ class BladeDirectives
 
         return Blade::compileString("
             @if (\$this->fields->get($handle))
-                @include('livewire-forms::field', [
+                @include(\$this->view->get('field'), [
                     'field' => \$this->fields->get($handle),
                     'rawField' => $rawField,
                 ])
@@ -73,7 +73,7 @@ class BladeDirectives
     public static function formHoneypot(): string
     {
         return Blade::compileString("
-            @include('livewire-forms::honeypot')
+            @include(\$this->view->get('honeypot'))
         ");
     }
 
@@ -83,7 +83,7 @@ class BladeDirectives
     public static function formSubmit(): string
     {
         return Blade::compileString("
-            @include('livewire-forms::submit')
+            @include(\$this->view->get('submit'))
         ");
     }
 
@@ -93,7 +93,7 @@ class BladeDirectives
     public static function formErrors(): string
     {
         return Blade::compileString("
-            @include('livewire-forms::errors')
+            @include(\$this->view->get('errors'))
         ");
     }
 
@@ -103,7 +103,7 @@ class BladeDirectives
     public static function formSuccess(): string
     {
         return Blade::compileString("
-            @include('livewire-forms::success')
+            @include(\$this->view->get('success'))
         ");
     }
 }

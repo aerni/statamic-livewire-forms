@@ -13,7 +13,7 @@ class Captcha extends Field
         WithLabel,
         WithShowLabel;
 
-    public function view(): string
+    public function viewProperty(): string
     {
         return 'fields.captcha';
     }

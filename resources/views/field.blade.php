@@ -1,6 +1,6 @@
 @if (isset($rawField) && $rawField === true)
 
-    @include($field->view)
+    @include($this->view->get($field->view))
 
 @else
 
@@ -13,7 +13,7 @@
         {{ $field->width === 75 ? 'md:col-span-9' : '' }}
         {{ $field->width === 100 ? 'md:col-span-12' : '' }}
     ">
-        @include($field->view)
+        @include($this->view->get($field->view))
     </div>
 
 @endif

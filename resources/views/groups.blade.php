@@ -1,3 +1,3 @@
 @foreach ($this->fields->groups() as $group => $fields)
-    @include('livewire-forms::group')
+    @include($this->view->get('group'))
 @endforeach

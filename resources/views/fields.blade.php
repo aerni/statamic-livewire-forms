@@ -1,3 +1,3 @@
 @foreach ($this->fields->all() as $field)
-    @include('livewire-forms::field')
+    @include($this->view->get('field'))
 @endforeach

@@ -15,7 +15,7 @@ class Input extends Field
         WithPlaceholder,
         WithShowLabel;
 
-    public function view(): string
+    public function viewProperty(): string
     {
         return 'fields.input';
     }

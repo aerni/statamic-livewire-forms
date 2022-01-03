@@ -7,7 +7,7 @@
 
         <div class="grid grid-cols-1 gap-8 mt-6 md:grid-cols-12">
             @foreach ($fields as $field)
-                @include('livewire-forms::field')
+                @include($this->view->get('field'))
             @endforeach
         </div>
     </div>

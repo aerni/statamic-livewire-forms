@@ -29,4 +29,4 @@
     </select>
 </div>
 
-@include('livewire-forms::error')
+@include($this->view->get('error'))

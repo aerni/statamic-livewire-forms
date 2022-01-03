@@ -10,10 +10,10 @@
     <div>
         <div class="{{ $field->inline ? 'items-center space-x-6' : 'flex-col justify-center space-y-3' }} flex">
             @foreach ($field->options as $option => $label)
-                @include('livewire-forms::fields/radio')
+                @include($this->view->get($field->view))
             @endforeach
         </div>
 
-        @include('livewire-forms::error')
+        @include($this->view->get('error'))
     </div>
 </fieldset>

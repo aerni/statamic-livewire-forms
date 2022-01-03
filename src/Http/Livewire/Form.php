@@ -8,13 +8,13 @@ use Statamic\Facades\Site;
 use Illuminate\Support\Arr;
 use Statamic\Forms\SendEmails;
 use Statamic\Events\FormSubmitted;
-use Aerni\LivewireForms\Form\Theme;
-use Illuminate\Contracts\View\View;
+use Illuminate\Contracts\View\View as LaravelView;
 use Illuminate\Support\Facades\URL;
 use Aerni\LivewireForms\Form\Fields;
 use Aerni\LivewireForms\Form\Honeypot;
 use Statamic\Events\SubmissionCreated;
 use Aerni\LivewireForms\Facades\Models;
+use Aerni\LivewireForms\Form\View;
 use Statamic\Exceptions\SilentFormFailureException;
 
 class Form extends Component
@@ -22,16 +22,14 @@ class Form extends Component
     protected array $models = [];
 
     public string $handle;
-    public string $view;
-    public string $theme;
-
+    public string $component;
+    public string $theme = 'livewire-forms';
     public array $data = [];
 
-    public function mount(string $form, string $view = null, string $theme = null): void
+    public function mount(string $form, string $view = null): void
     {
         $this->handle = $form;
-        $this->view = $view ?? Str::slug($form);
-        $this->theme = Theme::root($theme);
+        $this->component = $view ?? Str::slug($form);
     }
 
     public function booted(): void
@@ -56,6 +54,11 @@ class Form extends Component
         return Models::all()->merge($this->models)->toArray();
     }
 
+    public function getViewProperty(): View
+    {
+        return View::make($this->theme);
+    }
+
     public function getFormProperty(): \Statamic\Forms\Form
     {
         return \Statamic\Facades\Form::find($this->handle)
@@ -66,7 +69,6 @@ class Form extends Component
     {
         return Fields::make($this->form, $this->id, $this->data)
             ->models($this->models())
-            ->theme($this->theme)
             ->hydrated(fn ($fields) => $this->hydratedFields($fields))
             ->hydrate();
     }
@@ -82,9 +84,9 @@ class Form extends Component
         $this->handleFormSubmission();
     }
 
-    public function render(): View
+    public function render(): LaravelView
     {
-        return view("livewire.forms.{$this->view}");
+        return view("livewire.forms.{$this->component}");
     }
 
     protected function updated(string $field): void
