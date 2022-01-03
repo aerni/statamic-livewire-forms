@@ -2,12 +2,13 @@
 
 namespace Aerni\LivewireForms\Fields;
 
+use Aerni\LivewireForms\Facades\View;
 use Aerni\LivewireForms\Fields\Field;
+use Aerni\LivewireForms\Fields\Properties\WithLabel;
 use Aerni\LivewireForms\Fields\Properties\WithInline;
 use Aerni\LivewireForms\Fields\Properties\WithOptions;
-use Aerni\LivewireForms\Fields\Properties\WithInstructions;
-use Aerni\LivewireForms\Fields\Properties\WithLabel;
 use Aerni\LivewireForms\Fields\Properties\WithShowLabel;
+use Aerni\LivewireForms\Fields\Properties\WithInstructions;
 
 class Checkbox extends Field
 {
@@ -19,7 +20,7 @@ class Checkbox extends Field
 
     public function viewProperty(): string
     {
-        return 'fields.checkboxes';
+        return View::get('fields.checkboxes');
     }
 
     public function defaultProperty(): array|string

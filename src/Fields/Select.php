@@ -2,11 +2,12 @@
 
 namespace Aerni\LivewireForms\Fields;
 
+use Aerni\LivewireForms\Facades\View;
 use Aerni\LivewireForms\Fields\Field;
-use Aerni\LivewireForms\Fields\Properties\WithCastBooleans;
-use Aerni\LivewireForms\Fields\Properties\WithInstructions;
 use Aerni\LivewireForms\Fields\Properties\WithOptions;
 use Aerni\LivewireForms\Fields\Properties\WithShowLabel;
+use Aerni\LivewireForms\Fields\Properties\WithCastBooleans;
+use Aerni\LivewireForms\Fields\Properties\WithInstructions;
 
 class Select extends Field
 {
@@ -17,7 +18,7 @@ class Select extends Field
 
     public function viewProperty(): string
     {
-        return 'fields.select';
+        return View::get('fields.select');
     }
 
     public function defaultProperty(): string

@@ -6,21 +6,40 @@ class View
 {
     const DEFAULT_THEME = 'livewire-forms';
 
-    public function __construct(protected string $theme)
-    {
-        //
-    }
+    protected string $theme;
+    protected string $view;
 
-    public static function make(string $theme): self
+    public function theme(string $theme): self
     {
-        return new static($theme);
+        $this->theme = $theme;
+
+        return $this;
     }
 
     public function get(string $view): string
     {
-        $defaultView = self::DEFAULT_THEME . '::' . $view;
-        $themeView = "livewire.forms.{$this->theme}.{$view}";
+        $this->view = $view;
 
-        return view()->exists($themeView) ? $themeView : $defaultView;
+        return $this->isDefaultTheme()
+            ? $this->getDefaultThemeView()
+            : $this->getCustomThemeView();
+    }
+
+    protected function getDefaultThemeView(): string
+    {
+        return self::DEFAULT_THEME . '::' . $this->view;
+    }
+
+    protected function getCustomThemeView(): string
+    {
+        $themeView = "livewire.forms.{$this->theme}.{$this->view}";
+        $fallback = $this->getDefaultThemeView($this->view);
+
+        return view()->exists($themeView) ? $themeView : $fallback;
+    }
+
+    protected function isDefaultTheme(): bool
+    {
+        return $this->theme === self::DEFAULT_THEME;
     }
 }

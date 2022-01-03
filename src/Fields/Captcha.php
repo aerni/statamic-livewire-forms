@@ -2,10 +2,11 @@
 
 namespace Aerni\LivewireForms\Fields;
 
+use Aerni\LivewireForms\Facades\View;
 use Aerni\LivewireForms\Fields\Field;
-use Aerni\LivewireForms\Fields\Properties\WithInstructions;
 use Aerni\LivewireForms\Fields\Properties\WithLabel;
 use Aerni\LivewireForms\Fields\Properties\WithShowLabel;
+use Aerni\LivewireForms\Fields\Properties\WithInstructions;
 
 class Captcha extends Field
 {
@@ -15,6 +16,6 @@ class Captcha extends Field
 
     public function viewProperty(): string
     {
-        return 'fields.captcha';
+        return View::get('fields.captcha');
     }
 }

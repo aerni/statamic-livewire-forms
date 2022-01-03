@@ -2,6 +2,7 @@
 
 namespace Aerni\LivewireForms\Fields;
 
+use Aerni\LivewireForms\Facades\View;
 use Aerni\LivewireForms\Fields\Field;
 use Aerni\LivewireForms\Fields\Properties\WithInputType;
 use Aerni\LivewireForms\Fields\Properties\WithPlaceholder;
@@ -17,6 +18,6 @@ class Input extends Field
 
     public function viewProperty(): string
     {
-        return 'fields.input';
+        return View::get('fields.input');
     }
 }

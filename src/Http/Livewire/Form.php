@@ -7,14 +7,14 @@ use Statamic\Support\Str;
 use Statamic\Facades\Site;
 use Illuminate\Support\Arr;
 use Statamic\Forms\SendEmails;
+use Aerni\LivewireForms\Form\View;
 use Statamic\Events\FormSubmitted;
-use Illuminate\Contracts\View\View as LaravelView;
 use Illuminate\Support\Facades\URL;
 use Aerni\LivewireForms\Form\Fields;
 use Aerni\LivewireForms\Form\Honeypot;
 use Statamic\Events\SubmissionCreated;
 use Aerni\LivewireForms\Facades\Models;
-use Aerni\LivewireForms\Form\View;
+use Illuminate\Contracts\View\View as LaravelView;
 use Statamic\Exceptions\SilentFormFailureException;
 
 class Form extends Component
@@ -28,7 +28,9 @@ class Form extends Component
 
     public function mount(): void
     {
-        $this->initializeProperties();
+        $this
+            ->initializeProperties()
+            ->initializeComputedProperties();
     }
 
     public function booted(): void
@@ -40,6 +42,13 @@ class Form extends Component
     {
         $this->handle = $this->handle ?? throw new \Exception('Please set the handle of the form you want to use.');
         $this->component = $this->component ?? Str::slug($this->handle);
+
+        return $this;
+    }
+
+    protected function initializeComputedProperties(): self
+    {
+        $this->view->theme($this->theme);
 
         return $this;
     }
@@ -63,7 +72,7 @@ class Form extends Component
 
     public function getViewProperty(): View
     {
-        return View::make($this->theme);
+        return \Aerni\LivewireForms\Facades\View::getFacadeRoot();
     }
 
     public function getFormProperty(): \Statamic\Forms\Form
