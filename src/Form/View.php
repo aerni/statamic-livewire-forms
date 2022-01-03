@@ -18,8 +18,9 @@ class View
 
     public function get(string $view): string
     {
-        return $this->theme === self::DEFAULT_THEME
-            ? self::DEFAULT_THEME . '::' . $view
-            : "livewire.forms.{$this->theme}.{$view}";
+        $defaultView = self::DEFAULT_THEME . '::' . $view;
+        $themeView = "livewire.forms.{$this->theme}.{$view}";
+
+        return view()->exists($themeView) ? $themeView : $defaultView;
     }
 }
