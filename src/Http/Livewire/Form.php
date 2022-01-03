@@ -26,15 +26,22 @@ class Form extends Component
     public string $theme = 'livewire-forms';
     public array $data = [];
 
-    public function mount(string $form, string $view = null): void
+    public function mount(): void
     {
-        $this->handle = $form;
-        $this->component = $view ?? Str::slug($form);
+        $this->initializeProperties();
     }
 
     public function booted(): void
     {
         $this->hydrateData();
+    }
+
+    protected function initializeProperties(): self
+    {
+        $this->handle = $this->handle ?? throw new \Exception('Please set the handle of the form you want to use.');
+        $this->component = $this->component ?? Str::slug($this->handle);
+
+        return $this;
     }
 
     protected function hydrateData(): self
