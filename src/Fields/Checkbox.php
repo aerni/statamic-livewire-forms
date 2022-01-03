@@ -20,7 +20,7 @@ class Checkbox extends Field
 
     public function viewProperty(): string
     {
-        return View::get('fields.checkboxes');
+        return View::get('fields.checkbox');
     }
 
     public function defaultProperty(): array|string

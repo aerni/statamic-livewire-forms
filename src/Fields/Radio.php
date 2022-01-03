@@ -20,6 +20,6 @@ class Radio extends Field
 
     public function viewProperty(): string
     {
-        return View::get('fields.radios');
+        return View::get('fields.radio');
     }
 }
