@@ -6,5 +6,44 @@ use Aerni\LivewireForms\Http\Livewire\Form;
 
 class DummyForm extends Form
 {
-    //
+    /*
+    |--------------------------------------------------------------------------
+    | Initialize Properties
+    |--------------------------------------------------------------------------
+    |
+    | You may specify the form's handle, view, and theme, so that you
+    | don't have to pass them as tag parameters.
+    |
+    */
+
+    // protected string $handle = 'contact';
+    // protected string $view = 'default';
+    // protected string $theme = 'default';
+
+    /*
+    |--------------------------------------------------------------------------
+    | Field Models
+    |--------------------------------------------------------------------------
+    |
+    | You may add unique models that only apply to this form component.
+    |
+    */
+
+    // protected array $models = [
+    //     \Statamic\Fieldtypes\Select::class => \App\Fields\Select::class,
+    // ];
+
+    /*
+    |--------------------------------------------------------------------------
+    | Callbacks
+    |--------------------------------------------------------------------------
+    |
+    | You may use the following callback methods to hook into the fields
+    | and data at various lifecycle steps.
+    |
+    */
+
+    // protected function hydratedFields(Fields $fields): void
+    // {
+    // }
 }
