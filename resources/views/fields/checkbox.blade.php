@@ -42,6 +42,6 @@
             @endforeach
         </div>
 
-        @include($this->view->get('error'))
+        @include($this->component->getView('error'))
     </div>
 </fieldset>

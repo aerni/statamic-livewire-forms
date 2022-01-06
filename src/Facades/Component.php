@@ -4,10 +4,10 @@ namespace Aerni\LivewireForms\Facades;
 
 use Illuminate\Support\Facades\Facade;
 
-class View extends Facade
+class Component extends Facade
 {
     protected static function getFacadeAccessor()
     {
-        return \Aerni\LivewireForms\Form\View::class;
+        return \Aerni\LivewireForms\Form\Component::class;
     }
 }

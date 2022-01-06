@@ -1,3 +1,3 @@
 @foreach ($this->fields->all() as $field)
-    @include($this->view->get('field'))
+    @include($this->component->getView('field'))
 @endforeach

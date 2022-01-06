@@ -21,7 +21,7 @@ class BladeDirectives
     public static function formFields(): string
     {
         return Blade::compileString("
-            @include(\$this->view->get('fields'))
+            @include(\$this->component->getView('fields'))
         ");
     }
 
@@ -31,7 +31,7 @@ class BladeDirectives
     public static function formGroups(): string
     {
         return Blade::compileString("
-            @include(\$this->view->get('groups'))
+            @include(\$this->component->getView('groups'))
         ");
     }
 
@@ -41,7 +41,7 @@ class BladeDirectives
     public static function formGroup(string $expression): string
     {
         return Blade::compileString("
-            @include(\$this->view->get('group'), [
+            @include(\$this->component->getView('group'), [
                 'group' => $expression,
             ])
         ");
@@ -59,7 +59,7 @@ class BladeDirectives
 
         return Blade::compileString("
             @if (\$this->fields->get($handle))
-                @include(\$this->view->get('field'), [
+                @include(\$this->component->getView('field'), [
                     'field' => \$this->fields->get($handle),
                     'rawField' => $rawField,
                 ])
@@ -73,7 +73,7 @@ class BladeDirectives
     public static function formHoneypot(): string
     {
         return Blade::compileString("
-            @include(\$this->view->get('honeypot'))
+            @include(\$this->component->getView('honeypot'))
         ");
     }
 
@@ -83,7 +83,7 @@ class BladeDirectives
     public static function formSubmit(): string
     {
         return Blade::compileString("
-            @include(\$this->view->get('submit'))
+            @include(\$this->component->getView('submit'))
         ");
     }
 
@@ -93,7 +93,7 @@ class BladeDirectives
     public static function formErrors(): string
     {
         return Blade::compileString("
-            @include(\$this->view->get('errors'))
+            @include(\$this->component->getView('errors'))
         ");
     }
 
@@ -103,7 +103,7 @@ class BladeDirectives
     public static function formSuccess(): string
     {
         return Blade::compileString("
-            @include(\$this->view->get('success'))
+            @include(\$this->component->getView('success'))
         ");
     }
 }

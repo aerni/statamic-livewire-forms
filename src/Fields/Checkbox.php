@@ -2,7 +2,7 @@
 
 namespace Aerni\LivewireForms\Fields;
 
-use Aerni\LivewireForms\Facades\View;
+use Aerni\LivewireForms\Facades\Component;
 use Aerni\LivewireForms\Fields\Field;
 use Aerni\LivewireForms\Fields\Properties\WithLabel;
 use Aerni\LivewireForms\Fields\Properties\WithInline;
@@ -20,7 +20,7 @@ class Checkbox extends Field
 
     public function viewProperty(): string
     {
-        return View::get('fields.checkbox');
+        return Component::getView('fields.checkbox');
     }
 
     public function defaultProperty(): array|string

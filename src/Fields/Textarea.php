@@ -2,7 +2,7 @@
 
 namespace Aerni\LivewireForms\Fields;
 
-use Aerni\LivewireForms\Facades\View;
+use Aerni\LivewireForms\Facades\Component;
 use Aerni\LivewireForms\Fields\Field;
 use Aerni\LivewireForms\Fields\Properties\WithShowLabel;
 use Aerni\LivewireForms\Fields\Properties\WithPlaceholder;
@@ -18,6 +18,6 @@ class Textarea extends Field
 
     public function viewProperty(): string
     {
-        return View::get('fields.textarea');
+        return Component::getView('fields.textarea');
     }
 }

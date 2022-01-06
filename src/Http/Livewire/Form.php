@@ -7,7 +7,7 @@ use Statamic\Support\Str;
 use Statamic\Facades\Site;
 use Illuminate\Support\Arr;
 use Statamic\Forms\SendEmails;
-use Aerni\LivewireForms\Form\View;
+use Aerni\LivewireForms\Form\Component as FormComponent;
 use Statamic\Events\FormSubmitted;
 use Illuminate\Support\Facades\URL;
 use Aerni\LivewireForms\Form\Fields;
@@ -22,18 +22,19 @@ class Form extends Component
     protected array $models = [];
 
     public string $handle;
-    public string $component;
-    public string $theme = 'livewire-forms';
+    public string $view;
+    public string $theme;
     public array $data = [];
 
     public function mount(): void
     {
         $this
             ->initializeProperties()
+            ->initializeComputedProperties()
             ->hydrateData();
     }
 
-    public function boot(): void
+    public function hydrate(): void
     {
         $this->initializeComputedProperties();
     }
@@ -41,14 +42,15 @@ class Form extends Component
     protected function initializeProperties(): self
     {
         $this->handle = $this->handle ?? throw new \Exception('Please set the handle of the form you want to use.');
-        $this->component = $this->component ?? Str::slug($this->handle);
+        $this->theme = $this->theme ?? $this->component->defaultTheme();
+        $this->view = $this->view ?? $this->component->defaultView();
 
         return $this;
     }
 
     protected function initializeComputedProperties(): self
     {
-        $this->view->theme($this->theme);
+        $this->component->view($this->view)->theme($this->theme);
 
         return $this;
     }
@@ -70,9 +72,9 @@ class Form extends Component
         return Models::all()->merge($this->models)->toArray();
     }
 
-    public function getViewProperty(): View
+    public function getComponentProperty(): FormComponent
     {
-        return \Aerni\LivewireForms\Facades\View::getFacadeRoot();
+        return \Aerni\LivewireForms\Facades\Component::getFacadeRoot();
     }
 
     public function getFormProperty(): \Statamic\Forms\Form
@@ -102,7 +104,7 @@ class Form extends Component
 
     public function render(): LaravelView
     {
-        return view("livewire.forms.{$this->component}");
+        return view("livewire.forms.{$this->view}");
     }
 
     protected function updated(string $field): void

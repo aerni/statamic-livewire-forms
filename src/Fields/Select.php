@@ -2,7 +2,7 @@
 
 namespace Aerni\LivewireForms\Fields;
 
-use Aerni\LivewireForms\Facades\View;
+use Aerni\LivewireForms\Facades\Component;
 use Aerni\LivewireForms\Fields\Field;
 use Aerni\LivewireForms\Fields\Properties\WithOptions;
 use Aerni\LivewireForms\Fields\Properties\WithShowLabel;
@@ -18,7 +18,7 @@ class Select extends Field
 
     public function viewProperty(): string
     {
-        return View::get('fields.select');
+        return Component::getView('fields.select');
     }
 
     public function defaultProperty(): string

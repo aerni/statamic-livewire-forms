@@ -7,7 +7,7 @@
 
         <div class="grid grid-cols-1 gap-8 mt-6 md:grid-cols-12">
             @foreach ($fields as $field)
-                @include($this->view->get('field'))
+                @include($this->component->getView('field'))
             @endforeach
         </div>
     </div>

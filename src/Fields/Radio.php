@@ -2,7 +2,7 @@
 
 namespace Aerni\LivewireForms\Fields;
 
-use Aerni\LivewireForms\Facades\View;
+use Aerni\LivewireForms\Facades\Component;
 use Aerni\LivewireForms\Fields\Field;
 use Aerni\LivewireForms\Fields\Properties\WithInline;
 use Aerni\LivewireForms\Fields\Properties\WithOptions;
@@ -20,6 +20,6 @@ class Radio extends Field
 
     public function viewProperty(): string
     {
-        return View::get('fields.radio');
+        return Component::getView('fields.radio');
     }
 }
