@@ -3,7 +3,6 @@
 namespace Aerni\LivewireForms\Http\Livewire;
 
 use Livewire\Component;
-use Statamic\Support\Str;
 use Statamic\Facades\Site;
 use Illuminate\Support\Arr;
 use Statamic\Forms\SendEmails;
@@ -15,11 +14,13 @@ use Aerni\LivewireForms\Form\Honeypot;
 use Statamic\Events\SubmissionCreated;
 use Aerni\LivewireForms\Facades\Models;
 use Illuminate\Contracts\View\View as LaravelView;
+use Statamic\Contracts\Forms\Submission;
 use Statamic\Exceptions\SilentFormFailureException;
 
 class Form extends Component
 {
     protected array $models = [];
+    protected Submission $submission;
 
     public string $handle;
     public string $view;
@@ -99,7 +100,7 @@ class Form extends Component
     public function submit(): void
     {
         $this->validate();
-        $this->handleFormSubmission();
+        $this->handleSubmission();
     }
 
     public function render(): LaravelView
@@ -127,69 +128,84 @@ class Form extends Component
         return $this->fields->validationAttributes();
     }
 
-    protected function handleFormSubmission(): void
+    protected function handleSubmission(): void
     {
         try {
-            if ($this->isSpam()) {
-                throw new SilentFormFailureException;
-            }
-
-            $data = $this->normalizeDataForSubmission($this->data);
-            $submission = $this->form->makeSubmission()->data($data);
-
-            $this->emit('formSubmitted');
-
-            if (FormSubmitted::dispatch($submission) === false) {
-                throw new SilentFormFailureException;
-            }
+            $this
+                ->handleSpam()
+                ->prepareSubmissionData()
+                ->runSubmittingCallback()
+                ->makeSubmission()
+                ->handleSubmissionEvents()
+                ->storeSubmission()
+                ->success();
         } catch (SilentFormFailureException $e) {
             $this->success();
-            return;
+        }
+    }
+
+    protected function handleSpam(): self
+    {
+        $isSpam = (bool) Arr::get($this->data, $this->honeypot->handle);
+
+        if ($isSpam) {
+            throw new SilentFormFailureException;
         }
 
-        if ($this->form->store()) {
-            $submission->save();
+        return $this;
+    }
+
+    protected function prepareSubmissionData(): self
+    {
+        $this->data = $this->fields->normalizeData($this->data);
+
+        return $this;
+    }
+
+    protected function runSubmittingCallback(): self
+    {
+        $this->submitting();
+
+        return $this;
+    }
+
+    protected function submitting(): void
+    {
+        //
+    }
+
+    protected function makeSubmission(): self
+    {
+        $this->submission = $this->form->makeSubmission()->data($this->data);
+
+        return $this;
+    }
+
+    protected function handleSubmissionEvents(): self
+    {
+        $this->emit('formSubmitted');
+        $formSubmitted = FormSubmitted::dispatch($this->submission);
+
+        if ($formSubmitted === false) {
+            throw new SilentFormFailureException;
         }
 
         $this->emit('submissionCreated');
-        SubmissionCreated::dispatch($submission);
+        SubmissionCreated::dispatch($this->submission);
 
         $site = Site::findByUrl(URL::previous());
-        SendEmails::dispatch($submission, $site);
+        SendEmails::dispatch($this->submission, $site);
 
-        $this->success();
+        return $this;
     }
 
-    protected function normalizeDataForSubmission(array $data): array
+    protected function storeSubmission(): self
     {
-        return collect($data)->map(function ($value, $key) {
-            $field = $this->fields->get($key);
+        if ($this->form->store()) {
+            $this->submission->save();
+        }
 
-            // We want to return nothing if the field can't be found (e.g. honeypot).
-            if (is_null($field)) {
-                return null;
-            }
-
-            // We don't want to submit the captcha response value.
-            if ($field->type === 'captcha') {
-                return null;
-            }
-
-            if ($field->cast_booleans) {
-                return Str::toBool($value);
-            }
-
-            if ($field->input_type === 'number') {
-                return (int) $value;
-            }
-
-            return $value;
-        })->filter()->toArray();
-    }
-
-    protected function isSpam(): bool
-    {
-        return (bool) Arr::get($this->data, $this->honeypot->handle);
+        return $this;
     }
 
     protected function success(): void
