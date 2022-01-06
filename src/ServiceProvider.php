@@ -13,7 +13,10 @@ use Statamic\Providers\AddonServiceProvider;
 class ServiceProvider extends AddonServiceProvider
 {
     protected $commands = [
-        Commands\MakeLivewireForm::class,
+        Commands\MakeComponent::class,
+        Commands\MakeTheme::class,
+        Commands\MakeView::class,
+        Commands\Setup::class,
     ];
 
     protected $fieldtypes = [
