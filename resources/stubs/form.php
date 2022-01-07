@@ -26,11 +26,13 @@ class DummyForm extends Form
     |--------------------------------------------------------------------------
     |
     | You may add unique models that only apply to this form component.
+    | Use a field's handle as the key to only use the model for that field.
     |
     */
 
     // protected array $models = [
     //     \Statamic\Fieldtypes\Select::class => \App\Fields\Select::class,
+    //     'product' => \App\Fields\SelectProduct::class,
     // ];
 
     /*
