@@ -33,6 +33,47 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Default View
+    |--------------------------------------------------------------------------
+    |
+    | This view will be used if you don't specify one on the component.
+    |
+    */
+
+    'view' => 'default',
+
+    /*
+    |--------------------------------------------------------------------------
+    | Default Theme
+    |--------------------------------------------------------------------------
+    |
+    | This theme will be used if you don't specify one on the component.
+    |
+    */
+
+    'theme' => 'default',
+
+    /*
+    |--------------------------------------------------------------------------
+    | Field Models
+    |--------------------------------------------------------------------------
+    |
+    | You may change the model of each fieldtype with your own implementation.
+    |
+    */
+
+    'models' => [
+        \Aerni\LivewireForms\Fieldtypes\Captcha::class => \Aerni\LivewireForms\Fields\Captcha::class,
+        \Statamic\Fieldtypes\Checkboxes::class => \Aerni\LivewireForms\Fields\Checkbox::class,
+        \Statamic\Fieldtypes\Integer::class => \Aerni\LivewireForms\Fields\Input::class,
+        \Statamic\Fieldtypes\Radio::class => \Aerni\LivewireForms\Fields\Radio::class,
+        \Statamic\Fieldtypes\Select::class => \Aerni\LivewireForms\Fields\Select::class,
+        \Statamic\Fieldtypes\Text::class => \Aerni\LivewireForms\Fields\Input::class,
+        \Statamic\Fieldtypes\Textarea::class => \Aerni\LivewireForms\Fields\Textarea::class,
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
     | Realtime Validation
     |--------------------------------------------------------------------------
     |
@@ -60,6 +101,22 @@ return [
 ];
 ```
 
+## Getting started
+
+### Prerequisite
+
+This addon provides configured and styled form views for all Statamic form fieldtypes. The components are styled with [Tailwind CSS](https://tailwindcss.com/) and make use of the [@tailwindcss/forms](https://github.com/tailwindlabs/tailwindcss-forms) plugin. If you want to use the default styling, you'll need a working Tailwind setup.
+
+### Run the setup command
+
+Go ahead and run the following command in your console. It will guide you trough creating your first view and theme. Optionally, you may also create a component to customize the form's behavior.
+
+```bash
+php please livewire-forms:setup
+```
+
+### Setup your layout
+
 Add the Livewire `styles` in the `head`, and the `scripts` before the closing `body` tag in your template:
 
 ```blade
@@ -80,96 +137,47 @@ Add the Livewire `styles` in the `head`, and the `scripts` before the closing `b
 </body>
 ```
 
-## Form views
+### Render the form
 
-This addon provides configured and styled form views for all Statamic form fieldtypes. The components are styled with [Tailwind CSS](https://tailwindcss.com/) and make use of the [@tailwindcss/forms](https://github.com/tailwindlabs/tailwindcss-forms) plugin. If you want to use the default styling, you will need a working Tailwind setup.
-
-### Publish form views
-
-You can publish the form views to make the styling and markup your own:
-
-```bash
-php please vendor:publish --tag=livewire-forms-views
-```
-
-The views will be published to `views/vendor/livewire-forms`.
-
-> **Important Note:** It's highly likely that future releases will introduce breaking changes to the views. If you choose to publish the views you are on your own and have to manually update the views yourself.
-
-## Basic usage
-
-### 1. Create a Statamic form
-
-Go ahead and create a Statamic form in the Control Panel.
-
-### 2. Create a Livewire form view
-
-Run the following command and follow the instructions to create a Livewire view for your Statamic form. The form view will be published to `views/livewire/forms/form-handle.blade.php`.
-
-```bash
-php please make:livewire-form
-```
-
-### 3. Render the form
-
-Include the Livewire form component in your template and provide the handle of the Statamic form. This will automatically load the corresponding form view.
+Add the Livewire form component to your template and provide the handle of the Statamic form. The component will render the default view set in `config/livewire-forms.php`.
 
 ```blade
 <!-- Antlers -->
-{{ livewire:form form="contact" }}
+{{ livewire:form handle="contact" }}
 
 <!-- Blade -->
-<livewire:form form="contact">
+<livewire:form handle="contact">
 ```
 
 You can also dynamically render a form that was selected via Statamic's Form fieldtype:
 
 ```blade
 <!-- Antlers -->
-{{ livewire:form :form="field:handle" }}
+{{ livewire:form :handle="field:handle" }}
 
 <!-- Blade -->
-<livewire:form :form="field:handle">
+<livewire:form :handle="field:handle">
 ```
 
-You may also use the same view for every form by passing the name of the view to the `view` parameter:
+You can use the `view` and `theme` parameter to use a view or theme different to the one defined in the config,
 
 ```blade
 <!-- Antlers -->
-{{ livewire:form :form="field:handle" view="default" }}
+{{ livewire:form :handle="field:handle" view="contact" theme="regular" }}
 
 <!-- Blade -->
-<livewire:form :form="field:handle" view="default">
+<livewire:form :handle="field:handle" view="contact" theme="regular">
 ```
 
-The view is expected to be in the `views/livewire/forms` directory. But you may specify a subdirectory like so:
+## Views
 
-```blade
-<!-- Antlers -->
-{{ livewire:form :form="field:handle" view="contact/default" }}
-
-<!-- Blade -->
-<livewire:form :form="field:handle" view="contact/default">
-```
-
-## Customizing the form component view
-
-Sometimes you need more control over the markup of your form, eg. to group specific fields in a `<fieldset>`. You can render a single field by passing its handle to the `@formField` directive.
+This is the default view. You may customize it to your liking.
 
 ```blade
 <form wire:submit.prevent="submit" class="w-full max-w-2xl">
     <div class="grid grid-cols-1 gap-8 md:grid-cols-12">
-    
-        <fieldset>
-            <div class="mb-3">
-                <legend class="text-base font-medium text-gray-700">Personal Information</legend>
-            </div>
-            
-            @formField('name')
-            @formField('email')
-        </fieldset>
-
         @formFields
+        @formHoneypot
         @formSubmit
         @formErrors
         @formSuccess
@@ -177,80 +185,56 @@ Sometimes you need more control over the markup of your form, eg. to group speci
 </form>
 ```
 
-You may also render the blank field view without the field layout wrapper by passing a second parameter:
+Use the following command to create a new view:
 
-```blade
-@formField('name', true)
+```bash
+php please livewire-forms:view
 ```
 
-## Translating your fields
+### Blade Directives
 
-You can translate your field labels, instructions, options, and placeholders using JSON files. Create a translation file for each language, e.g. `resources/lang/de.json`.
+There are a couple of blade directives you may use in your form views. Each directive renders a view inside the current theme.
 
-### Example
-```yaml
-# resources/blueprints/forms/contact.yaml
+| Directive              | Description                                      | View               |
+| ---------------------- | ------------------------------------------------ | ------------------ |
+| `@formFields`          | Loop through and render all form fields          | fields.blade.php   |
+| `@formField('handle')` | Render a specific form field                     | field.blade.php    |
+| `@formGroups`          | Loop through and render all form fields by group | groups.blade.php   |
+| `@formGroup('group')`  | Render a specific from field group               | group.blade.php    |
+| `@formHoneypot`        | Render the form honeypot field                   | honeypot.blade.php |
+| `@formSubmit`          | Render the form submit button                    | submit.blade.php   |
+| `@formErrors`          | Render the form validation errors                | errors.blade.php   |
+| `@formSuccess`         | Render the form success message                  | success.blade.php  |
 
-sections:
-  main:
-    display: Main
-    fields:
-      -
-        display: Colors
-        placeholder: 'What is your favorite color?'
-        ...
+## Themes
+
+Themes allow you to customize the style and logic of your form fields. You may have any number of themes and use them for any of your forms. If a field's view doesn't exist in the configured theme, it will fall back to the default view provided by this addon. You can set the default theme in `config/livewire-forms.php`.
+
+Use the following command to create a new theme:
+
+```bash
+php please livewire-forms:theme
 ```
 
-```json
-// resources/lang/de.json
-
-{
-    "Colors": "Farben",
-    "What is your favorite color?": "Was ist deine Lieblingsfarbe?",
-}
-```
-
-## Captcha
-
-This addon comes with a `Captcha` fieldtype that lets you add a `Google reCAPTCHA v2 (checkbox)` captcha to your form. You can add the field either through the form blueprint builder in the Control Panel or directly to your form blueprint file.
-
-```yaml
-# resources/blueprints/forms/contact.yaml
-
-sections:
-  main:
-    display: Main
-    fields:
-      -
-        handle: captcha
-        field:
-          display: reCAPTCHA
-          type: captcha
-          icon: lock
-          instructions: 'Please verify that you''re human.'
-```
-
->**Note:** Make sure to add your captcha key and secret in your `.env` file.
+> **Important Note:** It's very likely that future releases will introduce breaking changes to the theme views. If that happens, you will have to manually update your themes.
 
 ## Realtime validation
 
 You can configure realtime validation on three levels. In the config file, on the form, and on the form field. Each level will override the configuration of the previous level.
 
-### 1. In the config
-A boolean to globally enable/disable realtime validation.
+### In the config
+
+A boolean in `config/livewire-forms.php` to globally enable/disable realtime validation:
 
 ```php
-// config/livewire-forms.php
-
 'realtime' => true,
 ```
 
-### 2. On the form
-A boolean to enable/disable realtime validation for a specific form.
+### On the form
+
+A boolean in a form's blueprint to enable/disable realtime validation for the whole form:
 
 ```yaml
-# resources/blueprints/forms/contact.yaml
-
 sections:
   main:
     display: Main
@@ -261,12 +245,11 @@ sections:
         ...
 ```
 
-### 3. On the form field
-A boolean to enable/disable realtime validation for the field:
+### On the form field
+
+A boolean in a form's blueprint to enable/disable realtime validation for a specific field:
 
 ```yaml
-# resources/blueprints/forms/contact.yaml
-
 sections:
   main:
     display: Main
@@ -275,17 +258,15 @@ sections:
         handle: email
         field:
           ...
+          realtime: true
           validate:
             - required
             - email
-          realtime: true
 ```
 
 Sometimes you may want to only validate certain rules in realtime. You may provide an array with the rules you want to validate in realtime instead of a boolean:
 
 ```yaml
-# resources/blueprints/forms/contact.yaml
-
 sections:
   main:
     display: Main
@@ -294,14 +275,14 @@ sections:
         handle: email
         field:
           ...
+          realtime:
+            - required
           validate:
             - required
             - email
-          realtime:
-            - required
 ```
 
-## Form field configuration
+## Field configuration
 
 There are multiple configuration options for your form fields:
 
@@ -310,10 +291,52 @@ There are multiple configuration options for your form fields:
 | `autocomplete`  | `string`                                | `input`               | Set the field's [autocomplete](https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/autocomplete) attribute |
 | `cast_booleans` | `boolean`                               | All fieldtypes        | Save the field value as a boolean |
 | `default`       | `array`, `boolean`, `integer`, `string` | All fieldtypes        | Set the field's default value |
+| `group`         | `string`                                | All fieldtypes        | Group your fields when using the `@formGroups` and `@formGroup('group')` directives in your view. |
 | `inline`        | `boolean`                               | `checkboxes`, `radio` | Set to `true` to display the fields inline |
 | `placeholder`   | `string`                                | `input`, `textarea`   | Set the field's placeholder value |
 | `show_label`    | `boolean`                               | All fieldtypes        | Set to `false` to hide the field's label and instructions. This can be useful for single checkboxes, eg. `Accept terms and conditions`. |
 | `width`         | `integer`                               | All fieldtypes        | Set the desired width of the field. |
+
+## Translating fields
+
+You can translate your field labels, instructions, options, and placeholders using JSON files. Create a translation file for each language, e.g. `resources/lang/de.json`.
+
+### Example
+
+**Form Blueprint**
+```yaml
+sections:
+  main:
+    display: Main
+    fields:
+      -
+        display: Colors
+        placeholder: 'What is your favorite color?'
+        ...
+```
+
+**Translation File**
+```json
+{
+    "Colors": "Farben",
+    "What is your favorite color?": "Was ist deine Lieblingsfarbe?",
+}
+```
+
+## Captcha Fieldtype
+
+This addon comes with a `Captcha` fieldtype that lets you add a `Google reCAPTCHA v2 (checkbox)` captcha to your form. The Captcha fieldtype is available in the form blueprint builder like any other fieldtype.
+
+>**Note:** Make sure to add your captcha key and secret in your `.env` file.
+
+## Commands
+
+| Command                          | Description                            |
+| -------------------------------- | -------------------------------------- |
+| livewire-forms:setup             | Step by step wizard to get you started |
+| livewire-forms:view {name?}      | Create a new Livewire form view        |
+| livewire-forms:theme {name?}     | Create a new Livewire form theme       |
+| livewire-forms:component {name?} | Create a new Livewire form component   |
 
 ## Events
 
