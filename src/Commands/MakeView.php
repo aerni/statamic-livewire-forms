@@ -2,21 +2,21 @@
 
 namespace Aerni\LivewireForms\Commands;
 
-use Aerni\LivewireForms\Facades\Component;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\File;
 use Statamic\Console\RunsInPlease;
+use Illuminate\Support\Facades\File;
+use Aerni\LivewireForms\Facades\Component;
 
 class MakeView extends Command
 {
     use RunsInPlease;
 
-    protected $signature = 'livewire-forms:view {view?}';
+    protected $signature = 'livewire-forms:view {name?}';
     protected $description = 'Create a new Livewire form view';
 
     public function handle(): void
     {
-        $view = $this->argument('view') ?? Component::defaultView();
+        $view = $this->argument('name') ?? $this->ask('What do you want to call the view?', Component::defaultView());
         $stub = File::get(__DIR__ . '/../../resources/stubs/form.blade.php');
         $filename = "{$view}.blade.php";
         $path = resource_path("views/livewire/forms/{$filename}");

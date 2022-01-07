@@ -11,12 +11,13 @@ class MakeComponent extends Command
 {
     use RunsInPlease;
 
-    protected $signature = 'livewire-forms:component {name}';
+    protected $signature = 'livewire-forms:component {name?}';
     protected $description = 'Create a new Livewire form component';
 
     public function handle(): void
     {
-        $filename = Str::studly($this->argument('name'));
+        $name = $this->argument('name') ?? $this->ask('What do you want to call the component?');
+        $filename = Str::studly($name);
         $stub = File::get(__DIR__ . '/../../resources/stubs/form.php');
         $stub = str_replace('DummyForm', $filename, $stub);
         $path = app_path("Http/Livewire/{$filename}.php");
