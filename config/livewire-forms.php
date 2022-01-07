@@ -29,7 +29,7 @@ return [
     | Field Models
     |--------------------------------------------------------------------------
     |
-    | You may change the implementation of each form fieldtype with your own.
+    | You may change the model of each fieldtype with your own implementation.
     |
     */
 

@@ -38,8 +38,8 @@ class DummyForm extends Form
     | Callbacks
     |--------------------------------------------------------------------------
     |
-    | You may use the following callback methods to hook into the fields
-    | and data at various lifecycle steps.
+    | You may use the following callback methods to hook into various
+    | lifecycle steps to modify fields and data.
     |
     */
 
