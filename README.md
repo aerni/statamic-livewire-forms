@@ -396,6 +396,49 @@ Livewire.on('submissionCreated', () => {
 })
 ```
 
+## Customization
+
+Sometimes you need more control over your form. For instance, if you want to dynamically populate a select field's options from a collection. Or if you have multiple radio fields that need to be styled differently. There are a few concepts to help you customize your form experience.
+
+Get started by creating a new component:
+
+```bash
+php please livewire-forms:component
+```
+
+### Field Models
+
+Each form fieldtype is bound to a model that is responsible to generate field properties like `id`, `handle`, `label`. For instance the `\Statamic\Fieldtypes\Text::class` is implemented with `\Aerni\LivewireForms\Fields\Input::class`. A property is assigned for each method ending with `Property`, e.g. `optionsProperty()` will generate an `options` property.
+
+You may change the default bindings in `config/livewire-forms.php`. If you have a fieldtype that's not supported by this addon, simply add your own implementation in the config.
+
+### Example
+
+In the following example we are extending the default `Select` field model to override the `optionsProperty` method to dynamically generate the options from a collection. We are also assigning a diffeent view that is unique to this select field.
+
+```php
+namespace App\Fields;
+
+use Aerni\LivewireForms\Facades\Component;
+use Aerni\LivewireForms\Fields\Select as Base;
+use Statamic\Facades\Entry;
+
+class SelectProduct extends Base
+{
+    public function optionsProperty(): array
+    {
+        return Entry::whereCollection('products')->mapWithKeys(function ($product) {
+            return [$product->slug() => $product->get('title')];
+        })->all();
+    }
+
+    public function viewProperty(): string
+    {
+        return Component::getView('fields.select_product');
+    }
+}
+```
+
 ## License
 Livewire Forms is **commercial software** but has an open-source codebase. If you want to use it in production, you'll need to [buy a license from the Statamic Marketplace](https://statamic.com/addons/aerni/livewire-forms).
 >Livewire Forms is **NOT** free software.
