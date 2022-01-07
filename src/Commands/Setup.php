@@ -22,21 +22,17 @@ class Setup extends Command
 
     protected function makeView(): void
     {
-        if ($this->confirm('Do you want to create a new form view?')) {
-            $this->call('livewire-forms:view');
-        }
+        $this->call('livewire-forms:view');
     }
 
     protected function makeTheme(): void
     {
-        if ($this->confirm('Do you want to create a new form theme?')) {
-            $this->call('livewire-forms:theme');
-        }
+        $this->call('livewire-forms:theme');
     }
 
     protected function makeComponent(): void
     {
-        if ($this->confirm('Do you want to create a new form component to customize the default behaviour?')) {
+        if ($this->confirm('Do you want to create a form component to customize the default behaviour?')) {
             $this->call('livewire-forms:component');
         }
     }
