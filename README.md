@@ -218,6 +218,100 @@ php please livewire-forms:theme
 
 > **Important Note:** It's very likely that future releases will introduce breaking changes to the theme views. If that happens, you will have to manually update your themes.
 
+## Components
+
+Sometimes you need more control over your form. For instance, if you want to dynamically populate a select field's options. Or if you have different types of radio fields that need different styling. There are a few concepts to help you customize your form experience.
+
+Get started by creating a new component:
+
+```bash
+php please livewire-forms:component
+```
+
+### Field Models
+
+Each form fieldtype is bound to a model that is responsible to generate a field's properties like `id`, `handle`, `label`. For instance the `\Statamic\Fieldtypes\Text::class` is implemented with `\Aerni\LivewireForms\Fields\Input::class`. A field property is created for each method ending with `Property`, e.g. `optionsProperty()` will generate an `options` property.
+
+You may change the default bindings in `config/livewire-forms.php`. If you have a fieldtype that's not supported by this addon, simply create a new model and add the binding to the config.
+
+### Callbacks
+
+There are a couple of callback methods that let you hook into various lifecycle steps to modify fields and data.
+
+```php
+/**
+ * Use this method to modify the fields before they are rendered, e.g. a field's label property.
+ */
+protected function hydratedFields(Fields $fields): void
+{
+    $fields->get('name')->label = 'Your name';
+}
+
+/**
+ * Use this method to do anything you want right before the form submission is created.
+ */
+protected function beforeSubmission(): void
+{
+    $this->data['success'] = true;
+}
+```
+
+## Customization Example
+
+In the following example we are extending the default `Select` field model to override the `optionsProperty` method to dynamically generate the options from a collection. We are also assigning a diffeent view that is unique to this select field. Note, how we are using the `Component::getView()` method, which allows us to return the specified view from the folder of the current theme.
+
+```php
+namespace App\Fields;
+
+use Aerni\LivewireForms\Facades\Component;
+use Aerni\LivewireForms\Fields\Select as Base;
+use Statamic\Facades\Entry;
+
+class SelectProduct extends Base
+{
+    public function optionsProperty(): array
+    {
+        return Entry::whereCollection('products')->mapWithKeys(function ($product) {
+            return [$product->slug() => $product->get('title')];
+        })->all();
+    }
+
+    public function viewProperty(): string
+    {
+        return Component::getView('fields.select_product');
+    }
+}
+```
+
+Next, we need to tell the form which field we want to use the `SelectProduct` model for. Each field model can either be bound to all the fields of a specific fieldtype like `\Statamic\Fieldtypes\Text::class`, or to a specific form field like `products`. In our case, we only want to use the `SelectProduct` model for the select field with the handle `products`.
+
+To change the default binding for the `products` field, we simply add it to the `models` property in the component:
+
+```php
+namespace App\Http\Livewire;
+
+use Aerni\LivewireForms\Http\Livewire\Form;
+
+class ContactForm extends Form
+{
+    protected string $handle = 'contact';
+
+    protected array $models = [
+        'product' => \App\Fields\SelectProduct::class,
+    ];
+}
+```
+
+Lastly, we need to render this new `ContactForm` component in our template:
+
+```blade
+<!-- Antlers -->
+{{ livewire:contact-form }}
+
+<!-- Blade -->
+<livewire:contact-form>
+```
+
 ## Realtime validation
 
 You can configure realtime validation on three levels. In the config file, on the form, and on the form field. Each level will override the configuration of the previous level.
@@ -394,49 +488,6 @@ public function handle(SubmissionCreated $event)
 Livewire.on('submissionCreated', () => {
     ...
 })
-```
-
-## Customization
-
-Sometimes you need more control over your form. For instance, if you want to dynamically populate a select field's options from a collection. Or if you have multiple radio fields that need to be styled differently. There are a few concepts to help you customize your form experience.
-
-Get started by creating a new component:
-
-```bash
-php please livewire-forms:component
-```
-
-### Field Models
-
-Each form fieldtype is bound to a model that is responsible to generate field properties like `id`, `handle`, `label`. For instance the `\Statamic\Fieldtypes\Text::class` is implemented with `\Aerni\LivewireForms\Fields\Input::class`. A property is assigned for each method ending with `Property`, e.g. `optionsProperty()` will generate an `options` property.
-
-You may change the default bindings in `config/livewire-forms.php`. If you have a fieldtype that's not supported by this addon, simply add your own implementation in the config.
-
-### Example
-
-In the following example we are extending the default `Select` field model to override the `optionsProperty` method to dynamically generate the options from a collection. We are also assigning a diffeent view that is unique to this select field.
-
-```php
-namespace App\Fields;
-
-use Aerni\LivewireForms\Facades\Component;
-use Aerni\LivewireForms\Fields\Select as Base;
-use Statamic\Facades\Entry;
-
-class SelectProduct extends Base
-{
-    public function optionsProperty(): array
-    {
-        return Entry::whereCollection('products')->mapWithKeys(function ($product) {
-            return [$product->slug() => $product->get('title')];
-        })->all();
-    }
-
-    public function viewProperty(): string
-    {
-        return Component::getView('fields.select_product');
-    }
-}
 ```
 
 ## License
