@@ -49,7 +49,7 @@ class DummyForm extends Form
     // {
     // }
 
-    // protected function submitting(): void
+    // protected function beforeSubmission(): void
     // {
     // }
 }
