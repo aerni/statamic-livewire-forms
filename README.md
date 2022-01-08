@@ -425,12 +425,12 @@ This addon comes with a `Captcha` fieldtype that lets you add a `Google reCAPTCH
 
 ## Commands
 
-| Command                          | Description                            |
-| -------------------------------- | -------------------------------------- |
-| livewire-forms:setup             | Step by step wizard to get you started |
-| livewire-forms:view {name?}      | Create a new Livewire form view        |
-| livewire-forms:theme {name?}     | Create a new Livewire form theme       |
-| livewire-forms:component {name?} | Create a new Livewire form component   |
+| Command                            | Description                            |
+| ---------------------------------- | -------------------------------------- |
+| `livewire-forms:setup`             | Step by step wizard to get you started |
+| `livewire-forms:view {name?}`      | Create a new Livewire form view        |
+| `livewire-forms:theme {name?}`     | Create a new Livewire form theme       |
+| `livewire-forms:component {name?}` | Create a new Livewire form component   |
 
 ## Events
 
