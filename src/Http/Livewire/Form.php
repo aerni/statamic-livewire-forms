@@ -171,7 +171,7 @@ class Form extends Component
                 return null;
             }
 
-            if ($field->cast_booleans) {
+            if ($field->cast_booleans && in_array($value, ['true', 'false'])) {
                 return Str::toBool($value);
             }
 
