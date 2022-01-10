@@ -230,31 +230,4 @@ class Fields
 
         return [$field->key => $realtime];
     }
-
-    public function normalizeData(array $data): array
-    {
-        return collect($data)->map(function ($value, $key) {
-            $field = $this->fields->get($key);
-
-            // We want to return nothing if the field can't be found (e.g. honeypot).
-            if (is_null($field)) {
-                return null;
-            }
-
-            // We don't want to submit the captcha response value.
-            if ($field->type === 'captcha') {
-                return null;
-            }
-
-            if ($field->cast_booleans) {
-                return Str::toBool($value);
-            }
-
-            if ($field->input_type === 'number') {
-                return (int) $value;
-            }
-
-            return $value;
-        })->filter()->toArray();
-    }
 }

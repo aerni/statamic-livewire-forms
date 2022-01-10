@@ -3,19 +3,20 @@
 namespace Aerni\LivewireForms\Http\Livewire;
 
 use Livewire\Component;
+use Statamic\Support\Str;
 use Statamic\Facades\Site;
 use Illuminate\Support\Arr;
 use Statamic\Forms\SendEmails;
-use Aerni\LivewireForms\Form\Component as FormComponent;
 use Statamic\Events\FormSubmitted;
 use Illuminate\Support\Facades\URL;
 use Aerni\LivewireForms\Form\Fields;
 use Aerni\LivewireForms\Form\Honeypot;
 use Statamic\Events\SubmissionCreated;
 use Aerni\LivewireForms\Facades\Models;
-use Illuminate\Contracts\View\View as LaravelView;
 use Statamic\Contracts\Forms\Submission;
+use Illuminate\Contracts\View\View as LaravelView;
 use Statamic\Exceptions\SilentFormFailureException;
+use Aerni\LivewireForms\Form\Component as FormComponent;
 
 class Form extends Component
 {
@@ -133,7 +134,7 @@ class Form extends Component
         try {
             $this
                 ->handleSpam()
-                ->prepareSubmissionData()
+                ->normalizeSubmissionData()
                 ->runBeforeSubmissionCallback()
                 ->makeSubmission()
                 ->handleSubmissionEvents()
@@ -155,9 +156,31 @@ class Form extends Component
         return $this;
     }
 
-    protected function prepareSubmissionData(): self
+    protected function normalizeSubmissionData(): self
     {
-        $this->data = $this->fields->normalizeData($this->data);
+        $this->data = collect($this->data)->map(function ($value, $key) {
+            $field = $this->fields->get($key);
+
+            // We want to return nothing if the field can't be found (e.g. honeypot).
+            if (is_null($field)) {
+                return null;
+            }
+
+            // We don't want to submit the captcha response value.
+            if ($field->type === 'captcha') {
+                return null;
+            }
+
+            if ($field->cast_booleans) {
+                return Str::toBool($value);
+            }
+
+            if ($field->input_type === 'number') {
+                return (int) $value;
+            }
+
+            return $value;
+        })->filter()->toArray();
 
         return $this;
     }
