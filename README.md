@@ -159,7 +159,7 @@ You can also dynamically render a form that was selected via Statamic's Form fie
 <livewire:form :handle="field:handle">
 ```
 
-You can use the `view` and `theme` parameter to use a view or theme different to the one defined in the config,
+You can use the `view` and `theme` parameter to use a view or theme different to the one defined in the config.
 
 ```blade
 <!-- Antlers -->
@@ -170,6 +170,12 @@ You can use the `view` and `theme` parameter to use a view or theme different to
 ```
 
 ## Views
+
+Use the following command to create a new view:
+
+```bash
+php please livewire-forms:view
+```
 
 This is the default view. You may customize it to your liking.
 
@@ -183,12 +189,6 @@ This is the default view. You may customize it to your liking.
         @formSuccess
     </div>
 </form>
-```
-
-Use the following command to create a new view:
-
-```bash
-php please livewire-forms:view
 ```
 
 ### Blade Directives
@@ -230,7 +230,7 @@ php please livewire-forms:component
 
 ### Field Models
 
-Each form fieldtype is bound to a model that is responsible to generate a field's properties like `id`, `handle`, `label`. For instance the `\Statamic\Fieldtypes\Text::class` is implemented with `\Aerni\LivewireForms\Fields\Input::class`. A field property is created for each method ending with `Property`, e.g. `optionsProperty()` will generate an `options` property.
+Each form fieldtype is bound to a model that is responsible to generate a field's properties like `id`, `handle`, `label`. For instance the `\Statamic\Fieldtypes\Text::class` fieldtype is implemented with `\Aerni\LivewireForms\Fields\Input::class` model. A field property is created for each method ending with `Property`, e.g. `optionsProperty()` will generate an `options` property.
 
 You may change the default bindings in `config/livewire-forms.php`. If you have a fieldtype that's not supported by this addon, simply create a new model and add the binding to the config.
 
@@ -256,9 +256,9 @@ protected function beforeSubmission(): void
 }
 ```
 
-## Customization Example
+### Customization Example
 
-In the following example we are extending the default `Select` field model to override the `optionsProperty` method to dynamically generate the options from a collection. We are also assigning a diffeent view that is unique to this select field. Note, how we are using the `Component::getView()` method, which allows us to return the specified view from the folder of the current theme.
+In the following example we are extending the default `Select` field model to override the `optionsProperty` method to dynamically generate the options from a collection. We are also assigning a different view that is unique to this select field. Note, how we are using the `Component::getView()` method, which allows us to return the specified view from the folder of the current theme.
 
 ```php
 namespace App\Fields;
@@ -378,18 +378,18 @@ sections:
 
 ## Field configuration
 
-There are multiple configuration options for your form fields:
+There are a couple of configuration options for your form fields:
 
-| Parameter       | Type                                    | Supported by          | Description                |
-| :-------------- | :-------------------------------------- | :-------------------- | :------------------------- |
-| `autocomplete`  | `string`                                | `input`               | Set the field's [autocomplete](https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/autocomplete) attribute |
-| `cast_booleans` | `boolean`                               | All fieldtypes        | Save the field value as a boolean |
-| `default`       | `array`, `boolean`, `integer`, `string` | All fieldtypes        | Set the field's default value |
-| `group`         | `string`                                | All fieldtypes        | Group your fields when using the `@formGroups` and `@formGroup('group')` directives in your view. |
-| `inline`        | `boolean`                               | `checkboxes`, `radio` | Set to `true` to display the fields inline |
-| `placeholder`   | `string`                                | `input`, `textarea`   | Set the field's placeholder value |
-| `show_label`    | `boolean`                               | All fieldtypes        | Set to `false` to hide the field's label and instructions. This can be useful for single checkboxes, eg. `Accept terms and conditions`. |
-| `width`         | `integer`                               | All fieldtypes        | Set the desired width of the field. |
+| Parameter       | Type                                    | Supported by                  | Description                                                                                                                            |
+| :-------------- | :-------------------------------------- | :---------------------------- | :------------------------------------------------------------------------------------------------------------------------------------- |
+| `autocomplete`  | `string`                                | `input`, `textarea`, `select` | Set the field's [autocomplete](https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/autocomplete) attribute. Defaults to `on`. |
+| `cast_booleans` | `boolean`                               | `radio`, `select`             | String values of `true` and `false` will be saved as booleans. |
+| `default`       | `array`, `boolean`, `integer`, `string` | All fieldtypes                | Set the field's default value |
+| `group`         | `string`                                | All fieldtypes                | Group your fields when using the `@formGroups` and `@formGroup('group')` directives in your view. |
+| `inline`        | `boolean`                               | `checkboxes`, `radio`         | Set to `true` to display the fields inline |
+| `placeholder`   | `string`                                | `input`, `textarea`           | Set the field's placeholder value |
+| `show_label`    | `boolean`                               | All fieldtypes                | Set to `false` to hide the field's label and instructions. This can be useful for single checkboxes, eg. `Accept terms and conditions`. |
+| `width`         | `integer`                               | All fieldtypes                | Set the desired width of the field. |
 
 ## Translating fields
 
