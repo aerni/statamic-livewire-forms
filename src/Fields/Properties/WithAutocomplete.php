@@ -6,6 +6,6 @@ trait WithAutocomplete
 {
     public function autocompleteProperty(): string
     {
-        return $this->field->get('autocomplete') ?? 'off';
+        return $this->field->get('autocomplete') ?? 'on';
     }
 }
