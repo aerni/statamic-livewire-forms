@@ -26,6 +26,10 @@ class Component
 
     public function theme(string $theme): self
     {
+        if (! is_dir(resource_path("views/livewire/forms/{$theme}"))) {
+            throw new \Exception("Theme [{$theme}] not found.");
+        }
+
         $this->theme = $theme;
 
         return $this;
