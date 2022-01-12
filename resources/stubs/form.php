@@ -47,10 +47,12 @@ class DummyForm extends Form
 
     // protected function hydratedFields(Fields $fields): void
     // {
+    //     $fields->get('name')->label('Your name');
     // }
 
     // protected function beforeSubmission(): void
     // {
+    //     $this->data['success'] = true;
     // }
 
     /*

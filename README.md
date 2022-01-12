@@ -244,7 +244,7 @@ There are a couple of callback methods that let you hook into various lifecycle 
  */
 protected function hydratedFields(Fields $fields): void
 {
-    $fields->get('name')->label = 'Your name';
+    $fields->get('name')->label('Your name');
 }
 
 /**

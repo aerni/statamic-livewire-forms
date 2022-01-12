@@ -43,8 +43,19 @@ trait WithConfig
         return Arr::get($this->config, $key);
     }
 
-    public function __set(string $key, mixed $value)
+    public function __set(string $key, mixed $value): void
     {
         $this->config[$key] = $value;
+    }
+
+    public function __call(string $name, array $arguments): mixed
+    {
+        if (! $arguments) {
+            return Arr::get($this->config, $name);
+        }
+
+        $this->config[$name] = $arguments[0];
+
+        return $this;
     }
 }
