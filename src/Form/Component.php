@@ -39,16 +39,7 @@ class Component
     {
         $themeView = "livewire.forms.{$this->theme}.{$view}";
         $defaultView = "livewire.forms.{$this->defaultTheme()}.{$view}";
-        $fallback = "livewire-forms::{$view}";
 
-        if (view()->exists($themeView)) {
-            return $themeView;
-        }
-
-        if (view()->exists($defaultView)) {
-            return $defaultView;
-        }
-
-        return $fallback;
+        return view()->exists($themeView) ? $themeView : $defaultView;
     }
 }

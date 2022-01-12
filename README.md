@@ -208,7 +208,7 @@ There are a couple of blade directives you may use in your form views. Each dire
 
 ## Themes
 
-Themes allow you to customize the style and logic of your form fields. You may have any number of themes and use them for any of your forms. If a field's view doesn't exist in the configured theme, it will fall back to the default view provided by this addon. You can set the default theme in `config/livewire-forms.php`.
+Themes allow you to customize the style and logic of your form fields. You may have any number of themes and use them for any of your forms. If a field's view doesn't exist in the configured theme, it will fall back to the default theme. You can set the default theme in `config/livewire-forms.php`.
 
 Use the following command to create a new theme:
 
