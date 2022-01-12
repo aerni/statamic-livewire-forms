@@ -312,11 +312,23 @@ Lastly, we need to render this new `ContactForm` component in our template:
 <livewire:contact-form>
 ```
 
-## Realtime validation
+## Validation
 
-You can configure realtime validation on three levels. In the config file, on the form, and on the form field. Each level will override the configuration of the previous level.
+### Validation Messages
 
-### In the config
+You can customize the validation messages of any field. Simply follow the instructions in the [Livewire docs](https://laravel-livewire.com/docs/2.x/input-validation). Just make sure to add `data` in front of the field's handle.
+
+```php
+protected $messages = [
+    'data.name.required' => 'What is your name darling?',
+];
+```
+
+### Realtime Validation
+
+You can configure real-time validation on three levels. In the config file, on the form, and on the form field. Each level will override the configuration of the previous level.
+
+#### In the config
 
 A boolean in `config/livewire-forms.php` to globally enable/disable realtime validation:
 
@@ -324,7 +336,7 @@ A boolean in `config/livewire-forms.php` to globally enable/disable realtime val
 'realtime' => true,
 ```
 
-### On the form
+#### On the form
 
 A boolean in a form's blueprint to enable/disable realtime validation for the whole form:
 
@@ -339,7 +351,7 @@ sections:
         ...
 ```
 
-### On the form field
+#### On the form field
 
 A boolean in a form's blueprint to enable/disable realtime validation for a specific field:
 
