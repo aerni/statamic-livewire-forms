@@ -8,7 +8,7 @@
             </div>
           <div class="ml-3">
                 <h3 class="text-sm font-medium text-green-800">
-                    @lang('The form was successfully submitted!')
+                    {{ $this->successMessage() }}
                 </h3>
             </div>
         </div>

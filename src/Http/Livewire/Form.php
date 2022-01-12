@@ -244,4 +244,19 @@ class Form extends Component
 
         session()->flash('success');
     }
+
+    public function successMessage(): string
+    {
+        return __('The form was successfully submitted!');
+    }
+
+    public function errorMessage(): string
+    {
+        return trans_choice('There was an error with your submission:|There were :count errors with your submission:', $this->getErrorBag()->count());
+    }
+
+    public function submitButtonLabel(): string
+    {
+        return __('Send');
+    }
 }

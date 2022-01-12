@@ -8,7 +8,7 @@
             </div>
             <div class="ml-3">
                 <h3 class="text-sm font-medium text-red-700">
-                    @choice('There was an error with your submission:|There were :count errors with your submission:', $errors->count())
+                    {{ $this->errorMessage() }}
                 </h3>
                 <div class="mt-2 text-sm text-red-600">
                     <ul class="pl-5 space-y-1 list-disc">

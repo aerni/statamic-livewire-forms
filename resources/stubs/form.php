@@ -52,4 +52,26 @@ class DummyForm extends Form
     // protected function beforeSubmission(): void
     // {
     // }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Messages and Submit Button Label
+    |--------------------------------------------------------------------------
+    |
+    | You may override the default success and error messages
+    | as well as the label of the submit button.
+    |
+    */
+
+    // public function successMessage(): string
+    // {
+    // }
+
+    // public function errorMessage(): string
+    // {
+    // }
+
+    // public function submitButtonLabel(): string
+    // {
+    // }
 }
