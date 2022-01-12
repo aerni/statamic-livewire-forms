@@ -16,9 +16,9 @@ class DummyForm extends Form
     |
     */
 
-    // protected string $handle = 'contact';
-    // protected string $view = 'default';
-    // protected string $theme = 'default';
+    // public string $handle = 'contact';
+    // public string $view = 'default';
+    // public string $theme = 'default';
 
     /*
     |--------------------------------------------------------------------------

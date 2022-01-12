@@ -294,7 +294,7 @@ use Aerni\LivewireForms\Http\Livewire\Form;
 
 class ContactForm extends Form
 {
-    protected string $handle = 'contact';
+    public string $handle = 'contact';
 
     protected array $models = [
         'product' => \App\Fields\SelectProduct::class,
