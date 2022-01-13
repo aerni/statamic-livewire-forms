@@ -273,7 +273,11 @@ protected function submittedForm(): void
 
 ### Customization Example
 
-In the following example we are extending the default `Select` field model to override the `optionsProperty` method to dynamically generate the options from a collection. We are also assigning a different view that is unique to this select field. Note, how we are using the `Component::getView()` method, which allows us to return the specified view from the folder of the current theme.
+In the following example we want to dynamically generate the options of a select field from a Statamic collection. We also want to change the view of the field because the design needs to be different to a regular select field. There are two ways to achieve our task. We can either create a `custom field model` or use the `hydratedFields` callback. Choose whichever route feels better to you.
+
+#### Using a custom field model
+
+We start by creating a new `SelectProduct` field model class that extends the default `Select` model class. We then override the `optionsProperty` method to return our options from a collection. We also override the `viewProperty` method to assign the unique view for this field. Note, how we are using the `Component::getView()` method, which takes the current theme into consideration.
 
 ```php
 namespace App\Fields;
@@ -298,9 +302,7 @@ class SelectProduct extends Base
 }
 ```
 
-Next, we need to tell the form which field we want to use the `SelectProduct` model for. Each field model can either be bound to all the fields of a specific fieldtype like `\Statamic\Fieldtypes\Text::class`, or to a specific form field like `products`. In our case, we only want to use the `SelectProduct` model for the select field with the handle `products`.
-
-To change the default binding for the `products` field, we simply add it to the `models` property in the component:
+Next, we need to tell the form which field we want to use the `SelectProduct` model for. Each field model can either be bound to all the fields of a specific fieldtype like `\Statamic\Fieldtypes\Text::class`, or to a specific form field like `products`. In our case, we only want to use the `SelectProduct` model for the select field with the handle `products`. To change the model for the `products` field, we simply add it to the `models` property in the component:
 
 ```php
 namespace App\Http\Livewire;
@@ -317,7 +319,38 @@ class ContactForm extends Form
 }
 ```
 
-Lastly, we need to render this new `ContactForm` component in our template:
+#### Using the hydratedFields callback
+
+Instead of defining a new field model, we can also achieve the same thing using the `hydratedFields` callback.
+
+```php
+namespace App\Http\Livewire;
+
+use Aerni\LivewireForms\Facades\Component;
+use Aerni\LivewireForms\Http\Livewire\Form;
+
+class ContactForm extends Form
+{
+    public string $handle = 'contact';
+
+    protected function hydratedFields(Fields $fields): void
+    {
+        $options = Entry::whereCollection('products')->mapWithKeys(function ($product) {
+            return [$product->slug() => $product->get('title')];
+        })->all();
+
+        $view = Component::getView('fields.select_product');
+
+        $fields->get('products')
+            ->options($options)
+            ->view($view);
+    }
+}
+```
+
+#### Rendering the component
+
+Lastly, we need to render the new `ContactForm` component in our template:
 
 ```blade
 <!-- Antlers -->
