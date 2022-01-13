@@ -220,7 +220,7 @@ php please livewire-forms:theme
 
 ## Components
 
-Sometimes you need more control over your form. For instance, if you want to dynamically populate a select field's options. Or if you have different types of radio fields that need different styling. There are a few concepts to help you customize your form experience.
+Sometimes you need more control over your form. For instance, if you want to dynamically populate a select field's options. Or if you have different types of radio fields that need different styling. There are a couple of concepts to help you customize your form experience.
 
 Get started by creating a new component:
 
@@ -230,9 +230,25 @@ php please livewire-forms:component
 
 ### Field Models
 
-Each form fieldtype is bound to a model that is responsible to generate a field's properties like `id`, `handle`, `label`. For instance the `\Statamic\Fieldtypes\Text::class` fieldtype is implemented with `\Aerni\LivewireForms\Fields\Input::class` model. A field property is created for each method ending with `Property`, e.g. `optionsProperty()` will generate an `options` property.
+Field models are responsible to generate a field's properties like `id`, `handle`, and `label`. For instance, all the fields of type `\Statamic\Fieldtypes\Select::class` are bound to the `\Aerni\LivewireForms\Fields\Select::class` model. A field property is created for each model method ending with `Property`, e.g. `optionsProperty()` will generate an `options` property.
 
-You may change the default bindings in `config/livewire-forms.php`. If you have a fieldtype that's not supported by this addon, simply create a new model and add the binding to the config.
+To change a fields default model, simply change the binding in the `models` property in your component:
+
+```php
+protected array $models = [
+    \Statamic\Fieldtypes\Select::class => \App\Fields\Select::class,
+];
+```
+
+If you only want to change a model for a specific field only, simply use the field's handle as the key instead:
+
+```php
+protected array $models = [
+    'products' => \App\Fields\SelectProduct::class,
+];
+```
+
+>Tip: You may change the default bindings in `config/livewire-forms.php`. If you have a fieldtype that's not supported by this addon, simply create a new model and add the binding to the config.
 
 ### Callbacks & Hooks
 
@@ -240,7 +256,7 @@ There are a couple of callbacks and hooks that let you modify fields and data at
 
 #### Hydrated Fields
 
-Use this callback to modify the fields before they are rendered, e.g. a field's label.
+Use this callback to modify the fields before they are rendered, e.g. a field's label. This is often the simpler route when changing a single thing, rather than creating a new field model.
 
 ```php
 protected function hydratedFields(Fields $fields): void
@@ -277,7 +293,7 @@ In the following example we want to dynamically generate the options of a select
 
 #### Using a custom field model
 
-We start by creating a new `SelectProduct` field model class that extends the default `Select` model class. We then override the `optionsProperty` method to return our options from a collection. We also override the `viewProperty` method to assign the unique view for this field. Note, how we are using the `Component::getView()` method, which takes the current theme into consideration.
+We start by creating a new `SelectProduct` field model class that extends the default `Select` model class. We then override the `optionsProperty` method to return our options from a collection. We also override the `viewProperty` method to assign the unique view for this field. We are making use of the `Component::getView()` method, which takes the current theme into consideration.
 
 ```php
 namespace App\Fields;
@@ -302,7 +318,7 @@ class SelectProduct extends Base
 }
 ```
 
-Next, we need to tell the form which field we want to use the `SelectProduct` model for. Each field model can either be bound to all the fields of a specific fieldtype like `\Statamic\Fieldtypes\Text::class`, or to a specific form field like `products`. In our case, we only want to use the `SelectProduct` model for the select field with the handle `products`. To change the model for the `products` field, we simply add it to the `models` property in the component:
+Next, we need to tell the form which field we want to use the `SelectProduct` model for. In our case, we only want to use the `SelectProduct` model for the select field with the handle `products`.
 
 ```php
 namespace App\Http\Livewire;
@@ -314,7 +330,7 @@ class ContactForm extends Form
     public string $handle = 'contact';
 
     protected array $models = [
-        'product' => \App\Fields\SelectProduct::class,
+        'products' => \App\Fields\SelectProduct::class,
     ];
 }
 ```
