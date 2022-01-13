@@ -206,6 +206,19 @@ There are a couple of blade directives you may use in your form views. Each dire
 | `@formErrors`          | Render the form validation errors                | errors.blade.php   |
 | `@formSuccess`         | Render the form success message                  | success.blade.php  |
 
+### Customization Example
+
+Sometimes you need more control over the markup of your form. If you decide to go completely custom, you can render single fields using the `@formField` directive. You can even override and add field properties using an array as the second argument:
+
+```blade
+@formField('name', [
+    'view' => 'fields.nameInput'
+    'tooltip' => 'Please enter your full name'
+])
+```
+
+>**Note:** The `view` property is a special one, as it will take the folder of the current theme into account.
+
 ## Themes
 
 Themes allow you to customize the style and logic of your form fields. You may have any number of themes and use them for any of your forms. If a field's view doesn't exist in the configured theme, it will fall back to the default theme. You can set the default theme in `config/livewire-forms.php`.
@@ -216,7 +229,7 @@ Use the following command to create a new theme:
 php please livewire-forms:theme
 ```
 
-> **Important Note:** It's very likely that future releases will introduce breaking changes to the theme views. If that happens, you will have to manually update your themes.
+> **Important:** It's very likely that future releases will introduce breaking changes to the theme views. If that happens, you will have to manually update your themes.
 
 ## Components
 
@@ -248,7 +261,7 @@ protected array $models = [
 ];
 ```
 
->Tip: You may change the default bindings in `config/livewire-forms.php`. If you have a fieldtype that's not supported by this addon, simply create a new model and add the binding to the config.
+>**Tip:** You may change the default bindings in `config/livewire-forms.php`. If you have a fieldtype that's not supported by this addon, simply create a new model and add the binding to the config.
 
 ### Callbacks & Hooks
 
