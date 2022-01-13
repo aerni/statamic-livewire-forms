@@ -55,13 +55,11 @@ class BladeDirectives
         $variables = explode(', ', $expression);
 
         $handle = $variables[0];
-        $rawField = isset($variables[1]) ? 'true' : 'false';
 
         return Blade::compileString("
             @if (\$this->fields->get($handle))
                 @include(\$this->component->getView('field'), [
                     'field' => \$this->fields->get($handle),
-                    'rawField' => $rawField,
                 ])
             @endif
         ");
