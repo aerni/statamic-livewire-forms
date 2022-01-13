@@ -54,15 +54,14 @@ class BladeDirectives
     {
         $variables = explode(', ', $expression);
 
-        $handle = $variables[0];
+        $field = $variables[0];
+        $properties = $variables[1] ?? '[]';
 
-        return Blade::compileString("
-            @if (\$this->fields->get($handle))
-                @include(\$this->component->getView('field'), [
-                    'field' => \$this->fields->get($handle),
-                ])
-            @endif
-        ");
+        return "<?php
+            if (\$this->fields->get($field)) {
+                echo \Aerni\LivewireForms\Facades\View::field(\$this->fields->get($field), $properties);
+            }
+        ?>";
     }
 
     /**
