@@ -38,11 +38,11 @@ class DummyForm extends Form
 
     /*
     |--------------------------------------------------------------------------
-    | Callbacks
+    | Callbacks & Hooks
     |--------------------------------------------------------------------------
     |
-    | You may use the following callback methods to hook into various
-    | lifecycle steps to modify fields and data.
+    | You may use the following callbacks and hooks to modify fields and data
+    | at various lifecycle steps.
     |
     */
 
@@ -54,6 +54,11 @@ class DummyForm extends Form
     // protected function submittingForm(): void
     // {
     //     $this->data['success'] = true;
+    // }
+
+    // protected function submittedForm(): void
+    // {
+    //     Newsletter::subscribe($this->data['email']);
     // }
 
     /*

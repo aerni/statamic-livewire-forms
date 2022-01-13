@@ -234,25 +234,40 @@ Each form fieldtype is bound to a model that is responsible to generate a field'
 
 You may change the default bindings in `config/livewire-forms.php`. If you have a fieldtype that's not supported by this addon, simply create a new model and add the binding to the config.
 
-### Callbacks
+### Callbacks & Hooks
 
-There are a couple of callback methods that let you hook into various lifecycle steps to modify fields and data.
+There are a couple of callbacks and hooks that let you modify fields and data at various lifecycle steps.
+
+#### Hydrated Fields
+
+Use this callback to modify the fields before they are rendered, e.g. a field's label.
 
 ```php
-/**
- * Use this method to modify the fields before they are rendered, e.g. a field's label property.
- */
 protected function hydratedFields(Fields $fields): void
 {
     $fields->get('name')->label('Your name');
 }
+```
 
-/**
- * Use this method to do anything you want right before the form submission is created.
- */
+#### Submitting Form
+
+Use this hook to add or change some data before the form submission is created.
+
+```php
 protected function submittingForm(): void
 {
-    $this->data['success'] = true;
+    $this->data['full_name'] = "{$this->data['first_name']} {$this->data['name']}";
+}
+```
+
+#### Submitted Form
+
+Use this hook to perform an action after the form has been submitted.
+
+```php
+protected function submittedForm(): void
+{
+    Newsletter::subscribe($this->data['email']);
 }
 ```
 

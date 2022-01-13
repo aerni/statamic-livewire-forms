@@ -101,7 +101,12 @@ class Form extends Component
     public function submit(): void
     {
         $this->validate();
-        $this->handleSubmission();
+
+        try {
+            $this->handleSpam()->handleSubmission()->handleSuccess();
+        } catch (SilentFormFailureException) {
+            $this->handleSuccess();
+        }
     }
 
     public function render(): LaravelView
@@ -129,20 +134,15 @@ class Form extends Component
         return $this->fields->validationAttributes();
     }
 
-    protected function handleSubmission(): void
+    protected function handleSubmission(): self
     {
-        try {
-            $this
-                ->handleSpam()
-                ->normalizeSubmissionData()
-                ->runSubmittingFormCallback()
-                ->makeSubmission()
-                ->handleSubmissionEvents()
-                ->storeSubmission()
-                ->success();
-        } catch (SilentFormFailureException $e) {
-            $this->success();
-        }
+        return $this
+            ->normalizeData()
+            ->runSubmittingFormHook()
+            ->makeSubmission()
+            ->handleSubmissionEvents()
+            ->storeSubmission()
+            ->runSubmittedFormHook();
     }
 
     protected function handleSpam(): self
@@ -156,7 +156,7 @@ class Form extends Component
         return $this;
     }
 
-    protected function normalizeSubmissionData(): self
+    protected function normalizeData(): self
     {
         $this->data = collect($this->data)->map(function ($value, $key) {
             $field = $this->fields->get($key);
@@ -185,14 +185,26 @@ class Form extends Component
         return $this;
     }
 
-    protected function runSubmittingFormCallback(): self
+    protected function runSubmittingFormHook(): self
     {
         $this->submittingForm();
 
         return $this;
     }
 
+    protected function runSubmittedFormHook(): self
+    {
+        $this->submittedForm();
+
+        return $this;
+    }
+
     protected function submittingForm(): void
+    {
+        //
+    }
+
+    protected function submittedForm(): void
     {
         //
     }
@@ -231,18 +243,27 @@ class Form extends Component
         return $this;
     }
 
-    protected function success(): void
+    protected function handleSuccess(): self
     {
-        /**
-         * Merge the current data with the default values instead of resetting it.
-         * This way we can preserve the captcha and honeypot values.
-         */
+        return $this->resetForm()->flashSuccess();
+    }
+
+    protected function resetForm(): self
+    {
+        // Merge the current data with the default values to preserve the captcha values.
         $this->data = array_merge($this->data, $this->fields->defaultValues());
 
         // Process the field conditions using the newly reset data.
         $this->fields->data($this->data)->processFieldConditions();
 
+        return $this;
+    }
+
+    protected function flashSuccess(): self
+    {
         session()->flash('success');
+
+        return $this;
     }
 
     public function successMessage(): string
