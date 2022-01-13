@@ -4,11 +4,11 @@
 This addon provides a powerful framework to use Statamic forms with Laravel Livewire. No more submitting your form with AJAX or dealing with funky client-side validation libraries. Livewire Forms is a powerhouse that will make your life soooo much easier!
 
 ## Features
+- Use your Statamic form blueprints as a form builder
 - Realtime validation with fine-grained control over each field
 - No need for a client-side form validation library
 - One source of truth for your validation rules
 - Spam protection with Google reCAPTCHA v2 and honeypot field
-- Use your Statamic form blueprints as a form builder
 - Support for display conditions set in your form blueprint
 - Multi-site support; translate your form labels, instructions, placeholders, etc.
 - Configured and styled form views
@@ -101,6 +101,15 @@ return [
 ];
 ```
 
+## Commands
+
+| Command                            | Description                            |
+| ---------------------------------- | -------------------------------------- |
+| `livewire-forms:setup`             | Step by step wizard to get you started |
+| `livewire-forms:view {name?}`      | Create a new Livewire form view        |
+| `livewire-forms:theme {name?}`     | Create a new Livewire form theme       |
+| `livewire-forms:component {name?}` | Create a new Livewire form component   |
+
 ## Getting started
 
 ### Prerequisite
@@ -109,7 +118,7 @@ This addon provides configured and styled form views for all Statamic form field
 
 ### Run the setup command
 
-Go ahead and run the following command in your console. It will guide you trough creating your first view and theme. Optionally, you may also create a component to customize the form's behavior.
+Go ahead and run the following command in your console. It will guide you trough creating your first [view](https://github.com/aerni/statamic-livewire-forms#views) and [theme](https://github.com/aerni/statamic-livewire-forms#themes). Optionally, you may also create a [component](https://github.com/aerni/statamic-livewire-forms#components) to customize the form's behavior.
 
 ```bash
 php please livewire-forms:setup
@@ -159,7 +168,7 @@ You can also dynamically render a form that was selected via Statamic's Form fie
 <livewire:form :handle="field:handle">
 ```
 
-You can use the `view` and `theme` parameter to use a view or theme different to the one defined in the config.
+Use the `view` and `theme` parameter if you want to use a view or theme different to the one defined in the config.
 
 ```blade
 <!-- Antlers -->
@@ -208,13 +217,20 @@ There are a couple of blade directives you may use in your form views. Each dire
 
 ### Customization Example
 
-Sometimes you need more control over the markup of your form. If you decide to go completely custom, you can render single fields using the `@formField` directive. You can even override and add field properties using an array as the second argument:
+Sometimes you need more control over the markup of your form. If you decide to go completely custom, you can render single fields using the `@formField` directive. You may also add or override field properties using an array as the second argument.
 
 ```blade
 @formField('name', [
     'view' => 'fields.nameInput'
     'tooltip' => 'Please enter your full name'
 ])
+```
+
+Use the properties in the field's view like this:
+
+```blade
+{{ $field->view }}
+{{ $field->tooltip }}
 ```
 
 >**Note:** The `view` property is a special one, as it will take the folder of the current theme into account.
@@ -511,15 +527,6 @@ sections:
 This addon comes with a `Captcha` fieldtype that lets you add a `Google reCAPTCHA v2 (checkbox)` captcha to your form. The Captcha fieldtype is available in the form blueprint builder like any other fieldtype.
 
 >**Note:** Make sure to add your captcha key and secret in your `.env` file.
-
-## Commands
-
-| Command                            | Description                            |
-| ---------------------------------- | -------------------------------------- |
-| `livewire-forms:setup`             | Step by step wizard to get you started |
-| `livewire-forms:view {name?}`      | Create a new Livewire form view        |
-| `livewire-forms:theme {name?}`     | Create a new Livewire form theme       |
-| `livewire-forms:component {name?}` | Create a new Livewire form component   |
 
 ## Events
 
