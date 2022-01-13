@@ -250,7 +250,7 @@ protected function hydratedFields(Fields $fields): void
 /**
  * Use this method to do anything you want right before the form submission is created.
  */
-protected function beforeSubmission(): void
+protected function submittingForm(): void
 {
     $this->data['success'] = true;
 }

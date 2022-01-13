@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire;
 
+use Aerni\LivewireForms\Form\Fields;
 use Aerni\LivewireForms\Http\Livewire\Form;
 
 class DummyForm extends Form
@@ -50,7 +51,7 @@ class DummyForm extends Form
     //     $fields->get('name')->label('Your name');
     // }
 
-    // protected function beforeSubmission(): void
+    // protected function submittingForm(): void
     // {
     //     $this->data['success'] = true;
     // }

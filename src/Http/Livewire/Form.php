@@ -135,7 +135,7 @@ class Form extends Component
             $this
                 ->handleSpam()
                 ->normalizeSubmissionData()
-                ->runBeforeSubmissionCallback()
+                ->runSubmittingFormCallback()
                 ->makeSubmission()
                 ->handleSubmissionEvents()
                 ->storeSubmission()
@@ -185,14 +185,14 @@ class Form extends Component
         return $this;
     }
 
-    protected function runBeforeSubmissionCallback(): self
+    protected function runSubmittingFormCallback(): self
     {
-        $this->beforeSubmission();
+        $this->submittingForm();
 
         return $this;
     }
 
-    protected function beforeSubmission(): void
+    protected function submittingForm(): void
     {
         //
     }
