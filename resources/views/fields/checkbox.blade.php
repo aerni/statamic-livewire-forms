@@ -19,7 +19,7 @@
                             name="{{ $field->id }}"
                             value="{{ $option }}"
                             type="checkbox"
-                            wire:model.lazy="{{ $field->key }}"
+                            wire:model.{{ $field->wire_model_modifier }}="{{ $field->key }}"
 
                             @if (! $errors->has($field->key))
                                 class="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"

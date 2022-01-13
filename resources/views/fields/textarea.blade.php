@@ -11,7 +11,7 @@
         id="{{ $field->id }}"
         name="{{ $field->id }}"
         placeholder="{{ $field->placeholder }}"
-        wire:model.lazy="{{ $field->key }}"
+        wire:model.{{ $field->wire_model_modifier }}="{{ $field->key }}"
         rows="5"
 
         @if (! $errors->has($field->key))
