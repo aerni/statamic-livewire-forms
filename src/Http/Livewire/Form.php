@@ -60,7 +60,7 @@ class Form extends Component
 
     protected function hydrateDefaultData(): self
     {
-        $this->data = $this->fields->defaultValues();
+        $this->data = array_filter($this->fields->defaultValues());
 
         return $this;
     }
@@ -264,7 +264,7 @@ class Form extends Component
     protected function resetForm(): self
     {
         // Merge the current data with the default values to preserve the captcha values.
-        $this->data = array_merge($this->data, $this->fields->defaultValues());
+        $this->data = array_filter(array_merge($this->data, $this->fields->defaultValues()));
 
         // Process the field conditions using the newly reset data.
         $this->processFieldConditions();

@@ -127,7 +127,7 @@ class Fields
 
         return $this->fields->mapWithKeys(function ($field, $handle) {
             return [$handle => $field->default];
-        })->except($captcha)->filter()->toArray();
+        })->except($captcha)->toArray();
     }
 
     public function validationRules(): array
