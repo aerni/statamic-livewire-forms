@@ -73,13 +73,16 @@ class DummyForm extends Form
 
     // public function successMessage(): string
     // {
+    //     return __("Thank you, {$this->submission->get('name')}!");
     // }
 
     // public function errorMessage(): string
     // {
+    //     return 'Something went terribly wrong!';
     // }
 
     // public function submitButtonLabel(): string
     // {
+    //     return 'Send now';
     // }
 }
