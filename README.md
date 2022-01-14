@@ -407,6 +407,15 @@ Lastly, we need to render the new `ContactForm` component in our template:
 
 ## Validation
 
+### Validation Rules
+
+You can use any validation rule you want. Simply add it to the field in the form blueprint or use the blueprint builder in the CP. If you have validation rules like `required_if`, make sure to prefix the field with `data`.
+
+```yaml
+validate:
+  - 'required_if:data.newsletter,true'
+```
+
 ### Validation Messages
 
 You can customize the validation messages of any field. Simply follow the instructions in the [Livewire docs](https://laravel-livewire.com/docs/2.x/input-validation). Just make sure to add `data` in front of the field's handle.
