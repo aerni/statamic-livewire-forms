@@ -14,6 +14,7 @@
         id="{{ $field->id }}"
         name="{{ $field->id }}"
         wire:model.{{ $field->wire_model_modifier }}="{{ $field->key }}"
+        @if ($field->multiple) multiple @endif
 
         @if (! $errors->has($field->key))
             class="block w-full py-2 pl-3 pr-10 text-base border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
