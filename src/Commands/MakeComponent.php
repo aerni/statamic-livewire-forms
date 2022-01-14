@@ -3,8 +3,8 @@
 namespace Aerni\LivewireForms\Commands;
 
 use Illuminate\Console\Command;
-use Illuminate\Support\Str;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Str;
 use Statamic\Console\RunsInPlease;
 
 class MakeComponent extends Command

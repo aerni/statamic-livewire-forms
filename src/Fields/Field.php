@@ -2,41 +2,41 @@
 
 namespace Aerni\LivewireForms\Fields;
 
-use ReflectionClass;
-use ReflectionMethod;
-use Statamic\Support\Str;
-use Statamic\Fields\Field as StatamicField;
 use Aerni\LivewireForms\Fields\Properties\WithConditions;
+use Aerni\LivewireForms\Fields\Properties\WithDefault;
+use Aerni\LivewireForms\Fields\Properties\WithGroup;
+use Aerni\LivewireForms\Fields\Properties\WithHandle;
 use Aerni\LivewireForms\Fields\Properties\WithId;
 use Aerni\LivewireForms\Fields\Properties\WithKey;
-use Aerni\LivewireForms\Fields\Properties\WithView;
-use Aerni\LivewireForms\Fields\Properties\WithGroup;
 use Aerni\LivewireForms\Fields\Properties\WithLabel;
-use Aerni\LivewireForms\Fields\Properties\WithRules;
-use Aerni\LivewireForms\Fields\Properties\WithWidth;
-use Aerni\LivewireForms\Fields\Properties\WithHandle;
-use Aerni\LivewireForms\Fields\Properties\WithDefault;
 use Aerni\LivewireForms\Fields\Properties\WithRealtime;
+use Aerni\LivewireForms\Fields\Properties\WithRules;
 use Aerni\LivewireForms\Fields\Properties\WithShow;
+use Aerni\LivewireForms\Fields\Properties\WithView;
+use Aerni\LivewireForms\Fields\Properties\WithWidth;
 use Aerni\LivewireForms\Fields\Properties\WithWireModelModifier;
 use Aerni\LivewireForms\Traits\WithConfig;
+use ReflectionClass;
+use ReflectionMethod;
+use Statamic\Fields\Field as StatamicField;
+use Statamic\Support\Str;
 
 abstract class Field
 {
-    use WithConditions,
-        WithConfig,
-        WithDefault,
-        WithGroup,
-        WithHandle,
-        WithId,
-        WithKey,
-        WithLabel,
-        WithRealtime,
-        WithRules,
-        WithShow,
-        WithView,
-        WithWidth,
-        WithWireModelModifier;
+    use WithConditions;
+    use WithConfig;
+    use WithDefault;
+    use WithGroup;
+    use WithHandle;
+    use WithId;
+    use WithKey;
+    use WithLabel;
+    use WithRealtime;
+    use WithRules;
+    use WithShow;
+    use WithView;
+    use WithWidth;
+    use WithWireModelModifier;
 
     public function __construct(protected StatamicField $field, protected string $id)
     {

@@ -2,8 +2,8 @@
 
 namespace Aerni\LivewireForms;
 
-use Illuminate\Support\Facades\Blade;
 use Aerni\LivewireForms\Facades\Captcha;
+use Illuminate\Support\Facades\Blade;
 
 class BladeDirectives
 {

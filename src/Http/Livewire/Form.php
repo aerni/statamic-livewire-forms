@@ -2,21 +2,21 @@
 
 namespace Aerni\LivewireForms\Http\Livewire;
 
-use Livewire\Component;
-use Statamic\Support\Str;
-use Statamic\Facades\Site;
-use Illuminate\Support\Arr;
-use Statamic\Forms\SendEmails;
-use Statamic\Events\FormSubmitted;
-use Illuminate\Support\Facades\URL;
+use Aerni\LivewireForms\Facades\Models;
+use Aerni\LivewireForms\Form\Component as FormComponent;
 use Aerni\LivewireForms\Form\Fields;
 use Aerni\LivewireForms\Form\Honeypot;
-use Statamic\Events\SubmissionCreated;
-use Aerni\LivewireForms\Facades\Models;
-use Statamic\Contracts\Forms\Submission;
 use Illuminate\Contracts\View\View as LaravelView;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\URL;
+use Livewire\Component;
+use Statamic\Contracts\Forms\Submission;
+use Statamic\Events\FormSubmitted;
+use Statamic\Events\SubmissionCreated;
 use Statamic\Exceptions\SilentFormFailureException;
-use Aerni\LivewireForms\Form\Component as FormComponent;
+use Statamic\Facades\Site;
+use Statamic\Forms\SendEmails;
+use Statamic\Support\Str;
 
 class Form extends Component
 {
@@ -163,7 +163,7 @@ class Form extends Component
         $isSpam = (bool) Arr::get($this->data, $this->honeypot->handle);
 
         if ($isSpam) {
-            throw new SilentFormFailureException;
+            throw new SilentFormFailureException();
         }
 
         return $this;
@@ -235,7 +235,7 @@ class Form extends Component
         $formSubmitted = FormSubmitted::dispatch($this->submission);
 
         if ($formSubmitted === false) {
-            throw new SilentFormFailureException;
+            throw new SilentFormFailureException();
         }
 
         $this->emit('submissionCreated');
