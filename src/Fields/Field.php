@@ -5,11 +5,10 @@ namespace Aerni\LivewireForms\Fields;
 use ReflectionClass;
 use ReflectionMethod;
 use Statamic\Support\Str;
-use Aerni\LivewireForms\Traits\WithConfig;
 use Statamic\Fields\Field as StatamicField;
+use Aerni\LivewireForms\Fields\Properties\WithConditions;
 use Aerni\LivewireForms\Fields\Properties\WithId;
 use Aerni\LivewireForms\Fields\Properties\WithKey;
-use Aerni\LivewireForms\Fields\Properties\WithType;
 use Aerni\LivewireForms\Fields\Properties\WithView;
 use Aerni\LivewireForms\Fields\Properties\WithGroup;
 use Aerni\LivewireForms\Fields\Properties\WithLabel;
@@ -18,13 +17,14 @@ use Aerni\LivewireForms\Fields\Properties\WithWidth;
 use Aerni\LivewireForms\Fields\Properties\WithHandle;
 use Aerni\LivewireForms\Fields\Properties\WithDefault;
 use Aerni\LivewireForms\Fields\Properties\WithRealtime;
-use Aerni\LivewireForms\Fields\Properties\WithConditions;
+use Aerni\LivewireForms\Fields\Properties\WithShow;
 use Aerni\LivewireForms\Fields\Properties\WithWireModelModifier;
+use Aerni\LivewireForms\Traits\WithConfig;
 
 abstract class Field
 {
-    use WithConfig,
-        WithConditions,
+    use WithConditions,
+        WithConfig,
         WithDefault,
         WithGroup,
         WithHandle,
@@ -33,6 +33,7 @@ abstract class Field
         WithLabel,
         WithRealtime,
         WithRules,
+        WithShow,
         WithView,
         WithWidth,
         WithWireModelModifier;

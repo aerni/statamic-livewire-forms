@@ -2,7 +2,7 @@
 
 namespace Aerni\LivewireForms\Form;
 
-use Illuminate\Support\Str;
+use Aerni\LivewireForms\Facades\Conditions;
 use Statamic\Fields\Validator;
 use Illuminate\Support\Collection;
 use Aerni\LivewireForms\Facades\Models;
@@ -16,26 +16,19 @@ class Fields
     protected Collection $fields;
     protected $hydratedCallbacks = [];
 
-    public function __construct(protected StatamicForm $form, protected string $id, protected array $data)
+    public function __construct(protected StatamicForm $form, protected string $id)
     {
         $this->models = Models::all();
     }
 
-    public static function make(StatamicForm $form, string $id, array $data): self
+    public static function make(StatamicForm $form, string $id): self
     {
-        return new static($form, $id, $data);
+        return new static($form, $id);
     }
 
     public function models(array $models): self
     {
         $this->models = collect($models);
-
-        return $this;
-    }
-
-    public function data(array $data): self
-    {
-        $this->data = $data;
 
         return $this;
     }
@@ -71,7 +64,6 @@ class Fields
     {
         return $this
             ->hydrateFields()
-            ->processFieldConditions()
             ->removeDuplicateCaptchaFields()
             ->runHydratedCallbacks();
     }
@@ -117,63 +109,11 @@ class Fields
         return $this;
     }
 
-    public function processFieldConditions(): self
+    public function processConditions(array $data): self
     {
-        $fieldsToShow = $this->fields->map(function ($field) {
-            // Always show the field if there are no conditions.
-            if (! $conditions = $field->conditions) {
-                return true;
-            }
-
-            $type = array_key_first($conditions);
-            $conditions = array_first($conditions);
-
-            $conditions = collect($conditions)->map(function ($condition, $field) {
-                [$operator, $expectedValue] = explode(' ', $condition);
-
-                $actualValue = collect($this->data)->get($field);
-
-                return $this->evaluateCondition($actualValue, $operator, $expectedValue);
-            });
-
-            return $this->evaluateConditions($type, $conditions);
-        })->filter()->keys();
-
-        $this->fields = $this->fields->only($fieldsToShow);
+        $this->fields = $this->fields->each(fn ($field) => $field->show(Conditions::process($field, $data)));
 
         return $this;
-    }
-
-    protected function evaluateConditions(string $conditionsType, Collection $conditions): bool
-    {
-        return match ($conditionsType) {
-            'if' => $conditions->count() === $conditions->filter()->count(),
-            'if_any' => $conditions->filter()->isNotEmpty(),
-            'unless' => $conditions->filter()->isEmpty(),
-            'unless_any' => $conditions->count() !== $conditions->filter()->count(),
-            default => false,
-        };
-    }
-
-    protected function evaluateCondition(string|array|null $actualValue, string $operator, string $expectedValue): bool
-    {
-        return match ($operator) {
-            'equals' => $actualValue == $expectedValue,
-            'not' => $actualValue != $expectedValue,
-            'contains' => is_array($actualValue)
-                ? ! array_diff(explode(',', $expectedValue), $actualValue)
-                : Str::contains($actualValue, $expectedValue),
-            'contains_any' => is_array($actualValue)
-                ? (bool) array_intersect(explode(',', $expectedValue), $actualValue)
-                : Str::contains($actualValue, explode(',', $expectedValue)),
-            '===' => $actualValue === $expectedValue,
-            '!==' => $actualValue !== $expectedValue,
-            '>' => $actualValue > $expectedValue,
-            '>=' => $actualValue >= $expectedValue,
-            '<' => $actualValue < $expectedValue,
-            '<=' => $actualValue <= $expectedValue,
-            default => false,
-        };
     }
 
     public function defaultValues(): array
