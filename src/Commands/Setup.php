@@ -2,7 +2,6 @@
 
 namespace Aerni\LivewireForms\Commands;
 
-use Aerni\LivewireForms\Facades\Component;
 use Illuminate\Console\Command;
 use Statamic\Console\RunsInPlease;
 

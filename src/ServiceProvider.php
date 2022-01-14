@@ -2,12 +2,11 @@
 
 namespace Aerni\LivewireForms;
 
-use Livewire\Livewire;
-use Illuminate\Support\Facades\Blade;
-use Aerni\LivewireForms\BladeDirectives;
 use Aerni\LivewireForms\Facades\Captcha;
-use Illuminate\Support\Facades\Validator;
 use Aerni\LivewireForms\Http\Livewire\Form;
+use Illuminate\Support\Facades\Blade;
+use Illuminate\Support\Facades\Validator;
+use Livewire\Livewire;
 use Statamic\Providers\AddonServiceProvider;
 
 class ServiceProvider extends AddonServiceProvider
