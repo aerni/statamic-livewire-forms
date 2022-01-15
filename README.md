@@ -296,7 +296,7 @@ protected function hydratedFields(Fields $fields): void
 
 #### Submitting Form
 
-Use this hook to add or change some data before the form submission is created.
+Use this hook to change data before the form submission is created.
 
 ```php
 protected function submittingForm(): void
@@ -312,7 +312,7 @@ Use this hook to perform an action after the form has been submitted.
 ```php
 protected function submittedForm(): void
 {
-    Newsletter::subscribe($this->data['email']);
+    Newsletter::subscribe($this->data->get('email'));
 }
 ```
 

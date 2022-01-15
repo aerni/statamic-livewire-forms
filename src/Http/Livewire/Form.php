@@ -8,6 +8,7 @@ use Aerni\LivewireForms\Form\Fields;
 use Aerni\LivewireForms\Form\Honeypot;
 use Illuminate\Contracts\View\View as LaravelView;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\URL;
 use Livewire\Component;
 use Statamic\Contracts\Forms\Submission;
@@ -26,7 +27,8 @@ class Form extends Component
     public string $handle;
     public string $view;
     public string $theme;
-    public array $data = [];
+
+    public Collection $data;
 
     public function mount(): void
     {
@@ -60,7 +62,7 @@ class Form extends Component
 
     protected function hydrateDefaultData(): self
     {
-        $this->data = array_filter($this->fields->defaultValues());
+        $this->data = $this->fields->defaultValues()->filter();
 
         return $this;
     }
@@ -160,7 +162,7 @@ class Form extends Component
 
     protected function handleSpam(): self
     {
-        $isSpam = (bool) Arr::get($this->data, $this->honeypot->handle);
+        $isSpam = $this->data->has($this->honeypot->handle);
 
         if ($isSpam) {
             throw new SilentFormFailureException();
@@ -171,7 +173,7 @@ class Form extends Component
 
     protected function normalizeData(): self
     {
-        $this->data = collect($this->data)->map(function ($value, $key) {
+        $this->data = $this->data->map(function ($value, $key) {
             $field = $this->fields->get($key);
 
             // We want to return nothing if the field can't be found (e.g. honeypot).
@@ -193,7 +195,7 @@ class Form extends Component
             }
 
             return $value;
-        })->filter()->toArray();
+        })->filter();
 
         return $this;
     }
@@ -264,7 +266,7 @@ class Form extends Component
     protected function resetForm(): self
     {
         // Merge the current data with the default values to preserve the captcha values.
-        $this->data = array_filter(array_merge($this->data, $this->fields->defaultValues()));
+        $this->data = $this->data->merge($this->fields->defaultValues())->filter();
 
         // Process the field conditions using the newly reset data.
         $this->processFieldConditions();

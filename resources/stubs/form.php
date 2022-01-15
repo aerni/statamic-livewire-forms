@@ -53,12 +53,12 @@ class DummyForm extends Form
 
     // protected function submittingForm(): void
     // {
-    //     $this->data['success'] = true;
+    //     $this->data->put('success', true);
     // }
 
     // protected function submittedForm(): void
     // {
-    //     Newsletter::subscribe($this->data['email']);
+    //     Newsletter::subscribe($this->data->get('email'));
     // }
 
     /*

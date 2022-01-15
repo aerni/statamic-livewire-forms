@@ -109,14 +109,14 @@ class Fields
         return $this;
     }
 
-    public function processConditions(array $data): self
+    public function processConditions(Collection $data): self
     {
         $this->fields = $this->fields->each(fn ($field) => $field->show(Conditions::process($field, $data)));
 
         return $this;
     }
 
-    public function defaultValues(): array
+    public function defaultValues(): Collection
     {
         /**
          * When submitting a form, we need to preserve the captcha response on the Livewire component
@@ -127,7 +127,7 @@ class Fields
 
         return $this->fields->mapWithKeys(function ($field, $handle) {
             return [$handle => $field->default];
-        })->except($captcha)->toArray();
+        })->except($captcha);
     }
 
     public function validationRules(): array

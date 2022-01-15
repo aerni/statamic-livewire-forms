@@ -8,7 +8,7 @@ use Illuminate\Support\Str;
 
 class Conditions
 {
-    public function process(Field $field, array $data): bool
+    public function process(Field $field, Collection $data): bool
     {
         // Always show the field if there are no conditions.
         if (! $field->conditions) {
@@ -21,7 +21,7 @@ class Conditions
         $conditions = collect($conditions)->map(function ($condition, $field) use ($data) {
             [$operator, $expectedValue] = explode(' ', $condition);
 
-            $actualValue = collect($data)->get($field);
+            $actualValue = $data->get($field);
 
             return $this->evaluateCondition($actualValue, $operator, $expectedValue);
         });
