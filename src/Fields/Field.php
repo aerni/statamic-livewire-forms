@@ -67,6 +67,6 @@ abstract class Field
                 $value = (new ReflectionMethod($this, $method->name))->invoke($this);
 
                 return [$key => $value];
-            })->toArray();
+            })->sortKeys()->toArray();
     }
 }
