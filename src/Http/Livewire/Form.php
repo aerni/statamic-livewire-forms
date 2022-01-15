@@ -276,7 +276,7 @@ class Form extends Component
 
     protected function flashSuccess(): self
     {
-        session()->flash('success');
+        session()->flash('success', $this->successMessage());
 
         return $this;
     }
