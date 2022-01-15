@@ -103,6 +103,8 @@ return [
 
 ## Commands
 
+There are a number of helpful commands to help you create views, themes and components:
+
 | Command                            | Description                            |
 | ---------------------------------- | -------------------------------------- |
 | `livewire-forms:setup`             | Step by step wizard to get you started |
