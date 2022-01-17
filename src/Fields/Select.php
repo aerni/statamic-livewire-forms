@@ -10,6 +10,7 @@ use Aerni\LivewireForms\Fields\Properties\WithMultiple;
 use Aerni\LivewireForms\Fields\Properties\WithOptions;
 use Aerni\LivewireForms\Fields\Properties\WithPlaceholder;
 use Aerni\LivewireForms\Fields\Properties\WithShowLabel;
+use Illuminate\Support\Arr;
 
 class Select extends Field
 {
@@ -31,6 +32,8 @@ class Select extends Field
         $default = $this->field->defaultValue();
         $options = $this->optionsProperty();
 
-        return $default ?? array_key_first($options);
+        return $default
+            ? Arr::get($options, $default, Arr::first($options))
+            : Arr::first($options);
     }
 }
