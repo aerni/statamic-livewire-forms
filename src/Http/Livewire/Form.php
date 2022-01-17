@@ -48,6 +48,7 @@ class Form extends Component
         $this->handle = $this->handle ?? throw new \Exception('Please set the handle of the form you want to use.');
         $this->view = $this->view ?? $this->component->defaultView();
         $this->theme = $this->theme ?? $this->component->defaultTheme();
+        $this->data = collect();
 
         return $this;
     }
