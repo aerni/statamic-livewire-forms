@@ -10,6 +10,14 @@ class Conditions
 {
     public function process(Field $field, Collection $data): bool
     {
+        /**
+         * If the value is different to the default one, we don't want to process the conditions.
+         * This is the case if you set it in the `hydratedFields` callback.
+         */
+        if ($field->show !== $field->showProperty()) {
+            return $field->show;
+        }
+
         // Always show the field if there are no conditions.
         if (! $field->conditions) {
             return true;
