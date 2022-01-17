@@ -1,5 +1,4 @@
 <fieldset>
-
     @if ($field->show_label)
         <div class="mb-3">
             <legend class="text-base font-medium text-gray-700">{{ $field->label }}</legend>
