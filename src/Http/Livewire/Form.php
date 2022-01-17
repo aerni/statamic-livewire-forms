@@ -34,13 +34,12 @@ class Form extends Component
         $this
             ->initializeProperties()
             ->initializeComputedProperties()
-            ->hydrateDefaultData()
-            ->processFieldConditions();
+            ->hydrateDefaultData();
     }
 
     public function hydrate(): void
     {
-        $this->initializeComputedProperties()->processFieldConditions();
+        $this->initializeComputedProperties();
     }
 
     protected function initializeProperties(): self
@@ -63,18 +62,6 @@ class Form extends Component
     protected function hydrateDefaultData(): self
     {
         $this->data = $this->fields->defaultValues()->filter();
-
-        return $this;
-    }
-
-    public function updatedData(): void
-    {
-        $this->processFieldConditions();
-    }
-
-    protected function processFieldConditions(): self
-    {
-        $this->fields->processConditions($this->data);
 
         return $this;
     }
@@ -104,6 +91,7 @@ class Form extends Component
     {
         return Fields::make($this->form, $this->id)
             ->models($this->models())
+            ->data($this->data)
             ->hydrated(fn ($fields) => $this->hydratedFields($fields))
             ->hydrate();
     }
@@ -268,8 +256,8 @@ class Form extends Component
         // Merge the current data with the default values to preserve the captcha values.
         $this->data = $this->data->merge($this->fields->defaultValues())->filter();
 
-        // Process the field conditions using the newly reset data.
-        $this->processFieldConditions();
+        // Make sure to process the fields using the newly reset data.
+        $this->fields->data($this->data)->hydrate();
 
         return $this;
     }

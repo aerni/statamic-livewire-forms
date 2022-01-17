@@ -13,6 +13,7 @@ use Statamic\Forms\Form as StatamicForm;
 class Fields
 {
     protected Collection $models;
+    protected Collection $data;
     protected Collection $fields;
     protected $hydratedCallbacks = [];
 
@@ -29,6 +30,13 @@ class Fields
     public function models(array $models): self
     {
         $this->models = collect($models);
+
+        return $this;
+    }
+
+    public function data(Collection $data): self
+    {
+        $this->data = $data;
 
         return $this;
     }
@@ -65,7 +73,8 @@ class Fields
         return $this
             ->hydrateFields()
             ->removeDuplicateCaptchaFields()
-            ->runHydratedCallbacks();
+            ->runHydratedCallbacks()
+            ->processConditions();
     }
 
     protected function runHydratedCallbacks(): self
@@ -109,11 +118,11 @@ class Fields
         return $this;
     }
 
-    public function processConditions(Collection $data): self
+    protected function processConditions(): self
     {
-        $this->fields = $this->fields->each(fn ($field) => $field->show(Conditions::process($field, $data)));
+        $data = $this->data->isNotEmpty() ? $this->data : $this->defaultValues()->filter();
 
-        $this->runHydratedCallbacks();
+        $this->fields = $this->fields->each(fn ($field) => $field->show(Conditions::process($field, $data)));
 
         return $this;
     }
