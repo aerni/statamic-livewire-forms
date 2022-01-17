@@ -25,4 +25,12 @@ class Select extends Field
     {
         return Component::getView('fields.select');
     }
+
+    public function defaultProperty(): string
+    {
+        $default = $this->field->defaultValue();
+        $options = $this->optionsProperty();
+
+        return $default ?? array_key_first($options);
+    }
 }
