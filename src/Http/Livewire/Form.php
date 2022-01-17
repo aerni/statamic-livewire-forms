@@ -34,12 +34,13 @@ class Form extends Component
         $this
             ->initializeProperties()
             ->initializeComputedProperties()
-            ->hydrateDefaultData();
+            ->hydrateDefaultData()
+            ->processFieldConditions();
     }
 
     public function hydrate(): void
     {
-        $this->initializeComputedProperties();
+        $this->initializeComputedProperties()->processFieldConditions();
     }
 
     protected function initializeProperties(): self
@@ -47,7 +48,6 @@ class Form extends Component
         $this->handle = $this->handle ?? throw new \Exception('Please set the handle of the form you want to use.');
         $this->view = $this->view ?? $this->component->defaultView();
         $this->theme = $this->theme ?? $this->component->defaultTheme();
-        $this->data = collect();
 
         return $this;
     }
@@ -62,6 +62,18 @@ class Form extends Component
     protected function hydrateDefaultData(): self
     {
         $this->data = $this->fields->defaultValues()->filter();
+
+        return $this;
+    }
+
+    public function updatedData(): void
+    {
+        $this->processFieldConditions();
+    }
+
+    protected function processFieldConditions(): self
+    {
+        $this->fields->processConditions($this->data);
 
         return $this;
     }
@@ -89,7 +101,7 @@ class Form extends Component
 
     public function getFieldsProperty(): Fields
     {
-        return Fields::make($this->form, $this->id, $this->data)
+        return Fields::make($this->form, $this->id)
             ->models($this->models())
             ->hydrated(fn ($fields) => $this->hydratedFields($fields))
             ->hydrate();
@@ -256,7 +268,7 @@ class Form extends Component
         $this->data = $this->data->merge($this->fields->defaultValues())->filter();
 
         // Process the field conditions using the newly reset data.
-        $this->fields->data($this->data)->processConditions();
+        $this->processFieldConditions();
 
         return $this;
     }

@@ -16,26 +16,19 @@ class Fields
     protected Collection $fields;
     protected $hydratedCallbacks = [];
 
-    public function __construct(protected StatamicForm $form, protected string $id, protected Collection $data)
+    public function __construct(protected StatamicForm $form, protected string $id)
     {
         $this->models = Models::all();
     }
 
-    public static function make(StatamicForm $form, string $id, Collection $data): self
+    public static function make(StatamicForm $form, string $id): self
     {
-        return new static($form, $id, $data);
+        return new static($form, $id);
     }
 
     public function models(array $models): self
     {
         $this->models = collect($models);
-
-        return $this;
-    }
-
-    public function data(Collection $data): self
-    {
-        $this->data = $data;
 
         return $this;
     }
@@ -72,7 +65,6 @@ class Fields
         return $this
             ->hydrateFields()
             ->removeDuplicateCaptchaFields()
-            ->processConditions()
             ->runHydratedCallbacks();
     }
 
@@ -117,9 +109,9 @@ class Fields
         return $this;
     }
 
-    public function processConditions(): self
+    public function processConditions(Collection $data): self
     {
-        $this->fields = $this->fields->each(fn ($field) => $field->show(Conditions::process($field, $this->data)));
+        $this->fields = $this->fields->each(fn ($field) => $field->show(Conditions::process($field, $data)));
 
         return $this;
     }
