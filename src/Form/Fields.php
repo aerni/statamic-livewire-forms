@@ -113,6 +113,8 @@ class Fields
     {
         $this->fields = $this->fields->each(fn ($field) => $field->show(Conditions::process($field, $data)));
 
+        $this->runHydratedCallbacks();
+
         return $this;
     }
 
