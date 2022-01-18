@@ -27,15 +27,30 @@ class Select extends Field
         return Component::getView('fields.select');
     }
 
-    public function defaultProperty(): string
+    public function defaultProperty(): string|array|null
     {
         $default = $this->field->defaultValue();
         $options = $this->optionsProperty();
 
         // A default is only valid if it exists in the options.
-        $default = collect($options)->only($default ?? [])->keys()->first();
+        $default = collect($options)->only($default ?? [])->keys();
 
-        // If there is no default, we want to fall back to the placeholder or first option.
-        return $default ?? $this->placeholderProperty() ?? array_key_first($options);
+        // Return all defaults if the Select field has multiple enabled.
+        if ($this->multipleProperty()) {
+            return $default->toArray();
+        }
+
+        // If there are any defaults, return the first.
+        if ($default->isNotEmpty()) {
+            return $default->first();
+        }
+
+        // If there is a placeholder we don't want to return a default.
+        if ($this->placeholderProperty()) {
+            return null;
+        }
+
+        // Fall back to simply return the first option.
+        return array_key_first($options);
     }
 }

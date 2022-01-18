@@ -24,8 +24,8 @@
             aria-describedby="{{ $field->id }}-error"
         @endif
     >
-        @if ($field->placeholder)
-            <option value="" selected hidden>{{ $field->placeholder }}</option>
+        @if ($field->placeholder && ! $field->multiple)
+            <option value="" selected>{{ $field->placeholder }}</option>
         @endif
 
         @foreach ($field->options as $option => $label)
