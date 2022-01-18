@@ -10,7 +10,6 @@ use Aerni\LivewireForms\Fields\Properties\WithMultiple;
 use Aerni\LivewireForms\Fields\Properties\WithOptions;
 use Aerni\LivewireForms\Fields\Properties\WithPlaceholder;
 use Aerni\LivewireForms\Fields\Properties\WithShowLabel;
-use Illuminate\Support\Arr;
 
 class Select extends Field
 {
