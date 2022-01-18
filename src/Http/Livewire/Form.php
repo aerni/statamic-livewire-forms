@@ -61,9 +61,18 @@ class Form extends Component
 
     protected function hydrateDefaultData(): self
     {
-        $this->data = $this->fields->defaultValues()->filter();
+        $this->data = $this->defaultValues();
 
         return $this;
+    }
+
+    protected function defaultValues(): Collection
+    {
+        /**
+         * We only want to filter out any default value that is null.
+         * We need to preserve empty arrays to make checkboxes work properly.
+         */
+        return $this->fields->defaultValues()->filter(fn ($value) => ! is_null($value));
     }
 
     protected function hydratedFields(Fields $fields): void
@@ -254,7 +263,7 @@ class Form extends Component
     protected function resetForm(): self
     {
         // Merge the current data with the default values to preserve the captcha values.
-        $this->data = $this->data->merge($this->fields->defaultValues())->filter();
+        $this->data = $this->data->merge($this->defaultValues());
 
         // Make sure to process the fields using the newly reset data.
         $this->fields->data($this->data)->hydrate();
