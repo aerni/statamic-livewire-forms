@@ -32,8 +32,10 @@ class Select extends Field
         $default = $this->field->defaultValue();
         $options = $this->optionsProperty();
 
-        return $default
-            ? Arr::get($options, $default, Arr::first($options))
-            : Arr::first($options);
+        // A default is only valid if it exists in the options.
+        $default = collect($options)->only($default ?? [])->keys()->first();
+
+        // If there is no default, we want to fall back to the placeholder or first option.
+        return $default ?? $this->placeholderProperty() ?? array_key_first($options);
     }
 }
