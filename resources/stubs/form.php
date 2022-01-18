@@ -73,7 +73,7 @@ class DummyForm extends Form
 
     // public function successMessage(): string
     // {
-    //     return __("Thank you, {$this->submission->get('name')}!");
+    //     return __("Thank you, {$this->data->get('name')}!");
     // }
 
     // public function errorMessage(): string

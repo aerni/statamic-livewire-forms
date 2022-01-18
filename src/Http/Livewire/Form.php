@@ -252,7 +252,7 @@ class Form extends Component
 
     protected function handleSuccess(): self
     {
-        return $this->resetForm()->flashSuccess();
+        return $this->flashSuccess()->resetForm();
     }
 
     protected function resetForm(): self
