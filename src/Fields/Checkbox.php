@@ -8,7 +8,6 @@ use Aerni\LivewireForms\Fields\Properties\WithInline;
 use Aerni\LivewireForms\Fields\Properties\WithOptions;
 use Aerni\LivewireForms\Fields\Properties\WithShowLabel;
 use Aerni\LivewireForms\Fields\Properties\WithInstructions;
-use Illuminate\Support\Arr;
 
 class Checkbox extends Field
 {
@@ -28,6 +27,7 @@ class Checkbox extends Field
         $default = $this->field->defaultValue();
         $options = $this->optionsProperty();
 
-        return array_keys(Arr::only($options, $default));
+        // A default is only valid if it exists in the options.
+        return collect($options)->only($default ?? [])->keys()->toArray();
     }
 }
