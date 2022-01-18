@@ -28,12 +28,7 @@ class Radio extends Field
         $default = $this->field->defaultValue();
         $options = $this->optionsProperty();
 
-        // Only get defaults values if they exist in the options.
-        $validDefaults = collect($options)->only($default);
-
-        // Get the first valid default and respect the order of the defaults.
-        return collect($default)->first(function ($value) use ($validDefaults) {
-            return $validDefaults->has($value);
-        });
+        // A default is only valid if it exists in the options.
+        return collect($options)->only($default ?? [])->keys()->first();
     }
 }
