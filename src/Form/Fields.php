@@ -58,6 +58,13 @@ class Fields
         });
     }
 
+    public function getByType(string $key): Collection
+    {
+        return $this->fields->filter(function ($field) use ($key) {
+            return $field->field()->type() === $key;
+        });
+    }
+
     public function groups(): Collection
     {
         return $this->fields->groupBy(fn ($field) => $field->group);

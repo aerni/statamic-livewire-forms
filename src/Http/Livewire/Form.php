@@ -2,23 +2,28 @@
 
 namespace Aerni\LivewireForms\Http\Livewire;
 
-use Aerni\LivewireForms\Facades\Models;
-use Aerni\LivewireForms\Form\Component as FormComponent;
+use Livewire\Component;
+use Statamic\Support\Str;
+use Statamic\Facades\Site;
+use Livewire\WithFileUploads;
+use Statamic\Forms\SendEmails;
+use Statamic\Events\FormSubmitted;
+use Illuminate\Support\Facades\URL;
 use Aerni\LivewireForms\Form\Fields;
 use Aerni\LivewireForms\Form\Honeypot;
-use Illuminate\Contracts\View\View as LaravelView;
-use Illuminate\Support\Facades\URL;
-use Livewire\Component;
-use Statamic\Contracts\Forms\Submission;
-use Statamic\Events\FormSubmitted;
 use Statamic\Events\SubmissionCreated;
+use Aerni\LivewireForms\Facades\Models;
+use Statamic\Contracts\Forms\Submission;
+use Statamic\Forms\Uploaders\AssetsUploader;
+use Illuminate\Contracts\View\View as LaravelView;
 use Statamic\Exceptions\SilentFormFailureException;
-use Statamic\Facades\Site;
-use Statamic\Forms\SendEmails;
-use Statamic\Support\Str;
+use Aerni\LivewireForms\Form\Component as FormComponent;
+use Illuminate\Http\UploadedFile;
 
 class Form extends Component
 {
+    use WithFileUploads;
+
     protected array $models = [];
     protected Submission $submission;
 
@@ -144,6 +149,7 @@ class Form extends Component
         return $this
             ->normalizeData()
             ->runSubmittingFormHook()
+            ->uploadFiles()
             ->makeSubmission()
             ->handleSubmissionEvents()
             ->storeSubmission()
@@ -212,6 +218,25 @@ class Form extends Component
     protected function submittedForm(): void
     {
         //
+    }
+
+    protected function uploadFiles(): self
+    {
+        $fieldsWithData = $this->fields->getByType('assets')->intersectByKeys($this->data);
+
+        $fieldsWithData->each(function ($field, $handle) {
+            $config = $field->field()->config();
+
+            $files = collect($this->data[$handle])->map(function ($file) {
+                return new UploadedFile($file->getRealPath(), $file->getClientOriginalName(), $file->getMimeType());
+            })->toArray();
+
+            $filePaths = AssetsUploader::field($config)->upload($files);
+
+            $this->data[$handle] = $filePaths;
+        });
+
+        return $this;
     }
 
     protected function makeSubmission(): self
