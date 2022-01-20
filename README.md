@@ -505,16 +505,16 @@ sections:
 
 There are a couple of configuration options for your form fields:
 
-| Parameter       | Type                                    | Supported by                  | Description                                                                                                                            |
-| :-------------- | :-------------------------------------- | :---------------------------- | :------------------------------------------------------------------------------------------------------------------------------------- |
-| `autocomplete`  | `string`                                | `input`, `textarea`, `select` | Set the field's [autocomplete](https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/autocomplete) attribute. Defaults to `on`. |
-| `cast_booleans` | `boolean`                               | `radio`, `select`             | String values of `true` and `false` will be saved as booleans. |
-| `default`       | `array`, `boolean`, `integer`, `string` | All fieldtypes                | Set the field's default value |
-| `group`         | `string`                                | All fieldtypes                | Group your fields when using the `@formGroups` and `@formGroup('group')` directives in your view. |
-| `inline`        | `boolean`                               | `checkboxes`, `radio`         | Set to `true` to display the fields inline |
-| `placeholder`   | `string`                                | `input`, `textarea`           | Set the field's placeholder value |
-| `show_label`    | `boolean`                               | All fieldtypes                | Set to `false` to hide the field's label and instructions. This can be useful for single checkboxes, eg. `Accept terms and conditions`. |
-| `width`         | `integer`                               | All fieldtypes                | Set the desired width of the field. |
+| Parameter       | Type                                    | Supported by                   | Description                                                                                                                            |
+| :-------------- | :-------------------------------------- | :----------------------------- | :------------------------------------------------------------------------------------------------------------------------------------- |
+| `autocomplete`  | `string`                                | `input`, `textarea`, `select`  | Set the field's [autocomplete](https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/autocomplete) attribute. Defaults to `on`. |
+| `cast_booleans` | `boolean`                               | `radio`, `select`              | String values of `true` and `false` will be saved as booleans. |
+| `default`       | `array`, `boolean`, `integer`, `string` | All fieldtypes except `assets` | Set the field's default value |
+| `group`         | `string`                                | All fieldtypes                 | Group your fields when using the `@formGroups` and `@formGroup('group')` directives in your view. |
+| `inline`        | `boolean`                               | `checkboxes`, `radio`          | Set to `true` to display the fields inline |
+| `placeholder`   | `string`                                | `input`, `textarea`            | Set the field's placeholder value |
+| `show_label`    | `boolean`                               | All fieldtypes                 | Set to `false` to hide the field's label and instructions. This can be useful for single checkboxes, eg. `Accept terms and conditions`. |
+| `width`         | `integer`                               | All fieldtypes                 | Set the desired width of the field. |
 
 ## Translating fields
 
