@@ -150,7 +150,7 @@ Add the Livewire `styles` in the `head`, and the `scripts` before the closing `b
 
 ### Render the form
 
-Add the Livewire form component to your template and provide the handle of the Statamic form. The component will render the default view set in `config/livewire-forms.php`.
+Add the Livewire form component to your template and provide the handle of the Statamic form.
 
 ```blade
 <!-- Antlers -->
@@ -170,7 +170,7 @@ You can also dynamically render a form that was selected via Statamic's Form fie
 <livewire:form :handle="field:handle">
 ```
 
-Use the `view` and `theme` parameter if you want to use a view or theme different to the one defined in the config.
+Use the `view` and `theme` parameter if you want to use a view or theme that is different to the one defined in `config/livewire-forms.php`.
 
 ```blade
 <!-- Antlers -->
@@ -179,6 +179,14 @@ Use the `view` and `theme` parameter if you want to use a view or theme differen
 <!-- Blade -->
 <livewire:form :handle="field:handle" view="contact" theme="regular">
 ```
+
+#### Available Properties
+
+| Property | Description                                        |
+| -------- | -------------------------------------------------- |
+| `handle` | The handle of the form you want to use (required)  |
+| `view`   | The component view you want to use                 |
+| `theme`  | The theme you want to use                          |
 
 ## Views
 
