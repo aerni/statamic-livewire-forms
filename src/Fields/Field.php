@@ -12,7 +12,6 @@ use Aerni\LivewireForms\Fields\Properties\WithLabel;
 use Aerni\LivewireForms\Fields\Properties\WithRealtime;
 use Aerni\LivewireForms\Fields\Properties\WithRules;
 use Aerni\LivewireForms\Fields\Properties\WithShow;
-use Aerni\LivewireForms\Fields\Properties\WithType;
 use Aerni\LivewireForms\Fields\Properties\WithView;
 use Aerni\LivewireForms\Fields\Properties\WithWidth;
 use Aerni\LivewireForms\Fields\Properties\WithWireModelModifier;
