@@ -34,9 +34,9 @@ class Fields
         return $this;
     }
 
-    public function data(Collection $data): self
+    public function data(array $data): self
     {
-        $this->data = $data;
+        $this->data = collect($data);
 
         return $this;
     }

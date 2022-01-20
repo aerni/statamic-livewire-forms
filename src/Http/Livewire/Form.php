@@ -7,7 +7,6 @@ use Aerni\LivewireForms\Form\Component as FormComponent;
 use Aerni\LivewireForms\Form\Fields;
 use Aerni\LivewireForms\Form\Honeypot;
 use Illuminate\Contracts\View\View as LaravelView;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\URL;
 use Livewire\Component;
 use Statamic\Contracts\Forms\Submission;
@@ -27,7 +26,7 @@ class Form extends Component
     public string $view;
     public string $theme;
 
-    public Collection $data;
+    public array $data = [];
 
     public function mount(): void
     {
@@ -47,7 +46,6 @@ class Form extends Component
         $this->handle = $this->handle ?? throw new \Exception('Please set the handle of the form you want to use.');
         $this->view = $this->view ?? $this->component->defaultView();
         $this->theme = $this->theme ?? $this->component->defaultTheme();
-        $this->data = collect();
 
         return $this;
     }
@@ -65,7 +63,7 @@ class Form extends Component
          * We only want to filter out any default value that is null.
          * We need to preserve empty arrays to make checkboxes work properly.
          */
-        $this->data = $this->fields->defaultValues()->filter(fn ($value) => ! is_null($value));
+        $this->data = $this->fields->defaultValues()->filter(fn ($value) => ! is_null($value))->toArray();
 
         return $this;
     }
@@ -154,7 +152,7 @@ class Form extends Component
 
     protected function handleSpam(): self
     {
-        $isSpam = $this->data->has($this->honeypot->handle);
+        $isSpam = collect($this->data)->has($this->honeypot->handle);
 
         if ($isSpam) {
             throw new SilentFormFailureException();
@@ -165,7 +163,7 @@ class Form extends Component
 
     protected function normalizeData(): self
     {
-        $this->data = $this->data->map(function ($value, $key) {
+        $this->data = collect($this->data)->map(function ($value, $key) {
             $field = $this->fields->get($key);
 
             // We want to return nothing if the field can't be found (e.g. honeypot).
@@ -187,7 +185,7 @@ class Form extends Component
             }
 
             return $value;
-        })->filter();
+        })->filter()->toArray();
 
         return $this;
     }
@@ -258,7 +256,10 @@ class Form extends Component
     protected function resetForm(): self
     {
         // Merge the current data with the default values to preserve the captcha.
-        $this->data = $this->data->merge($this->fields->defaultValues())->filter(fn ($value) => ! is_null($value));
+        $this->data = collect($this->data)
+            ->merge($this->fields->defaultValues())
+            ->filter(fn ($value) => ! is_null($value))
+            ->toArray();
 
         // Make sure to process the fields using the newly reset data.
         $this->fields->data($this->data)->hydrate();

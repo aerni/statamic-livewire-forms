@@ -314,7 +314,7 @@ Use this hook to perform an action after the form has been submitted.
 ```php
 protected function submittedForm(): void
 {
-    Newsletter::subscribe($this->data->get('email'));
+    Newsletter::subscribe($this->data['email']);
 }
 ```
 

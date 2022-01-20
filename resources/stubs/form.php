@@ -53,12 +53,12 @@ class DummyForm extends Form
 
     // protected function submittingForm(): void
     // {
-    //     $this->data->put('success', true);
+    //     $this->data['success'] = true;
     // }
 
     // protected function submittedForm(): void
     // {
-    //     Newsletter::subscribe($this->data->get('email'));
+    //     Newsletter::subscribe($this->data['email']);
     // }
 
     /*
@@ -73,7 +73,7 @@ class DummyForm extends Form
 
     // public function successMessage(): string
     // {
-    //     return __("Thank you, {$this->data->get('name')}!");
+    //     return __("Thank you, {$this->data['name']}!");
     // }
 
     // public function errorMessage(): string
