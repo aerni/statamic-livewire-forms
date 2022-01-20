@@ -15,9 +15,9 @@
         @if ($field->multiple) multiple @endif
 
         @if (! $errors->has($field->key))
-            class="block w-full placeholder-gray-300 border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+            class="block w-full"
         @else
-            class="block w-full text-red-800 placeholder-red-300 border-red-300 rounded-md focus:ring-red-500 focus:border-red-500 sm:text-sm"
+            class="block w-full text-red-800"
             aria-invalid="true"
             aria-describedby="{{ $field->id }}-error"
         @endif
