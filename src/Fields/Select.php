@@ -9,7 +9,6 @@ use Aerni\LivewireForms\Fields\Properties\WithInstructions;
 use Aerni\LivewireForms\Fields\Properties\WithMultiple;
 use Aerni\LivewireForms\Fields\Properties\WithOptions;
 use Aerni\LivewireForms\Fields\Properties\WithPlaceholder;
-use Aerni\LivewireForms\Fields\Properties\WithShowLabel;
 
 class Select extends Field
 {
@@ -19,7 +18,6 @@ class Select extends Field
     use WithMultiple;
     use WithOptions;
     use WithPlaceholder;
-    use WithShowLabel;
 
     public function viewProperty(): string
     {

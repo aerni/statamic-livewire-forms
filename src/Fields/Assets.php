@@ -4,12 +4,10 @@ namespace Aerni\LivewireForms\Fields;
 
 use Aerni\LivewireForms\Facades\Component;
 use Aerni\LivewireForms\Fields\Properties\WithMultiple;
-use Aerni\LivewireForms\Fields\Properties\WithShowLabel;
 
 class Assets extends Field
 {
     use WithMultiple;
-    use WithShowLabel;
 
     public function viewProperty(): string
     {
