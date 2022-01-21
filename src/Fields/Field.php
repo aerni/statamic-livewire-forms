@@ -2,26 +2,26 @@
 
 namespace Aerni\LivewireForms\Fields;
 
+use Aerni\LivewireForms\Fields\Properties\WithConditions;
+use Aerni\LivewireForms\Fields\Properties\WithDefault;
+use Aerni\LivewireForms\Fields\Properties\WithGroup;
+use Aerni\LivewireForms\Fields\Properties\WithHandle;
+use Aerni\LivewireForms\Fields\Properties\WithId;
+use Aerni\LivewireForms\Fields\Properties\WithInstructions;
+use Aerni\LivewireForms\Fields\Properties\WithKey;
+use Aerni\LivewireForms\Fields\Properties\WithLabel;
+use Aerni\LivewireForms\Fields\Properties\WithRealtime;
+use Aerni\LivewireForms\Fields\Properties\WithRules;
+use Aerni\LivewireForms\Fields\Properties\WithShow;
+use Aerni\LivewireForms\Fields\Properties\WithShowLabel;
+use Aerni\LivewireForms\Fields\Properties\WithView;
+use Aerni\LivewireForms\Fields\Properties\WithWidth;
+use Aerni\LivewireForms\Fields\Properties\WithWireModelModifier;
+use Aerni\LivewireForms\Traits\WithConfig;
 use ReflectionClass;
 use ReflectionMethod;
-use Statamic\Support\Str;
-use Aerni\LivewireForms\Traits\WithConfig;
 use Statamic\Fields\Field as StatamicField;
-use Aerni\LivewireForms\Fields\Properties\WithId;
-use Aerni\LivewireForms\Fields\Properties\WithKey;
-use Aerni\LivewireForms\Fields\Properties\WithShow;
-use Aerni\LivewireForms\Fields\Properties\WithView;
-use Aerni\LivewireForms\Fields\Properties\WithGroup;
-use Aerni\LivewireForms\Fields\Properties\WithLabel;
-use Aerni\LivewireForms\Fields\Properties\WithRules;
-use Aerni\LivewireForms\Fields\Properties\WithWidth;
-use Aerni\LivewireForms\Fields\Properties\WithHandle;
-use Aerni\LivewireForms\Fields\Properties\WithDefault;
-use Aerni\LivewireForms\Fields\Properties\WithRealtime;
-use Aerni\LivewireForms\Fields\Properties\WithShowLabel;
-use Aerni\LivewireForms\Fields\Properties\WithConditions;
-use Aerni\LivewireForms\Fields\Properties\WithInstructions;
-use Aerni\LivewireForms\Fields\Properties\WithWireModelModifier;
+use Statamic\Support\Str;
 
 abstract class Field
 {
