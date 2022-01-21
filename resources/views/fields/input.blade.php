@@ -22,8 +22,11 @@
             aria-invalid="true"
             aria-describedby="{{ $field->id }}-error"
         @endif
-
     />
 </div>
 
-@include($this->component->getView('error'))
+@if ($field->instructions && ! $errors->has($field->key))
+    <p class="mt-2 text-sm text-gray-500">{{ $field->instructions }}</p>
+@else
+    @include($this->component->getView('error'))
+@endif
