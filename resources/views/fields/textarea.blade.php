@@ -1,8 +1,11 @@
 @if ($field->show_label)
     <div class="mb-1">
-        <label for="{{ $field->id }}" class="block text-sm font-medium text-gray-700">
+        <label for="{{ $field->id }}" class="block font-medium text-gray-700 @if ($field->instructions) text-base @else text-sm @endif">
             {{ $field->label }}
         </label>
+        @if ($field->instructions)
+            <p class="mb-4 text-sm text-gray-500">{{ $field->instructions }}</p>
+        @endif
     </div>
 @endif
 
