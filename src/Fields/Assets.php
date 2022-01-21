@@ -3,11 +3,13 @@
 namespace Aerni\LivewireForms\Fields;
 
 use Aerni\LivewireForms\Facades\Component;
+use Aerni\LivewireForms\Fields\Properties\WithInstructions;
 use Aerni\LivewireForms\Fields\Properties\WithMultiple;
 
 class Assets extends Field
 {
     use WithMultiple;
+    use WithInstructions;
 
     public function viewProperty(): string
     {
