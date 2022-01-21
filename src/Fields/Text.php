@@ -8,7 +8,7 @@ use Aerni\LivewireForms\Fields\Properties\WithInputType;
 use Aerni\LivewireForms\Fields\Properties\WithPlaceholder;
 use Aerni\LivewireForms\Fields\Properties\WithShowLabel;
 
-class Input extends Field
+class Text extends Field
 {
     use WithAutocomplete;
     use WithInputType;
