@@ -121,7 +121,7 @@ This addon provides configured and styled form views for all Statamic form field
 
 ### Run the setup command
 
-Go ahead and run the following command in your console. It will guide you trough creating your first [view](https://github.com/aerni/statamic-livewire-forms#views) and [theme](https://github.com/aerni/statamic-livewire-forms#themes). Optionally, you may also create a [component](https://github.com/aerni/statamic-livewire-forms#components) to customize the form's behavior.
+Go ahead and run the following command in your console. It will guide you through creating your first [view](https://github.com/aerni/statamic-livewire-forms#views) and [theme](https://github.com/aerni/statamic-livewire-forms#themes). Optionally, you may also create a [component](https://github.com/aerni/statamic-livewire-forms#components) to customize the form's behavior.
 
 ```bash
 php please livewire-forms:setup
