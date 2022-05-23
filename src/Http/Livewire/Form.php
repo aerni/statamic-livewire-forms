@@ -17,7 +17,6 @@ use Statamic\Events\SubmissionCreated;
 use Statamic\Exceptions\SilentFormFailureException;
 use Statamic\Facades\Site;
 use Statamic\Forms\SendEmails;
-use Statamic\Forms\Uploaders\AssetsUploader;
 use Statamic\Support\Str;
 
 class Form extends Component
@@ -149,7 +148,6 @@ class Form extends Component
         return $this
             ->normalizeData()
             ->runSubmittingFormHook()
-            ->uploadFiles()
             ->makeSubmission()
             ->handleSubmissionEvents()
             ->storeSubmission()
@@ -220,30 +218,30 @@ class Form extends Component
         //
     }
 
-    protected function uploadFiles(): self
+    protected function makeSubmission(): self
     {
-        $fieldsWithData = $this->fields->getByType('assets')->intersectByKeys($this->data);
+        $this->submission = $this->form->makeSubmission();
 
-        $fieldsWithData->each(function ($field, $handle) {
-            $config = $field->field()->config();
+        $assetIds = $this->submission->uploadFiles($this->uploadedFiles());
 
-            $files = collect($this->data[$handle])->map(function ($file) {
-                return new UploadedFile($file->getRealPath(), $file->getClientOriginalName(), $file->getMimeType());
-            })->toArray();
+        $values = collect($this->data)->merge($assetIds)->all();
 
-            $filePaths = AssetsUploader::field($config)->upload($files);
+        $processedValues = $this->form->blueprint()->fields()->addValues($values)->process()->values();
 
-            $this->data[$handle] = $filePaths;
-        });
+        $this->submission->data($processedValues);
 
         return $this;
     }
 
-    protected function makeSubmission(): self
+    protected function uploadedFiles(): array
     {
-        $this->submission = $this->form->makeSubmission()->data($this->data);
-
-        return $this;
+        return $this->fields->getByType('assets') // Only get asset fields.
+            ->intersectByKeys($this->data) // Only get fields with data.
+            ->map(function ($field, $handle) {
+                return collect($this->data[$handle])
+                    ->map(fn ($file) => new UploadedFile($file->getRealPath(), $file->getClientOriginalName(), $file->getMimeType()))
+                    ->all();
+            })->all();
     }
 
     protected function handleSubmissionEvents(): self
