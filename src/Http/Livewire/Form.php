@@ -7,7 +7,6 @@ use Aerni\LivewireForms\Form\Component as FormComponent;
 use Aerni\LivewireForms\Form\Fields;
 use Aerni\LivewireForms\Form\Honeypot;
 use Illuminate\Contracts\View\View as LaravelView;
-use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\URL;
 use Livewire\Component;
 use Livewire\WithFileUploads;
@@ -235,13 +234,8 @@ class Form extends Component
 
     protected function uploadedFiles(): array
     {
-        return $this->fields->getByType('assets') // Only get asset fields.
-            ->intersectByKeys($this->data) // Only get fields with data.
-            ->map(function ($field, $handle) {
-                return collect($this->data[$handle])
-                    ->map(fn ($file) => new UploadedFile($file->getRealPath(), $file->getClientOriginalName(), $file->getMimeType()))
-                    ->all();
-            })->all();
+        // Only get the asset fields that contain data.
+        return array_intersect_key($this->data, $this->fields->getByType('assets')->all());
     }
 
     protected function handleSubmissionEvents(): self
