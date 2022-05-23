@@ -287,6 +287,11 @@ class Form extends Component
         // Make sure to process the fields using the newly reset data.
         $this->fields->data($this->data)->hydrate();
 
+        // Reset asset fields using this trick: https://talltips.novate.co.uk/livewire/livewire-file-uploads-using-s3#removing-filename-from-input-field-after-upload
+        $this->fields->getByType('assets')->each(function ($field) {
+            $field->id($field->id().'_'.rand());
+        });
+
         return $this;
     }
 
