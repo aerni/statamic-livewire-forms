@@ -7,6 +7,7 @@ use Aerni\LivewireForms\Form\Component as FormComponent;
 use Aerni\LivewireForms\Form\Fields;
 use Aerni\LivewireForms\Form\Honeypot;
 use Illuminate\Contracts\View\View as LaravelView;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\URL;
 use Livewire\Component;
 use Livewire\WithFileUploads;
@@ -235,7 +236,12 @@ class Form extends Component
     protected function uploadedFiles(): array
     {
         // Only get the asset fields that contain data.
-        return array_intersect_key($this->data, $this->fields->getByType('assets')->all());
+        $assetFields = array_intersect_key($this->data, $this->fields->getByType('assets')->all());
+
+        // The assets fieldtype is expecting an array, even for `max_files: 1`, but we don't want to force that on the front end.
+        return collect($assetFields)
+            ->map(fn ($field) => Arr::wrap($field))
+            ->all();
     }
 
     protected function handleSubmissionEvents(): self
