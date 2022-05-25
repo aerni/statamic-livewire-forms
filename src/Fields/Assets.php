@@ -19,9 +19,21 @@ class Assets extends Field
         return $this->field->get('max_files') !== 1;
     }
 
-    public function defaultProperty(): array
+    public function defaultProperty(): ?array
     {
-        // The Assets fieldtype expects an array. Validation fails if it's something else.
-        return [];
+        return $this->multipleProperty() ? [] : null;
+    }
+
+    public function rulesProperty(): array
+    {
+        $rules = array_flatten($this->field->rules());
+
+        if ($this->multipleProperty()) {
+            return $rules;
+        }
+
+        return collect($rules)
+            ->filter(fn ($rule) => ! in_array($rule, ['array', 'max:1']))
+            ->all();
     }
 }

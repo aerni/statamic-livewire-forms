@@ -7,7 +7,7 @@ use Aerni\LivewireForms\Form\Component as FormComponent;
 use Aerni\LivewireForms\Form\Fields;
 use Aerni\LivewireForms\Form\Honeypot;
 use Illuminate\Contracts\View\View as LaravelView;
-use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\URL;
 use Livewire\Component;
 use Livewire\WithFileUploads;
@@ -17,7 +17,6 @@ use Statamic\Events\SubmissionCreated;
 use Statamic\Exceptions\SilentFormFailureException;
 use Statamic\Facades\Site;
 use Statamic\Forms\SendEmails;
-use Statamic\Forms\Uploaders\AssetsUploader;
 use Statamic\Support\Str;
 
 class Form extends Component
@@ -149,7 +148,6 @@ class Form extends Component
         return $this
             ->normalizeData()
             ->runSubmittingFormHook()
-            ->uploadFiles()
             ->makeSubmission()
             ->handleSubmissionEvents()
             ->storeSubmission()
@@ -220,30 +218,30 @@ class Form extends Component
         //
     }
 
-    protected function uploadFiles(): self
+    protected function makeSubmission(): self
     {
-        $fieldsWithData = $this->fields->getByType('assets')->intersectByKeys($this->data);
+        $this->submission = $this->form->makeSubmission();
 
-        $fieldsWithData->each(function ($field, $handle) {
-            $config = $field->field()->config();
+        $assetIds = $this->submission->uploadFiles($this->uploadedFiles());
 
-            $files = collect($this->data[$handle])->map(function ($file) {
-                return new UploadedFile($file->getRealPath(), $file->getClientOriginalName(), $file->getMimeType());
-            })->toArray();
+        $values = collect($this->data)->merge($assetIds)->all();
 
-            $filePaths = AssetsUploader::field($config)->upload($files);
+        $processedValues = $this->form->blueprint()->fields()->addValues($values)->process()->values();
 
-            $this->data[$handle] = $filePaths;
-        });
+        $this->submission->data($processedValues);
 
         return $this;
     }
 
-    protected function makeSubmission(): self
+    protected function uploadedFiles(): array
     {
-        $this->submission = $this->form->makeSubmission()->data($this->data);
+        // Only get the asset fields that contain data.
+        $assetFields = array_intersect_key($this->data, $this->fields->getByType('assets')->all());
 
-        return $this;
+        // The assets fieldtype is expecting an array, even for `max_files: 1`, but we don't want to force that on the front end.
+        return collect($assetFields)
+            ->map(fn ($field) => Arr::wrap($field))
+            ->all();
     }
 
     protected function handleSubmissionEvents(): self
@@ -288,6 +286,11 @@ class Form extends Component
 
         // Make sure to process the fields using the newly reset data.
         $this->fields->data($this->data)->hydrate();
+
+        // Reset asset fields using this trick: https://talltips.novate.co.uk/livewire/livewire-file-uploads-using-s3#removing-filename-from-input-field-after-upload
+        $this->fields->getByType('assets')->each(function ($field) {
+            $field->id($field->id().'_'.rand());
+        });
 
         return $this;
     }
