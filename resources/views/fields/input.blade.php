@@ -4,6 +4,8 @@
             {{ $field->label }}
         </label>
     </div>
+@else
+    <label for="{{ $field->id }}" class="sr-only">{{ $field->label }}</label>
 @endif
 
 <div>

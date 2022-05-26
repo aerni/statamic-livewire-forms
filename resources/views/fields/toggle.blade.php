@@ -6,6 +6,8 @@
                 <p class="mb-4 text-sm text-gray-500">{{ $field->instructions }}</p>
             @endif
         </div>
+    @else
+        <legend class="sr-only">{{ $field->label }}</legend>
     @endif
 
     <div>

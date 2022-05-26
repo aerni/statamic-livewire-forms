@@ -7,6 +7,8 @@
             <p class="mb-4 text-sm text-gray-500">{{ $field->instructions }}</p>
         @endif
     </div>
+@else
+    <p class="sr-only">{{ $field->label }}</p>
 @endif
 
 <div
