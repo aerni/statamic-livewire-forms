@@ -42,6 +42,7 @@ return [
         \Statamic\Fieldtypes\Select::class => \Aerni\LivewireForms\Fields\Select::class,
         \Statamic\Fieldtypes\Text::class => \Aerni\LivewireForms\Fields\Text::class,
         \Statamic\Fieldtypes\Textarea::class => \Aerni\LivewireForms\Fields\Textarea::class,
+        \Statamic\Fieldtypes\Toggle::class => \Aerni\LivewireForms\Fields\Toggle::class,
     ],
 
     /*
@@ -67,7 +68,7 @@ return [
 
     'captcha' => [
         'key' => env('CAPTCHA_KEY'),
-        'secret' => env('CAPTCHA_SECRET')
+        'secret' => env('CAPTCHA_SECRET'),
     ],
 
 ];
