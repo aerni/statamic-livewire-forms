@@ -514,7 +514,7 @@ There are a couple of configuration options for your form fields:
 | `group`         | `string`                                | All fieldtypes                 | Group your fields when using the `@formGroups` and `@formGroup('group')` directives in your view. |
 | `inline`        | `boolean`                               | `checkboxes`, `radio`          | Set to `true` to display the fields inline |
 | `placeholder`   | `string`                                | `input`, `textarea`            | Set the field's placeholder value |
-| `show_label`    | `boolean`                               | All fieldtypes                 | Set to `false` to hide the field's label and instructions. This can be useful for single checkboxes, eg. `Accept terms and conditions`. |
+| `show_label`    | `boolean`                               | All fieldtypes                 | Set to `false` to hide the field's label and instructions. |
 | `width`         | `integer`                               | All fieldtypes                 | Set the desired width of the field. |
 
 ## Translating fields
