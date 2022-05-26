@@ -22,46 +22,55 @@ class ServiceProvider extends AddonServiceProvider
         Fieldtypes\Captcha::class,
     ];
 
-    public function boot()
+    public function bootAddon()
     {
-        parent::boot();
-
-        $this->registerTranslations();
-        $this->registerPublishables();
-        $this->registerBladeDirectives();
-        $this->registerValidators();
-        $this->registerLivewireComponents();
+        $this
+            ->registerTranslations()
+            ->registerPublishables()
+            ->registerBladeDirectives()
+            ->registerValidators()
+            ->registerLivewireComponents();
     }
 
-    protected function registerTranslations()
+    protected function registerTranslations(): self
     {
         $this->loadTranslationsFrom(__DIR__.'/../resources/lang', 'livewire-forms');
         $this->loadJsonTranslationsFrom(__DIR__.'/../resources/lang');
+
+        return $this;
     }
 
-    protected function registerPublishables()
+    protected function registerPublishables(): self
     {
         $this->publishes([
             __DIR__.'/../resources/views' => resource_path('views/vendor/livewire-forms'),
         ], 'livewire-forms-views');
+
+        return $this;
     }
 
-    protected function registerBladeDirectives()
+    protected function registerBladeDirectives(): self
     {
         foreach (get_class_methods(BladeDirectives::class) as $method) {
             Blade::directive($method, [BladeDirectives::class, $method]);
         }
+
+        return $this;
     }
 
-    protected function registerValidators()
+    protected function registerValidators(): self
     {
         Validator::extend('captcha', function ($attribute, $value) {
             return Captcha::verifyResponse($value, request()->getClientIp());
         }, __('livewire-forms::validation.captcha_challenge'));
+
+        return $this;
     }
 
-    protected function registerLivewireComponents()
+    protected function registerLivewireComponents(): self
     {
         Livewire::component('form', Form::class);
+
+        return $this;
     }
 }
