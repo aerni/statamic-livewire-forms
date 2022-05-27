@@ -26,7 +26,7 @@ class Assets extends Field
 
     public function rulesProperty(): array
     {
-        $rules = array_flatten($this->field->rules());
+        $rules = parent::rulesProperty();
 
         if ($this->multipleProperty()) {
             return $rules;

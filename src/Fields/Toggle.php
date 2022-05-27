@@ -16,7 +16,7 @@ class Toggle extends Field
 
     public function rulesProperty(): array
     {
-        $rules = collect(array_flatten($this->field->rules()));
+        $rules = collect(parent::rulesProperty());
 
         if ($rules->contains('required')) {
             $rules->push('accepted');
