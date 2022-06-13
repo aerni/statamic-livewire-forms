@@ -3,23 +3,21 @@
 namespace App\Http\Livewire;
 
 use Aerni\LivewireForms\Form\Fields;
-use Aerni\LivewireForms\Http\Livewire\Form;
+use Aerni\LivewireForms\Http\Livewire\BaseForm;
 
-class DummyForm extends Form
+class DummyForm extends BaseForm
 {
     /*
     |--------------------------------------------------------------------------
     | Initialize Properties
     |--------------------------------------------------------------------------
     |
-    | You may specify the form's handle, view, and theme, so that you
-    | don't have to pass them as tag parameters.
+    | You may override the form's view and theme.
     |
     */
 
-    // public string $handle = 'contact';
-    // public string $view = 'default';
-    // public string $theme = 'default';
+    // protected static $VIEW = 'default';
+    // protected static $THEME = 'default';
 
     /*
     |--------------------------------------------------------------------------

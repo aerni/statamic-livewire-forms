@@ -17,8 +17,10 @@ class MakeComponent extends Command
     public function handle(): void
     {
         $name = $this->argument('name') ?? $this->ask('What do you want to call the component?');
+        $name = Str::of($name)->endsWith('Form') ? $name : Str::of($name)->append('Form')->__toString();
         $filename = Str::studly($name);
-        $stub = File::get(__DIR__ . '/../../resources/stubs/form.php');
+
+        $stub = File::get(__DIR__.'/../../resources/stubs/DummyForm.php');
         $stub = str_replace('DummyForm', $filename, $stub);
         $path = app_path("Http/Livewire/{$filename}.php");
 
@@ -31,6 +33,6 @@ class MakeComponent extends Command
 
     protected function getRelativePath($path): string
     {
-        return str_replace(base_path() . '/', '', $path);
+        return str_replace(base_path().'/', '', $path);
     }
 }
