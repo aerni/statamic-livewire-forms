@@ -47,8 +47,9 @@ class BaseForm extends Component
 
     protected function initializeProperties(): self
     {
-        $this->view = static::$VIEW ?? $this->view;
-        $this->theme = static::$THEME ?? $this->theme;
+        $this->handle = static::$HANDLE ?? $this->handle ?? throw new \Exception('Please set the handle of the form you want to use.');
+        $this->view = static::$VIEW ?? $this->view ?? $this->component->defaultView();
+        $this->theme = static::$THEME ?? $this->theme ?? $this->component->defaultTheme();
 
         return $this;
     }
