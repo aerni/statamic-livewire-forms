@@ -2,6 +2,7 @@
 
 namespace Aerni\LivewireForms\Form;
 
+use Illuminate\Support\Str;
 use Livewire\LivewireComponentsFinder;
 
 class Component
@@ -47,8 +48,9 @@ class Component
 
     public function getComponent(string $handle): string
     {
-        $component = app(LivewireComponentsFinder::class)->build()->find($handle);
+        $key = Str::replace('_', '-', $handle).'-form';
+        $component = app(LivewireComponentsFinder::class)->build()->find($key);
 
-        return $component ? $handle : 'default-form';
+        return $component ? $key : 'default-form';
     }
 }
