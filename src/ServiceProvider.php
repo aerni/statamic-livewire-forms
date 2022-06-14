@@ -3,6 +3,7 @@
 namespace Aerni\LivewireForms;
 
 use Aerni\LivewireForms\Facades\Captcha;
+use Aerni\LivewireForms\Http\Livewire\DefaultForm;
 use Aerni\LivewireForms\Http\Livewire\Form;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Validator;
@@ -70,6 +71,7 @@ class ServiceProvider extends AddonServiceProvider
     protected function registerLivewireComponents(): self
     {
         Livewire::component('form', Form::class);
+        Livewire::component('default-form', DefaultForm::class);
 
         return $this;
     }
