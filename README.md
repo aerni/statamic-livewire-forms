@@ -261,13 +261,27 @@ php please livewire-forms:theme
 
 ## Components
 
-Sometimes you need more control over your form. For instance, if you want to dynamically populate a select field's options. Or if you have different types of radio fields that need different styling. There are a couple of concepts to help you customize your form experience.
+Sometimes you need more control over your form. For instance, if you want to dynamically populate a select field's options. Or if you have multiple radio fields that need different styling. There are a couple of concepts that help you customize your form experience.
 
-Get started by creating a new component:
+Get started by creating a new component. The following example will create a new form component in `app/Http/Livewire/ContactForm.php`
 
 ```bash
-php please livewire-forms:component
+php please livewire-forms:component ContactForm
 ```
+
+### Render the component
+
+Livewire Forms is smart enough to autoload custom components by matching the class name with the form's handle. The following example will look for a `App\Http\Livewire\ContactForm.php` component. If there is no class with that name, the default form component will be loaded instead.
+
+```blade
+<!-- Antlers -->
+{{ livewire:form handle="contact" }}
+
+<!-- Blade -->
+<livewire:form handle="contact">
+```
+
+>**Note:** The component's name needs to end with `Form`. This is necessary for Livewire Forms to do its autoloading magic.
 
 ### Field Models
 
@@ -281,7 +295,7 @@ protected array $models = [
 ];
 ```
 
-If you only want to change a model for a specific field only, simply use the field's handle as the key instead:
+If you want to change a model for a specific field only, simply use the field's handle as the key instead:
 
 ```php
 protected array $models = [
@@ -297,7 +311,7 @@ There are a couple of callbacks and hooks that let you modify fields and data at
 
 #### Hydrated Fields
 
-Use this callback to modify the fields before they are rendered, e.g. a field's label. This is often the simpler route when changing a single thing, rather than creating a new field model.
+Use this callback to modify the fields before they are rendered, e.g. a field's label. This is often the simpler route when changing a single thing, rather than adding a new field model binding.
 
 ```php
 protected function hydratedFields(Fields $fields): void
@@ -330,7 +344,7 @@ protected function submittedForm(): void
 
 ### Customization Example
 
-In the following example we want to dynamically generate the options of a select field from a Statamic collection. We also want to change the view of the field because the design needs to be different to a regular select field. There are two ways to achieve our task. We can either create a `custom field model` or use the `hydratedFields` callback. Choose whichever route feels better to you.
+In the following example we want to dynamically generate the options of a select field based on the entries of a Statamic collection. We also want to change the view of the field because the design needs to be different to a regular select field. There are two ways to achieve our task. We can either create a `custom field model` or use the `hydratedFields` callback. Choose whichever route feels better to you.
 
 #### Using a custom field model
 
@@ -364,12 +378,10 @@ Next, we need to tell the form which field we want to use the `SelectProduct` mo
 ```php
 namespace App\Http\Livewire;
 
-use Aerni\LivewireForms\Http\Livewire\Form;
+use Aerni\LivewireForms\Http\Livewire\BaseForm;
 
-class ContactForm extends Form
+class ContactForm extends BaseForm
 {
-    public string $handle = 'contact';
-
     protected array $models = [
         'products' => \App\Fields\SelectProduct::class,
     ];
@@ -384,12 +396,10 @@ Instead of defining a new field model, we can also achieve the same thing using 
 namespace App\Http\Livewire;
 
 use Aerni\LivewireForms\Facades\Component;
-use Aerni\LivewireForms\Http\Livewire\Form;
+use Aerni\LivewireForms\Http\Livewire\BaseForm;
 
-class ContactForm extends Form
+class ContactForm extends BaseForm
 {
-    public string $handle = 'contact';
-
     protected function hydratedFields(Fields $fields): void
     {
         $options = Entry::whereCollection('products')->mapWithKeys(function ($product) {
@@ -405,16 +415,16 @@ class ContactForm extends Form
 }
 ```
 
-#### Rendering the component
+#### Render the component
 
-Lastly, we need to render the new `ContactForm` component in our template:
+Lastly, we need to render our new `ContactForm` component in the template.
 
 ```blade
 <!-- Antlers -->
-{{ livewire:contact-form }}
+{{ livewire:form handle="contact" }}
 
 <!-- Blade -->
-<livewire:contact-form>
+<livewire:form handle="contact">
 ```
 
 ## Validation
