@@ -17,16 +17,13 @@ use Aerni\LivewireForms\Fields\Properties\WithShowLabel;
 use Aerni\LivewireForms\Fields\Properties\WithView;
 use Aerni\LivewireForms\Fields\Properties\WithWidth;
 use Aerni\LivewireForms\Fields\Properties\WithWireModelModifier;
-use Aerni\LivewireForms\Traits\WithConfig;
 use ReflectionClass;
-use ReflectionMethod;
 use Statamic\Fields\Field as StatamicField;
 use Statamic\Support\Str;
 
 abstract class Field
 {
     use WithConditions;
-    use WithConfig;
     use WithDefault;
     use WithGroup;
     use WithHandle;
@@ -49,7 +46,7 @@ abstract class Field
 
     public static function make(StatamicField $field, string $id): self
     {
-        return (new static($field, $id))->hydrate();
+        return new static($field, $id);
     }
 
     public function field(): StatamicField
@@ -57,25 +54,28 @@ abstract class Field
         return $this->field;
     }
 
-    public function hydrate(): self
+    public function __get(string $key): mixed
     {
-        $properties = $this->hydrateProperties(get_class($this));
-
-        return $this->config($properties);
+        return collect((new ReflectionClass($this))->getMethods())
+            ->first(fn ($method) => $method->name === Str::camel("{$key}Property"))
+            ?->invoke($this);
     }
 
-    protected function hydrateProperties(string $class): array
+    public function __set(string $key, mixed $value): void
     {
-        return collect((new ReflectionClass($class))->getMethods())
-            ->mapWithKeys(function ($method) {
-                if (! Str::contains($method->name, 'Property')) {
-                    return [];
-                }
+        $newConfig = collect($this->field->config())->put($key, $value)->all();
 
-                $key = Str::snake(Str::replace($method->name, 'Property', ''));
-                $value = (new ReflectionMethod($this, $method->name))->invoke($this);
+        $this->field->setConfig($newConfig);
+    }
 
-                return [$key => $value];
-            })->sortKeys()->toArray();
+    public function __call(string $method, array $arguments): mixed
+    {
+        if (! $arguments) {
+            return $this->$method;
+        }
+
+        $this->$method = $arguments[0];
+
+        return $this;
     }
 }
