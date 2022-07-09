@@ -5,10 +5,7 @@ namespace Aerni\LivewireForms\Fields;
 use Aerni\LivewireForms\Fields\Properties\WithConditions;
 use Aerni\LivewireForms\Fields\Properties\WithDefault;
 use Aerni\LivewireForms\Fields\Properties\WithGroup;
-use Aerni\LivewireForms\Fields\Properties\WithHandle;
-use Aerni\LivewireForms\Fields\Properties\WithId;
 use Aerni\LivewireForms\Fields\Properties\WithInstructions;
-use Aerni\LivewireForms\Fields\Properties\WithKey;
 use Aerni\LivewireForms\Fields\Properties\WithLabel;
 use Aerni\LivewireForms\Fields\Properties\WithRealtime;
 use Aerni\LivewireForms\Fields\Properties\WithRules;
@@ -26,10 +23,7 @@ abstract class Field
     use WithConditions;
     use WithDefault;
     use WithGroup;
-    use WithHandle;
-    use WithId;
     use WithInstructions;
-    use WithKey;
     use WithLabel;
     use WithRealtime;
     use WithRules;
@@ -54,10 +48,25 @@ abstract class Field
         return $this->field;
     }
 
+    public function id(): string
+    {
+        return "{$this->id}_{$this->handle()}";
+    }
+
+    public function handle(): string
+    {
+        return $this->field->handle();
+    }
+
+    public function key(): string
+    {
+        return "data.{$this->handle()}";
+    }
+
     public function __get(string $key): mixed
     {
         return collect((new ReflectionClass($this))->getMethods())
-            ->first(fn ($method) => $method->name === Str::camel("{$key}Property"))
+            ->first(fn ($method) => Str::contains($method->name, Str::camel($key)))
             ?->invoke($this);
     }
 
