@@ -176,7 +176,7 @@ class BaseForm extends Component
             }
 
             // We don't want to submit the captcha response value.
-            if ($field->type === 'captcha') {
+            if ($field->field()->type() === 'captcha') {
                 return null;
             }
 
