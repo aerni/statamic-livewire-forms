@@ -2,7 +2,6 @@
 
 namespace Aerni\LivewireForms\Fields;
 
-use Aerni\LivewireForms\Facades\Component;
 use Aerni\LivewireForms\Fields\Properties\WithAutocomplete;
 use Aerni\LivewireForms\Fields\Properties\WithCastBooleans;
 use Aerni\LivewireForms\Fields\Properties\WithMultiple;
@@ -17,10 +16,7 @@ class Select extends Field
     use WithOptions;
     use WithPlaceholder;
 
-    public function viewProperty(): string
-    {
-        return Component::getView('fields.select');
-    }
+    protected string $view = 'select';
 
     public function defaultProperty(): string|array|null
     {

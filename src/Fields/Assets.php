@@ -2,17 +2,13 @@
 
 namespace Aerni\LivewireForms\Fields;
 
-use Aerni\LivewireForms\Facades\Component;
 use Aerni\LivewireForms\Fields\Properties\WithMultiple;
 
 class Assets extends Field
 {
     use WithMultiple;
 
-    public function viewProperty(): string
-    {
-        return Component::getView('fields.file');
-    }
+    protected string $view = 'file';
 
     public function multipleProperty(): bool
     {
