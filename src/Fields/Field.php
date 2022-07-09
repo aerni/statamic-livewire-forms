@@ -78,7 +78,7 @@ abstract class Field
 
     public function __set(string $key, mixed $value): void
     {
-        $newConfig = collect($this->field->config())->put($key, $value)->all();
+        $newConfig = collect($this->field->config())->put(Str::snake($key), $value)->all();
 
         $this->field->setConfig($newConfig);
     }
