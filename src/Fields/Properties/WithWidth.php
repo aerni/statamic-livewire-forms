@@ -6,6 +6,6 @@ trait WithWidth
 {
     public function widthProperty(): int
     {
-        return $this->field->get('width') ?? 100;
+        return $this->field->get('width', 100);
     }
 }
