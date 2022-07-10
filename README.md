@@ -245,7 +245,7 @@ Use the properties in the field's view like this:
 {{ $field->tooltip }}
 ```
 
->**Note:** The `view` property is a special one, as it will take the folder of the current theme into account.
+>**Note:** The `view` property is special, as it will look for the view in the `{theme}/fields/` directory.
 
 ## Themes
 
@@ -285,7 +285,7 @@ Livewire Forms is smart enough to autoload custom components by matching the cla
 
 ### Field Models
 
-Field models are responsible to generate a field's properties like `id`, `handle`, and `label`. For instance, all the fields of type `\Statamic\Fieldtypes\Select::class` are bound to the `\Aerni\LivewireForms\Fields\Select::class` model. A field property is created for each model method ending with `Property`, e.g. `optionsProperty()` will generate an `options` property.
+Field models are responsible for generating a field's properties like `view`, `label`, and `rules`. For instance, all the fields of type `\Statamic\Fieldtypes\Select::class` are bound to the `\Aerni\LivewireForms\Fields\Select::class` model. A field property is created for each model method ending with `Property`, e.g. `optionsProperty()` will generate an `options` property.
 
 To change a fields default model, simply change the binding in the `models` property in your component:
 
@@ -348,27 +348,23 @@ In the following example we want to dynamically generate the options of a select
 
 #### Using a custom field model
 
-We start by creating a new `SelectProduct` field model class that extends the default `Select` model class. We then override the `optionsProperty` method to return our options from a collection. We also override the `viewProperty` method to assign the unique view for this field. We are making use of the `Component::getView()` method, which takes the current theme into consideration.
+We start by creating a new `SelectProduct` field model class that extends the default `Select` model class. We then override the `optionsProperty` method to return our options from a collection. We also assign a different view using the `VIEW` class constant.
 
 ```php
 namespace App\Fields;
 
-use Aerni\LivewireForms\Facades\Component;
-use Aerni\LivewireForms\Fields\Select as Base;
+use Aerni\LivewireForms\Fields\Select;
 use Statamic\Facades\Entry;
 
-class SelectProduct extends Base
+class SelectProduct extends Select
 {
+    public const VIEW = 'select_product';
+
     public function optionsProperty(): array
     {
-        return Entry::whereCollection('products')->mapWithKeys(function ($product) {
-            return [$product->slug() => $product->get('title')];
-        })->all();
-    }
-
-    public function viewProperty(): string
-    {
-        return Component::getView('fields.select_product');
+        return Entry::whereCollection('products')
+            ->mapWithKeys(fn ($product) => [$product->slug() => $product->get('title')])
+            ->all();
     }
 }
 ```
@@ -395,22 +391,19 @@ Instead of defining a new field model, we can also achieve the same thing using 
 ```php
 namespace App\Http\Livewire;
 
-use Aerni\LivewireForms\Facades\Component;
 use Aerni\LivewireForms\Http\Livewire\BaseForm;
 
 class ContactForm extends BaseForm
 {
     protected function hydratedFields(Fields $fields): void
     {
-        $options = Entry::whereCollection('products')->mapWithKeys(function ($product) {
-            return [$product->slug() => $product->get('title')];
-        })->all();
-
-        $view = Component::getView('fields.select_product');
+        $options = Entry::whereCollection('products')
+            ->mapWithKeys(fn ($product) => [$product->slug() => $product->get('title')])
+            ->all();
 
         $fields->get('products')
             ->options($options)
-            ->view($view);
+            ->view('select_product');
     }
 }
 ```
