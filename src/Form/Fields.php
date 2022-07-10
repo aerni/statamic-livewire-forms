@@ -53,16 +53,12 @@ class Fields
 
     public function getByKey(string $key): ?Field
     {
-        return $this->fields->first(function ($field) use ($key) {
-            return $field->key === $key;
-        });
+        return $this->fields->first(fn ($field) => $field->key === $key);
     }
 
     public function getByType(string $key): Collection
     {
-        return $this->fields->filter(function ($field) use ($key) {
-            return $field->field()->type() === $key;
-        });
+        return $this->fields->filter(fn ($field) => $field->field()->type() === $key);
     }
 
     public function groups(): Collection
@@ -103,7 +99,8 @@ class Fields
     protected function hydrateFields(): self
     {
         $this->fields = $this->form->fields()->map(function ($field) {
-            $class = $this->models->get($field->handle()) ?? $this->models->get(get_class($field->fieldtype()));
+            $class = $this->models->get($field->handle())
+                ?? $this->models->get($field->fieldtype()::class);
 
             return $class ? $class::make($field, $this->id) : null;
         })->filter();
@@ -143,23 +140,23 @@ class Fields
          */
         $captcha = $this->captcha()->keys()->first();
 
-        return $this->fields->mapWithKeys(function ($field, $handle) {
-            return [$handle => $field->default];
-        })->except($captcha);
+        return $this->fields
+            ->mapWithKeys(fn ($field, $handle) => [$handle => $field->default])
+            ->except($captcha);
     }
 
     public function validationRules(): array
     {
-        return $this->fields->mapWithKeys(function ($field) {
-            return [$field->key => $field->rules];
-        })->toArray();
+        return $this->fields
+            ->mapWithKeys(fn ($field) => [$field->key => $field->rules])
+            ->toArray();
     }
 
     public function validationAttributes(): array
     {
-        return $this->fields->mapWithKeys(function ($field) {
-            return [$field->key => $field->label];
-        })->toArray();
+        return $this->fields
+            ->mapWithKeys(fn ($field) => [$field->key => $field->label])
+            ->toArray();
     }
 
     public function realtimeValidationRules(string $field): array
