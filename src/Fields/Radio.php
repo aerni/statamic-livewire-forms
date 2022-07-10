@@ -12,7 +12,7 @@ class Radio extends Field
     use WithInline;
     use WithOptions;
 
-    const VIEW = 'radio';
+    public const VIEW = 'radio';
 
     public function defaultProperty(): ?string
     {

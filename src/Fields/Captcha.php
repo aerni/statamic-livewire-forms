@@ -4,5 +4,5 @@ namespace Aerni\LivewireForms\Fields;
 
 class Captcha extends Field
 {
-    const VIEW = 'captcha';
+    public const VIEW = 'captcha';
 }

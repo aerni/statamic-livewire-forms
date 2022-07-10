@@ -8,7 +8,7 @@ class Assets extends Field
 {
     use WithMultiple;
 
-    const VIEW = 'file';
+    public const VIEW = 'file';
 
     public function multipleProperty(): bool
     {

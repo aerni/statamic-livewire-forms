@@ -16,7 +16,7 @@ class Select extends Field
     use WithOptions;
     use WithPlaceholder;
 
-    const VIEW = 'select';
+    public const VIEW = 'select';
 
     public function defaultProperty(): string|array|null
     {

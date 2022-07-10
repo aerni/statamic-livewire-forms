@@ -10,5 +10,5 @@ class Textarea extends Field
     use WithAutocomplete;
     use WithPlaceholder;
 
-    const VIEW = 'textarea';
+    public const VIEW = 'textarea';
 }

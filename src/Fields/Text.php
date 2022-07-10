@@ -12,5 +12,5 @@ class Text extends Field
     use WithInputType;
     use WithPlaceholder;
 
-    const VIEW = 'input';
+    public const VIEW = 'input';
 }
