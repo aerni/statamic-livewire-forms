@@ -8,7 +8,7 @@ class Assets extends Field
 {
     use WithMultiple;
 
-    protected string $view = 'file';
+    const VIEW = 'file';
 
     public function multipleProperty(): bool
     {

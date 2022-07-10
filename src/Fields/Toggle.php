@@ -8,7 +8,7 @@ class Toggle extends Field
 {
     use WithInlineLabel;
 
-    protected string $view = 'toggle';
+    const VIEW = 'toggle';
 
     public function rulesProperty(): array
     {

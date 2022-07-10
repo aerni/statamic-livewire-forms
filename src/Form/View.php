@@ -11,11 +11,7 @@ class View
     public function field(Field $field, array $properties): LaravelView
     {
         foreach ($properties as $property => $value) {
-            if ($property === 'view') {
-                $field->view(Component::getView($value));
-            } else {
-                $field->$property($value);
-            }
+            $field->$property($value);
         }
 
         return view(Component::getView('field'), ['field' => $field]);

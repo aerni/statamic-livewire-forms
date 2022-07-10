@@ -233,7 +233,7 @@ Sometimes you need more control over the markup of your form. If you decide to g
 
 ```blade
 @formField('name', [
-    'view' => 'fields.nameInput'
+    'view' => 'nameInput',
     'tooltip' => 'Please enter your full name'
 ])
 ```

@@ -2,7 +2,6 @@
 
 namespace Aerni\LivewireForms\Fields;
 
-use Aerni\LivewireForms\Facades\Component;
 use Aerni\LivewireForms\Fields\Properties\WithConditions;
 use Aerni\LivewireForms\Fields\Properties\WithDefault;
 use Aerni\LivewireForms\Fields\Properties\WithGroup;
@@ -12,6 +11,7 @@ use Aerni\LivewireForms\Fields\Properties\WithRealtime;
 use Aerni\LivewireForms\Fields\Properties\WithRules;
 use Aerni\LivewireForms\Fields\Properties\WithShow;
 use Aerni\LivewireForms\Fields\Properties\WithShowLabel;
+use Aerni\LivewireForms\Fields\Properties\WithView;
 use Aerni\LivewireForms\Fields\Properties\WithWidth;
 use Aerni\LivewireForms\Fields\Properties\WithWireModelModifier;
 use ReflectionClass;
@@ -29,10 +29,9 @@ abstract class Field
     use WithRules;
     use WithShow;
     use WithShowLabel;
+    use WithView;
     use WithWidth;
     use WithWireModelModifier;
-
-    protected string $view;
 
     public function __construct(protected StatamicField $field, protected string $id)
     {
@@ -62,11 +61,6 @@ abstract class Field
     public function key(): string
     {
         return "data.{$this->handle()}";
-    }
-
-    public function view(): string
-    {
-        return Component::getView("fields.{$this->view}");
     }
 
     public function __get(string $key): mixed

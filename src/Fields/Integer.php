@@ -12,7 +12,7 @@ class Integer extends Field
     use WithInputType;
     use WithPlaceholder;
 
-    protected string $view = 'input';
+    const VIEW = 'input';
 
     public function inputTypeProperty(): string
     {

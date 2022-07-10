@@ -16,7 +16,7 @@ class Select extends Field
     use WithOptions;
     use WithPlaceholder;
 
-    protected string $view = 'select';
+    const VIEW = 'select';
 
     public function defaultProperty(): string|array|null
     {
