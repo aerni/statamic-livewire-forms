@@ -245,7 +245,8 @@ Use the properties in the field's view like this:
 {{ $field->tooltip }}
 ```
 
->**Note:** The `view` property is special, as it will look for the view in the `{theme}/fields/` directory.
+>**Note:** The `view` property will look for the view in the theme's fields directory: `{theme}/fields/{view}.blade.php`.
+>**Note:** There are a few properties such as options, default and conditions that won't work correctly when assigned in the view. This is due to the hydration lifecycle of Livewire. If you want to change those properties, you should create a custom component instead.
 
 ## Themes
 
