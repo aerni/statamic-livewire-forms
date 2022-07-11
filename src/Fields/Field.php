@@ -65,9 +65,11 @@ abstract class Field
 
     public function __get(string $key): mixed
     {
-        return collect((new ReflectionClass($this))->getMethods())
-            ->first(fn ($method) => Str::contains($method->name, Str::camel($key)))
+        $property = collect((new ReflectionClass($this))->getMethods())
+            ->first(fn ($method) => Str::startsWith($method->name, Str::camel($key)))
             ?->invoke($this);
+
+        return $property ?? $this->field->get($key);
     }
 
     public function __set(string $key, mixed $value): void
