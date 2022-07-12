@@ -350,7 +350,7 @@ In the following example we want to dynamically generate the options of a select
 
 #### Using a custom field model
 
-We start by creating a new `SelectProduct` field model class that extends the default `Select` model class. We then override the `optionsProperty` method to return our options from a collection. We also assign a different view using the `VIEW` class constant.
+We start by creating a new `SelectProduct` field model class that extends the default `Select` model class. We then override the `optionsProperty` method to return our options from a collection. We also assign a different view using the `$view` class property.
 
 ```php
 namespace App\Fields;
@@ -360,7 +360,7 @@ use Statamic\Facades\Entry;
 
 class SelectProduct extends Select
 {
-    public const VIEW = 'select_product';
+    protected static string $view = 'select_product';
 
     public function optionsProperty(): array
     {

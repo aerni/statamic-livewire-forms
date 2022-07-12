@@ -12,5 +12,5 @@ class Text extends Field
     use WithInputType;
     use WithPlaceholder;
 
-    public const VIEW = 'input';
+    protected static string $view = 'input';
 }

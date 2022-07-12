@@ -8,6 +8,6 @@ trait WithView
 {
     public function viewProperty(): string
     {
-        return Component::getView("fields.{$this->field->get('view', static::VIEW)}");
+        return Component::getView("fields.{$this->field->get('view', static::$view)}");
     }
 }

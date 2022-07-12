@@ -63,7 +63,7 @@ abstract class Field
         return "data.{$this->handle()}";
     }
 
-    public function __get(string $key): mixed
+    protected function get(string $key): mixed
     {
         $property = collect((new ReflectionClass($this))->getMethods())
             ->first(fn ($method) => Str::startsWith($method->name, Str::camel($key)))
@@ -72,21 +72,29 @@ abstract class Field
         return $property ?? $this->field->get(Str::snake($key));
     }
 
-    public function __set(string $key, mixed $value): void
+    protected function set(string $key, mixed $value): self
     {
         $newConfig = collect($this->field->config())->put(Str::snake($key), $value)->all();
 
         $this->field->setConfig($newConfig);
-    }
-
-    public function __call(string $method, array $arguments): mixed
-    {
-        if (! $arguments) {
-            return $this->$method;
-        }
-
-        $this->$method = $arguments[0];
 
         return $this;
+    }
+
+    public function __get(string $key): mixed
+    {
+        return $this->get($key);
+    }
+
+    public function __set(string $key, mixed $value): void
+    {
+        $this->set($key, $value);
+    }
+
+    public function __call(string $property, array $arguments): mixed
+    {
+        return $arguments
+            ? $this->set($property, $arguments[0])
+            : $this->get($property);
     }
 }

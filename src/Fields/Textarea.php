@@ -10,5 +10,5 @@ class Textarea extends Field
     use WithAutocomplete;
     use WithPlaceholder;
 
-    public const VIEW = 'textarea';
+    protected static string $view = 'textarea';
 }
