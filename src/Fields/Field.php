@@ -14,7 +14,6 @@ use Aerni\LivewireForms\Fields\Properties\WithShowLabel;
 use Aerni\LivewireForms\Fields\Properties\WithView;
 use Aerni\LivewireForms\Fields\Properties\WithWidth;
 use Aerni\LivewireForms\Fields\Properties\WithWireModelModifier;
-use ReflectionClass;
 use Statamic\Fields\Field as StatamicField;
 use Statamic\Support\Str;
 
@@ -65,11 +64,12 @@ abstract class Field
 
     protected function get(string $key): mixed
     {
-        $property = collect((new ReflectionClass($this))->getMethods())
-            ->first(fn ($method) => Str::startsWith($method->name, Str::camel($key)))
-            ?->invoke($this);
+        $method = collect(get_class_methods($this))
+            ->first(fn ($method) => Str::startsWith($method, Str::camel($key)));
 
-        return $property ?? $this->field->get(Str::snake($key));
+        return $method
+            ? $this->$method()
+            : $this->field->get(Str::snake($key));
     }
 
     protected function set(string $key, mixed $value): self
