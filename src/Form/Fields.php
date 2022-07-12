@@ -108,23 +108,25 @@ class Fields
         return $this;
     }
 
-    protected function captcha(): Collection
-    {
-        return $this->fields->whereInstanceOf(Captcha::class);
-    }
-
     protected function removeDuplicateCaptchaFields(): self
     {
-        $duplicates = $this->captcha()->slice(1)->keys();
+        $duplicates = $this->fields->whereInstanceOf(Captcha::class)->slice(1)->keys();
 
         $this->fields = $this->fields->except($duplicates);
 
         return $this;
     }
 
+    public function captcha(): ?Captcha
+    {
+        return $this->fields->whereInstanceOf(Captcha::class)->first();
+    }
+
     protected function processConditions(): self
     {
-        $data = $this->data->isNotEmpty() ? $this->data : $this->defaultValues()->filter();
+        $data = $this->data->isNotEmpty()
+            ? $this->data
+            : $this->defaultValues()->filter();
 
         $this->fields = $this->fields->each(fn ($field) => $field->show(Conditions::process($field, $data)));
 
@@ -134,15 +136,12 @@ class Fields
     public function defaultValues(): Collection
     {
         /**
-         * When submitting a form, we need to preserve the captcha response on the Livewire component
-         * until the captcha expires itself. Otherwise we will get a `The Captcha field is required.`
-         * error (when submitting the form again without reloading the page) because the response value is missing.
+         * Only filter null values to preserve empty arrays.
+         * This is to ensure that fields like checkboxes are initialized propertly.
          */
-        $captcha = $this->captcha()->keys()->first();
-
         return $this->fields
             ->mapWithKeys(fn ($field, $handle) => [$handle => $field->default])
-            ->except($captcha);
+            ->filter(fn ($value) => ! is_null($value));
     }
 
     public function validationRules(): array

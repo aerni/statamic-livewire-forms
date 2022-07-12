@@ -8,6 +8,7 @@ use Aerni\LivewireForms\Form\Fields;
 use Aerni\LivewireForms\Form\Honeypot;
 use Illuminate\Contracts\View\View as LaravelView;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\URL;
 use Livewire\Component;
 use Livewire\WithFileUploads;
@@ -73,11 +74,10 @@ class BaseForm extends Component
 
     protected function hydrateDefaultData(): self
     {
-        /**
-         * We only want to filter out any default value that is null.
-         * We need to preserve empty arrays to make checkboxes work properly.
-         */
-        $this->data = $this->fields->defaultValues()->filter(fn ($value) => ! is_null($value))->toArray();
+        $this->data = collect($this->data)
+            ->only($this->fields->captcha()?->handle) // Make sure to preserve the captcha response.
+            ->merge($this->fields->defaultValues())
+            ->all();
 
         return $this;
     }
@@ -156,7 +156,6 @@ class BaseForm extends Component
     protected function handleSubmission(): self
     {
         return $this
-            ->normalizeData()
             ->runSubmittingFormHook()
             ->makeSubmission()
             ->handleSubmissionEvents()
@@ -171,35 +170,6 @@ class BaseForm extends Component
         if ($isSpam) {
             throw new SilentFormFailureException();
         }
-
-        return $this;
-    }
-
-    protected function normalizeData(): self
-    {
-        $this->data = collect($this->data)->map(function ($value, $key) {
-            $field = $this->fields->get($key);
-
-            // We want to return nothing if the field can't be found (e.g. honeypot).
-            if (is_null($field)) {
-                return null;
-            }
-
-            // We don't want to submit the captcha response value.
-            if ($field->field()->type() === 'captcha') {
-                return null;
-            }
-
-            if ($field->cast_booleans && in_array($value, ['true', 'false'])) {
-                return Str::toBool($value);
-            }
-
-            if ($field->input_type === 'number') {
-                return (int) $value;
-            }
-
-            return $value;
-        })->filter()->toArray();
 
         return $this;
     }
@@ -234,13 +204,40 @@ class BaseForm extends Component
 
         $assetIds = $this->submission->uploadFiles($this->uploadedFiles());
 
-        $values = collect($this->data)->merge($assetIds)->all();
+        $values = array_merge($this->normalizedData(), $assetIds);
 
         $processedValues = $this->form->blueprint()->fields()->addValues($values)->process()->values();
 
         $this->submission->data($processedValues);
 
         return $this;
+    }
+
+    protected function normalizedData(): array
+    {
+        return collect($this->data)->map(function ($value, $key) {
+            $field = $this->fields->get($key);
+
+            // We want to return nothing if the field can't be found (e.g. honeypot).
+            if (is_null($field)) {
+                return null;
+            }
+
+            // We don't want to submit the captcha response value.
+            if ($field->field()->type() === 'captcha') {
+                return null;
+            }
+
+            if ($field->cast_booleans && in_array($value, ['true', 'false'])) {
+                return Str::toBool($value);
+            }
+
+            if ($field->input_type === 'number') {
+                return (int) $value;
+            }
+
+            return $value;
+        })->all();
     }
 
     protected function uploadedFiles(): array
@@ -288,11 +285,8 @@ class BaseForm extends Component
 
     protected function resetForm(): self
     {
-        // Merge the current data with the default values to preserve the captcha.
-        $this->data = collect($this->data)
-            ->merge($this->fields->defaultValues())
-            ->filter(fn ($value) => ! is_null($value))
-            ->toArray();
+        // Reset the form data.
+        $this->hydrateDefaultData();
 
         // Make sure to process the fields using the newly reset data.
         $this->fields->data($this->data)->hydrate();
