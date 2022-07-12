@@ -69,7 +69,7 @@ abstract class Field
             ->first(fn ($method) => Str::startsWith($method->name, Str::camel($key)))
             ?->invoke($this);
 
-        return $property ?? $this->field->get($key);
+        return $property ?? $this->field->get(Str::snake($key));
     }
 
     public function __set(string $key, mixed $value): void
