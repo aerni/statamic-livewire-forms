@@ -10,7 +10,7 @@ class Toggle extends Field
 
     protected static string $view = 'toggle';
 
-    public function rulesProperty(): array
+    protected function rulesProperty(): array
     {
         $rules = collect(parent::rulesProperty());
 

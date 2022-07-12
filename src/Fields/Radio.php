@@ -14,7 +14,7 @@ class Radio extends Field
 
     protected static string $view = 'radio';
 
-    public function defaultProperty(): ?string
+    protected function defaultProperty(): ?string
     {
         $default = $this->field->defaultValue();
         $options = $this->optionsProperty();

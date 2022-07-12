@@ -10,17 +10,17 @@ class Assets extends Field
 
     protected static string $view = 'file';
 
-    public function multipleProperty(): bool
+    protected function multipleProperty(): bool
     {
         return $this->field->get('max_files') !== 1;
     }
 
-    public function defaultProperty(): ?array
+    protected function defaultProperty(): ?array
     {
         return $this->multipleProperty() ? [] : null;
     }
 
-    public function rulesProperty(): array
+    protected function rulesProperty(): array
     {
         $rules = parent::rulesProperty();
 

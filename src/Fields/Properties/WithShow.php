@@ -6,7 +6,7 @@ use Statamic\Support\Str;
 
 trait WithShow
 {
-    public function showProperty(): bool
+    protected function showProperty(): bool
     {
         return Str::toBool($this->field->get('show', true));
     }

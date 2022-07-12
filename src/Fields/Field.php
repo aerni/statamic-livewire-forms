@@ -43,22 +43,22 @@ abstract class Field
         return new static($field, $id);
     }
 
-    public function field(): StatamicField
+    protected function field(): StatamicField
     {
         return $this->field;
     }
 
-    public function id(): string
+    protected function id(): string
     {
         return "{$this->id}_{$this->handle()}";
     }
 
-    public function handle(): string
+    protected function handle(): string
     {
         return $this->field->handle();
     }
 
-    public function key(): string
+    protected function key(): string
     {
         return "data.{$this->handle()}";
     }

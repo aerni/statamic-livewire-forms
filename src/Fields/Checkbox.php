@@ -12,7 +12,7 @@ class Checkbox extends Field
 
     protected static string $view = 'checkbox';
 
-    public function defaultProperty(): string|array|null
+    protected function defaultProperty(): string|array|null
     {
         $default = $this->field->defaultValue();
         $options = $this->optionsProperty();

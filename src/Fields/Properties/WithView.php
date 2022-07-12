@@ -6,7 +6,7 @@ use Aerni\LivewireForms\Facades\Component;
 
 trait WithView
 {
-    public function viewProperty(): string
+    protected function viewProperty(): string
     {
         return Component::getView("fields.{$this->field->get('view', static::$view)}");
     }
