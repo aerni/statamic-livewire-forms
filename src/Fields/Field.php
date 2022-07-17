@@ -47,17 +47,17 @@ abstract class Field
         return $this->field;
     }
 
-    protected function id(): string
+    protected function idProperty(): string
     {
         return "{$this->id}_{$this->handle()}";
     }
 
-    protected function handle(): string
+    protected function handleProperty(): string
     {
         return $this->field->handle();
     }
 
-    protected function key(): string
+    protected function keyProperty(): string
     {
         return "data.{$this->handle()}";
     }
@@ -65,7 +65,7 @@ abstract class Field
     protected function get(string $key): mixed
     {
         $method = collect(get_class_methods($this))
-            ->first(fn ($method) => Str::startsWith($method, Str::camel($key)));
+            ->first(fn ($method) => $method === Str::camel($key).'Property');
 
         return $method
             ? $this->$method()
