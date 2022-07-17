@@ -5,7 +5,10 @@ namespace Aerni\LivewireForms\Fields;
 use Aerni\LivewireForms\Fields\Properties\WithConditions;
 use Aerni\LivewireForms\Fields\Properties\WithDefault;
 use Aerni\LivewireForms\Fields\Properties\WithGroup;
+use Aerni\LivewireForms\Fields\Properties\WithHandle;
+use Aerni\LivewireForms\Fields\Properties\WithId;
 use Aerni\LivewireForms\Fields\Properties\WithInstructions;
+use Aerni\LivewireForms\Fields\Properties\WithKey;
 use Aerni\LivewireForms\Fields\Properties\WithLabel;
 use Aerni\LivewireForms\Fields\Properties\WithRealtime;
 use Aerni\LivewireForms\Fields\Properties\WithRules;
@@ -31,6 +34,9 @@ abstract class Field
     use WithView;
     use WithWidth;
     use WithWireModelModifier;
+    use WithId;
+    use WithHandle;
+    use WithKey;
 
     public function __construct(protected StatamicField $field, protected string $id)
     {
@@ -45,21 +51,6 @@ abstract class Field
     protected function field(): StatamicField
     {
         return $this->field;
-    }
-
-    protected function idProperty(): string
-    {
-        return "{$this->id}_{$this->handle()}";
-    }
-
-    protected function handleProperty(): string
-    {
-        return $this->field->handle();
-    }
-
-    protected function keyProperty(): string
-    {
-        return "data.{$this->handle()}";
     }
 
     protected function get(string $key): mixed
