@@ -2,10 +2,12 @@
 
 namespace Aerni\LivewireForms\Fields\Properties;
 
+use Statamic\Support\Str;
+
 trait WithShow
 {
-    public function showProperty(): bool
+    protected function showProperty(): bool
     {
-        return true;
+        return Str::toBool($this->field->get('show', true));
     }
 }

@@ -53,16 +53,12 @@ class Fields
 
     public function getByKey(string $key): ?Field
     {
-        return $this->fields->first(function ($field) use ($key) {
-            return $field->key === $key;
-        });
+        return $this->fields->first(fn ($field) => $field->key === $key);
     }
 
     public function getByType(string $key): Collection
     {
-        return $this->fields->filter(function ($field) use ($key) {
-            return $field->field()->type() === $key;
-        });
+        return $this->fields->filter(fn ($field) => $field->field()->type() === $key);
     }
 
     public function groups(): Collection
@@ -103,7 +99,8 @@ class Fields
     protected function hydrateFields(): self
     {
         $this->fields = $this->form->fields()->map(function ($field) {
-            $class = $this->models->get($field->handle()) ?? $this->models->get(get_class($field->fieldtype()));
+            $class = $this->models->get($field->handle())
+                ?? $this->models->get($field->fieldtype()::class);
 
             return $class ? $class::make($field, $this->id) : null;
         })->filter();
@@ -111,23 +108,25 @@ class Fields
         return $this;
     }
 
-    protected function captcha(): Collection
-    {
-        return $this->fields->whereInstanceOf(Captcha::class);
-    }
-
     protected function removeDuplicateCaptchaFields(): self
     {
-        $duplicates = $this->captcha()->slice(1)->keys();
+        $duplicates = $this->fields->whereInstanceOf(Captcha::class)->slice(1)->keys();
 
         $this->fields = $this->fields->except($duplicates);
 
         return $this;
     }
 
+    public function captcha(): ?Captcha
+    {
+        return $this->fields->whereInstanceOf(Captcha::class)->first();
+    }
+
     protected function processConditions(): self
     {
-        $data = $this->data->isNotEmpty() ? $this->data : $this->defaultValues()->filter();
+        $data = $this->data->isNotEmpty()
+            ? $this->data
+            : $this->defaultValues()->filter();
 
         $this->fields = $this->fields->each(fn ($field) => $field->show(Conditions::process($field, $data)));
 
@@ -137,29 +136,26 @@ class Fields
     public function defaultValues(): Collection
     {
         /**
-         * When submitting a form, we need to preserve the captcha response on the Livewire component
-         * until the captcha expires itself. Otherwise we will get a `The Captcha field is required.`
-         * error (when submitting the form again without reloading the page) because the response value is missing.
+         * Only filter null values to preserve empty arrays.
+         * This is to ensure that fields like checkboxes are initialized propertly.
          */
-        $captcha = $this->captcha()->keys()->first();
-
-        return $this->fields->mapWithKeys(function ($field, $handle) {
-            return [$handle => $field->default];
-        })->except($captcha);
+        return $this->fields
+            ->mapWithKeys(fn ($field, $handle) => [$handle => $field->default])
+            ->filter(fn ($value) => ! is_null($value));
     }
 
     public function validationRules(): array
     {
-        return $this->fields->mapWithKeys(function ($field) {
-            return [$field->key => $field->rules];
-        })->toArray();
+        return $this->fields
+            ->mapWithKeys(fn ($field) => [$field->key => $field->rules])
+            ->toArray();
     }
 
     public function validationAttributes(): array
     {
-        return $this->fields->mapWithKeys(function ($field) {
-            return [$field->key => $field->label];
-        })->toArray();
+        return $this->fields
+            ->mapWithKeys(fn ($field) => [$field->key => $field->label])
+            ->toArray();
     }
 
     public function realtimeValidationRules(string $field): array

@@ -2,19 +2,15 @@
 
 namespace Aerni\LivewireForms\Fields;
 
-use Aerni\LivewireForms\Facades\Component;
 use Aerni\LivewireForms\Fields\Properties\WithInlineLabel;
 
 class Toggle extends Field
 {
     use WithInlineLabel;
 
-    public function viewProperty(): string
-    {
-        return Component::getView('fields.toggle');
-    }
+    protected static string $view = 'toggle';
 
-    public function rulesProperty(): array
+    protected function rulesProperty(): array
     {
         $rules = collect(parent::rulesProperty());
 

@@ -17,22 +17,15 @@ use Aerni\LivewireForms\Fields\Properties\WithShowLabel;
 use Aerni\LivewireForms\Fields\Properties\WithView;
 use Aerni\LivewireForms\Fields\Properties\WithWidth;
 use Aerni\LivewireForms\Fields\Properties\WithWireModelModifier;
-use Aerni\LivewireForms\Traits\WithConfig;
-use ReflectionClass;
-use ReflectionMethod;
 use Statamic\Fields\Field as StatamicField;
 use Statamic\Support\Str;
 
 abstract class Field
 {
     use WithConditions;
-    use WithConfig;
     use WithDefault;
     use WithGroup;
-    use WithHandle;
-    use WithId;
     use WithInstructions;
-    use WithKey;
     use WithLabel;
     use WithRealtime;
     use WithRules;
@@ -41,6 +34,9 @@ abstract class Field
     use WithView;
     use WithWidth;
     use WithWireModelModifier;
+    use WithId;
+    use WithHandle;
+    use WithKey;
 
     public function __construct(protected StatamicField $field, protected string $id)
     {
@@ -49,33 +45,49 @@ abstract class Field
 
     public static function make(StatamicField $field, string $id): self
     {
-        return (new static($field, $id))->hydrate();
+        return new static($field, $id);
     }
 
-    public function field(): StatamicField
+    protected function field(): StatamicField
     {
         return $this->field;
     }
 
-    public function hydrate(): self
+    protected function get(string $key): mixed
     {
-        $properties = $this->hydrateProperties(get_class($this));
+        $method = collect(get_class_methods($this))
+            ->first(fn ($method) => $method === Str::camel($key).'Property');
 
-        return $this->config($properties);
+        return $method
+            ? $this->$method()
+            : $this->field->get(Str::snake($key));
     }
 
-    protected function hydrateProperties(string $class): array
+    protected function set(string $key, mixed $value): self
     {
-        return collect((new ReflectionClass($class))->getMethods())
-            ->mapWithKeys(function ($method) {
-                if (! Str::contains($method->name, 'Property')) {
-                    return [];
-                }
+        $newConfig = collect($this->field->config())
+            ->put(Str::snake($key), $value)
+            ->all();
 
-                $key = Str::snake(Str::replace($method->name, 'Property', ''));
-                $value = (new ReflectionMethod($this, $method->name))->invoke($this);
+        $this->field->setConfig($newConfig);
 
-                return [$key => $value];
-            })->sortKeys()->toArray();
+        return $this;
+    }
+
+    public function __get(string $key): mixed
+    {
+        return $this->get($key);
+    }
+
+    public function __set(string $key, mixed $value): void
+    {
+        $this->set($key, $value);
+    }
+
+    public function __call(string $property, array $arguments): mixed
+    {
+        return $arguments
+            ? $this->set($property, $arguments[0])
+            : $this->get($property);
     }
 }

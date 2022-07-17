@@ -2,7 +2,6 @@
 
 namespace Aerni\LivewireForms\Fields;
 
-use Aerni\LivewireForms\Facades\Component;
 use Aerni\LivewireForms\Fields\Properties\WithInline;
 use Aerni\LivewireForms\Fields\Properties\WithOptions;
 
@@ -11,12 +10,9 @@ class Checkbox extends Field
     use WithInline;
     use WithOptions;
 
-    public function viewProperty(): string
-    {
-        return Component::getView('fields.checkbox');
-    }
+    protected static string $view = 'checkbox';
 
-    public function defaultProperty(): string|array|null
+    protected function defaultProperty(): string|array|null
     {
         $default = $this->field->defaultValue();
         $options = $this->optionsProperty();

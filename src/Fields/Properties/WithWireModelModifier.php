@@ -4,8 +4,8 @@ namespace Aerni\LivewireForms\Fields\Properties;
 
 trait WithWireModelModifier
 {
-    public function wireModelModifierProperty(): string
+    protected function wireModelModifierProperty(): string
     {
-        return 'lazy';
+        return $this->field->get('wireModelModifier', 'lazy');
     }
 }
