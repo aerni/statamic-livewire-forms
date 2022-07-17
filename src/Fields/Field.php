@@ -74,7 +74,9 @@ abstract class Field
 
     protected function set(string $key, mixed $value): self
     {
-        $newConfig = collect($this->field->config())->put(Str::snake($key), $value)->all();
+        $newConfig = collect($this->field->config())
+            ->put(Str::snake($key), $value)
+            ->all();
 
         $this->field->setConfig($newConfig);
 
