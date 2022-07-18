@@ -48,7 +48,7 @@ abstract class Field
         return new static($field, $id);
     }
 
-    protected function field(): StatamicField
+    public function field(): StatamicField
     {
         return $this->field;
     }
