@@ -522,7 +522,39 @@ There are a couple of configuration options for your form fields:
 | `show_label`    | `boolean`                               | All fieldtypes                 | Set to `false` to hide the field's label and instructions. |
 | `width`         | `integer`                               | All fieldtypes                 | Set the desired width of the field. |
 
-## Translating fields
+## Localization
+
+There are a few default message strings like the `submit button label` and `success message` that you might want to change. You can change the messages globally or on a per form level.
+
+### Globally
+
+Publish the language files and change whatever message you'd like:
+
+```bash
+php artisan vendor:publish --tag=livewire-forms-translations
+```
+
+### Per Form
+
+1. Create a file called `livewire-forms.php` for each of your localizations, e.g., `lang/en/livewire-forms.php`.
+2. Create an array with the handle of each form for which you want to change a message for.
+3. Use the same keys that are used in the global language files. Note that the messages in this file will take precedence over the messages in the global language file.
+
+```php
+return [
+    'contact' => [
+        'submit_button_label' => 'Contact now',
+        'success_message' => 'Thanks for contacting us. We will be in touch.',
+        'error_message' => 'There was an error with your submission:|There were :count errors with your submission:',
+    ],
+
+    'newsletter' => [
+        'submit_button_label' => 'Signup now',
+    ],
+];
+```
+
+### Translating fields
 
 You can translate your field labels, instructions, options, and placeholders using JSON files. Create a translation file for each language, e.g. `resources/lang/de.json`.
 
