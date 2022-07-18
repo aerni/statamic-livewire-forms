@@ -74,7 +74,7 @@ class BaseForm extends Component
     protected function hydrateDefaultData(): self
     {
         $this->data = collect($this->data)
-            ->only($this->fields->captcha()?->handle) // Make sure to preserve the captcha response.
+            ->only($this->fields->captcha()?->handle ?? []) // Make sure to preserve the captcha response.
             ->merge($this->fields->defaultValues())
             ->all();
 
