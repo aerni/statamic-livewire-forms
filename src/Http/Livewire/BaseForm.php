@@ -8,6 +8,7 @@ use Aerni\LivewireForms\Form\Fields;
 use Aerni\LivewireForms\Form\Honeypot;
 use Illuminate\Contracts\View\View as LaravelView;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\URL;
 use Livewire\Component;
 use Livewire\WithFileUploads;
@@ -306,16 +307,22 @@ class BaseForm extends Component
 
     public function successMessage(): string
     {
-        return __('The form was successfully submitted!');
+        return Lang::has("livewire-forms.{$this->handle}.success_message")
+            ? __("livewire-forms.{$this->handle}.success_message")
+            : __('livewire-forms::messages.success_message');
     }
 
     public function errorMessage(): string
     {
-        return trans_choice('There was an error with your submission:|There were :count errors with your submission:', $this->getErrorBag()->count());
+        return Lang::has("livewire-forms.{$this->handle}.error_message")
+            ? trans_choice("livewire-forms.{$this->handle}.error_message", $this->getErrorBag()->count())
+            : trans_choice('livewire-forms::messages.error_message', $this->getErrorBag()->count());
     }
 
     public function submitButtonLabel(): string
     {
-        return __('Send');
+        return Lang::has("livewire-forms.{$this->handle}.submit_button_label")
+            ? __("livewire-forms.{$this->handle}.submit_button_label")
+            : __('livewire-forms::messages.submit_button_label');
     }
 }

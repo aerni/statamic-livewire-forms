@@ -36,7 +36,6 @@ class ServiceProvider extends AddonServiceProvider
     protected function registerTranslations(): self
     {
         $this->loadTranslationsFrom(__DIR__.'/../resources/lang', 'livewire-forms');
-        $this->loadJsonTranslationsFrom(__DIR__.'/../resources/lang');
 
         return $this;
     }
