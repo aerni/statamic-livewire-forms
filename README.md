@@ -536,9 +536,9 @@ php artisan vendor:publish --tag=livewire-forms-translations
 
 ### Per Form
 
-1. Create a file called `livewire-forms.php` for each of your localizations, e.g., `lang/en/livewire-forms.php`.
+1. Create a file called `livewire-forms.php` for each of your localizations, e.g., `resources/lang/en/livewire-forms.php`.
 2. Create an array with the handle of each form for which you want to change a message for.
-3. Use the same keys that are used in the global language files. Note that the messages in this file will take precedence over the messages in the global language file.
+3. Use the same keys that are used in the global language files. Note, that the messages in this file will take precedence over the messages in the global language file.
 
 ```php
 return [
