@@ -62,7 +62,7 @@ class ServiceProvider extends AddonServiceProvider
     {
         Validator::extend('captcha', function ($attribute, $value) {
             return Captcha::verifyResponse($value, request()->getClientIp());
-        }, __('livewire-forms::validation.captcha_challenge'));
+        }, __('livewire-forms::messages.captcha_challenge'));
 
         return $this;
     }
