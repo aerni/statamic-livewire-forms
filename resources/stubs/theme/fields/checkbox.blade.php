@@ -11,7 +11,7 @@
     @endif
 
     <div>
-        <div class="{{ $field->inline ? 'items-center space-x-6' : 'flex-col justify-center space-y-3' }} flex">
+        <div class="{{ $field->inline ? 'items-start space-x-6' : 'flex-col space-y-3' }} flex">
             @foreach ($field->options as $option => $label)
                 <div class="flex items-start">
                     <div class="flex items-center h-5">
