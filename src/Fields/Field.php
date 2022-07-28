@@ -25,7 +25,10 @@ abstract class Field
     use WithConditions;
     use WithDefault;
     use WithGroup;
+    use WithHandle;
+    use WithId;
     use WithInstructions;
+    use WithKey;
     use WithLabel;
     use WithRealtime;
     use WithRules;
@@ -34,9 +37,6 @@ abstract class Field
     use WithView;
     use WithWidth;
     use WithWireModelModifier;
-    use WithId;
-    use WithHandle;
-    use WithKey;
 
     public function __construct(protected StatamicField $field, protected string $id)
     {
