@@ -30,7 +30,8 @@ class ServiceProvider extends AddonServiceProvider
             ->registerPublishables()
             ->registerBladeDirectives()
             ->registerValidators()
-            ->registerLivewireComponents();
+            ->registerLivewireComponents()
+            ->registerSelectableFieldtypes();
     }
 
     protected function registerTranslations(): self
@@ -71,6 +72,13 @@ class ServiceProvider extends AddonServiceProvider
     {
         Livewire::component('form', Form::class);
         Livewire::component('default-form', DefaultForm::class);
+
+        return $this;
+    }
+
+    protected function registerSelectableFieldtypes(): self
+    {
+        \Statamic\Fieldtypes\Hidden::makeSelectableInForms();
 
         return $this;
     }
