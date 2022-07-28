@@ -10,6 +10,6 @@
         {{ $field->width === 100 ? 'md:col-span-12' : '' }}
     ">
         @include($field->view)
-</div>
+    </div>
 
 @endif
