@@ -37,6 +37,7 @@ return [
         \Aerni\LivewireForms\Fieldtypes\Captcha::class => \Aerni\LivewireForms\Fields\Captcha::class,
         \Statamic\Fieldtypes\Assets\Assets::class => \Aerni\LivewireForms\Fields\Assets::class,
         \Statamic\Fieldtypes\Checkboxes::class => \Aerni\LivewireForms\Fields\Checkbox::class,
+        \Statamic\Fieldtypes\Hidden::class => \Aerni\LivewireForms\Fields\Hidden::class,
         \Statamic\Fieldtypes\Integer::class => \Aerni\LivewireForms\Fields\Integer::class,
         \Statamic\Fieldtypes\Radio::class => \Aerni\LivewireForms\Fields\Radio::class,
         \Statamic\Fieldtypes\Select::class => \Aerni\LivewireForms\Fields\Select::class,
