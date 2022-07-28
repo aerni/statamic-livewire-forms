@@ -63,7 +63,9 @@ class Fields
 
     public function groups(): Collection
     {
-        return $this->fields->groupBy(fn ($field) => $field->group);
+        return $this->fields
+            ->filter(fn ($field) => $field->show)
+            ->groupBy(fn ($field) => $field->group);
     }
 
     public function group(string $group): Collection
