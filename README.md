@@ -324,8 +324,8 @@ protected function hydratedFields(Fields $fields): void
 
 #### Submitting Form
 
-Use this hook to change data before the form submission is created.
-
+Use this hook to modify data before the form submission is created. Note, that you can only modify data of fields that are part of the form blueprint. You can't add data for nonexistent fields. In the example below: The form blueprint needs a `full_name` field.
+ 
 ```php
 protected function submittingForm(): void
 {
