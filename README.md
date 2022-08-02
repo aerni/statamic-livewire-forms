@@ -329,7 +329,7 @@ Use this hook to modify data before the form submission is created. Note, that y
 ```php
 protected function submittingForm(): void
 {
-    $this->data['full_name'] = "{$this->data['first_name']} {$this->data['name']}";
+    $this->data['full_name'] = "{$this->data['first_name']} {$this->data['last_name']}";
 }
 ```
 
