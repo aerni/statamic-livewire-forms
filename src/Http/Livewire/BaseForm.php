@@ -158,6 +158,7 @@ class BaseForm extends Component
         return $this
             ->runSubmittingFormHook()
             ->makeSubmission()
+            ->runCreatedSubmissionFormHook()
             ->handleSubmissionEvents()
             ->storeSubmission()
             ->runSubmittedFormHook();
@@ -181,6 +182,13 @@ class BaseForm extends Component
         return $this;
     }
 
+    protected function runCreatedSubmissionFormHook(): self
+    {
+        $this->createdSubmission($this->submission);
+
+        return $this;
+    }
+
     protected function runSubmittedFormHook(): self
     {
         $this->submittedForm();
@@ -189,6 +197,11 @@ class BaseForm extends Component
     }
 
     protected function submittingForm(): void
+    {
+        //
+    }
+
+    protected function createdSubmission(Submission $submission): void
     {
         //
     }

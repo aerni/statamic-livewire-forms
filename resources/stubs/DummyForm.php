@@ -54,6 +54,13 @@ class DummyForm extends BaseForm
     //     $this->data['success'] = true;
     // }
 
+    // protected function createdSubmission(Submission $submission): void
+    // {
+    //     $title = $submission->augmentedValue('entry')->value()->title;
+    //
+    //     $submission->set('entry_title', $title);
+    // }
+
     // protected function submittedForm(): void
     // {
     //     Newsletter::subscribe($this->data['email']);
