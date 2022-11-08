@@ -1,4 +1,4 @@
-@if ($field->show_label)
+@if ($field->show_label && $field->input_type !== 'hidden')
     <div class="mb-1">
         <label for="{{ $field->id }}" class="block text-sm font-medium text-gray-700">
             {{ $field->label }}
