@@ -13,4 +13,13 @@ class Text extends Field
     use WithPlaceholder;
 
     protected static string $view = 'input';
+
+    protected function showProperty(): bool
+    {
+        if ($this->inputTypeProperty() === 'hidden') {
+            return false;
+        }
+
+        return parent::showProperty();
+    }
 }
