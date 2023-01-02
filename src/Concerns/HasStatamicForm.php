@@ -2,16 +2,16 @@
 
 namespace Aerni\LivewireForms\Concerns;
 
-use Statamic\Forms\Form;
-use Statamic\Facades\Site;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Str;
-use Statamic\Forms\SendEmails;
-use Statamic\Events\FormSubmitted;
 use Illuminate\Support\Facades\URL;
-use Statamic\Events\SubmissionCreated;
+use Illuminate\Support\Str;
 use Statamic\Contracts\Forms\Submission;
+use Statamic\Events\FormSubmitted;
+use Statamic\Events\SubmissionCreated;
 use Statamic\Exceptions\SilentFormFailureException;
+use Statamic\Facades\Site;
+use Statamic\Forms\Form;
+use Statamic\Forms\SendEmails;
 
 trait HasStatamicForm
 {
