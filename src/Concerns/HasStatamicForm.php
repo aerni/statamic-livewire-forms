@@ -9,8 +9,9 @@ use Statamic\Contracts\Forms\Submission;
 use Statamic\Events\FormSubmitted;
 use Statamic\Events\SubmissionCreated;
 use Statamic\Exceptions\SilentFormFailureException;
+use Statamic\Facades\Form;
 use Statamic\Facades\Site;
-use Statamic\Forms\Form;
+use Statamic\Forms\Form as StatamicForm;
 use Statamic\Forms\SendEmails;
 
 trait HasStatamicForm
@@ -26,9 +27,13 @@ trait HasStatamicForm
             ->storeFormSubmission();
     }
 
-    public function getFormProperty(): Form
+    public function getFormProperty(): StatamicForm
     {
-        return \Statamic\Facades\Form::find($this->formHandle)
+        if (in_array(CreatesStatamicForm::class, class_uses_recursive($this))) {
+            return $this->findOrMakeForm();
+        }
+
+        return Form::find($this->formHandle)
             ?? throw new \Exception("Form with handle [{$this->formHandle}] cannot be found.");
     }
 
@@ -79,11 +84,19 @@ trait HasStatamicForm
         // Should we normalize data? Or should this be up to the user?
         // $values = array_merge($this->normalizedData(), $assetIds);
 
+        // Process the data according to the blueprint fields.
         $processedData = $this->form->blueprint()->fields()
             ->addValues($this->formData())
-            ->process()->values();
+            ->process()->values()
+            ->all();
 
-        $this->formSubmission->data($processedData);
+        /**
+         * Add all data to the form submission. Even if a field doesn't exist in the blueprint.
+         * This is needed when using the CreatesStatamicForm trait as those forms don't have a blueprint.
+         */
+        $data = array_merge($this->formData(), $processedData);
+
+        $this->formSubmission->data($data);
 
         return $this;
     }
