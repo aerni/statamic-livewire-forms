@@ -2,20 +2,19 @@
 
 namespace Aerni\LivewireForms\Concerns;
 
+use Illuminate\Support\Arr;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Str;
+use Statamic\Contracts\Forms\Submission;
+use Statamic\Events\FormSubmitted;
+use Statamic\Events\SubmissionCreated;
+use Statamic\Exceptions\SilentFormFailureException;
+use Statamic\Facades\Blink;
 use Statamic\Facades\Form;
 use Statamic\Facades\Site;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Str;
-use Statamic\Forms\SendEmails;
-use Illuminate\Support\Collection;
-use Statamic\Events\FormSubmitted;
-use Illuminate\Support\Facades\URL;
-use Statamic\Events\SubmissionCreated;
-use Statamic\Contracts\Forms\Submission;
 use Statamic\Forms\Form as StatamicForm;
-use Statamic\Exceptions\SilentFormFailureException;
-use Aerni\LivewireForms\Concerns\AllowDynamicFormFields;
-use Statamic\Facades\Blink;
+use Statamic\Forms\SendEmails;
 
 trait WithStatamicForm
 {
