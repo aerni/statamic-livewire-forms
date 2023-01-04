@@ -6,8 +6,10 @@ use Statamic\Contracts\Forms\Form as StatamicForm;
 use Statamic\Facades\Form;
 use Statamic\Support\Str;
 
-trait CreatesStatamicForm
+trait CreateStatamicForm
 {
+    use AllowDynamicFormFields;
+
     public function findOrMakeForm(): StatamicForm
     {
         if ($form = Form::find($this->formHandle)) {
