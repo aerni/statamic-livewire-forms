@@ -15,6 +15,7 @@ use Statamic\Contracts\Forms\Submission;
 use Statamic\Forms\Form as StatamicForm;
 use Statamic\Exceptions\SilentFormFailureException;
 use Aerni\LivewireForms\Concerns\AllowDynamicFormFields;
+use Statamic\Facades\Blink;
 
 trait WithStatamicForm
 {
@@ -74,26 +75,29 @@ trait WithStatamicForm
             ->all();
     }
 
-    // TODO: We are calling this so many times. Should probably cache it.
     protected function getFormFields(): Collection
     {
-        $fields = Arr::isAssoc($this->formFields)
-            ? collect($this->formFields)
-            : collect($this->formFields)->mapWithKeys(fn ($field) => [$field => Str::afterLast($field, '.')]);
+        return Blink::once('livewire-forms::form-fields', function () {
+            $fields = Arr::isAssoc($this->formFields)
+                ? collect($this->formFields)
+                : collect($this->formFields)->mapWithKeys(fn ($field) => [$field => Str::afterLast($field, '.')]);
 
-        if ($this->uses(AllowDynamicFormFields::class)) {
-            return $fields;
-        }
+            if ($this->uses(AllowDynamicFormFields::class)) {
+                return $fields;
+            }
 
-        return $fields->filter(fn ($field) => $this->form->blueprint()->hasField($field));
+            return $fields->filter(fn ($field) => $this->form->blueprint()->hasField($field));
+        });
     }
 
     protected function getFormData(): array
     {
-        return $this->getFormFields()
-            ->mapWithKeys(fn ($field, $property) => [$field => $this->getPropertyValue($property)])
-            ->filter()
-            ->all();
+        return Blink::once('livewire-forms::form-data', function () {
+            return $this->getFormFields()
+                ->mapWithKeys(fn ($field, $property) => [$field => $this->getPropertyValue($property)])
+                ->filter()
+                ->all();
+        });
     }
 
     protected function makeFormSubmission(): self
