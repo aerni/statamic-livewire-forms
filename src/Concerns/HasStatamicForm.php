@@ -21,6 +21,7 @@ trait HasStatamicForm
     public function submitForm(): self
     {
         return $this
+            ->validateFormFields()
             ->validateForm()
             ->makeFormSubmission()
             ->handleFormEvents()
@@ -35,6 +36,17 @@ trait HasStatamicForm
 
         return Form::find($this->formHandle)
             ?? throw new \Exception("Form with handle [{$this->formHandle}] cannot be found.");
+    }
+
+    protected function validateFormFields(): self
+    {
+        collect($this->formFields)->each(function ($field) {
+            if (! $this->form->blueprint()->hasField($field)) {
+                throw new \Exception("A form field with handle [$field] cannot be found.");
+            }
+        });
+
+        return $this;
     }
 
     protected function validateForm(): self
@@ -61,18 +73,18 @@ trait HasStatamicForm
             ->all();
     }
 
-    protected function fieldKeys(): array
-    {
-        $fields = collect($this->formFields);
+    // protected function fieldKeys(): array
+    // {
+    //     $fields = collect($this->formFields);
 
-        if (Arr::isAssoc($this->formFields)) {
-            return array_keys($this->formFields);
-        }
+    //     if (Arr::isAssoc($this->formFields)) {
+    //         return array_keys($this->formFields);
+    //     }
 
-        return $fields
-            ->map(fn ($field) => Str::afterLast($field, '.'))
-            ->all();
-    }
+    //     return $fields
+    //         ->map(fn ($field) => Str::afterLast($field, '.'))
+    //         ->all();
+    // }
 
     protected function formMessages(): array
     {
