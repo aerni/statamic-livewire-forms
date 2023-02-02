@@ -48,7 +48,7 @@ class Conditions
         };
     }
 
-    protected function evaluateCondition(string|array|null $actualValue, string $operator, string $expectedValue): bool
+    protected function evaluateCondition(string|bool|array|null $actualValue, string $operator, string $expectedValue): bool
     {
         return match ($operator) {
             'equals' => $actualValue == $expectedValue,
