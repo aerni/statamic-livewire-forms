@@ -48,11 +48,11 @@ trait WithStatamicForm
     {
         if ($rules = $this->getLivewireFormRules()) {
             $this->validate($rules);
-        };
+        }
 
         if ($rules = $this->getStatamicFormRules()) {
             $this->validate($rules);
-        };
+        }
 
         return $this;
     }
@@ -104,7 +104,11 @@ trait WithStatamicForm
         $this->formSubmission = $this->form->makeSubmission();
 
         // TODO: Add way to upload files.
-        // $assetIds = $this->formSubmission->uploadFiles($this->uploadedFiles());
+        $assetIds = $this->formSubmission->uploadFiles($this->normalizeUploadedFiles());
+
+        dd($assetIds);
+
+        // TODO: Merge the asset Ids into the data. Should we do this in getFormData()?
 
         // Process the data according to the blueprint fields.
         $data = $this->form->blueprint()->fields()
@@ -121,6 +125,22 @@ trait WithStatamicForm
         $this->formSubmission->data($data);
 
         return $this;
+    }
+
+    protected function normalizeUploadedFiles(): array
+    {
+        $assetFields = $this->form->blueprint()->fields()->all()
+            ->filter(fn ($field) => $field->type() === 'assets');
+
+        dd($assetFields);
+
+        // Only get the asset fields that contain data.
+        $assetFields = array_intersect_key($this->data, $this->fields->getByType('assets')->all());
+
+        // The assets fieldtype is expecting an array, even for `max_files: 1`, but we don't want to force that on the front end.
+        return collect($assetFields)
+            ->map(fn ($field) => Arr::wrap($field))
+            ->all();
     }
 
     protected function handleFormEvents(): self
