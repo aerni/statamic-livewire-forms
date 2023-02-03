@@ -17,7 +17,8 @@ class ReCaptcha
          * If the user verify's the captcha but the validation of the form fails for some other reason
          * we need to return the cached response rather than trying to verify it again.
          */
-        if (Cache::has("captcha:response:{$response}")) {
+        $hash = md5($response);
+        if (Cache::has("captcha:response:{$hash}")) {
             return $this->isValid($response);
         }
 
@@ -37,7 +38,8 @@ class ReCaptcha
     */
     protected function isValid(string $response): bool
     {
-        $verifiedResponse = Cache::get("captcha:response:{$response}");
+        $hash = md5($response);
+        $verifiedResponse = Cache::get("captcha:response:{$hash}");
 
         if (is_null($verifiedResponse)) {
             return false;
