@@ -261,6 +261,13 @@ php please livewire-forms:theme
 
 > **Important:** It's very likely that future releases will introduce breaking changes to the theme views. If that happens, you will have to manually update your themes.
 
+### Field Views
+Each field will load the view defined by its type by default. A `subscription` field of `type: radio`, for example, will load the `radio.blade.php` view.
+
+Sometimes you may want to load a different view for a field. In this example, we want to display a fancy radio button group. Simply create a `subscription.blade.php` view within the theme's `fields` folder to autoload your custom view.
+
+You may also manually override a field's view by adding `view: {the_name_of_the_view}` to the config in the blueprint.
+
 ## Components
 
 Sometimes you need more control over your form. For instance, if you want to dynamically populate a select field's options. Or if you have multiple radio fields that need different styling. There are a couple of concepts that help you customize your form experience.
@@ -325,7 +332,7 @@ protected function hydratedFields(Fields $fields): void
 #### Submitting Form
 
 Use this hook to modify data before the form submission is created. Note, that you can only modify data of fields that are part of the form blueprint. You can't add data for nonexistent fields. In the example below: The form blueprint needs a `full_name` field.
- 
+
 ```php
 protected function submittingForm(): void
 {
