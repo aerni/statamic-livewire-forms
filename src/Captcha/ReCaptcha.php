@@ -12,14 +12,16 @@ class ReCaptcha
      */
     public function verifyResponse(string $response, string $clientIp): bool
     {
+        // Hash the response to comply with memory limit of some cache drivers.
+        $hashedResponse = md5($response);
+
         /**
          * The captcha's response can only be verified once.
          * If the user verify's the captcha but the validation of the form fails for some other reason
          * we need to return the cached response rather than trying to verify it again.
          */
-        $hash = md5($response);
-        if (Cache::has("captcha:response:{$hash}")) {
-            return $this->isValid($response);
+        if (Cache::has("captcha:response:{$hashedResponse}")) {
+            return $this->isValid($hashedResponse);
         }
 
         $verifiedResponse = Http::asForm()->post($this->verificationUrl(), [
@@ -28,18 +30,17 @@ class ReCaptcha
             'remoteip' => $clientIp,
         ])->json();
 
-        Cache::put("captcha:response:{$response}", $verifiedResponse);
+        Cache::put("captcha:response:{$hashedResponse}", $verifiedResponse);
 
-        return $this->isValid($response);
+        return $this->isValid($hashedResponse);
     }
 
     /**
-    * Check if the verified response is valid.
-    */
-    protected function isValid(string $response): bool
+     * Check if the verified response is valid.
+     */
+    protected function isValid(string $hashedResponse): bool
     {
-        $hash = md5($response);
-        $verifiedResponse = Cache::get("captcha:response:{$hash}");
+        $verifiedResponse = Cache::get("captcha:response:{$hashedResponse}");
 
         if (is_null($verifiedResponse)) {
             return false;
