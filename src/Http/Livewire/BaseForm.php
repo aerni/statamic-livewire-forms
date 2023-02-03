@@ -249,6 +249,10 @@ class BaseForm extends Component
                 return (int) $value;
             }
 
+            if (! $field->show && ! $field->always_save) {
+                return null;
+            }
+
             return $value;
         })->all();
     }
