@@ -149,14 +149,14 @@ class Fields
     public function validationRules(): array
     {
         return $this->fields
-            ->mapWithKeys(fn ($field) => [$field->key => $field->rules])
+            ->mapWithKeys(fn ($field) => $field->rules())
             ->toArray();
     }
 
     public function validationAttributes(): array
     {
         return $this->fields
-            ->mapWithKeys(fn ($field) => [$field->key => $field->label])
+            ->mapWithKeys(fn ($field) => $field->validationAttributes())
             ->toArray();
     }
 

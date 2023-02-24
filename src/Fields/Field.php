@@ -53,6 +53,16 @@ abstract class Field
         return $this->field;
     }
 
+    public function rules(): array
+    {
+        return [$this->key => $this->rules];
+    }
+
+    public function validationAttributes(): array
+    {
+        return [$this->key => $this->label];
+    }
+
     protected function get(string $key): mixed
     {
         $method = collect(get_class_methods($this))
