@@ -42,7 +42,7 @@ class BladeDirectives
     {
         return Blade::compileString("
             @include(\$this->component->getView('section'), [
-                'handle' => $expression,
+                'section' => \$this->fields->section($expression),
             ])
         ");
     }

@@ -73,19 +73,24 @@ class Fields
     public function sections(): Collection
     {
         return $this->form->blueprint()->tabs()->first()->sections()
-            ->mapWithKeys(fn ($section) => [
-                Str::snake($section->display()) => [
+            ->map(function ($section, $index) {
+                $handle = $section->display()
+                    ? Str::snake($section->display())
+                    : $index;
+
+                return [
+                    'handle' => $handle,
                     'display' => $section->display(),
                     'instructions' => $section->instructions(),
                     'fields' => $this->getSectionFields($section),
-                ],
-            ])
+                ];
+            })
             ->filter(fn ($section) => $section['fields']->isNotEmpty()); // We don't want to show sections that have no visible fields
     }
 
-    public function section(string $handle): Collection
+    public function section(string $handle): ?array
     {
-        return $this->sections()->only($handle);
+        return $this->sections()->firstWhere('handle', $handle);
     }
 
     public function hydrate(): self
