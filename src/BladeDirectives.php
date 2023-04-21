@@ -26,23 +26,23 @@ class BladeDirectives
     }
 
     /**
-     * Get all fields of a group.
+     * Get all fields of a section.
      */
-    public static function formGroups(): string
+    public static function formSections(): string
     {
         return Blade::compileString("
-            @include(\$this->component->getView('groups'))
+            @include(\$this->component->getView('sections'))
         ");
     }
 
     /**
-     * Get all fields of a group.
+     * Get all fields of a section.
      */
-    public static function formGroup(string $expression): string
+    public static function formSection(string $expression): string
     {
         return Blade::compileString("
-            @include(\$this->component->getView('group'), [
-                'group' => $expression,
+            @include(\$this->component->getView('section'), [
+                'section' => $expression,
             ])
         ");
     }

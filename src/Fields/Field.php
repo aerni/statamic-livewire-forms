@@ -4,7 +4,7 @@ namespace Aerni\LivewireForms\Fields;
 
 use Aerni\LivewireForms\Fields\Properties\WithConditions;
 use Aerni\LivewireForms\Fields\Properties\WithDefault;
-use Aerni\LivewireForms\Fields\Properties\WithGroup;
+use Aerni\LivewireForms\Fields\Properties\WithSection;
 use Aerni\LivewireForms\Fields\Properties\WithHandle;
 use Aerni\LivewireForms\Fields\Properties\WithId;
 use Aerni\LivewireForms\Fields\Properties\WithInstructions;
@@ -24,7 +24,7 @@ abstract class Field
 {
     use WithConditions;
     use WithDefault;
-    use WithGroup;
+    use WithSection;
     use WithHandle;
     use WithId;
     use WithInstructions;

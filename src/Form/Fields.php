@@ -61,16 +61,16 @@ class Fields
         return $this->fields->filter(fn ($field) => $field->field()->type() === $key);
     }
 
-    public function groups(): Collection
+    public function sections(): Collection
     {
         return $this->fields
             ->filter(fn ($field) => $field->show)
-            ->groupBy(fn ($field) => $field->group);
+            ->groupBy(fn ($field) => $field->section);
     }
 
-    public function group(string $group): Collection
+    public function section(string $section): Collection
     {
-        return $this->groups()->only($group);
+        return $this->sections()->only($section);
     }
 
     public function hydrate(): self

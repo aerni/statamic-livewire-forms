@@ -216,16 +216,16 @@ This is the default view. You may customize it to your liking.
 
 There are a couple of blade directives you may use in your form views. Each directive renders a view inside the current theme.
 
-| Directive              | Description                                      | View               |
-| ---------------------- | ------------------------------------------------ | ------------------ |
-| `@formFields`          | Loop through and render all form fields          | fields.blade.php   |
-| `@formField('handle')` | Render a specific form field                     | field.blade.php    |
-| `@formGroups`          | Loop through and render all form fields by group | groups.blade.php   |
-| `@formGroup('group')`  | Render a specific from field group               | group.blade.php    |
-| `@formHoneypot`        | Render the form honeypot field                   | honeypot.blade.php |
-| `@formSubmit`          | Render the form submit button                    | submit.blade.php   |
-| `@formErrors`          | Render the form validation errors                | errors.blade.php   |
-| `@formSuccess`         | Render the form success message                  | success.blade.php  |
+| Directive                 | Description                                        | View               |
+| ------------------------- | -------------------------------------------------- | ------------------ |
+| `@formFields`             | Loop through and render all form fields            | fields.blade.php   |
+| `@formField('handle')`    | Render a specific form field                       | field.blade.php    |
+| `@formSections`           | Loop through and render all form fields by section | sections.blade.php |
+| `@formSection('section')` | Render a specific from field section               | section.blade.php  |
+| `@formHoneypot`           | Render the form honeypot field                     | honeypot.blade.php |
+| `@formSubmit`             | Render the form submit button                      | submit.blade.php   |
+| `@formErrors`             | Render the form validation errors                  | errors.blade.php   |
+| `@formSuccess`            | Render the form success message                    | success.blade.php  |
 
 ### Customization Example
 
@@ -536,7 +536,7 @@ There are a couple of configuration options for your form fields:
 | `autocomplete`  | `string`                                | `input`, `textarea`, `select`  | Set the field's [autocomplete](https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/autocomplete) attribute. Defaults to `on`. |
 | `cast_booleans` | `boolean`                               | `radio`, `select`              | String values of `true` and `false` will be saved as booleans. |
 | `default`       | `array`, `boolean`, `integer`, `string` | All fieldtypes except `assets` | Set the field's default value |
-| `group`         | `string`                                | All fieldtypes                 | Group your fields when using the `@formGroups` and `@formGroup('group')` directives in your view. |
+| `section`       | `string`                                | All fieldtypes                 | Group your fields by section when using the `@formSections` and `@formSection('section')` directives in your view. |
 | `inline`        | `boolean`                               | `checkboxes`, `radio`          | Set to `true` to display the fields inline |
 | `placeholder`   | `string`                                | `input`, `textarea`            | Set the field's placeholder value |
 | `show_label`    | `boolean`                               | All fieldtypes                 | Set to `false` to hide the field's label and instructions. |
