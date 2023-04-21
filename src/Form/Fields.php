@@ -7,6 +7,8 @@ use Aerni\LivewireForms\Facades\Models;
 use Aerni\LivewireForms\Fields\Captcha;
 use Aerni\LivewireForms\Fields\Field;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
+use Statamic\Fields\Section;
 use Statamic\Fields\Validator;
 use Statamic\Forms\Form as StatamicForm;
 
@@ -61,16 +63,29 @@ class Fields
         return $this->fields->filter(fn ($field) => $field->field()->type() === $key);
     }
 
-    public function sections(): Collection
+    protected function getSectionFields(Section $section): Collection
     {
         return $this->fields
-            ->filter(fn ($field) => $field->show)
-            ->groupBy(fn ($field) => $field->section);
+            ->filter(fn ($field) => $field->show) // Only consider fields that are visible
+            ->intersectByKeys($section->fields()->all()); // Only keep the fields that are part of the section
     }
 
-    public function section(string $section): Collection
+    public function sections(): Collection
     {
-        return $this->sections()->only($section);
+        return $this->form->blueprint()->tabs()->first()->sections()
+            ->mapWithKeys(fn ($section) => [
+                Str::snake($section->display()) => [
+                    'display' => $section->display(),
+                    'instructions' => $section->instructions(),
+                    'fields' => $this->getSectionFields($section),
+                ],
+            ])
+            ->filter(fn ($section) => $section['fields']->isNotEmpty()); // We don't want to show sections that have no visible fields
+    }
+
+    public function section(string $handle): Collection
+    {
+        return $this->sections()->only($handle);
     }
 
     public function hydrate(): self
@@ -100,14 +115,19 @@ class Fields
 
     protected function hydrateFields(): self
     {
-        $this->fields = $this->form->fields()->map(function ($field) {
+        $this->fields = $this->makeFields($this->form->fields());
+
+        return $this;
+    }
+
+    protected function makeFields(Collection $fields): Collection
+    {
+        return $fields->map(function ($field) {
             $class = $this->models->get($field->handle())
                 ?? $this->models->get($field->fieldtype()::class);
 
             return $class ? $class::make($field, $this->id) : null;
         })->filter();
-
-        return $this;
     }
 
     protected function removeDuplicateCaptchaFields(): self

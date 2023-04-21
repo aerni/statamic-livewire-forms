@@ -1,3 +1,3 @@
-@foreach ($this->fields->sections() as $section => $fields)
+@foreach ($this->fields->sections() as $handle => $section)
     @include($this->component->getView('section'))
 @endforeach
