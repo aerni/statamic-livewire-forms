@@ -16,14 +16,6 @@ class BladeDirectives
     }
 
     /**
-     * An alias of formSections
-     */
-    public static function formFields(): string
-    {
-        return static::formSections();
-    }
-
-    /**
      * Get all the fields grouped by section
      */
     public static function formSections(): string
