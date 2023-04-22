@@ -16,17 +16,15 @@ class BladeDirectives
     }
 
     /**
-     * Get all form fields.
+     * An alias of formSections
      */
     public static function formFields(): string
     {
-        return Blade::compileString("
-            @include(\$this->component->getView('fields'))
-        ");
+        return static::formSections();
     }
 
     /**
-     * Get all fields of a section.
+     * Get all the fields grouped by section
      */
     public static function formSections(): string
     {
@@ -36,7 +34,7 @@ class BladeDirectives
     }
 
     /**
-     * Get all fields of a section.
+     * Get the fields of a specific section by its handle
      */
     public static function formSection(string $expression): string
     {
