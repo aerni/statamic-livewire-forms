@@ -1,4 +1,4 @@
-@if(session()->has('success'))
+@if (session()->has('success'))
     <div class="col-span-1 p-4 rounded-md md:col-span-12 bg-green-50">
         <div class="flex">
             <div class="flex-shrink-0">
