@@ -4,10 +4,10 @@
 
         @if ($section['display'])
             <div class="mb-6">
-                <h3 class="text-lg font-medium leading-6 text-gray-900">{{ __("livewire-forms.{$handle}.{$section['handle']}.display") }}</h3>
+                <h3 class="text-lg font-medium leading-6 text-gray-900">{{ __($section['display']) }}</h3>
 
                 @if ($section['instructions'])
-                    <p class="mt-1 text-sm text-gray-500">{{ __("livewire-forms.{$handle}.{$section['handle']}.instructions") }}</p>
+                    <p class="mt-1 text-sm text-gray-500">{{ __($section['instructions']) }}</p>
                 @endif
             </div>
         @endif
