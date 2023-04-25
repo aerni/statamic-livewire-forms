@@ -477,17 +477,19 @@ A boolean in `config/livewire-forms.php` to globally enable/disable realtime val
 
 #### On the form
 
-A boolean in a form's blueprint to enable/disable realtime validation for the whole form:
+A boolean at the root of a form's blueprint to enable/disable realtime validation for the whole form:
 
 ```yaml
-sections:
+realtime: true
+tabs:
   main:
     display: Main
-    realtime: false
-    fields:
+    sections:
       -
-        handle: email
-        ...
+        fields:
+          -
+            handle: email
+            field: ...
 ```
 
 #### On the form field
@@ -495,36 +497,38 @@ sections:
 A boolean in a form's blueprint to enable/disable realtime validation for a specific field:
 
 ```yaml
-sections:
+tabs:
   main:
     display: Main
-    fields:
+    sections:
       -
-        handle: email
-        field:
-          ...
-          realtime: true
-          validate:
-            - required
-            - email
+        fields:
+          -
+            handle: email
+            field: ...
+            realtime: true
+            validate:
+              - required
+              - email
 ```
 
 Sometimes you may want to only validate certain rules in realtime. You may provide an array with the rules you want to validate in realtime instead of a boolean:
 
 ```yaml
-sections:
+tabs:
   main:
     display: Main
-    fields:
+    sections:
       -
-        handle: email
-        field:
-          ...
-          realtime:
-            - required
-          validate:
-            - required
-            - email
+        fields:
+          -
+            handle: email
+            field: ...
+            realtime:
+              - required
+            validate:
+              - required
+              - email
 ```
 
 ## Field configuration

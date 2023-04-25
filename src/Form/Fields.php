@@ -195,7 +195,7 @@ class Fields
         }
 
         $realtime = $field->realtime
-            ?? $this->form->blueprint()->contents()['sections']['main']['realtime']
+            ?? $this->form->blueprint()->contents()['realtime']
             ?? config('livewire-forms.realtime', true);
 
         // Use the regular validation rules if "realtime: true".
