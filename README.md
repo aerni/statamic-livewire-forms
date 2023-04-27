@@ -216,16 +216,15 @@ This is the default view. You may customize it to your liking.
 
 There are a couple of blade directives you may use in your form views. Each directive renders a view inside the current theme.
 
-| Directive                 | Description                                        | View               |
-| ------------------------- | -------------------------------------------------- | ------------------ |
-| `@formFields`             | Loop through and render all form fields            | fields.blade.php   |
-| `@formField('handle')`    | Render a specific form field                       | field.blade.php    |
-| `@formSections`           | Loop through and render all form fields by section | sections.blade.php |
-| `@formSection('section')` | Render a specific from field section               | section.blade.php  |
-| `@formHoneypot`           | Render the form honeypot field                     | honeypot.blade.php |
-| `@formSubmit`             | Render the form submit button                      | submit.blade.php   |
-| `@formErrors`             | Render the form validation errors                  | errors.blade.php   |
-| `@formSuccess`            | Render the form success message                    | success.blade.php  |
+| Directive                | Description                                        | View               |
+| ------------------------ | -------------------------------------------------- | ------------------ |
+| `@formSections`          | Loop through and render all form fields by section | sections.blade.php |
+| `@formSection('handle')` | Render a specific from section                     | section.blade.php  |
+| `@formField('handle')`   | Render a specific form field                       | field.blade.php    |
+| `@formHoneypot`          | Render the form honeypot field                     | honeypot.blade.php |
+| `@formSubmit`            | Render the form submit button                      | submit.blade.php   |
+| `@formErrors`            | Render the form validation errors                  | errors.blade.php   |
+| `@formSuccess`           | Render the form success message                    | success.blade.php  |
 
 ### Customization Example
 
@@ -270,7 +269,7 @@ You may also manually override a field's view by adding `view: {the_name_of_the_
 
 ## Components
 
-Sometimes you need more control over your form. For instance, if you want to dynamically populate a select field's options. Or if you have multiple radio fields that need different styling. There are a couple of concepts that help you customize your form experience.
+Sometimes you need more control over your form. For instance, if you want to dynamically populate a select field's options. There are a couple of concepts that help you customize your form experience.
 
 Get started by creating a new component. The following example will create a new form component in `app/Http/Livewire/ContactForm.php`
 
@@ -586,14 +585,18 @@ You can translate your field labels, instructions, options, and placeholders usi
 
 **Form Blueprint**
 ```yaml
-sections:
+tabs:
   main:
     display: Main
-    fields:
+    sections:
       -
-        display: Colors
-        placeholder: 'What is your favorite color?'
-        ...
+        fields:
+          -
+            handle: colors
+            field:
+              display: Colors
+              placeholder: 'What is your favorite color?'
+              ...
 ```
 
 **Translation File**
