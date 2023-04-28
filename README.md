@@ -202,8 +202,8 @@ This is the default view. You may customize it to your liking.
 
 ```blade
 <form wire:submit.prevent="submit" class="w-full max-w-2xl">
-    <div class="grid grid-cols-1 gap-8 md:grid-cols-12">
-        @formFields
+    <div class="flex flex-col gap-y-16">
+        @formSections
         @formHoneypot
         @formSubmit
         @formErrors
@@ -488,7 +488,8 @@ tabs:
         fields:
           -
             handle: email
-            field: ...
+            field:
+              type: text
 ```
 
 #### On the form field
@@ -504,11 +505,12 @@ tabs:
         fields:
           -
             handle: email
-            field: ...
-            realtime: true
-            validate:
-              - required
-              - email
+            field:
+              type: text
+              realtime: true
+              validate:
+                - required
+                - email
 ```
 
 Sometimes you may want to only validate certain rules in realtime. You may provide an array with the rules you want to validate in realtime instead of a boolean:
@@ -522,12 +524,13 @@ tabs:
         fields:
           -
             handle: email
-            field: ...
-            realtime:
-              - required
-            validate:
-              - required
-              - email
+            field:
+              type: text
+              realtime:
+                - required
+              validate:
+                - required
+                - email
 ```
 
 ## Field configuration
@@ -565,6 +568,7 @@ php artisan vendor:publish --tag=livewire-forms-translations
 
 ```php
 return [
+
     'contact' => [
         'submit_button_label' => 'Contact now',
         'success_message' => 'Thanks for contacting us. We will be in touch.',
@@ -574,6 +578,7 @@ return [
     'newsletter' => [
         'submit_button_label' => 'Signup now',
     ],
+    
 ];
 ```
 
@@ -596,7 +601,6 @@ tabs:
             field:
               display: Colors
               placeholder: 'What is your favorite color?'
-              ...
 ```
 
 **Translation File**
