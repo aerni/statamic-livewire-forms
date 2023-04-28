@@ -542,7 +542,6 @@ There are a couple of configuration options for your form fields:
 | `autocomplete`  | `string`                                | `input`, `textarea`, `select`  | Set the field's [autocomplete](https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/autocomplete) attribute. Defaults to `on`. |
 | `cast_booleans` | `boolean`                               | `radio`, `select`              | String values of `true` and `false` will be saved as booleans. |
 | `default`       | `array`, `boolean`, `integer`, `string` | All fieldtypes except `assets` | Set the field's default value |
-| `section`       | `string`                                | All fieldtypes                 | Group your fields by section when using the `@formSections` and `@formSection('section')` directives in your view. |
 | `inline`        | `boolean`                               | `checkboxes`, `radio`          | Set to `true` to display the fields inline |
 | `placeholder`   | `string`                                | `input`, `textarea`            | Set the field's placeholder value |
 | `show_label`    | `boolean`                               | All fieldtypes                 | Set to `false` to hide the field's label and instructions. |
