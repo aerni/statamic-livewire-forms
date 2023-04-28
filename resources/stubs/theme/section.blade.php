@@ -1,6 +1,6 @@
 @if ($section)
 
-    <div class="pt-8 border-t border-gray-200 first:pt-0 first:border-t-0">
+    <div>
 
         @if ($section['display'])
             <div class="mb-6">
