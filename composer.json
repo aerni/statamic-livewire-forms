@@ -1,6 +1,6 @@
 {
     "name": "aerni/livewire-forms",
-    "description": "A Statamic forms framework for Laravel Livewire",
+    "description": "A Statamic forms framework powered by Laravel Livewire",
     "keywords": [
         "statamic",
         "livewire",
@@ -40,7 +40,7 @@
     "extra": {
         "statamic": {
             "name": "Livewire Forms",
-            "description": "A Statamic forms framework for Laravel Livewire"
+            "description": "A Statamic forms framework powered by Laravel Livewire"
         },
         "laravel": {
             "providers": [

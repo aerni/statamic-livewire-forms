@@ -1,4 +1,4 @@
-![Statamic](https://flat.badgen.net/badge/Statamic/3.3.12+/FF269E) ![Packagist version](https://flat.badgen.net/packagist/v/aerni/livewire-forms/latest) ![Packagist Total Downloads](https://flat.badgen.net/packagist/dt/aerni/livewire-forms)
+![Statamic](https://flat.badgen.net/badge/Statamic/4.0+/FF269E) ![Packagist version](https://flat.badgen.net/packagist/v/aerni/livewire-forms/latest) ![Packagist Total Downloads](https://flat.badgen.net/packagist/dt/aerni/livewire-forms)
 
 # Livewire Forms
 This addon provides a powerful framework to use Statamic forms with Laravel Livewire. No more submitting your form with AJAX or dealing with funky client-side validation libraries. Livewire Forms is a powerhouse that will make your life soooo much easier!
@@ -202,8 +202,8 @@ This is the default view. You may customize it to your liking.
 
 ```blade
 <form wire:submit.prevent="submit" class="w-full max-w-2xl">
-    <div class="grid grid-cols-1 gap-8 md:grid-cols-12">
-        @formFields
+    <div class="flex flex-col gap-y-16">
+        @formSections
         @formHoneypot
         @formSubmit
         @formErrors
@@ -216,16 +216,15 @@ This is the default view. You may customize it to your liking.
 
 There are a couple of blade directives you may use in your form views. Each directive renders a view inside the current theme.
 
-| Directive              | Description                                      | View               |
-| ---------------------- | ------------------------------------------------ | ------------------ |
-| `@formFields`          | Loop through and render all form fields          | fields.blade.php   |
-| `@formField('handle')` | Render a specific form field                     | field.blade.php    |
-| `@formGroups`          | Loop through and render all form fields by group | groups.blade.php   |
-| `@formGroup('group')`  | Render a specific from field group               | group.blade.php    |
-| `@formHoneypot`        | Render the form honeypot field                   | honeypot.blade.php |
-| `@formSubmit`          | Render the form submit button                    | submit.blade.php   |
-| `@formErrors`          | Render the form validation errors                | errors.blade.php   |
-| `@formSuccess`         | Render the form success message                  | success.blade.php  |
+| Directive                | Description                                        | View               |
+| ------------------------ | -------------------------------------------------- | ------------------ |
+| `@formSections`          | Loop through and render all form fields by section | sections.blade.php |
+| `@formSection('handle')` | Render a specific from section                     | section.blade.php  |
+| `@formField('handle')`   | Render a specific form field                       | field.blade.php    |
+| `@formHoneypot`          | Render the form honeypot field                     | honeypot.blade.php |
+| `@formSubmit`            | Render the form submit button                      | submit.blade.php   |
+| `@formErrors`            | Render the form validation errors                  | errors.blade.php   |
+| `@formSuccess`           | Render the form success message                    | success.blade.php  |
 
 ### Customization Example
 
@@ -270,7 +269,7 @@ You may also manually override a field's view by adding `view: {the_name_of_the_
 
 ## Components
 
-Sometimes you need more control over your form. For instance, if you want to dynamically populate a select field's options. Or if you have multiple radio fields that need different styling. There are a couple of concepts that help you customize your form experience.
+Sometimes you need more control over your form. For instance, if you want to dynamically populate a select field's options. There are a couple of concepts that help you customize your form experience.
 
 Get started by creating a new component. The following example will create a new form component in `app/Http/Livewire/ContactForm.php`
 
@@ -477,17 +476,20 @@ A boolean in `config/livewire-forms.php` to globally enable/disable realtime val
 
 #### On the form
 
-A boolean in a form's blueprint to enable/disable realtime validation for the whole form:
+A boolean at the root of a form's blueprint to enable/disable realtime validation for the whole form:
 
 ```yaml
-sections:
+realtime: true
+tabs:
   main:
     display: Main
-    realtime: false
-    fields:
+    sections:
       -
-        handle: email
-        ...
+        fields:
+          -
+            handle: email
+            field:
+              type: text
 ```
 
 #### On the form field
@@ -495,36 +497,40 @@ sections:
 A boolean in a form's blueprint to enable/disable realtime validation for a specific field:
 
 ```yaml
-sections:
+tabs:
   main:
     display: Main
-    fields:
+    sections:
       -
-        handle: email
-        field:
-          ...
-          realtime: true
-          validate:
-            - required
-            - email
+        fields:
+          -
+            handle: email
+            field:
+              type: text
+              realtime: true
+              validate:
+                - required
+                - email
 ```
 
 Sometimes you may want to only validate certain rules in realtime. You may provide an array with the rules you want to validate in realtime instead of a boolean:
 
 ```yaml
-sections:
+tabs:
   main:
     display: Main
-    fields:
+    sections:
       -
-        handle: email
-        field:
-          ...
-          realtime:
-            - required
-          validate:
-            - required
-            - email
+        fields:
+          -
+            handle: email
+            field:
+              type: text
+              realtime:
+                - required
+              validate:
+                - required
+                - email
 ```
 
 ## Field configuration
@@ -536,7 +542,6 @@ There are a couple of configuration options for your form fields:
 | `autocomplete`  | `string`                                | `input`, `textarea`, `select`  | Set the field's [autocomplete](https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/autocomplete) attribute. Defaults to `on`. |
 | `cast_booleans` | `boolean`                               | `radio`, `select`              | String values of `true` and `false` will be saved as booleans. |
 | `default`       | `array`, `boolean`, `integer`, `string` | All fieldtypes except `assets` | Set the field's default value |
-| `group`         | `string`                                | All fieldtypes                 | Group your fields when using the `@formGroups` and `@formGroup('group')` directives in your view. |
 | `inline`        | `boolean`                               | `checkboxes`, `radio`          | Set to `true` to display the fields inline |
 | `placeholder`   | `string`                                | `input`, `textarea`            | Set the field's placeholder value |
 | `show_label`    | `boolean`                               | All fieldtypes                 | Set to `false` to hide the field's label and instructions. |
@@ -562,6 +567,7 @@ php artisan vendor:publish --tag=livewire-forms-translations
 
 ```php
 return [
+
     'contact' => [
         'submit_button_label' => 'Contact now',
         'success_message' => 'Thanks for contacting us. We will be in touch.',
@@ -571,10 +577,11 @@ return [
     'newsletter' => [
         'submit_button_label' => 'Signup now',
     ],
+    
 ];
 ```
 
-### Translating fields
+### Translating sections and fields
 
 You can translate your field labels, instructions, options, and placeholders using JSON files. Create a translation file for each language, e.g. `resources/lang/de.json`.
 
@@ -582,21 +589,27 @@ You can translate your field labels, instructions, options, and placeholders usi
 
 **Form Blueprint**
 ```yaml
-sections:
+tabs:
   main:
     display: Main
-    fields:
+    sections:
       -
-        display: Colors
-        placeholder: 'What is your favorite color?'
-        ...
+        display: Subscription
+        instructions: 'Choose your subscription below'
+        fields:
+          -
+            handle: subscription
+            field:
+              display: Subscription
+              placeholder: 'Which subscription do you want?'
 ```
 
 **Translation File**
 ```json
 {
-    "Colors": "Farben",
-    "What is your favorite color?": "Was ist deine Lieblingsfarbe?",
+    "Subscription": "Abo",
+    "Choose your subscription below": "Wähle dein Abo",
+    "Which subscription do you want?": "Welches Abo möchtest du?",
 }
 ```
 

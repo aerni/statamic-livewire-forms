@@ -16,33 +16,23 @@ class BladeDirectives
     }
 
     /**
-     * Get all form fields.
+     * Get all the fields grouped by section
      */
-    public static function formFields(): string
+    public static function formSections(): string
     {
         return Blade::compileString("
-            @include(\$this->component->getView('fields'))
+            @include(\$this->component->getView('sections'))
         ");
     }
 
     /**
-     * Get all fields of a group.
+     * Get the fields of a specific section by its handle
      */
-    public static function formGroups(): string
+    public static function formSection(string $expression): string
     {
         return Blade::compileString("
-            @include(\$this->component->getView('groups'))
-        ");
-    }
-
-    /**
-     * Get all fields of a group.
-     */
-    public static function formGroup(string $expression): string
-    {
-        return Blade::compileString("
-            @include(\$this->component->getView('group'), [
-                'group' => $expression,
+            @include(\$this->component->getView('section'), [
+                'section' => \$this->fields->section($expression),
             ])
         ");
     }

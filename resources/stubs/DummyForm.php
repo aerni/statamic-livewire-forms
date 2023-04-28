@@ -83,11 +83,11 @@ class DummyForm extends BaseForm
 
     // public function errorMessage(): string
     // {
-    //     return 'Something went terribly wrong!';
+    // return __("Something went terribly wrong!");
     // }
 
     // public function submitButtonLabel(): string
     // {
-    //     return 'Send now';
+    //     return __("Send now");
     // }
 }
