@@ -581,7 +581,7 @@ return [
 ];
 ```
 
-### Translating fields
+### Translating sections and fields
 
 You can translate your field labels, instructions, options, and placeholders using JSON files. Create a translation file for each language, e.g. `resources/lang/de.json`.
 
@@ -594,19 +594,22 @@ tabs:
     display: Main
     sections:
       -
+        display: Subscription
+        instructions: 'Choose your subscription below'
         fields:
           -
-            handle: colors
+            handle: subscription
             field:
-              display: Colors
-              placeholder: 'What is your favorite color?'
+              display: Subscription
+              placeholder: 'Which subscription do you want?'
 ```
 
 **Translation File**
 ```json
 {
-    "Colors": "Farben",
-    "What is your favorite color?": "Was ist deine Lieblingsfarbe?",
+    "Subscription": "Abo",
+    "Choose your subscription below": "Wähle dein Abo",
+    "Which subscription do you want?": "Welches Abo möchtest du?",
 }
 ```
 
