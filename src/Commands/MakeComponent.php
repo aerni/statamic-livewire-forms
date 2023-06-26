@@ -12,6 +12,7 @@ class MakeComponent extends Command
     use RunsInPlease;
 
     protected $signature = 'livewire-forms:component {name?}';
+
     protected $description = 'Create a new Livewire form component';
 
     public function handle(): void

@@ -12,12 +12,13 @@ class MakeView extends Command
     use RunsInPlease;
 
     protected $signature = 'livewire-forms:view {name?}';
+
     protected $description = 'Create a new Livewire form view';
 
     public function handle(): void
     {
         $view = $this->argument('name') ?? $this->ask('What do you want to call the view?', Component::defaultView());
-        $stub = File::get(__DIR__ . '/../../resources/stubs/form.blade.php');
+        $stub = File::get(__DIR__.'/../../resources/stubs/form.blade.php');
         $filename = "{$view}.blade.php";
         $path = resource_path("views/livewire/forms/{$filename}");
 
@@ -30,6 +31,6 @@ class MakeView extends Command
 
     protected function getRelativePath($path): string
     {
-        return str_replace(base_path() . '/', '', $path);
+        return str_replace(base_path().'/', '', $path);
     }
 }

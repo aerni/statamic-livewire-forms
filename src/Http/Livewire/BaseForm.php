@@ -25,10 +25,13 @@ class BaseForm extends Component
     use WithFileUploads;
 
     protected array $models = [];
+
     protected Submission $submission;
 
     public string $handle;
+
     public string $view;
+
     public string $theme;
 
     public array $data = [];

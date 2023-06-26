@@ -41,6 +41,7 @@ return [
         \Statamic\Fieldtypes\Integer::class => \Aerni\LivewireForms\Fields\Integer::class,
         \Statamic\Fieldtypes\Radio::class => \Aerni\LivewireForms\Fields\Radio::class,
         \Statamic\Fieldtypes\Select::class => \Aerni\LivewireForms\Fields\Select::class,
+        \Statamic\Fieldtypes\Spacer::class => \Aerni\LivewireForms\Fields\Spacer::class,
         \Statamic\Fieldtypes\Text::class => \Aerni\LivewireForms\Fields\Text::class,
         \Statamic\Fieldtypes\Textarea::class => \Aerni\LivewireForms\Fields\Textarea::class,
         \Statamic\Fieldtypes\Toggle::class => \Aerni\LivewireForms\Fields\Toggle::class,

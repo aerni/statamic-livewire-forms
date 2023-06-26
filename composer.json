@@ -19,7 +19,7 @@
     "require": {
         "php": "^8.0",
         "laravel/framework": "^9.0 || ^10.0",
-        "statamic/cms": "^4.0",
+        "statamic/cms": "^4.9",
         "jonassiewertsen/statamic-livewire": "^2.12.0",
         "livewire/livewire": "^2.12.3"
     },

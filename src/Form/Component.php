@@ -8,6 +8,7 @@ use Livewire\LivewireComponentsFinder;
 class Component
 {
     protected string $theme;
+
     protected string $view;
 
     public function defaultView(): string

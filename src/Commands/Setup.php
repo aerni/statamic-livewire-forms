@@ -10,6 +10,7 @@ class Setup extends Command
     use RunsInPlease;
 
     protected $signature = 'livewire-forms:setup';
+
     protected $description = 'Step by step wizard to get you started';
 
     public function handle(): void
