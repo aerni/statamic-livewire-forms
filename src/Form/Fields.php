@@ -15,8 +15,11 @@ use Statamic\Forms\Form as StatamicForm;
 class Fields
 {
     protected Collection $models;
+
     protected Collection $data;
+
     protected Collection $fields;
+
     protected $hydratedCallbacks = [];
 
     public function __construct(protected StatamicForm $form, protected string $id)

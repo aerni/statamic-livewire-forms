@@ -9,8 +9,11 @@ use Livewire\Component;
 class Form extends Component
 {
     public string $handle;
+
     public string $component;
+
     public string $view;
+
     public string $theme;
 
     public function mount(): void
