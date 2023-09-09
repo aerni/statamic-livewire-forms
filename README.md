@@ -272,7 +272,7 @@ You may also manually override a field's view by adding `view: {the_name_of_the_
 
 Sometimes you need more control over your form. For instance, if you want to dynamically populate a select field's options. There are a couple of concepts that help you customize your form experience.
 
-Get started by creating a new component. The following example will create a new form component in `app/Http/Livewire/ContactForm.php`
+Get started by creating a new component. The following example will create a new form component in `app/Livewire/ContactForm.php`
 
 ```bash
 php please livewire-forms:component ContactForm

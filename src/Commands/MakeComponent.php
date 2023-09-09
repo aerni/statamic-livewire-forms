@@ -23,10 +23,10 @@ class MakeComponent extends Command
 
         $stub = File::get(__DIR__.'/../../resources/stubs/DummyForm.php');
         $stub = str_replace('DummyForm', $filename, $stub);
-        $path = app_path("Http/Livewire/{$filename}.php");
+        $path = app_path("Livewire/{$filename}.php");
 
         if (! File::exists($path) || $this->confirm("A component with the name <comment>$filename</comment> already exists. Do you want to overwrite it?")) {
-            File::ensureDirectoryExists(app_path('Http/Livewire'));
+            File::ensureDirectoryExists(app_path('Livewire'));
             File::put($path, $stub);
             $this->line("<info>[✓]</info> The component was successfully created: <comment>{$this->getRelativePath($path)}</comment>");
         }
