@@ -108,7 +108,7 @@ class BaseForm extends Component
 
     public function getFieldsProperty(): Fields
     {
-        return Fields::make($this->form, $this->id)
+        return Fields::make($this->form, $this->getId())
             ->models($this->models())
             ->data($this->data)
             ->hydrated(fn ($fields) => $this->hydratedFields($fields))
@@ -117,7 +117,7 @@ class BaseForm extends Component
 
     public function getHoneypotProperty(): Honeypot
     {
-        return Honeypot::make($this->form->honeypot(), $this->id);
+        return Honeypot::make($this->form->honeypot(), $this->getId());
     }
 
     public function submit(): void
