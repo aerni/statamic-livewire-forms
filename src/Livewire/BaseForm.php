@@ -273,14 +273,14 @@ class BaseForm extends Component
 
     protected function handleSubmissionEvents(): self
     {
-        $this->emit('formSubmitted');
+        $this->dispatch('formSubmitted');
         $formSubmitted = FormSubmitted::dispatch($this->submission);
 
         if ($formSubmitted === false) {
             throw new SilentFormFailureException();
         }
 
-        $this->emit('submissionCreated');
+        $this->dispatch('submissionCreated');
         SubmissionCreated::dispatch($this->submission);
 
         $site = Site::findByUrl(URL::previous());
