@@ -3,8 +3,8 @@
 namespace Aerni\LivewireForms;
 
 use Aerni\LivewireForms\Facades\Captcha;
-use Aerni\LivewireForms\Http\Livewire\DefaultForm;
-use Aerni\LivewireForms\Http\Livewire\Form;
+use Aerni\LivewireForms\Livewire\DefaultForm;
+use Aerni\LivewireForms\Livewire\Form;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Validator;
 use Livewire\Livewire;

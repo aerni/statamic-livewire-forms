@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Http\Livewire;
+namespace App\Livewire;
 
 use Aerni\LivewireForms\Form\Fields;
-use Aerni\LivewireForms\Http\Livewire\BaseForm;
+use Aerni\LivewireForms\Livewire\BaseForm;
 
 class DummyForm extends BaseForm
 {

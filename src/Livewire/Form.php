@@ -1,6 +1,6 @@
 <?php
 
-namespace Aerni\LivewireForms\Http\Livewire;
+namespace Aerni\LivewireForms\Livewire;
 
 use Aerni\LivewireForms\Form\Component as FormComponent;
 use Illuminate\Contracts\View\View;
