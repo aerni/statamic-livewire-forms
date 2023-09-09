@@ -136,7 +136,7 @@ class BaseForm extends Component
         return view("livewire.forms.{$this->view}");
     }
 
-    protected function updated(string $field): void
+    public function updated(string $field): void
     {
         $this->validateOnly($field, $this->realtimeRules($field));
     }
