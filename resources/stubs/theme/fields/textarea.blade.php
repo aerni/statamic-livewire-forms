@@ -16,7 +16,11 @@
         id="{{ $field->id }}"
         name="{{ $field->id }}"
         placeholder="{{ $field->placeholder }}"
-        wire:model.{{ $field->wire_model_modifier }}="{{ $field->key }}"
+        @if ($field->wire_model)
+            wire:model.{{ $field->wire_model }}="{{ $field->key }}"
+        @else
+            wire:model="{{ $field->key }}"
+        @endif
         rows="5"
 
         @if (! $errors->has($field->key))

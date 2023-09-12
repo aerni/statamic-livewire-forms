@@ -15,7 +15,11 @@
         type="{{ $field->input_type }}"
         autocomplete="{{ $field->autocomplete }}"
         placeholder="{{ $field->placeholder }}"
-        wire:model.{{ $field->wire_model_modifier }}="{{ $field->key }}"
+        @if ($field->wire_model)
+            wire:model.{{ $field->wire_model }}="{{ $field->key }}"
+        @else
+            wire:model="{{ $field->key }}"
+        @endif
 
         @if (! $errors->has($field->key))
             class="block w-full placeholder-gray-300 border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
