@@ -5,7 +5,6 @@ This addon provides a powerful framework to use Statamic forms with Laravel Live
 
 ## Features
 - Use your Statamic form blueprints as a form builder
-- Realtime validation with fine-grained control over each field
 - No need for a client-side form validation library
 - One source of truth for your validation rules
 - Spam protection with Google reCAPTCHA v2 and honeypot field
@@ -74,17 +73,6 @@ return [
         \Statamic\Fieldtypes\Textarea::class => \Aerni\LivewireForms\Fields\Textarea::class,
         \Statamic\Fieldtypes\Toggle::class => \Aerni\LivewireForms\Fields\Toggle::class,
     ],
-
-    /*
-    |--------------------------------------------------------------------------
-    | Realtime Validation
-    |--------------------------------------------------------------------------
-    |
-    | A boolean to globally enable/disable realtime validation.
-    |
-    */
-
-    'realtime' => true,
 
     /*
     |--------------------------------------------------------------------------
@@ -463,39 +451,9 @@ protected $messages = [
 ];
 ```
 
-### Realtime Validation
+### Real-time Validation
 
-You can configure real-time validation on three levels. In the config file, on the form, and on the form field. Each level will override the configuration of the previous level.
-
-#### In the config
-
-A boolean in `config/livewire-forms.php` to globally enable/disable realtime validation:
-
-```php
-'realtime' => true,
-```
-
-#### On the form
-
-A boolean at the root of a form's blueprint to enable/disable realtime validation for the whole form:
-
-```yaml
-realtime: true
-tabs:
-  main:
-    display: Main
-    sections:
-      -
-        fields:
-          -
-            handle: email
-            field:
-              type: text
-```
-
-#### On the form field
-
-A boolean in a form's blueprint to enable/disable realtime validation for a specific field:
+You may use [real-time validation](https://livewire.laravel.com/docs/validation#real-time-validation) by adding `wire_model: blur` or `wire_model:live` to a field's config.
 
 ```yaml
 tabs:
@@ -508,27 +466,7 @@ tabs:
             handle: email
             field:
               type: text
-              realtime: true
-              validate:
-                - required
-                - email
-```
-
-Sometimes you may want to only validate certain rules in realtime. You may provide an array with the rules you want to validate in realtime instead of a boolean:
-
-```yaml
-tabs:
-  main:
-    display: Main
-    sections:
-      -
-        fields:
-          -
-            handle: email
-            field:
-              type: text
-              realtime:
-                - required
+              wire_model: blur
               validate:
                 - required
                 - email

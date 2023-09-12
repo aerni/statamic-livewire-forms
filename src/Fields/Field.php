@@ -9,7 +9,6 @@ use Aerni\LivewireForms\Fields\Properties\WithId;
 use Aerni\LivewireForms\Fields\Properties\WithInstructions;
 use Aerni\LivewireForms\Fields\Properties\WithKey;
 use Aerni\LivewireForms\Fields\Properties\WithLabel;
-use Aerni\LivewireForms\Fields\Properties\WithRealtime;
 use Aerni\LivewireForms\Fields\Properties\WithRules;
 use Aerni\LivewireForms\Fields\Properties\WithShow;
 use Aerni\LivewireForms\Fields\Properties\WithShowLabel;
@@ -27,7 +26,6 @@ abstract class Field
     use WithInstructions;
     use WithKey;
     use WithLabel;
-    use WithRealtime;
     use WithRules;
     use WithShow;
     use WithShowLabel;
