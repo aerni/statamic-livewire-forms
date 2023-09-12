@@ -1,6 +1,6 @@
 <?php
 
-namespace Aerni\LivewireForms\Http\Livewire;
+namespace Aerni\LivewireForms\Livewire;
 
 use Aerni\LivewireForms\Facades\Models;
 use Aerni\LivewireForms\Form\Component as FormComponent;
@@ -108,7 +108,7 @@ class BaseForm extends Component
 
     public function getFieldsProperty(): Fields
     {
-        return Fields::make($this->form, $this->id)
+        return Fields::make($this->form, $this->getId())
             ->models($this->models())
             ->data($this->data)
             ->hydrated(fn ($fields) => $this->hydratedFields($fields))
@@ -117,7 +117,7 @@ class BaseForm extends Component
 
     public function getHoneypotProperty(): Honeypot
     {
-        return Honeypot::make($this->form->honeypot(), $this->id);
+        return Honeypot::make($this->form->honeypot(), $this->getId());
     }
 
     public function submit(): void
@@ -136,7 +136,7 @@ class BaseForm extends Component
         return view("livewire.forms.{$this->view}");
     }
 
-    protected function updated(string $field): void
+    public function updated(string $field): void
     {
         $this->validateOnly($field, $this->realtimeRules($field));
     }
@@ -273,14 +273,14 @@ class BaseForm extends Component
 
     protected function handleSubmissionEvents(): self
     {
-        $this->emit('formSubmitted');
+        $this->dispatch('formSubmitted');
         $formSubmitted = FormSubmitted::dispatch($this->submission);
 
         if ($formSubmitted === false) {
             throw new SilentFormFailureException();
         }
 
-        $this->emit('submissionCreated');
+        $this->dispatch('submissionCreated');
         SubmissionCreated::dispatch($this->submission);
 
         $site = Site::findByUrl(URL::previous());

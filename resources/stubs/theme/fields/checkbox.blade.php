@@ -20,7 +20,11 @@
                             name="{{ $field->id }}"
                             value="{{ $option }}"
                             type="checkbox"
-                            wire:model.{{ $field->wire_model_modifier }}="{{ $field->key }}"
+                            @if ($field->wire_model)
+                                wire:model.{{ $field->wire_model }}="{{ $field->key }}"
+                            @else
+                                wire:model="{{ $field->key }}"
+                            @endif
 
                             @if (! $errors->has($field->key))
                                 class="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"

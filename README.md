@@ -272,7 +272,7 @@ You may also manually override a field's view by adding `view: {the_name_of_the_
 
 Sometimes you need more control over your form. For instance, if you want to dynamically populate a select field's options. There are a couple of concepts that help you customize your form experience.
 
-Get started by creating a new component. The following example will create a new form component in `app/Http/Livewire/ContactForm.php`
+Get started by creating a new component. The following example will create a new form component in `app/Livewire/ContactForm.php`
 
 ```bash
 php please livewire-forms:component ContactForm
@@ -280,7 +280,7 @@ php please livewire-forms:component ContactForm
 
 ### Render the component
 
-Livewire Forms is smart enough to autoload custom components by matching the class name with the form's handle. The following example will look for a `App\Http\Livewire\ContactForm.php` component. If there is no class with that name, the default form component will be loaded instead.
+Livewire Forms is smart enough to autoload custom components by matching the class name with the form's handle. The following example will look for a `App\Livewire\ContactForm.php` component. If there is no class with that name, the default form component will be loaded instead.
 
 ```blade
 <!-- Antlers -->
@@ -394,9 +394,9 @@ class SelectProduct extends Select
 Next, we need to tell the form which field we want to use the `SelectProduct` model for. In our case, we only want to use the `SelectProduct` model for the select field with the handle `products`.
 
 ```php
-namespace App\Http\Livewire;
+namespace App\Livewire;
 
-use Aerni\LivewireForms\Http\Livewire\BaseForm;
+use Aerni\LivewireForms\Livewire\BaseForm;
 
 class ContactForm extends BaseForm
 {
@@ -411,9 +411,9 @@ class ContactForm extends BaseForm
 Instead of defining a new field model, we can also achieve the same thing using the `hydratedFields` callback.
 
 ```php
-namespace App\Http\Livewire;
+namespace App\Livewire;
 
-use Aerni\LivewireForms\Http\Livewire\BaseForm;
+use Aerni\LivewireForms\Livewire\BaseForm;
 
 class ContactForm extends BaseForm
 {
@@ -578,7 +578,7 @@ return [
     'newsletter' => [
         'submit_button_label' => 'Signup now',
     ],
-    
+
 ];
 ```
 

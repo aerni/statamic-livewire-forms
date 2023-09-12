@@ -1,6 +1,6 @@
 <?php
 
-namespace Aerni\LivewireForms\Http\Livewire;
+namespace Aerni\LivewireForms\Livewire;
 
 class DefaultForm extends BaseForm
 {
