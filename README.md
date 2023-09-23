@@ -117,28 +117,6 @@ Go ahead and run the following command in your console. It will guide you throug
 php please livewire-forms:setup
 ```
 
-### Setup your layout
-
-Add the Livewire `styles` in the `head`, and the `scripts` before the closing `body` tag in your template:
-
-```blade
-<head>
-    <!-- Antlers -->
-    {{ livewire:styles }}
-
-    <!-- Blade -->
-    @livewireStyles
-</head>
-
-<body>
-    <!-- Antlers -->
-    {{ livewire:scripts }}
-
-    <!-- Blade -->
-    @livewireScripts
-</body>
-```
-
 ### Render the form
 
 Add the Livewire form component to your template and provide the handle of the Statamic form.
