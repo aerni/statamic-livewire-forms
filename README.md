@@ -478,6 +478,7 @@ There are a couple of configuration options for your form fields:
 | `placeholder`   | `string`                                | `input`, `textarea`            | Set the field's placeholder value |
 | `show_label`    | `boolean`                               | All fieldtypes                 | Set to `false` to hide the field's label and instructions. |
 | `width`         | `integer`                               | All fieldtypes                 | Set the desired width of the field. |
+| `wire_model`    | `string`                                | All fieldtypes                 | Customize wire:model, e.g. `wire_model: live.debounce.150ms`. |
 
 ## Localization
 
