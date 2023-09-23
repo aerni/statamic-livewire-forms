@@ -5,7 +5,6 @@ This addon provides a powerful framework to use Statamic forms with Laravel Live
 
 ## Features
 - Use your Statamic form blueprints as a form builder
-- Realtime validation with fine-grained control over each field
 - No need for a client-side form validation library
 - One source of truth for your validation rules
 - Spam protection with Google reCAPTCHA v2 and honeypot field
@@ -77,17 +76,6 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Realtime Validation
-    |--------------------------------------------------------------------------
-    |
-    | A boolean to globally enable/disable realtime validation.
-    |
-    */
-
-    'realtime' => true,
-
-    /*
-    |--------------------------------------------------------------------------
     | Captcha Configuration
     |--------------------------------------------------------------------------
     |
@@ -127,28 +115,6 @@ Go ahead and run the following command in your console. It will guide you throug
 
 ```bash
 php please livewire-forms:setup
-```
-
-### Setup your layout
-
-Add the Livewire `styles` in the `head`, and the `scripts` before the closing `body` tag in your template:
-
-```blade
-<head>
-    <!-- Antlers -->
-    {{ livewire:styles }}
-
-    <!-- Blade -->
-    @livewireStyles
-</head>
-
-<body>
-    <!-- Antlers -->
-    {{ livewire:scripts }}
-
-    <!-- Blade -->
-    @livewireScripts
-</body>
 ```
 
 ### Render the form
@@ -453,9 +419,34 @@ validate:
   - 'required_if:data.newsletter,true'
 ```
 
+### Real-time Validation
+
+You may use [real-time validation](https://livewire.laravel.com/docs/validation#real-time-validation) by adding `wire_model: blur` or `wire_model:live` to a field's config.
+
+```yaml
+tabs:
+  main:
+    display: Main
+    sections:
+      -
+        fields:
+          -
+            handle: email
+            field:
+              type: text
+              wire_model: blur
+              validate:
+                - required
+                - email
+```
+
 ### Validation Messages
 
-You can customize the validation messages of any field. Simply follow the instructions in the [Livewire docs](https://laravel-livewire.com/docs/2.x/input-validation). Just make sure to add `data` in front of the field's handle.
+You can customize the validation messages of your fields by creating a [custom form component](#components) and using either of the two methods below.
+
+>**Note:** Make sure to add `data` in front of the field's handle.
+
+#### Using the `$messages` property
 
 ```php
 protected $messages = [
@@ -463,75 +454,15 @@ protected $messages = [
 ];
 ```
 
-### Realtime Validation
-
-You can configure real-time validation on three levels. In the config file, on the form, and on the form field. Each level will override the configuration of the previous level.
-
-#### In the config
-
-A boolean in `config/livewire-forms.php` to globally enable/disable realtime validation:
+#### Using the `messages()` method
 
 ```php
-'realtime' => true,
-```
-
-#### On the form
-
-A boolean at the root of a form's blueprint to enable/disable realtime validation for the whole form:
-
-```yaml
-realtime: true
-tabs:
-  main:
-    display: Main
-    sections:
-      -
-        fields:
-          -
-            handle: email
-            field:
-              type: text
-```
-
-#### On the form field
-
-A boolean in a form's blueprint to enable/disable realtime validation for a specific field:
-
-```yaml
-tabs:
-  main:
-    display: Main
-    sections:
-      -
-        fields:
-          -
-            handle: email
-            field:
-              type: text
-              realtime: true
-              validate:
-                - required
-                - email
-```
-
-Sometimes you may want to only validate certain rules in realtime. You may provide an array with the rules you want to validate in realtime instead of a boolean:
-
-```yaml
-tabs:
-  main:
-    display: Main
-    sections:
-      -
-        fields:
-          -
-            handle: email
-            field:
-              type: text
-              realtime:
-                - required
-              validate:
-                - required
-                - email
+protected function messages(): array
+{
+    return [
+        'data.name.required' => 'What is your name darling?',
+    ];
+}
 ```
 
 ## Field configuration
@@ -547,6 +478,7 @@ There are a couple of configuration options for your form fields:
 | `placeholder`   | `string`                                | `input`, `textarea`            | Set the field's placeholder value |
 | `show_label`    | `boolean`                               | All fieldtypes                 | Set to `false` to hide the field's label and instructions. |
 | `width`         | `integer`                               | All fieldtypes                 | Set the desired width of the field. |
+| `wire_model`    | `string`                                | All fieldtypes                 | Customize wire:model, e.g. `wire_model: live.debounce.150ms`. |
 
 ## Localization
 

@@ -9,7 +9,6 @@ use Aerni\LivewireForms\Fields\Field;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use Statamic\Fields\Section;
-use Statamic\Fields\Validator;
 use Statamic\Forms\Form as StatamicForm;
 
 class Fields
@@ -186,32 +185,5 @@ class Fields
         return $this->fields
             ->mapWithKeys(fn ($field) => $field->validationAttributes())
             ->toArray();
-    }
-
-    public function realtimeValidationRules(string $field): array
-    {
-        $field = $this->getByKey($field) ?? $field;
-
-        // Don't use realtime validation if the field can't be found (e.g. honeypot).
-        if (is_string($field)) {
-            return [$field => []];
-        }
-
-        $realtime = $field->realtime
-            ?? $this->form->blueprint()->contents()['realtime']
-            ?? config('livewire-forms.realtime', true);
-
-        // Use the regular validation rules if "realtime: true".
-        if ($realtime === true) {
-            return [$field->key => $field->rules];
-        }
-
-        // Make sure to always get an array of realtime rules.
-        $realtime = Validator::explodeRules($realtime);
-
-        // Remove any realtime rules that are not part of the regular validation rules.
-        $realtime = array_intersect($realtime, $field->rules);
-
-        return [$field->key => $realtime];
     }
 }
