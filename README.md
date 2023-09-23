@@ -441,16 +441,6 @@ validate:
   - 'required_if:data.newsletter,true'
 ```
 
-### Validation Messages
-
-You can customize the validation messages of any field. Simply follow the instructions in the [Livewire docs](https://laravel-livewire.com/docs/2.x/input-validation). Just make sure to add `data` in front of the field's handle.
-
-```php
-protected $messages = [
-    'data.name.required' => 'What is your name darling?',
-];
-```
-
 ### Real-time Validation
 
 You may use [real-time validation](https://livewire.laravel.com/docs/validation#real-time-validation) by adding `wire_model: blur` or `wire_model:live` to a field's config.
@@ -470,6 +460,31 @@ tabs:
               validate:
                 - required
                 - email
+```
+
+### Validation Messages
+
+You can customize the validation messages of your fields by creating a [custom form component](#components) and using either of the two methods below.
+
+>**Note:** Make sure to add `data` in front of the field's handle.
+
+#### Using the `$messages` property
+
+```php
+protected $messages = [
+    'data.name.required' => 'What is your name darling?',
+];
+```
+
+#### Using the `messages()` method
+
+```php
+protected function messages(): array
+{
+    return [
+        'data.name.required' => 'What is your name darling?',
+    ];
+}
 ```
 
 ## Field configuration
