@@ -138,17 +138,12 @@ class BaseForm extends Component
 
     public function updated(string $field): void
     {
-        $this->validateOnly($field, $this->realtimeRules($field));
+        $this->validateOnly($field);
     }
 
     protected function rules(): array
     {
         return $this->fields->validationRules();
-    }
-
-    protected function realtimeRules(string $field): array
-    {
-        return $this->fields->realtimeValidationRules($field);
     }
 
     protected function validationAttributes(): array

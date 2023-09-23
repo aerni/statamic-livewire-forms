@@ -186,16 +186,4 @@ class Fields
             ->mapWithKeys(fn ($field) => $field->validationAttributes())
             ->toArray();
     }
-
-    public function realtimeValidationRules(string $field): array
-    {
-        $field = $this->getByKey($field) ?? $field;
-
-        // If a field can't be found, we can't return any rules (e.g. honeypot).
-        if (is_string($field)) {
-            return [$field => []];
-        }
-
-        return [$field->key => $field->rules];
-    }
 }
