@@ -5,6 +5,7 @@ This addon provides a powerful framework to use Statamic forms with Laravel Live
 
 ## Features
 - Use your Statamic form blueprints as a form builder
+- Real-time validation with fine-grained control over each field
 - No need for a client-side form validation library
 - One source of truth for your validation rules
 - Spam protection with Google reCAPTCHA v2 and honeypot field
@@ -421,7 +422,7 @@ validate:
 
 ### Real-time Validation
 
-You may use [real-time validation](https://livewire.laravel.com/docs/validation#real-time-validation) by adding `wire_model: blur` or `wire_model:live` to a field's config.
+Real-time validation works out of the box by updating the field's value on [change event](https://livewire.laravel.com/docs/wire-model#updating-on-change-event). You may override this behavior by setting the `wire_model` parameter in the field's config.
 
 ```yaml
 tabs:
@@ -434,11 +435,13 @@ tabs:
             handle: email
             field:
               type: text
-              wire_model: blur
+              wire_model: live.debounce.150ms
               validate:
                 - required
                 - email
 ```
+
+To use Livewire's default behavior and defer all network requests until the form is submitted, you may set `wire_model: defer`.
 
 ### Validation Messages
 
@@ -478,7 +481,7 @@ There are a couple of configuration options for your form fields:
 | `placeholder`   | `string`                                | `input`, `textarea`            | Set the field's placeholder value |
 | `show_label`    | `boolean`                               | All fieldtypes                 | Set to `false` to hide the field's label and instructions. |
 | `width`         | `integer`                               | All fieldtypes                 | Set the desired width of the field. |
-| `wire_model`    | `string`                                | All fieldtypes                 | Customize wire:model, e.g. `wire_model: live.debounce.150ms`. |
+| `wire_model`    | `string`                                | All fieldtypes                 | Customize `wire:model`, e.g. `wire_model: live.debounce.150ms`. |
 
 ## Localization
 

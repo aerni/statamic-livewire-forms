@@ -14,6 +14,7 @@ use Aerni\LivewireForms\Fields\Properties\WithShow;
 use Aerni\LivewireForms\Fields\Properties\WithShowLabel;
 use Aerni\LivewireForms\Fields\Properties\WithView;
 use Aerni\LivewireForms\Fields\Properties\WithWidth;
+use Aerni\LivewireForms\Fields\Properties\WithWireModel;
 use Statamic\Fields\Field as StatamicField;
 use Statamic\Support\Str;
 
@@ -31,6 +32,7 @@ abstract class Field
     use WithShowLabel;
     use WithView;
     use WithWidth;
+    use WithWireModel;
 
     public function __construct(protected StatamicField $field, protected string $id)
     {
