@@ -16,7 +16,7 @@
                 <div wire:key="{{ $field->id }}-{{ $option }}" class="flex items-start">
                     <div class="flex items-center h-5">
                         <input
-                            id="{{ $field->id }}.{{ $option }}"
+                            id="{{ $field->id }}-{{ $option }}"
                             name="{{ $field->id }}"
                             value="{{ $option }}"
                             type="radio"
@@ -37,7 +37,7 @@
                     </div>
                     <div class="ml-3 text-sm">
                         <label
-                            for="{{ $field->id }}.{{ $option }}"
+                            for="{{ $field->id }}-{{ $option }}"
                             class="font-medium {{ $errors->has($field->key) ? 'text-red-700' : 'text-gray-700'}}"
                         >
                             {{ $label }}
