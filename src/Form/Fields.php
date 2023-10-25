@@ -76,12 +76,11 @@ class Fields
     {
         return $this->form->blueprint()->tabs()->first()->sections()
             ->map(function ($section, $index) {
-                $handle = $section->display()
-                    ? Str::snake($section->display())
-                    : $index;
+                $handle = $section->display() ? Str::snake($section->display()) : $index;
 
                 return [
                     'handle' => $handle,
+                    'id' => "{$this->id}-section-{$index}-{$handle}",
                     'display' => $section->display(),
                     'instructions' => $section->instructions(),
                     'fields' => $this->getSectionFields($section),

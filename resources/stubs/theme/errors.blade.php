@@ -12,8 +12,8 @@
             </h3>
             <div class="mt-2 text-sm text-red-600">
                 <ul class="pl-5 space-y-1 list-disc">
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
+                    @foreach ($errors->all() as $index => $error)
+                        <li wire:key="error-{{ $index }}-{{ Str::slug($error) }}">{{ $error }}</li>
                     @endforeach
                 </ul>
             </div>

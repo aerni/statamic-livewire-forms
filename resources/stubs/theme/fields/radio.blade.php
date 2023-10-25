@@ -13,7 +13,7 @@
     <div>
         <div class="{{ $field->inline ? 'items-start space-x-6' : 'flex-col space-y-3' }} flex">
             @foreach ($field->options as $option => $label)
-                <div class="flex items-start">
+                <div wire:key="{{ $field->id }}-{{ $option }}" class="flex items-start">
                     <div class="flex items-center h-5">
                         <input
                             id="{{ $field->id }}.{{ $option }}"

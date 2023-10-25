@@ -1,6 +1,6 @@
 @if ($section)
 
-    <div>
+    <div wire:key="{{ $section['id'] }}">
 
         @if ($section['display'])
             <div class="mb-6">

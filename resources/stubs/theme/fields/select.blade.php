@@ -35,7 +35,7 @@
         @endif
 
         @foreach ($field->options as $option => $label)
-            <option value="{{ $option }}">{{ $label }}</option>
+            <option wire:key="{{ $field->id }}-{{ $option }}" value="{{ $option }}">{{ $label }}</option>
         @endforeach
     </select>
 </div>
