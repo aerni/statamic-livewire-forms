@@ -14,19 +14,19 @@
 <div
     class="g-recaptcha"
     data-sitekey="@captchaKey"
-    data-callback="setResponseToken_{{ $_instance->id }}"
-    data-expired-callback="resetResponseToken_{{ $_instance->id }}"
+    data-callback="setResponseToken_{{ $this->getId() }}"
+    data-expired-callback="resetResponseToken_{{ $this->getId() }}"
     wire:ignore
 ></div>
 
 @include($this->component->getView('error'))
 
 <script>
-    function setResponseToken_{{ $_instance->id }}(token) {
+    function setResponseToken_{{ $this->getId() }}(token) {
         @this.set('{{ $field->key }}', token)
     }
 
-    function resetResponseToken_{{ $_instance->id }}() {
+    function resetResponseToken_{{ $this->getId() }}() {
         @this.set('{{ $field->key }}', null)
     }
 </script>
