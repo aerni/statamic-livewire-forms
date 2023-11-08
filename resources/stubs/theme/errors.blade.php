@@ -1,4 +1,4 @@
-@if ($errors->any())
+@if($errors->any())
 
     <div class="flex p-4 rounded-md bg-red-50">
         <div class="flex-shrink-0">
@@ -12,8 +12,8 @@
             </h3>
             <div class="mt-2 text-sm text-red-600">
                 <ul class="pl-5 space-y-1 list-disc">
-                    @foreach ($errors->all() as $index => $error)
-                        <li wire:key="error-{{ $index }}-{{ Str::slug($error) }}">{{ $error }}</li>
+                    @foreach($errors->all() as $error)
+                        <li wire:key="error-{{ Str::slug($error) }}">{{ $error }}</li>
                     @endforeach
                 </ul>
             </div>

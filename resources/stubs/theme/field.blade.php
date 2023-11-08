@@ -1,8 +1,8 @@
-@if ($field->show)
+@if($field->show)
 
     <div
         wire:key="{{ $field->id }}"
-        class="col-span-1
+        class="space-y-2 col-span-1
             {{ $field->width === 25 ? 'md:col-span-3' : '' }}
             {{ $field->width === 33 ? 'md:col-span-4' : '' }}
             {{ $field->width === 50 ? 'md:col-span-6' : '' }}

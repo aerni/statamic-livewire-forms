@@ -1,25 +1,31 @@
-@if ($field->show_label)
-    <div class="mb-1">
-        <p class="block font-medium text-gray-700 @if ($field->instructions) text-base @else text-sm @endif">
-            {{ $field->label }}
-        </p>
-        @if ($field->instructions)
-            <p class="mb-4 text-sm text-gray-500">{{ $field->instructions }}</p>
-        @endif
-    </div>
-@else
-    <p class="sr-only">{{ $field->label }}</p>
-@endif
+<div>
+    @include($this->component->getView('label'))
+
+    @if($field->instructions_position == 'above')
+        @include($this->component->getView('instructions'))
+    @endif
+</div>
 
 <div
+    id="{{ $field->id }}"
     class="g-recaptcha"
     data-sitekey="@captchaKey"
     data-callback="setResponseToken_{{ $this->getId() }}"
     data-expired-callback="resetResponseToken_{{ $this->getId() }}"
     wire:ignore
+    aria-label="{{ $field->id }}-label"
+    @if($field->instructions)
+        aria-describedby="{{ $field->id }}-instructions"
+    @endif
 ></div>
 
-@include($this->component->getView('error'))
+<div>
+    @if($field->instructions_position == 'below')
+        @include($this->component->getView('instructions'))
+    @endif
+
+    @include($this->component->getView('error'))
+</div>
 
 <script>
     function setResponseToken_{{ $this->getId() }}(token) {
