@@ -6,11 +6,11 @@ use Aerni\LivewireForms\Form\Component as FormComponent;
 use Illuminate\Contracts\View\View;
 use Livewire\Component;
 
-class Form extends Component
+class DynamicForm extends Component
 {
-    public string $handle;
-
     public string $component;
+
+    public string $handle;
 
     public string $view;
 
@@ -31,6 +31,6 @@ class Form extends Component
 
     public function render(): View
     {
-        return view('livewire-forms::form');
+        return view('livewire-forms::dynamic-form');
     }
 }
