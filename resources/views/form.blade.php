@@ -1,8 +1,3 @@
 <div>
-    <livewire:is
-        component="{{ $this->component }}"
-        handle="{{ $this->handle }}"
-        view="{{ $this->view }}"
-        theme="{{ $this->theme }}"
-    >
+    <livewire:is :$component :$handle :$view :$theme />
 </div>
