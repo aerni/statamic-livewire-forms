@@ -60,7 +60,7 @@ class BladeDirectives
     public static function formHoneypot(): string
     {
         return Blade::compileString("
-            @include(\$this->component->getView('honeypot'))
+            @include(\$this->component->getView('fields.honeypot'))
         ");
     }
 
