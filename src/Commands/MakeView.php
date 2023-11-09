@@ -18,12 +18,12 @@ class MakeView extends Command
     public function handle(): void
     {
         $view = $this->argument('name') ?? $this->ask('What do you want to call the view?', Component::defaultView());
-        $stub = File::get(__DIR__.'/../../resources/stubs/form.blade.php');
+        $stub = File::get(__DIR__.'/../../resources/views/default-form.blade.php');
         $filename = "{$view}.blade.php";
-        $path = resource_path("views/livewire/forms/{$filename}");
+        $path = resource_path("views/vendor/livewire-forms/{$filename}");
 
         if (! File::exists($path) || $this->confirm("A view with the name <comment>$filename</comment> already exists. Do you want to overwrite it?")) {
-            File::ensureDirectoryExists(resource_path('views/livewire/forms'));
+            File::ensureDirectoryExists(resource_path('views/vendor/livewire-forms'));
             File::put($path, $stub);
             $this->line("<info>[✓]</info> The view was successfully created: <comment>{$this->getRelativePath($path)}</comment>");
         }

@@ -13,7 +13,7 @@ class Component
 
     public function defaultView(): string
     {
-        return config('livewire-forms.view', 'default');
+        return config('livewire-forms.view', 'default-form');
     }
 
     public function defaultTheme(): string
@@ -30,8 +30,8 @@ class Component
 
     public function theme(string $theme): self
     {
-        if (! is_dir(resource_path("views/livewire/forms/{$theme}"))) {
-            throw new \Exception("Theme [{$theme}] not found.");
+        if (! is_dir(resource_path("views/vendor/livewire-forms/themes/{$theme}"))) {
+            throw new \Exception("The theme [{$theme}] doesn't exist. Please create it or use a different theme.");
         }
 
         $this->theme = $theme;
@@ -41,8 +41,8 @@ class Component
 
     public function getView(string $view): string
     {
-        $themeView = "livewire.forms.{$this->theme}.{$view}";
-        $defaultView = "livewire.forms.{$this->defaultTheme()}.{$view}";
+        $themeView = "livewire-forms::themes/{$this->theme}.{$view}";
+        $defaultView = "livewire-forms::themes/{$this->defaultTheme()}.{$view}";
 
         return view()->exists($themeView) ? $themeView : $defaultView;
     }

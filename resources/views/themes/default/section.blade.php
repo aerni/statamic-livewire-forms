@@ -4,16 +4,17 @@
         wire:key="{{ $section['id'] }}"
         aria-labelledby="{{ $section['id'] }}-label"
         aria-describedby="{{ $section['id'] }}-instructions"
+        class="grid gap-y-8"
     >
 
         @if($section['display'])
-            <div class="mb-6">
-                <h3 id="{{ $section['id'] }}-label" class="text-lg font-medium leading-6 text-gray-900">
+            <div>
+                <h3 id="{{ $section['id'] }}-label" class="text-lg font-medium text-gray-900">
                     {{ __($section['display']) }}
                 </h3>
 
                 @if($section['instructions'])
-                    <p id="{{ $section['id'] }}-instructions" class="mt-1 text-sm text-gray-500">
+                    <p id="{{ $section['id'] }}-instructions" class="text-base text-gray-500">
                         {{ __($section['instructions']) }}
                     </p>
                 @endif

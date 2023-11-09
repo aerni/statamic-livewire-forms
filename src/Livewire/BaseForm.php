@@ -133,7 +133,7 @@ class BaseForm extends Component
 
     public function render(): LaravelView
     {
-        return view("livewire.forms.{$this->view}");
+        return view("livewire-forms::{$this->view}");
     }
 
     public function updated(string $field): void
