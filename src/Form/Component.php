@@ -2,9 +2,6 @@
 
 namespace Aerni\LivewireForms\Form;
 
-use Illuminate\Support\Str;
-use Livewire\Livewire;
-
 class Component
 {
     protected string $theme;
@@ -45,13 +42,5 @@ class Component
         $defaultView = "livewire-forms::themes.{$this->defaultTheme()}.{$view}";
 
         return view()->exists($themeView) ? $themeView : $defaultView;
-    }
-
-    public function getComponent(string $handle): string
-    {
-        $key = Str::replace('_', '-', $handle).'-form';
-        $component = Livewire::isDiscoverable($key);
-
-        return $component ? $key : 'default-form';
     }
 }
