@@ -10,9 +10,9 @@ use Livewire\Livewire;
 
 class DynamicForm extends Component
 {
-    public string $component;
-
     public string $handle;
+
+    public string $component;
 
     public string $view;
 
@@ -51,7 +51,18 @@ class DynamicForm extends Component
 
     protected function getTheme(): string
     {
-        return $this->theme ?? FormComponent::defaultTheme();
+        // Load the user-defined theme if it exists
+        if ($this->theme ?? null) {
+            return $this->theme;
+        }
+
+        // Autoload the theme by form handle if it exists
+        if (is_dir(resource_path("views/vendor/livewire-forms/themes/{$this->handle}"))) {
+            return $this->handle;
+        }
+
+        // Fall back to the default theme
+        return FormComponent::defaultTheme();
     }
 
     public function render(): View
