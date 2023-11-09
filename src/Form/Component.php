@@ -13,7 +13,7 @@ class Component
 
     public function defaultView(): string
     {
-        return config('livewire-forms.view', 'default-form');
+        return config('livewire-forms.view', 'form');
     }
 
     public function defaultTheme(): string
