@@ -27,10 +27,6 @@ class Component
 
     public function theme(string $theme): self
     {
-        if (! is_dir(resource_path("views/vendor/livewire-forms/themes/{$theme}"))) {
-            throw new \Exception("The theme [{$theme}] doesn't exist. Please create it or use a different theme.");
-        }
-
         $this->theme = $theme;
 
         return $this;
