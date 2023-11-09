@@ -20,7 +20,7 @@ use Statamic\Facades\Site;
 use Statamic\Forms\SendEmails;
 use Statamic\Support\Str;
 
-class BaseForm extends Component
+class Form extends Component
 {
     use WithFileUploads;
 
