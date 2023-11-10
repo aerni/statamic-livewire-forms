@@ -31,16 +31,6 @@ class BladeDirectives
     }
 
     /**
-     * Get all the fields grouped by section
-     */
-    public static function formSections(): string
-    {
-        return Blade::compileString("
-            @formView('layouts.sections')
-        ");
-    }
-
-    /**
      * Get the fields of a specific section by its handle
      */
     public static function formSection(string $expression): string
@@ -67,45 +57,5 @@ class BladeDirectives
                 echo \Aerni\LivewireForms\Facades\View::field(\$this->fields->get($field), $arguments);
             }
         ?>";
-    }
-
-    /**
-     * Get the honeypot field.
-     */
-    public static function formHoneypot(): string
-    {
-        return Blade::compileString("
-            @formView('fields.honeypot')
-        ");
-    }
-
-    /**
-     * Get the form submit button.
-     */
-    public static function formSubmit(): string
-    {
-        return Blade::compileString("
-            @formView('layouts.submit')
-        ");
-    }
-
-    /**
-     * Get the form errors messages.
-     */
-    public static function formErrors(): string
-    {
-        return Blade::compileString("
-            @formView('messages.errors')
-        ");
-    }
-
-    /**
-     * Get the form success message.
-     */
-    public static function formSuccess(): string
-    {
-        return Blade::compileString("
-            @formView('messages.success')
-        ");
     }
 }

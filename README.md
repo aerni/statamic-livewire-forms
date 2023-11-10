@@ -182,17 +182,13 @@ This is the default view. You may customize it to your liking.
 
 ### Blade Directives
 
-There are a couple of blade directives you may use in your form views. Each directive renders a view inside the current theme.
+There are a couple of blade directives you may use in your form views. The directives are aware of the form's theme and will render the views accordingly.
 
-| Directive                | Description                                        | View               |
-| ------------------------ | -------------------------------------------------- | ------------------ |
-| `@formSections`          | Loop through and render all form fields by section | sections.blade.php |
-| `@formSection('handle')` | Render a specific from section                     | section.blade.php  |
-| `@formField('handle')`   | Render a specific form field                       | field.blade.php    |
-| `@formHoneypot`          | Render the form honeypot field                     | honeypot.blade.php |
-| `@formSubmit`            | Render the form submit button                      | submit.blade.php   |
-| `@formErrors`            | Render the form validation errors                  | errors.blade.php   |
-| `@formSuccess`           | Render the form success message                    | success.blade.php  |
+| Directive                | Description                                        | View                      |
+| ------------------------ | -------------------------------------------------- | ------------------------- |
+| `@formSection('handle')` | Render a specific from section                     | section.blade.php         |
+| `@formField('handle')`   | Render a specific form field                       | field.blade.php           |
+| `@formView('view')`      | Render a specific form view                        | Whatever view you give it |
 
 ### Customization Example
 
