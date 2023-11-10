@@ -26,7 +26,6 @@ class ServiceProvider extends AddonServiceProvider
     {
         $this
             ->registerTranslations()
-            ->registerPublishables()
             ->registerBladeDirectives()
             ->registerValidators()
             ->registerLivewireComponents()
@@ -36,15 +35,6 @@ class ServiceProvider extends AddonServiceProvider
     protected function registerTranslations(): self
     {
         $this->loadTranslationsFrom(__DIR__.'/../resources/lang', 'livewire-forms');
-
-        return $this;
-    }
-
-    protected function registerPublishables(): self
-    {
-        $this->publishes([
-            __DIR__.'/../resources/views' => resource_path('views/vendor/livewire-forms'),
-        ], 'livewire-forms-views');
 
         return $this;
     }
