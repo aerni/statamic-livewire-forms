@@ -35,17 +35,17 @@ class DynamicForm extends Component
 
     protected function getView(): string
     {
-        // Load the user-defined view if it exists
+        // Try to load a user-defined view first.
         if ($this->view ?? null) {
             return $this->view;
         }
 
-        // Autoload the view by form handle if it exists
+        // Try to autoload the view by form handle.
         if (view()->exists("livewire-forms::{$this->handle}")) {
             return $this->handle;
         }
 
-        // Fall back to the default view
+        // Fall back to the default view.
         return FormComponent::defaultView();
     }
 
