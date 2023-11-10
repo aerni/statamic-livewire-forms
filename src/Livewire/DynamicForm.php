@@ -57,7 +57,7 @@ class DynamicForm extends Component
         }
 
         // Autoload the theme by form handle if it exists
-        if (is_dir(resource_path("views/vendor/livewire-forms/themes/{$this->handle}"))) {
+        if (is_dir(resource_path("views/vendor/livewire-forms/{$this->handle}"))) {
             return $this->handle;
         }
 

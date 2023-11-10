@@ -34,8 +34,8 @@ class Component
 
     public function getView(string $view): string
     {
-        $themeView = "livewire-forms::themes.{$this->theme}.{$view}";
-        $defaultView = "livewire-forms::themes.{$this->defaultTheme()}.{$view}";
+        $themeView = "livewire-forms::{$this->theme}.{$view}";
+        $defaultView = "livewire-forms::{$this->defaultTheme()}.{$view}";
 
         return view()->exists($themeView) ? $themeView : $defaultView;
     }
