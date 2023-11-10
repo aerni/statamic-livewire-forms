@@ -16,12 +16,27 @@ class BladeDirectives
     }
 
     /**
+     * Get a specific form view.
+     */
+    public static function formView(string $expression): string
+    {
+        $variables = explode(', ', $expression);
+
+        $view = $variables[0];
+        $arguments = $variables[1] ?? '[]';
+
+        return Blade::compileString("
+            @include(\$this->component->getView($view), $arguments)
+        ");
+    }
+
+    /**
      * Get all the fields grouped by section
      */
     public static function formSections(): string
     {
         return Blade::compileString("
-            @include(\$this->component->getView('layouts.sections'))
+            @formView('layouts.sections')
         ");
     }
 
@@ -31,7 +46,7 @@ class BladeDirectives
     public static function formSection(string $expression): string
     {
         return Blade::compileString("
-            @include(\$this->component->getView('layouts.section'), [
+            @formView('layouts.section', [
                 'section' => \$this->fields->section($expression),
             ])
         ");
@@ -45,11 +60,11 @@ class BladeDirectives
         $variables = explode(', ', $expression);
 
         $field = $variables[0];
-        $properties = $variables[1] ?? '[]';
+        $arguments = $variables[1] ?? '[]';
 
         return "<?php
             if (\$this->fields->get($field)) {
-                echo \Aerni\LivewireForms\Facades\View::field(\$this->fields->get($field), $properties);
+                echo \Aerni\LivewireForms\Facades\View::field(\$this->fields->get($field), $arguments);
             }
         ?>";
     }
@@ -60,7 +75,7 @@ class BladeDirectives
     public static function formHoneypot(): string
     {
         return Blade::compileString("
-            @include(\$this->component->getView('fields.honeypot'))
+            @formView('fields.honeypot')
         ");
     }
 
@@ -70,7 +85,7 @@ class BladeDirectives
     public static function formSubmit(): string
     {
         return Blade::compileString("
-            @include(\$this->component->getView('layouts.submit'))
+            @formView('layouts.submit')
         ");
     }
 
@@ -80,7 +95,7 @@ class BladeDirectives
     public static function formErrors(): string
     {
         return Blade::compileString("
-            @include(\$this->component->getView('messages.errors'))
+            @formView('messages.errors')
         ");
     }
 
@@ -90,7 +105,7 @@ class BladeDirectives
     public static function formSuccess(): string
     {
         return Blade::compileString("
-            @include(\$this->component->getView('messages.success'))
+            @formView('messages.success')
         ");
     }
 }

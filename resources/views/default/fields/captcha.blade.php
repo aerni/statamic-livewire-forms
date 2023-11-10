@@ -1,8 +1,8 @@
 <div>
-    @include($this->component->getView('messages.label'))
+    @formView('messages.label')
 
     @if($field->instructions_position == 'above')
-        @include($this->component->getView('messages.instructions'))
+        @formView('messages.instructions')
     @endif
 </div>
 
@@ -21,10 +21,10 @@
 
 <div>
     @if($field->instructions_position == 'below')
-        @include($this->component->getView('messages.instructions'))
+        @formView('messages.instructions')
     @endif
 
-    @include($this->component->getView('messages.error'))
+    @formView('messages.error')
 </div>
 
 <script>

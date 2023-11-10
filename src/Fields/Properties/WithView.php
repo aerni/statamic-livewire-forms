@@ -2,20 +2,21 @@
 
 namespace Aerni\LivewireForms\Fields\Properties;
 
-use Aerni\LivewireForms\Facades\Component;
-
 trait WithView
 {
     protected function viewProperty(): string
     {
-        $auto = Component::getView("fields.{$this->handle}");
-        $field = Component::getView("fields.{$this->field->get('view')}");
-        $default = Component::getView('fields.'.static::$view);
+        // Try to load a user-defined view first.
+        if ($this->field->get('view')) {
+            return 'fields'.$this->field->get('view');
+        }
 
-        return match (true) {
-            view()->exists($field) => $field,
-            view()->exists($auto) => $auto,
-            default => $default
-        };
+        // Try to autoload the view by field handle.
+        if (view()->exists("livewire-forms::fields.{$this->handle}")) {
+            return 'fields'.$this->handle;
+        }
+
+        // Fall back to the default field view.
+        return 'fields.'.static::$view;
     }
 }
