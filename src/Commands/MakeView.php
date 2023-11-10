@@ -18,7 +18,7 @@ class MakeView extends Command
     public function handle(): void
     {
         $view = $this->argument('name') ?? $this->ask('What do you want to call the view?', Component::defaultView());
-        $stub = File::get(__DIR__.'/../../resources/views/default-form.blade.php');
+        $stub = File::get(__DIR__.'/../../resources/views/default.blade.php');
         $filename = "{$view}.blade.php";
         $path = resource_path("views/vendor/livewire-forms/{$filename}");
 
