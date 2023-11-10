@@ -23,7 +23,7 @@
 
         <div class="grid grid-cols-1 gap-8 md:grid-cols-12">
             @foreach($section['fields'] as $field)
-                @include($this->component->getView('field'))
+                @include($this->component->getView('layouts.field'))
             @endforeach
         </div>
 

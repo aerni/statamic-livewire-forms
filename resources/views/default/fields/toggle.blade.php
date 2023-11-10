@@ -1,9 +1,9 @@
 <fieldset class="space-y-3">
     <div>
-        @include($this->component->getView('legend'))
+        @include($this->component->getView('messages.legend'))
 
         @if($field->instructions_position == 'above')
-            @include($this->component->getView('instructions'))
+            @include($this->component->getView('messages.instructions'))
         @endif
     </div>
 
@@ -44,9 +44,9 @@
 
     <div>
         @if($field->instructions_position == 'below')
-            @include($this->component->getView('instructions'))
+            @include($this->component->getView('messages.instructions'))
         @endif
 
-        @include($this->component->getView('error'))
+        @include($this->component->getView('messages.error'))
     </div>
 </fieldset>

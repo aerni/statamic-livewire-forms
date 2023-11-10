@@ -21,7 +21,7 @@ class BladeDirectives
     public static function formSections(): string
     {
         return Blade::compileString("
-            @include(\$this->component->getView('sections'))
+            @include(\$this->component->getView('layouts.sections'))
         ");
     }
 
@@ -31,7 +31,7 @@ class BladeDirectives
     public static function formSection(string $expression): string
     {
         return Blade::compileString("
-            @include(\$this->component->getView('section'), [
+            @include(\$this->component->getView('layouts.section'), [
                 'section' => \$this->fields->section($expression),
             ])
         ");
@@ -70,7 +70,7 @@ class BladeDirectives
     public static function formSubmit(): string
     {
         return Blade::compileString("
-            @include(\$this->component->getView('submit'))
+            @include(\$this->component->getView('layouts.submit'))
         ");
     }
 
@@ -80,7 +80,7 @@ class BladeDirectives
     public static function formErrors(): string
     {
         return Blade::compileString("
-            @include(\$this->component->getView('errors'))
+            @include(\$this->component->getView('messages.errors'))
         ");
     }
 
@@ -90,7 +90,7 @@ class BladeDirectives
     public static function formSuccess(): string
     {
         return Blade::compileString("
-            @include(\$this->component->getView('success'))
+            @include(\$this->component->getView('messages.success'))
         ");
     }
 }
