@@ -3,9 +3,9 @@
 namespace App\Livewire;
 
 use Aerni\LivewireForms\Form\Fields;
-use Aerni\LivewireForms\Livewire\BaseForm;
+use Aerni\LivewireForms\Livewire\Form;
 
-class DummyForm extends BaseForm
+class DummyForm extends Form
 {
     /*
     |--------------------------------------------------------------------------
