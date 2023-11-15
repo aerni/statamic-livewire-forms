@@ -14,12 +14,10 @@ class Text extends Field
 
     protected static string $view = 'input';
 
-    protected function showProperty(): bool
+    protected function hiddenProperty(): bool
     {
-        if ($this->inputTypeProperty() === 'hidden') {
-            return false;
-        }
-
-        return parent::showProperty();
+        return $this->field->get('input_type') === 'hidden'
+            ? true
+            : parent::hiddenProperty();
     }
 }

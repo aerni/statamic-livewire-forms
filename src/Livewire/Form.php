@@ -8,8 +8,10 @@ use Aerni\LivewireForms\Form\Fields;
 use Aerni\LivewireForms\Form\Honeypot;
 use Illuminate\Contracts\View\View as LaravelView;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\URL;
+use Livewire\Attributes\On;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Statamic\Contracts\Forms\Submission;
@@ -35,6 +37,8 @@ class Form extends Component
     public string $theme;
 
     public array $data = [];
+
+    public Collection $fieldsToSubmit;
 
     public function mount(): void
     {
@@ -62,6 +66,8 @@ class Form extends Component
         $this->theme = static::$THEME
             ?? $this->theme
             ?? $this->component->defaultTheme();
+
+        $this->fieldsToSubmit = collect();
 
         return $this;
     }
@@ -110,7 +116,6 @@ class Form extends Component
     {
         return Fields::make($this->form, $this->getId())
             ->models($this->models())
-            ->data($this->data)
             ->hydrated(fn ($fields) => $this->hydratedFields($fields))
             ->hydrate();
     }
@@ -149,6 +154,14 @@ class Form extends Component
     protected function validationAttributes(): array
     {
         return $this->fields->validationAttributes();
+    }
+
+    #[On('field-conditions-updated')]
+    public function submitFieldValue(string $field, bool $passesConditions): void
+    {
+        $this->fields->get($field)->always_save
+            ? $this->fieldsToSubmit->put($field, true)
+            : $this->fieldsToSubmit->put($field, $passesConditions);
     }
 
     protected function handleSubmission(): self
@@ -229,28 +242,32 @@ class Form extends Component
         return collect($this->data)->map(function ($value, $key) {
             $field = $this->fields->get($key);
 
-            // We want to return nothing if the field can't be found (e.g. honeypot).
+            // Don't save values of fields that can't be found (e.g. honeypot).
             if (is_null($field)) {
                 return null;
             }
 
-            // We don't want to submit the captcha response value.
+            // Don't save values of conditionally hidden fields if 'always_save' isn't on.
+            if (! $this->fieldsToSubmit->get($field->handle)) {
+                return null;
+            }
+
+            // Don't save the captcha response.
             if ($field->field()->type() === 'captcha') {
                 return null;
             }
 
+            // Cast to booleans if enabled in the config.
             if ($field->cast_booleans && in_array($value, ['true', 'false'])) {
                 return Str::toBool($value);
             }
 
+            // Cast to integers if the input type is 'number'.
             if ($field->input_type === 'number') {
                 return (int) $value;
             }
 
-            if (! $field->show && ! $field->always_save) {
-                return null;
-            }
-
+            // Otherwise, just return the value.
             return $value;
         })->all();
     }
@@ -302,9 +319,6 @@ class Form extends Component
     {
         // Reset the form data.
         $this->hydrateDefaultData();
-
-        // Make sure to process the fields using the newly reset data.
-        $this->fields->data($this->data)->hydrate();
 
         // Reset asset fields using this trick: https://talltips.novate.co.uk/livewire/livewire-file-uploads-using-s3#removing-filename-from-input-field-after-upload
         $this->fields->getByType('assets')

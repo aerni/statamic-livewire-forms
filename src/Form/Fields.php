@@ -2,7 +2,6 @@
 
 namespace Aerni\LivewireForms\Form;
 
-use Aerni\LivewireForms\Facades\Conditions;
 use Aerni\LivewireForms\Facades\Models;
 use Aerni\LivewireForms\Fields\Captcha;
 use Aerni\LivewireForms\Fields\Field;
@@ -14,8 +13,6 @@ use Statamic\Forms\Form as StatamicForm;
 class Fields
 {
     protected Collection $models;
-
-    protected Collection $data;
 
     protected Collection $fields;
 
@@ -34,13 +31,6 @@ class Fields
     public function models(array $models): self
     {
         $this->models = collect($models);
-
-        return $this;
-    }
-
-    public function data(array $data): self
-    {
-        $this->data = collect($data);
 
         return $this;
     }
@@ -67,9 +57,7 @@ class Fields
 
     protected function getSectionFields(Section $section): Collection
     {
-        return $this->fields
-            ->filter(fn ($field) => $field->show) // Only consider fields that are visible
-            ->intersectByKeys($section->fields()->all()); // Only keep the fields that are part of the section
+        return $this->fields->intersectByKeys($section->fields()->all()); // Only keep the fields that are part of the section
     }
 
     public function sections(): Collection
@@ -84,9 +72,11 @@ class Fields
                     'display' => $section->display(),
                     'instructions' => $section->instructions(),
                     'fields' => $this->getSectionFields($section),
+                    // TODO: Return a method for x-if similar to how we're returning 'Statamic.$conditions.showField()' in the WithShow trait.
+                    // 'show_section' =>
                 ];
             })
-            ->filter(fn ($section) => $section['fields']->isNotEmpty()); // We don't want to show sections that have no visible fields
+            ->filter(fn ($section) => $section['fields']->isNotEmpty()); // Hide empty sections with no fields.
     }
 
     public function section(string $handle): ?array
@@ -99,8 +89,7 @@ class Fields
         return $this
             ->hydrateFields()
             ->removeDuplicateCaptchaFields()
-            ->runHydratedCallbacks()
-            ->processConditions();
+            ->runHydratedCallbacks();
     }
 
     protected function runHydratedCallbacks(): self
@@ -148,17 +137,6 @@ class Fields
     public function captcha(): ?Captcha
     {
         return $this->fields->whereInstanceOf(Captcha::class)->first();
-    }
-
-    protected function processConditions(): self
-    {
-        $data = $this->data->isNotEmpty()
-            ? $this->data
-            : $this->defaultValues()->filter();
-
-        $this->fields = $this->fields->each(fn ($field) => $field->show(Conditions::process($field, $data)));
-
-        return $this;
     }
 
     public function defaultValues(): Collection
