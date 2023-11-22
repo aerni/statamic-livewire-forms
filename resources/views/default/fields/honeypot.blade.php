@@ -1,16 +1,10 @@
-<div class="hidden">
-
-    <label for="{{ $this->honeypot->id }}">
-        {{ $this->honeypot->label }}
-    </label>
-
+<div class="hidden" aria-hidden="true">
     <input
-        type="text"
-        name="{{ $this->honeypot->id }}"
         id="{{ $this->honeypot->id }}"
+        name="{{ $this->honeypot->id }}"
+        type="text"
         wire:model="{{ $this->honeypot->key }}"
         tabindex="-1"
         autocomplete="off"
     />
-
 </div>

@@ -3,14 +3,15 @@
 namespace Aerni\LivewireForms\Livewire;
 
 use Aerni\LivewireForms\Facades\Models;
+use Aerni\LivewireForms\Fields\Honeypot;
 use Aerni\LivewireForms\Form\Component as FormComponent;
 use Aerni\LivewireForms\Form\Fields;
-use Aerni\LivewireForms\Form\Honeypot;
 use Illuminate\Contracts\View\View as LaravelView;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\URL;
+use Livewire\Attributes\Computed;
 use Livewire\Attributes\On;
 use Livewire\Component;
 use Livewire\WithFileUploads;
@@ -120,9 +121,10 @@ class Form extends Component
             ->hydrate();
     }
 
-    public function getHoneypotProperty(): Honeypot
+    #[Computed(true)]
+    public function honeypot(): Honeypot
     {
-        return Honeypot::make($this->form->honeypot(), $this->getId());
+        return $this->fields->honeypot();
     }
 
     public function submit(): void

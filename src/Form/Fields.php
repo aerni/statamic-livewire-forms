@@ -5,6 +5,7 @@ namespace Aerni\LivewireForms\Form;
 use Aerni\LivewireForms\Facades\Models;
 use Aerni\LivewireForms\Fields\Captcha;
 use Aerni\LivewireForms\Fields\Field;
+use Aerni\LivewireForms\Fields\Honeypot;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use Statamic\Fields\Section;
@@ -72,8 +73,6 @@ class Fields
                     'display' => $section->display(),
                     'instructions' => $section->instructions(),
                     'fields' => $this->getSectionFields($section),
-                    // TODO: Return a method for x-if similar to how we're returning 'Statamic.$conditions.showField()' in the WithShow trait.
-                    // 'show_section' =>
                 ];
             })
             ->filter(fn ($section) => $section['fields']->isNotEmpty()); // Hide empty sections with no fields.
@@ -137,6 +136,14 @@ class Fields
     public function captcha(): ?Captcha
     {
         return $this->fields->whereInstanceOf(Captcha::class)->first();
+    }
+
+    public function honeypot(): Honeypot
+    {
+        return Honeypot::make(
+            new \Statamic\Fields\Field($this->form->honeypot(), []),
+            $this->id
+        );
     }
 
     public function defaultValues(): Collection
