@@ -23,8 +23,10 @@ class Models
         return $this->models->get($key);
     }
 
-    public function register(array $models): void
+    public function register(array $models): self
     {
         $this->models = $this->models->merge($models);
+
+        return $this;
     }
 }

@@ -2,26 +2,24 @@
 
 namespace Aerni\LivewireForms\Form;
 
-use Aerni\LivewireForms\Facades\Models;
-use Aerni\LivewireForms\Fields\Captcha;
-use Aerni\LivewireForms\Fields\Field;
-use Aerni\LivewireForms\Fields\Honeypot;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use Statamic\Fields\Section;
+use Illuminate\Support\Collection;
+use Aerni\LivewireForms\Fields\Field;
+use Aerni\LivewireForms\Facades\Models;
+use Aerni\LivewireForms\Fields\Captcha;
+use Aerni\LivewireForms\Fields\Honeypot;
 use Statamic\Forms\Form as StatamicForm;
 
 class Fields
 {
-    protected Collection $models;
-
     protected Collection $fields;
 
     protected $hydratedCallbacks = [];
 
     public function __construct(protected StatamicForm $form, protected string $id)
     {
-        $this->models = Models::all();
+        //
     }
 
     public static function make(StatamicForm $form, string $id): self
@@ -29,9 +27,13 @@ class Fields
         return new static($form, $id);
     }
 
-    public function models(array $models): self
+    public function models(?array $models = null): Collection|self
     {
-        $this->models = collect($models);
+        if (is_null($models)) {
+            return Models::all();
+        }
+
+        Models::register($models);
 
         return $this;
     }
@@ -117,8 +119,8 @@ class Fields
     protected function makeFields(Collection $fields): Collection
     {
         return $fields->map(function ($field) {
-            $class = $this->models->get($field->handle())
-                ?? $this->models->get($field->fieldtype()::class);
+            $class = $this->models()->get($field->handle())
+                ?? $this->models()->get($field->fieldtype()::class);
 
             return $class ? $class::make($field, $this->id) : null;
         })->filter();

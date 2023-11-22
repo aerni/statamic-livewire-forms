@@ -2,26 +2,25 @@
 
 namespace Aerni\LivewireForms\Livewire;
 
-use Aerni\LivewireForms\Facades\Models;
-use Aerni\LivewireForms\Fields\Honeypot;
-use Aerni\LivewireForms\Form\Component as FormComponent;
-use Aerni\LivewireForms\Form\Fields;
-use Illuminate\Contracts\View\View as LaravelView;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Lang;
-use Illuminate\Support\Facades\URL;
-use Livewire\Attributes\Computed;
-use Livewire\Attributes\On;
 use Livewire\Component;
-use Livewire\WithFileUploads;
-use Statamic\Contracts\Forms\Submission;
-use Statamic\Events\FormSubmitted;
-use Statamic\Events\SubmissionCreated;
-use Statamic\Exceptions\SilentFormFailureException;
-use Statamic\Facades\Site;
-use Statamic\Forms\SendEmails;
 use Statamic\Support\Str;
+use Statamic\Facades\Site;
+use Illuminate\Support\Arr;
+use Livewire\Attributes\On;
+use Livewire\WithFileUploads;
+use Statamic\Forms\SendEmails;
+use Livewire\Attributes\Computed;
+use Illuminate\Support\Collection;
+use Statamic\Events\FormSubmitted;
+use Illuminate\Support\Facades\URL;
+use Aerni\LivewireForms\Form\Fields;
+use Illuminate\Support\Facades\Lang;
+use Statamic\Events\SubmissionCreated;
+use Aerni\LivewireForms\Fields\Honeypot;
+use Statamic\Contracts\Forms\Submission;
+use Illuminate\Contracts\View\View as LaravelView;
+use Statamic\Exceptions\SilentFormFailureException;
+use Aerni\LivewireForms\Form\Component as FormComponent;
 
 class Form extends Component
 {
@@ -97,11 +96,6 @@ class Form extends Component
         //
     }
 
-    protected function models(): array
-    {
-        return Models::all()->merge($this->models)->toArray();
-    }
-
     public function getComponentProperty(): FormComponent
     {
         return \Aerni\LivewireForms\Facades\Component::getFacadeRoot();
@@ -116,7 +110,7 @@ class Form extends Component
     public function getFieldsProperty(): Fields
     {
         return Fields::make($this->form, $this->getId())
-            ->models($this->models())
+            ->models($this->models)
             ->hydrated(fn ($fields) => $this->hydratedFields($fields))
             ->hydrate();
     }
