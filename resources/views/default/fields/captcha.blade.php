@@ -27,6 +27,10 @@
     @formView('messages.error')
 </div>
 
+@assets
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+@endassets
+
 <script>
     function setResponseToken_{{ $this->getId() }}(token) {
         @this.set('{{ $field->key }}', token)
@@ -36,7 +40,3 @@
         @this.set('{{ $field->key }}', null)
     }
 </script>
-
-@once
-    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
-@endonce
