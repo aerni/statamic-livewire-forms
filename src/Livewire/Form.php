@@ -2,7 +2,7 @@
 
 namespace Aerni\LivewireForms\Livewire;
 
-use Livewire\Component;
+use Livewire\Component as LivewireComponent;
 use Statamic\Support\Str;
 use Statamic\Facades\Site;
 use Illuminate\Support\Arr;
@@ -20,9 +20,9 @@ use Aerni\LivewireForms\Fields\Honeypot;
 use Statamic\Contracts\Forms\Submission;
 use Illuminate\Contracts\View\View as LaravelView;
 use Statamic\Exceptions\SilentFormFailureException;
-use Aerni\LivewireForms\Form\Component as FormComponent;
+use Aerni\LivewireForms\Form\Component;
 
-class Form extends Component
+class Form extends LivewireComponent
 {
     use WithFileUploads;
 
@@ -96,18 +96,21 @@ class Form extends Component
         //
     }
 
-    public function getComponentProperty(): FormComponent
+    #[Computed]
+    public function component(): Component
     {
         return \Aerni\LivewireForms\Facades\Component::getFacadeRoot();
     }
 
-    public function getFormProperty(): \Statamic\Forms\Form
+    #[Computed(true)]
+    public function form(): \Statamic\Forms\Form
     {
         return \Statamic\Facades\Form::find($this->handle)
             ?? throw new \Exception("Form with handle [{$this->handle}] cannot be found.");
     }
 
-    public function getFieldsProperty(): Fields
+    #[Computed]
+    public function fields(): Fields
     {
         return Fields::make($this->form, $this->getId())
             ->models($this->models)
