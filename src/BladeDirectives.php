@@ -26,7 +26,7 @@ class BladeDirectives
         $arguments = $variables[1] ?? '[]';
 
         return Blade::compileString("
-            @include(\$this->component->getView($view), $arguments)
+            @include(\$this->evaluatedThemeView($view), $arguments)
         ");
     }
 

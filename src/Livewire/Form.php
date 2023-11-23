@@ -2,7 +2,7 @@
 
 namespace Aerni\LivewireForms\Livewire;
 
-use Livewire\Component as LivewireComponent;
+use Livewire\Component;
 use Statamic\Support\Str;
 use Statamic\Facades\Site;
 use Illuminate\Support\Arr;
@@ -20,9 +20,8 @@ use Aerni\LivewireForms\Fields\Honeypot;
 use Statamic\Contracts\Forms\Submission;
 use Illuminate\Contracts\View\View as LaravelView;
 use Statamic\Exceptions\SilentFormFailureException;
-use Aerni\LivewireForms\Form\Component;
 
-class Form extends LivewireComponent
+class Form extends Component
 {
     use WithFileUploads;
 
@@ -44,13 +43,7 @@ class Form extends LivewireComponent
     {
         $this
             ->initializeProperties()
-            ->initializeComputedProperties()
             ->hydrateDefaultData();
-    }
-
-    public function hydrate(): void
-    {
-        $this->initializeComputedProperties();
     }
 
     protected function initializeProperties(): self
@@ -72,15 +65,6 @@ class Form extends LivewireComponent
         return $this;
     }
 
-    protected function initializeComputedProperties(): self
-    {
-        $this->component
-            ->view($this->view)
-            ->theme($this->theme);
-
-        return $this;
-    }
-
     protected function hydrateDefaultData(): self
     {
         $this->data = collect($this->data)
@@ -94,12 +78,6 @@ class Form extends LivewireComponent
     protected function hydratedFields(Fields $fields): void
     {
         //
-    }
-
-    #[Computed]
-    public function component(): Component
-    {
-        return \Aerni\LivewireForms\Facades\Component::getFacadeRoot();
     }
 
     #[Computed(true)]
