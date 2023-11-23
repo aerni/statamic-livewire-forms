@@ -19,21 +19,21 @@ use Statamic\Events\SubmissionCreated;
 use Aerni\LivewireForms\Fields\Honeypot;
 use Statamic\Contracts\Forms\Submission;
 use Illuminate\Contracts\View\View as LaravelView;
+use Aerni\LivewireForms\Livewire\Concerns\WithView;
 use Statamic\Exceptions\SilentFormFailureException;
+use Aerni\LivewireForms\Livewire\Concerns\WithTheme;
+use Aerni\LivewireForms\Livewire\Concerns\WithHandle;
 
 class Form extends Component
 {
+    use WithHandle;
+    use WithView;
+    use WithTheme;
     use WithFileUploads;
 
     protected array $models = [];
 
     protected Submission $submission;
-
-    public string $handle;
-
-    public string $view;
-
-    public string $theme;
 
     public array $data = [];
 
@@ -48,18 +48,6 @@ class Form extends Component
 
     protected function initializeProperties(): self
     {
-        $this->handle = static::$HANDLE
-            ?? $this->handle
-            ?? throw new \Exception('Please set the handle of the form you want to use.');
-
-        $this->view = static::$VIEW
-            ?? $this->view
-            ?? $this->component->defaultView();
-
-        $this->theme = static::$THEME
-            ?? $this->theme
-            ?? $this->component->defaultTheme();
-
         $this->fieldsToSubmit = collect();
 
         return $this;
