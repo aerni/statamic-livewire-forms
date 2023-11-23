@@ -50,11 +50,15 @@ class BladeDirectives
         $variables = explode(', ', $expression);
 
         $field = $variables[0];
-        $arguments = $variables[1] ?? '[]';
+        $properties = $variables[1] ?? '[]';
 
         return "<?php
-            if (\$this->fields->get($field)) {
-                echo \Aerni\LivewireForms\Facades\View::field(\$this->fields->get($field), $arguments);
+            if (\$field = \$this->fields->get($field)) {
+                foreach ($properties as \$property => \$value) {
+                    \$field->\$property(\$value);
+                }
+
+                echo view(\$this->evaluatedThemeView('layouts.field'), ['field' => \$field]);
             }
         ?>";
     }

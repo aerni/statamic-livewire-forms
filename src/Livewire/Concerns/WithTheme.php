@@ -31,4 +31,13 @@ trait WithTheme
         // Fall back to the default theme.
         return config('livewire-forms.theme', 'default');
     }
+
+    protected function evaluatedThemeView(string $view): string
+    {
+        $defaultTheme = config('livewire-forms.theme', 'default');
+        $themeView = "livewire-forms::{$this->theme}.{$view}";
+        $defaultThemeView = "livewire-forms::{$defaultTheme}.{$view}";
+
+        return view()->exists($themeView) ? $themeView : $defaultThemeView;
+    }
 }
