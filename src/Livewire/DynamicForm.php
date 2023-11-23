@@ -2,68 +2,19 @@
 
 namespace Aerni\LivewireForms\Livewire;
 
-use Aerni\LivewireForms\Facades\Component as FormComponent;
-use Illuminate\Contracts\View\View;
-use Illuminate\Support\Str;
 use Livewire\Component;
-use Livewire\Livewire;
+use Illuminate\Contracts\View\View;
+use Aerni\LivewireForms\Livewire\Concerns\WithView;
+use Aerni\LivewireForms\Livewire\Concerns\WithHandle;
+use Aerni\LivewireForms\Livewire\Concerns\WithComponent;
+use Aerni\LivewireForms\Livewire\Concerns\WithTheme;
 
 class DynamicForm extends Component
 {
-    public string $handle;
-
-    public string $component;
-
-    public string $view;
-
-    public string $theme;
-
-    public function mount(): void
-    {
-        $this->handle = $this->handle ?? throw new \Exception('Please set the handle of the form you want to use.');
-        $this->component = $this->getComponent();
-        $this->view = $this->getView();
-        $this->theme = $this->getTheme();
-    }
-
-    protected function getComponent(): string
-    {
-        $component = Str::replace('_', '-', $this->handle).'-form';
-
-        return Livewire::isDiscoverable($component) ? $component : 'default-form';
-    }
-
-    protected function getView(): string
-    {
-        // Try to load a user-defined view first.
-        if ($this->view ?? null) {
-            return $this->view;
-        }
-
-        // Try to autoload the view by form handle.
-        if (view()->exists("livewire-forms::{$this->handle}")) {
-            return $this->handle;
-        }
-
-        // Fall back to the default view.
-        return FormComponent::defaultView();
-    }
-
-    protected function getTheme(): string
-    {
-        // Load the user-defined theme if it exists
-        if ($this->theme ?? null) {
-            return $this->theme;
-        }
-
-        // Autoload the theme by form handle if it exists
-        if (is_dir(resource_path("views/vendor/livewire-forms/{$this->handle}"))) {
-            return $this->handle;
-        }
-
-        // Fall back to the default theme
-        return FormComponent::defaultTheme();
-    }
+    use WithComponent;
+    use WithHandle;
+    use WithTheme;
+    use WithView;
 
     public function render(): View
     {
