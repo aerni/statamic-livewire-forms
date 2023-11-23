@@ -2,13 +2,13 @@
 
 namespace Aerni\LivewireForms\Form;
 
-use Illuminate\Support\Str;
-use Statamic\Fields\Section;
-use Illuminate\Support\Collection;
-use Aerni\LivewireForms\Fields\Field;
 use Aerni\LivewireForms\Facades\Models;
 use Aerni\LivewireForms\Fields\Captcha;
+use Aerni\LivewireForms\Fields\Field;
 use Aerni\LivewireForms\Fields\Honeypot;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
+use Statamic\Fields\Section;
 use Statamic\Forms\Form as StatamicForm;
 
 class Fields
@@ -150,13 +150,7 @@ class Fields
 
     public function defaultValues(): Collection
     {
-        /**
-         * Only filter null values to preserve empty arrays.
-         * This is to ensure that fields like checkboxes are initialized propertly.
-         */
-        return $this->fields
-            ->mapWithKeys(fn ($field, $handle) => [$handle => $field->default])
-            ->filter(fn ($value) => ! is_null($value));
+        return $this->fields->mapWithKeys(fn ($field, $handle) => [$handle => $field->default]);
     }
 
     public function validationRules(): array

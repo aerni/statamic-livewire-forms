@@ -2,8 +2,9 @@
 
 namespace Aerni\LivewireForms\Livewire\Concerns;
 
-use Statamic\Support\Str;
 use Illuminate\Support\Arr;
+use Livewire\Attributes\Computed;
+use Statamic\Support\Str;
 
 trait WithData
 {
@@ -11,14 +12,22 @@ trait WithData
 
     public function mountWithData(): void
     {
-        $this->data = $this->defaultData();
+        $this->data = $this->defaultData;
     }
 
+    // The persisted computed property ensures that we can reset the data to its mount state.
+    #[Computed(true)]
     protected function defaultData(): array
     {
+        return $this->fields->defaultValues()
+            ->merge($this->data)
+            ->all();
+    }
+
+    protected function captchaValue(): array
+    {
         return collect($this->data)
-            ->only($this->fields->captcha()?->handle ?? []) // Make sure to preserve the captcha response.
-            ->merge($this->fields->defaultValues())
+            ->only($this->fields->captcha()?->handle ?? [])
             ->all();
     }
 
