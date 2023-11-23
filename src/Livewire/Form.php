@@ -19,6 +19,7 @@ use Statamic\Events\SubmissionCreated;
 use Aerni\LivewireForms\Fields\Honeypot;
 use Statamic\Contracts\Forms\Submission;
 use Illuminate\Contracts\View\View as LaravelView;
+use Aerni\LivewireForms\Livewire\Concerns\WithData;
 use Aerni\LivewireForms\Livewire\Concerns\WithView;
 use Statamic\Exceptions\SilentFormFailureException;
 use Aerni\LivewireForms\Livewire\Concerns\WithTheme;
@@ -29,38 +30,18 @@ class Form extends Component
     use WithHandle;
     use WithView;
     use WithTheme;
+    use WithData;
     use WithFileUploads;
 
     protected array $models = [];
 
     protected Submission $submission;
 
-    public array $data = [];
-
     public Collection $fieldsToSubmit;
 
     public function mount(): void
     {
-        $this
-            ->initializeProperties()
-            ->hydrateDefaultData();
-    }
-
-    protected function initializeProperties(): self
-    {
         $this->fieldsToSubmit = collect();
-
-        return $this;
-    }
-
-    protected function hydrateDefaultData(): self
-    {
-        $this->data = collect($this->data)
-            ->only($this->fields->captcha()?->handle ?? []) // Make sure to preserve the captcha response.
-            ->merge($this->fields->defaultValues())
-            ->all();
-
-        return $this;
     }
 
     protected function hydratedFields(Fields $fields): void
@@ -283,7 +264,7 @@ class Form extends Component
     protected function resetForm(): self
     {
         // Reset the form data.
-        $this->hydrateDefaultData();
+        $this->data = $this->defaultData();
 
         // Reset asset fields using this trick: https://talltips.novate.co.uk/livewire/livewire-file-uploads-using-s3#removing-filename-from-input-field-after-upload
         $this->fields->getByType('assets')
