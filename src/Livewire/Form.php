@@ -24,6 +24,7 @@ use Aerni\LivewireForms\Livewire\Concerns\WithView;
 use Statamic\Exceptions\SilentFormFailureException;
 use Aerni\LivewireForms\Livewire\Concerns\WithTheme;
 use Aerni\LivewireForms\Livewire\Concerns\WithHandle;
+use Aerni\LivewireForms\Livewire\Concerns\WithModels;
 
 class Form extends Component
 {
@@ -31,9 +32,8 @@ class Form extends Component
     use WithView;
     use WithTheme;
     use WithData;
+    use WithModels;
     use WithFileUploads;
-
-    protected array $models = [];
 
     protected Submission $submission;
 
