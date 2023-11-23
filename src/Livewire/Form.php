@@ -241,12 +241,12 @@ class Form extends LivewireComponent
         return collect($this->data)->map(function ($value, $key) {
             $field = $this->fields->get($key);
 
-            // Don't save values of fields that can't be found (e.g. honeypot).
+            // Return early if a field can't be found, else we'll run into errors with the below code.
             if (is_null($field)) {
                 return null;
             }
 
-            // Don't save values of conditionally hidden fields if 'always_save' isn't on.
+            // Only keep values of fields that should be submitted, e.g. if 'always_save' is on.
             if (! $this->fieldsToSubmit->get($field->handle)) {
                 return null;
             }
