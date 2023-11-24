@@ -31,6 +31,18 @@ trait WithData
             ->all();
     }
 
+    protected function set(string $key, mixed $value): self
+    {
+        $this->data[$key] = $value;
+
+        return $this;
+    }
+
+    protected function get(string $key): mixed
+    {
+        return $this->data[$key] ?? null;
+    }
+
     protected function normalizedDataForSubmission(): array
     {
         return collect($this->data)->map(function ($value, $key) {
