@@ -2,8 +2,8 @@
 
 namespace Aerni\LivewireForms\Livewire\Concerns;
 
-use Illuminate\Support\Arr;
 use Livewire\Attributes\Computed;
+use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 use Statamic\Support\Str;
 
 trait WithData
@@ -78,15 +78,10 @@ trait WithData
         })->all();
     }
 
-    // TODO: Can we move this into the normalizedDataForSubmission method?
-    protected function uploadedFiles(): array
+    protected function temporaryUploadedFiles(): array
     {
-        // Only get the asset fields that contain data.
-        $assetFields = array_intersect_key($this->data, $this->fields->getByType('assets')->all());
-
-        // The assets fieldtype is expecting an array, even for `max_files: 1`, but we don't want to force that on the front end.
-        return collect($assetFields)
-            ->map(fn ($field) => Arr::wrap($field))
+        return collect($this->data)
+            ->whereInstanceOf(TemporaryUploadedFile::class)
             ->all();
     }
 }

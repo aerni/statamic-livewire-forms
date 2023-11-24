@@ -70,11 +70,11 @@ trait HandlesSubmission
     {
         $this->submission = $this->form->makeSubmission();
 
-        $assetIds = $this->submission->uploadFiles($this->uploadedFiles());
+        $assetIds = $this->submission->uploadFiles($this->temporaryUploadedFiles());
 
-        $values = array_merge($this->normalizedDataForSubmission(), $assetIds);
+        $data = array_merge($this->normalizedDataForSubmission(), $assetIds);
 
-        $processedValues = $this->form->blueprint()->fields()->addValues($values)->process()->values();
+        $processedValues = $this->form->blueprint()->fields()->addValues($data)->process()->values();
 
         $this->submission->data($processedValues);
 
