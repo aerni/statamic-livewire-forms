@@ -2,8 +2,8 @@
 
 namespace Aerni\LivewireForms\Livewire\Concerns;
 
-use Livewire\Attributes\Computed;
 use Aerni\LivewireForms\Form\Fields;
+use Livewire\Attributes\Computed;
 
 trait WithFields
 {

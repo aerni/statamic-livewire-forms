@@ -29,10 +29,10 @@ class Form extends Component
     use WithFileUploads;
     use WithForm;
     use WithHandle;
+    use WithMessages;
     use WithModels;
     use WithTheme;
     use WithView;
-    use WithMessages;
 
     public function render(): View
     {

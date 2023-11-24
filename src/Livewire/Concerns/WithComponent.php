@@ -2,8 +2,8 @@
 
 namespace Aerni\LivewireForms\Livewire\Concerns;
 
-use Livewire\Livewire;
 use Illuminate\Support\Str;
+use Livewire\Livewire;
 
 trait WithComponent
 {

@@ -2,8 +2,8 @@
 
 namespace Aerni\LivewireForms\Livewire\Concerns;
 
-use Statamic\Facades\Form;
 use Livewire\Attributes\Computed;
+use Statamic\Facades\Form;
 
 trait WithForm
 {

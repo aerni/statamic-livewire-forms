@@ -2,12 +2,12 @@
 
 namespace Aerni\LivewireForms\Livewire;
 
-use Livewire\Component;
-use Illuminate\Contracts\View\View;
-use Aerni\LivewireForms\Livewire\Concerns\WithView;
-use Aerni\LivewireForms\Livewire\Concerns\WithHandle;
 use Aerni\LivewireForms\Livewire\Concerns\WithComponent;
+use Aerni\LivewireForms\Livewire\Concerns\WithHandle;
 use Aerni\LivewireForms\Livewire\Concerns\WithTheme;
+use Aerni\LivewireForms\Livewire\Concerns\WithView;
+use Illuminate\Contracts\View\View;
+use Livewire\Component;
 
 class DynamicForm extends Component
 {

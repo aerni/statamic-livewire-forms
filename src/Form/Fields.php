@@ -27,7 +27,7 @@ class Fields
         return new static($form, $id);
     }
 
-    public function models(?array $models = null): Collection|self
+    public function models(array $models = null): Collection|self
     {
         if (is_null($models)) {
             return Models::all();

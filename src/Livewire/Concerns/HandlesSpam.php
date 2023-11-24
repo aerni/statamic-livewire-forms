@@ -2,8 +2,8 @@
 
 namespace Aerni\LivewireForms\Livewire\Concerns;
 
-use Livewire\Attributes\Computed;
 use Aerni\LivewireForms\Fields\Honeypot;
+use Livewire\Attributes\Computed;
 use Statamic\Exceptions\SilentFormFailureException;
 
 trait HandlesSpam
