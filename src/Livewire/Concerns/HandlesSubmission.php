@@ -2,15 +2,15 @@
 
 namespace Aerni\LivewireForms\Livewire\Concerns;
 
-use Statamic\Facades\Site;
-use Livewire\Attributes\On;
-use Statamic\Forms\SendEmails;
 use Illuminate\Support\Collection;
-use Statamic\Events\FormSubmitted;
 use Illuminate\Support\Facades\URL;
-use Statamic\Events\SubmissionCreated;
+use Livewire\Attributes\On;
 use Statamic\Contracts\Forms\Submission;
+use Statamic\Events\FormSubmitted;
+use Statamic\Events\SubmissionCreated;
 use Statamic\Exceptions\SilentFormFailureException;
+use Statamic\Facades\Site;
+use Statamic\Forms\SendEmails;
 
 trait HandlesSubmission
 {
@@ -22,6 +22,17 @@ trait HandlesSubmission
     public function mountHandlesSubmission(): void
     {
         $this->fieldsToSubmit = collect();
+    }
+
+    public function submit(): void
+    {
+        $this->validate();
+
+        try {
+            $this->handleSpam()->handleSubmission()->handleSuccess();
+        } catch (SilentFormFailureException) {
+            $this->handleSuccess();
+        }
     }
 
     #[On('field-conditions-updated')]
