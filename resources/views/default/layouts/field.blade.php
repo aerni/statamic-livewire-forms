@@ -8,7 +8,7 @@
         },
     }"
     x-show="show"
-    x-effect="$dispatch('field-conditions-updated', { field: '{{ $field->handle }}', passesConditions: passesConditions() })"
+    x-effect="$wire.$dispatchSelf('field-conditions-updated', { field: '{{ $field->handle }}', passesConditions: passesConditions() })"
     wire:key="{{ $field->id }}"
     class="space-y-2 col-span-1
         {{ $field->width === 25 ? 'md:col-span-3' : '' }}
