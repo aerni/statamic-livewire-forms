@@ -5,6 +5,7 @@ namespace Aerni\LivewireForms\Livewire\Concerns;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\URL;
 use Livewire\Attributes\On;
+use Livewire\Attributes\Renderless;
 use Statamic\Contracts\Forms\Submission;
 use Statamic\Events\FormSubmitted;
 use Statamic\Events\SubmissionCreated;
@@ -35,6 +36,7 @@ trait HandlesSubmission
         }
     }
 
+    #[Renderless]
     #[On('field-conditions-updated')]
     public function submitFieldValue(string $field, bool $passesConditions): void
     {
