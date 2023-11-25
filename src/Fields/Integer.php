@@ -16,6 +16,7 @@ class Integer extends Field
 
     protected function inputTypeProperty(): string
     {
-        return $this->field->get('input_type', 'number');
+        return 'number';
+    }
     }
 }
