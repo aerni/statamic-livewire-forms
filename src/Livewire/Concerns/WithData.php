@@ -4,7 +4,6 @@ namespace Aerni\LivewireForms\Livewire\Concerns;
 
 use Livewire\Attributes\Computed;
 use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
-use Statamic\Support\Str;
 
 trait WithData
 {
@@ -58,23 +57,7 @@ trait WithData
                 return null;
             }
 
-            // Don't save the captcha response.
-            if ($field->field()->type() === 'captcha') {
-                return null;
-            }
-
-            // Cast to booleans if enabled in the config.
-            if ($field->cast_booleans && in_array($value, ['true', 'false'])) {
-                return Str::toBool($value);
-            }
-
-            // Cast to integers if the input type is 'number'.
-            if ($field->input_type === 'number') {
-                return (int) $value;
-            }
-
-            // Otherwise, just return the value.
-            return $value;
+            return $field->process($value);
         })->all();
     }
 

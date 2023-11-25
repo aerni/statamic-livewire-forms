@@ -63,6 +63,15 @@ abstract class Field
         return [$this->key => $this->label];
     }
 
+    public function process(mixed $value): mixed
+    {
+        if ($this->cast_booleans && in_array($value, ['true', 'false'])) {
+            return Str::toBool($value);
+        }
+
+        return $value;
+    }
+
     protected function get(string $key): mixed
     {
         $method = collect(get_class_methods($this))

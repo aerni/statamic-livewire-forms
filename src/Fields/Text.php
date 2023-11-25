@@ -16,8 +16,17 @@ class Text extends Field
 
     protected function hiddenProperty(): bool
     {
-        return $this->field->get('input_type') === 'hidden'
+        return $this->input_type === 'hidden'
             ? true
             : parent::hiddenProperty();
+    }
+
+    public function process(mixed $value): mixed
+    {
+        if ($this->input_type !== 'number') {
+            return $value;
+        }
+
+        return is_null($value) ? null : (int) $value;
     }
 }
