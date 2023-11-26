@@ -13,12 +13,7 @@ trait WithTheme
 
     protected function theme(): string
     {
-        // Try to get the theme defined in a custom component.
-        if (isset(static::$THEME)) {
-            return static::$THEME;
-        }
-
-        // Try to get the theme passed to the component in the view.
+        // Get the theme passed to the component in the view.
         if (isset($this->theme)) {
             return $this->theme;
         }

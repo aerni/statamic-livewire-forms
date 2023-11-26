@@ -13,17 +13,12 @@ trait WithView
 
     protected function view(): string
     {
-        // Try to get the view defined in a custom component.
-        if (isset(static::$VIEW)) {
-            return static::$VIEW;
-        }
-
-        // Try to get the view passed to the component in the view.
+        // Get the view passed to the component in the view.
         if (isset($this->view)) {
             return $this->view;
         }
 
-        // Try to autoload the view by form handle.
+        // Autoload the view by form handle if it exists.
         if (view()->exists("livewire-forms::{$this->handle}")) {
             return $this->handle;
         }

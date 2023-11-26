@@ -15,12 +15,7 @@ trait WithHandle
 
     protected function handle(): string
     {
-        // Try to get the handle defined in a custom component.
-        if (isset(static::$HANDLE)) {
-            return static::$HANDLE;
-        }
-
-        // Try to get the handle passed to the component in the view.
+        // Get the handle passed to the component in the view.
         if (isset($this->handle)) {
             return $this->handle;
         }
