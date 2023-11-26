@@ -119,11 +119,14 @@ class Fields
     protected function makeFields(Collection $fields): Collection
     {
         return $fields->map(function ($field) {
-            $class = $this->models()->get($field->handle())
-                ?? $this->models()->get($field->fieldtype()::class);
+            $fieldtype = $field->fieldtype()::class;
 
-            return $class ? $class::make($field, $this->id) : null;
-        })->filter();
+            $class = $this->models()->get($field->handle()) ?? $this->models()->get($fieldtype);
+
+            return $class
+                ? $class::make($field, $this->id)
+                : throw new \Exception("The field model binding for fieldtype [{$fieldtype}] cannot be found.");
+        });
     }
 
     protected function removeDuplicateCaptchaFields(): self
