@@ -2,11 +2,22 @@
 
 namespace Aerni\LivewireForms\Livewire\Concerns;
 
-use Aerni\LivewireForms\Form\Fields;
+use Livewire\Attributes\On;
 use Livewire\Attributes\Computed;
+use Illuminate\Support\Collection;
+use Livewire\Attributes\Renderless;
+use Aerni\LivewireForms\Form\Fields;
 
 trait WithFields
 {
+    // TODO: Can we make this protected?
+    public Collection $fieldsToSubmit;
+
+    public function mountWithFields(): void
+    {
+        $this->fieldsToSubmit = collect();
+    }
+
     #[Computed]
     public function fields(): Fields
     {
@@ -19,5 +30,14 @@ trait WithFields
     protected function hydratedFields(Fields $fields): void
     {
         //
+    }
+
+    #[Renderless]
+    #[On('field-conditions-updated')]
+    public function submitFieldValue(string $field, bool $passesConditions): void
+    {
+        $this->fields->get($field)->always_save
+            ? $this->fieldsToSubmit->put($field, true)
+            : $this->fieldsToSubmit->put($field, $passesConditions);
     }
 }

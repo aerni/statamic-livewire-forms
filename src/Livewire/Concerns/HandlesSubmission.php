@@ -2,10 +2,7 @@
 
 namespace Aerni\LivewireForms\Livewire\Concerns;
 
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\URL;
-use Livewire\Attributes\On;
-use Livewire\Attributes\Renderless;
 use Statamic\Contracts\Forms\Submission;
 use Statamic\Events\FormSubmitted;
 use Statamic\Events\SubmissionCreated;
@@ -17,14 +14,6 @@ trait HandlesSubmission
 {
     protected Submission $submission;
 
-    // TODO: Can we make this protected?
-    public Collection $fieldsToSubmit;
-
-    public function mountHandlesSubmission(): void
-    {
-        $this->fieldsToSubmit = collect();
-    }
-
     public function submit(): void
     {
         $this->validate();
@@ -34,15 +23,6 @@ trait HandlesSubmission
         } catch (SilentFormFailureException) {
             $this->handleSuccess();
         }
-    }
-
-    #[Renderless]
-    #[On('field-conditions-updated')]
-    public function submitFieldValue(string $field, bool $passesConditions): void
-    {
-        $this->fields->get($field)->always_save
-            ? $this->fieldsToSubmit->put($field, true)
-            : $this->fieldsToSubmit->put($field, $passesConditions);
     }
 
     protected function handleSubmission(): self
