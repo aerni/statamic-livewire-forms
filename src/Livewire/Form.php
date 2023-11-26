@@ -38,4 +38,15 @@ class Form extends Component
     {
         return view("livewire-forms::{$this->view}");
     }
+
+    public function submit(): void
+    {
+        $this->validate();
+
+        try {
+            $this->handleSpam()->handleSubmission()->handleSuccess();
+        } catch (SilentFormFailureException) {
+            $this->handleSuccess();
+        }
+    }
 }

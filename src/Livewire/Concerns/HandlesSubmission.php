@@ -14,17 +14,6 @@ trait HandlesSubmission
 {
     protected Submission $submission;
 
-    public function submit(): void
-    {
-        $this->validate();
-
-        try {
-            $this->handleSpam()->handleSubmission()->handleSuccess();
-        } catch (SilentFormFailureException) {
-            $this->handleSuccess();
-        }
-    }
-
     protected function handleSubmission(): self
     {
         return $this
