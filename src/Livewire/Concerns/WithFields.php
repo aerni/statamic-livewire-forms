@@ -2,11 +2,11 @@
 
 namespace Aerni\LivewireForms\Livewire\Concerns;
 
-use Livewire\Attributes\On;
-use Livewire\Attributes\Computed;
-use Illuminate\Support\Collection;
-use Livewire\Attributes\Renderless;
 use Aerni\LivewireForms\Form\Fields;
+use Illuminate\Support\Collection;
+use Livewire\Attributes\Computed;
+use Livewire\Attributes\On;
+use Livewire\Attributes\Renderless;
 
 trait WithFields
 {
