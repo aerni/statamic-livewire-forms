@@ -5,6 +5,9 @@ namespace Aerni\LivewireForms\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
+use function Laravel\Prompts\confirm;
+use function Laravel\Prompts\info;
+use function Laravel\Prompts\text;
 use Statamic\Console\RunsInPlease;
 
 class MakeComponent extends Command
@@ -17,7 +20,7 @@ class MakeComponent extends Command
 
     public function handle(): void
     {
-        $name = $this->argument('name') ?? $this->ask('What do you want to call the component?');
+        $name = $this->argument('name') ?? text(label: 'What do you want to name the component?', required: true);
         $name = Str::of($name)->endsWith('Form') ? $name : Str::of($name)->append('Form')->__toString();
         $filename = Str::studly($name);
 
@@ -25,10 +28,10 @@ class MakeComponent extends Command
         $stub = str_replace('DummyForm', $filename, $stub);
         $path = app_path("Livewire/{$filename}.php");
 
-        if (! File::exists($path) || $this->confirm("A component with the name <comment>$filename</comment> already exists. Do you want to overwrite it?")) {
+        if (! File::exists($path) || confirm(label: 'A component with this name already exists. Do you want to overwrite it?', default: false)) {
             File::ensureDirectoryExists(app_path('Livewire'));
             File::put($path, $stub);
-            $this->line("<info>[✓]</info> The component was successfully created: <comment>{$this->getRelativePath($path)}</comment>");
+            info("The component was successfully created: <comment>{$this->getRelativePath($path)}</comment>");
         }
     }
 

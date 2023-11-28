@@ -3,6 +3,7 @@
 namespace Aerni\LivewireForms\Commands;
 
 use Illuminate\Console\Command;
+use function Laravel\Prompts\confirm;
 use Statamic\Console\RunsInPlease;
 
 class Setup extends Command
@@ -32,7 +33,7 @@ class Setup extends Command
 
     protected function makeComponent(): void
     {
-        if ($this->confirm('Do you want to create a form component to customize the default behaviour?')) {
+        if (confirm(label: 'Do you want to create a form component to customize the default behaviour?')) {
             $this->call('livewire-forms:component');
         }
     }
