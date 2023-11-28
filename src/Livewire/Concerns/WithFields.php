@@ -4,11 +4,13 @@ namespace Aerni\LivewireForms\Livewire\Concerns;
 
 use Aerni\LivewireForms\Form\Fields;
 use Livewire\Attributes\Computed;
+use Livewire\Attributes\Locked;
 use Livewire\Attributes\On;
 use Livewire\Attributes\Renderless;
 
 trait WithFields
 {
+    #[Locked]
     public array $fieldsToSubmit = [];
 
     #[Computed]

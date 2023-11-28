@@ -2,8 +2,11 @@
 
 namespace Aerni\LivewireForms\Livewire\Concerns;
 
+use Livewire\Attributes\Locked;
+
 trait WithView
 {
+    #[Locked]
     public string $view;
 
     public function mountWithView(): void

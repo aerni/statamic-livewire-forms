@@ -2,8 +2,11 @@
 
 namespace Aerni\LivewireForms\Livewire\Concerns;
 
+use Livewire\Attributes\Locked;
+
 trait WithTheme
 {
+    #[Locked]
     public string $theme;
 
     public function mountWithTheme(): void

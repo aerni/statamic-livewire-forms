@@ -3,9 +3,11 @@
 namespace Aerni\LivewireForms\Livewire\Concerns;
 
 use Aerni\LivewireForms\Livewire\Form;
+use Livewire\Attributes\Locked;
 
 trait WithHandle
 {
+    #[Locked]
     public string $handle;
 
     public function mountWithHandle(): void
