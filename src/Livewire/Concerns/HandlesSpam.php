@@ -16,7 +16,7 @@ trait HandlesSpam
 
     protected function handleSpam(): self
     {
-        $isSpam = collect($this->data)->has($this->honeypot->handle);
+        $isSpam = $this->data()->has($this->honeypot->handle);
 
         if ($isSpam) {
             throw new SilentFormFailureException();

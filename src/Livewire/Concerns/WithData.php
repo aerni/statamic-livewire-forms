@@ -2,6 +2,7 @@
 
 namespace Aerni\LivewireForms\Livewire\Concerns;
 
+use Illuminate\Support\Collection;
 use Livewire\Attributes\Computed;
 use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 
@@ -23,11 +24,9 @@ trait WithData
             ->all();
     }
 
-    protected function captchaValue(): array
+    protected function data(): Collection
     {
-        return collect($this->data)
-            ->only($this->fields->getByType('captcha')->first()?->handle ?? [])
-            ->all();
+        return collect($this->data);
     }
 
     protected function set(string $key, mixed $value): self
@@ -42,9 +41,16 @@ trait WithData
         return $this->data[$key] ?? null;
     }
 
+    protected function captchaValue(): array
+    {
+        return $this->data()
+            ->only($this->fields->getByType('captcha')->first()?->handle ?? [])
+            ->all();
+    }
+
     protected function normalizedDataForSubmission(): array
     {
-        return collect($this->data)->map(function ($value, $key) {
+        return $this->data()->map(function ($value, $key) {
             $field = $this->fields->get($key);
 
             // Return early if a field can't be found, else we'll run into errors with the below code.
@@ -63,7 +69,7 @@ trait WithData
 
     protected function temporaryUploadedFiles(): array
     {
-        return collect($this->data)
+        return $this->data()
             ->whereInstanceOf(TemporaryUploadedFile::class)
             ->all();
     }
