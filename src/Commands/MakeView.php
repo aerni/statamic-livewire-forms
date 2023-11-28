@@ -4,10 +4,11 @@ namespace Aerni\LivewireForms\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
+use Statamic\Console\RunsInPlease;
+
 use function Laravel\Prompts\confirm;
 use function Laravel\Prompts\info;
 use function Laravel\Prompts\text;
-use Statamic\Console\RunsInPlease;
 
 class MakeView extends Command
 {

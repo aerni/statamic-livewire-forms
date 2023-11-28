@@ -3,8 +3,9 @@
 namespace Aerni\LivewireForms\Commands;
 
 use Illuminate\Console\Command;
-use function Laravel\Prompts\confirm;
 use Statamic\Console\RunsInPlease;
+
+use function Laravel\Prompts\confirm;
 
 class Setup extends Command
 {
