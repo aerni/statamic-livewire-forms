@@ -1,3 +1,3 @@
 <div>
-    <livewire:dynamic-component :is="$component" :$handle :$view :$theme />
+    <livewire:dynamic-component :is="$this->component" :$handle :$view :$theme />
 </div>
