@@ -59,7 +59,7 @@ trait WithData
             }
 
             // Only keep values of fields that should be submitted, e.g. if 'always_save' is on.
-            if (! $this->fieldsToSubmit->get($field->handle)) {
+            if (! $this->fieldsToSubmit[$field->handle] ?? null) {
                 return null;
             }
 

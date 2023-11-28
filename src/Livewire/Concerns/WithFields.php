@@ -3,20 +3,13 @@
 namespace Aerni\LivewireForms\Livewire\Concerns;
 
 use Aerni\LivewireForms\Form\Fields;
-use Illuminate\Support\Collection;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\On;
 use Livewire\Attributes\Renderless;
 
 trait WithFields
 {
-    // TODO: Can we make this protected?
-    public Collection $fieldsToSubmit;
-
-    public function mountWithFields(): void
-    {
-        $this->fieldsToSubmit = collect();
-    }
+    public array $fieldsToSubmit = [];
 
     #[Computed]
     public function fields(): Fields
@@ -37,7 +30,7 @@ trait WithFields
     public function submitFieldValue(string $field, bool $passesConditions): void
     {
         $this->fields->get($field)->always_save
-            ? $this->fieldsToSubmit->put($field, true)
-            : $this->fieldsToSubmit->put($field, $passesConditions);
+            ? $this->fieldsToSubmit[$field] = true
+            : $this->fieldsToSubmit[$field] = $passesConditions;
     }
 }
