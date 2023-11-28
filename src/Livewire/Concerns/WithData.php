@@ -26,7 +26,7 @@ trait WithData
     protected function captchaValue(): array
     {
         return collect($this->data)
-            ->only($this->fields->captcha()?->handle ?? [])
+            ->only($this->fields->getByType('captcha')->first()?->handle ?? [])
             ->all();
     }
 

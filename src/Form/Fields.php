@@ -3,7 +3,6 @@
 namespace Aerni\LivewireForms\Form;
 
 use Aerni\LivewireForms\Facades\Models;
-use Aerni\LivewireForms\Fields\Captcha;
 use Aerni\LivewireForms\Fields\Field;
 use Aerni\LivewireForms\Fields\Honeypot;
 use Illuminate\Support\Collection;
@@ -87,10 +86,7 @@ class Fields
 
     public function hydrate(): self
     {
-        return $this
-            ->hydrateFields()
-            ->removeDuplicateCaptchaFields()
-            ->runHydratedCallbacks();
+        return $this->hydrateFields()->runHydratedCallbacks();
     }
 
     protected function runHydratedCallbacks(): self
@@ -127,20 +123,6 @@ class Fields
                 ? $class::make($field, $this->id)
                 : throw new \Exception("The field model binding for fieldtype [{$fieldtype}] cannot be found.");
         });
-    }
-
-    protected function removeDuplicateCaptchaFields(): self
-    {
-        $duplicates = $this->fields->whereInstanceOf(Captcha::class)->slice(1)->keys();
-
-        $this->fields = $this->fields->except($duplicates);
-
-        return $this;
-    }
-
-    public function captcha(): ?Captcha
-    {
-        return $this->fields->whereInstanceOf(Captcha::class)->first();
     }
 
     public function honeypot(): Honeypot
