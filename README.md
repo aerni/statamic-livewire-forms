@@ -470,11 +470,11 @@ There are a couple of configuration options for your form fields:
 
 | Parameter       | Type                                    | Supported by                   | Description                                                                                                                            |
 | :-------------- | :-------------------------------------- | :----------------------------- | :------------------------------------------------------------------------------------------------------------------------------------- |
-| `autocomplete`  | `string`                                | `input`, `textarea`, `select`  | Set the field's [autocomplete](https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/autocomplete) attribute. Defaults to `on`. |
+| `autocomplete`  | `string`                                | `default`, `textarea`, `select`  | Set the field's [autocomplete](https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/autocomplete) attribute. Defaults to `on`. |
 | `cast_booleans` | `boolean`                               | `radio`, `select`              | String values of `true` and `false` will be saved as booleans. |
 | `default`       | `array`, `boolean`, `integer`, `string` | All fieldtypes except `assets` | Set the field's default value |
 | `inline`        | `boolean`                               | `checkboxes`, `radio`          | Set to `true` to display the fields inline |
-| `placeholder`   | `string`                                | `input`, `textarea`            | Set the field's placeholder value |
+| `placeholder`   | `string`                                | `default`, `textarea`            | Set the field's placeholder value |
 | `show_label`    | `boolean`                               | All fieldtypes                 | Set to `false` to hide the field's label and instructions. |
 | `width`         | `integer`                               | All fieldtypes                 | Set the desired width of the field. |
 | `wire_model`    | `string`                                | All fieldtypes                 | Customize `wire:model`, e.g. `wire_model: live.debounce.150ms`. |
