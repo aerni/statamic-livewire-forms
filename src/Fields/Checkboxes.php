@@ -5,12 +5,12 @@ namespace Aerni\LivewireForms\Fields;
 use Aerni\LivewireForms\Fields\Properties\WithInline;
 use Aerni\LivewireForms\Fields\Properties\WithOptions;
 
-class Checkbox extends Field
+class Checkboxes extends Field
 {
     use WithInline;
     use WithOptions;
 
-    protected static string $view = 'checkbox';
+    protected static string $view = 'checkboxes';
 
     protected function defaultProperty(): string|array|null
     {
