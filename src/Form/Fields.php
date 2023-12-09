@@ -8,7 +8,7 @@ use Aerni\LivewireForms\Fields\Honeypot;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use Statamic\Fields\Section;
-use Statamic\Forms\Form as StatamicForm;
+use Statamic\Forms\Form;
 
 class Fields
 {
@@ -16,12 +16,12 @@ class Fields
 
     protected $hydratedCallbacks = [];
 
-    public function __construct(protected StatamicForm $form, protected string $id)
+    public function __construct(protected Form $form, protected string $id)
     {
         //
     }
 
-    public static function make(StatamicForm $form, string $id): self
+    public static function make(Form $form, string $id): self
     {
         return new static($form, $id);
     }
