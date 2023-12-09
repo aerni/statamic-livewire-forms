@@ -8,7 +8,7 @@ class Assets extends Field
 {
     use WithMultiple;
 
-    protected static string $view = 'assets';
+    protected string $view = 'assets';
 
     protected function multipleProperty(): bool
     {

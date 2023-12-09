@@ -12,5 +12,5 @@ class Textarea extends Field
     use WithPlaceholder;
     use WithRows;
 
-    protected static string $view = 'textarea';
+    protected string $view = 'textarea';
 }

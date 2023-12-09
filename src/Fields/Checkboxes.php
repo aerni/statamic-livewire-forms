@@ -10,7 +10,7 @@ class Checkboxes extends Field
     use WithInline;
     use WithOptions;
 
-    protected static string $view = 'checkboxes';
+    protected string $view = 'checkboxes';
 
     protected function defaultProperty(): string|array|null
     {

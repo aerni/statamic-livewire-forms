@@ -12,7 +12,7 @@ class Radio extends Field
     use WithInline;
     use WithOptions;
 
-    protected static string $view = 'radio';
+    protected string $view = 'radio';
 
     protected function defaultProperty(): ?string
     {
