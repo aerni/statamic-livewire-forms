@@ -12,6 +12,23 @@ class DummyForm extends Component
 
     /*
     |--------------------------------------------------------------------------
+    | Initializing Properties
+    |--------------------------------------------------------------------------
+    |
+    | You may assign the public properties in the mount instead of passing them
+    | to the component in the view.
+    |
+    */
+
+    // public function mount(): void
+    // {
+    //     $this->handle = 'contact';
+    //     $this->theme = 'secondary';
+    //     $this->view = 'default';
+    // }
+
+    /*
+    |--------------------------------------------------------------------------
     | Field Models
     |--------------------------------------------------------------------------
     |
