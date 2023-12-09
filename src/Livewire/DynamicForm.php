@@ -11,10 +11,10 @@ use Livewire\Component;
 
 class DynamicForm extends Component
 {
-    use WithHandle;
     use WithComponent;
-    use WithView;
+    use WithHandle;
     use WithTheme;
+    use WithView;
 
     public function render(): View
     {

@@ -5,9 +5,12 @@ namespace Aerni\LivewireForms\Livewire\Concerns;
 use Illuminate\Support\Collection;
 use Livewire\Attributes\Computed;
 use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
+use Livewire\WithFileUploads;
 
 trait WithData
 {
+    use WithFileUploads;
+
     public array $data = [];
 
     public function mountWithData(): void

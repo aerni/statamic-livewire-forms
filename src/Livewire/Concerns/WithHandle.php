@@ -2,7 +2,6 @@
 
 namespace Aerni\LivewireForms\Livewire\Concerns;
 
-use Aerni\LivewireForms\Livewire\Form;
 use Livewire\Attributes\Locked;
 
 trait WithHandle
@@ -23,7 +22,7 @@ trait WithHandle
         }
 
         // Get the handle from the name of the component, e.g. 'contact-us-form' will load the 'contact_us' form.
-        if ($this instanceof Form) {
+        if (in_array(WithStatamicFormBuilder::class, class_uses($this))) {
             return str($this->getName())->beforeLast('-form')->replace('-', '_');
         }
 

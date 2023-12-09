@@ -3,21 +3,12 @@
 namespace App\Livewire;
 
 use Aerni\LivewireForms\Form\Fields;
-use Aerni\LivewireForms\Livewire\Form;
+use Aerni\LivewireForms\Livewire\Concerns\WithStatamicFormBuilder;
+use Livewire\Component;
 
-class DummyForm extends Form
+class DummyForm extends Component
 {
-    /*
-    |--------------------------------------------------------------------------
-    | Initialize Properties
-    |--------------------------------------------------------------------------
-    |
-    | You may override the form's view and theme.
-    |
-    */
-
-    // protected static $VIEW = 'default';
-    // protected static $THEME = 'default';
+    use WithStatamicFormBuilder;
 
     /*
     |--------------------------------------------------------------------------
