@@ -7,7 +7,6 @@ trait WithStatamicFormBuilder
     use WithHandle;
     use WithTheme;
     use WithView;
-
     use WithData;
     use WithFields;
     use WithForm;
