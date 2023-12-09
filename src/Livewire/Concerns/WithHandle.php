@@ -2,6 +2,7 @@
 
 namespace Aerni\LivewireForms\Livewire\Concerns;
 
+use Aerni\LivewireForms\Exceptions\HandleNotFoundException;
 use Livewire\Attributes\Locked;
 
 trait WithHandle
@@ -26,6 +27,6 @@ trait WithHandle
             return str($this->getName())->beforeLast('-form')->replace('-', '_');
         }
 
-        throw new \Exception('You need to set the handle of the form you want to use.');
+        throw new HandleNotFoundException();
     }
 }
