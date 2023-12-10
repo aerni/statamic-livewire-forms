@@ -2,7 +2,6 @@
 
 namespace Aerni\LivewireForms\Form;
 
-use Aerni\LivewireForms\Facades\Models;
 use Aerni\LivewireForms\Fields\Field;
 use Aerni\LivewireForms\Fields\Honeypot;
 use Illuminate\Support\Collection;
@@ -13,6 +12,7 @@ use Statamic\Forms\Form;
 class Fields
 {
     protected Collection $fields;
+    protected Collection $models;
 
     protected $hydratedCallbacks = [];
 
@@ -28,11 +28,13 @@ class Fields
 
     public function models(?array $models = null): Collection|self
     {
+        $defaultModels = collect(config('livewire-forms.models'));
+
         if (is_null($models)) {
-            return Models::all();
+            return $this->models ?? $defaultModels;
         }
 
-        Models::register($models);
+        $this->models = $defaultModels->merge($models);
 
         return $this;
     }
