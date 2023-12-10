@@ -11,7 +11,6 @@ trait WithStatamicFormBuilder
     use WithFields;
     use WithForm;
     use WithMessages;
-    use WithModels;
     use RendersView;
     use SubmitsForm;
 }

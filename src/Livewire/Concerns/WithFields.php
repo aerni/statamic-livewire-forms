@@ -10,6 +10,8 @@ use Livewire\Attributes\Renderless;
 
 trait WithFields
 {
+    use WithModels;
+
     #[Locked]
     public array $fieldsToSubmit = [];
 
