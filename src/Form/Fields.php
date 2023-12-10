@@ -12,6 +12,7 @@ use Statamic\Forms\Form;
 class Fields
 {
     protected Collection $fields;
+
     protected Collection $models;
 
     protected $hydratedCallbacks = [];
