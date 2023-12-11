@@ -6,7 +6,7 @@ class Captcha extends Field
 {
     protected string $view = 'captcha';
 
-    public function process(mixed $value): mixed
+    public function process(): mixed
     {
         return null;
     }

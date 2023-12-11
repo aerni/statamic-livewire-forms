@@ -2,65 +2,93 @@
 
 namespace Aerni\LivewireForms\Livewire\Concerns;
 
+use Aerni\LivewireForms\Fields\Honeypot;
 use Aerni\LivewireForms\Form\Fields;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
 use Livewire\Attributes\Computed;
-use Livewire\Attributes\Locked;
 use Livewire\Attributes\On;
 use Livewire\Attributes\Renderless;
+use Statamic\Fields\Field;
+use Statamic\Fields\Section;
 
 trait WithFields
 {
     use WithModels;
 
-    public Fields $synthFields;
+    public Collection $fields;
 
-    #[Locked]
-    public array $fieldsToSubmit = [];
-
-    public function mountWithFields()
+    public function mountWithFields(): void
     {
-        $this->synthFields = Fields::make($this->form, $this->getId())
-            ->models($this->models)
-            ->hydrate();
+        $this->fields = $this->fields();
 
-        $this->hydrateSynthFields($this->synthFields);
+        // $this->mountFields();
     }
 
-    public function hydrateSynthFields(Fields $fields): void
+    // public function mountFields(): void
+    // {
+    //     $this->fields->get('first_name')->display('Mounted');
+    // }
+
+    // public function hydrateFields(Collection $fields): void
+    // {
+    //     $fields->get('first_name')->display(rand(1, 100));
+    // }
+
+    public function fields(): Collection
     {
-        //
+        return $this->form->fields()->map(function ($field) {
+            $fieldtype = $field->fieldtype()::class;
+
+            $class = $this->models()->get($field->handle())
+                ?? $this->models()->get($fieldtype);
+
+            return $class
+                ? $class::make($field, $this->getId())
+                : throw new \Exception("The field model binding for fieldtype [{$fieldtype}] cannot be found.");
+        })->put($this->honeypot->handle, $this->honeypot);
     }
 
-    public function updatedSynthFields()
+    #[Computed(true)]
+    public function honeypot(): Honeypot
     {
-        $this->synthFields->get('first_name')->value('John');
-        ray($this->synthFields);
+        return (Honeypot::make(
+            new Field($this->form->honeypot(), []),
+            $this->getId()
+        ));
     }
 
-    #[Computed]
-    public function fields(): Fields
+    public function sections(): Collection
     {
-        return Fields::make($this->form, $this->getId())
-            ->models($this->models)
-            ->hydrated(fn ($fields) => $this->hydratedFields($fields))
-            ->hydrate();
+        return $this->form->blueprint()->tabs()->first()->sections()
+            ->map(function ($section, $index) {
+                $handle = $section->display() ? Str::snake($section->display()) : $index;
+
+                return [
+                    'handle' => $handle,
+                    'id' => "{$this->getId()}-section-{$index}-{$handle}",
+                    'display' => $section->display(),
+                    'instructions' => $section->instructions(),
+                    'fields' => $this->sectionFields($section),
+                ];
+            })
+            ->filter(fn ($section) => $section['fields']->isNotEmpty()); // Hide empty sections with no fields.
     }
 
-    protected function hydratedFields(Fields $fields): void
+    public function section(string $handle): ?array
     {
-        // This is set before the component is first rendered. Resulting in no flash.
-        $this->set('first_name', 'John');
-        // $fields->get('first_name')->value('John');
+        return $this->sections()->firstWhere('handle', $handle);
+    }
 
-        // dd($fields);
+    protected function sectionFields(Section $section): Collection
+    {
+        return $this->fields->intersectByKeys($section->fields()->all()); // Only keep the fields that are part of the section
     }
 
     #[Renderless]
     #[On('field-conditions-updated')]
     public function submitFieldValue(string $field, bool $passesConditions): void
     {
-        $this->fields->get($field)->always_save
-            ? $this->fieldsToSubmit[$field] = true
-            : $this->fieldsToSubmit[$field] = $passesConditions;
+        $this->fields->get($field)->submittable($passesConditions);
     }
 }

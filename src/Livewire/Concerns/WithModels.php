@@ -2,10 +2,14 @@
 
 namespace Aerni\LivewireForms\Livewire\Concerns;
 
-use Livewire\Attributes\Locked;
+use Illuminate\Support\Collection;
 
 trait WithModels
 {
-    #[Locked]
-    public array $models = [];
+    protected array $models = [];
+
+    public function models(): Collection
+    {
+        return collect(config('livewire-forms.models'))->merge($this->models);
+    }
 }

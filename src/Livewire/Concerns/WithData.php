@@ -2,78 +2,45 @@
 
 namespace Aerni\LivewireForms\Livewire\Concerns;
 
-use Illuminate\Support\Collection;
-use Livewire\Attributes\Computed;
-use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 use Livewire\WithFileUploads;
+use Illuminate\Support\Collection;
+use Aerni\LivewireForms\Fields\Captcha;
 
 trait WithData
 {
     use WithFileUploads;
 
-    public array $data = [];
-
-    public function mountWithData(): void
+    protected function values(): Collection
     {
-        $this->data = $this->defaultData;
+        return $this->fields->map(fn ($field) => $field->value());
     }
 
-    // The persisted computed property ensures that we can reset the data to its mount state.
-    #[Computed(true)]
-    protected function defaultData(): array
+    protected function processedValues(): Collection
     {
-        return $this->fields->defaultValues()
-            ->merge($this->data)
-            ->all();
+        return $this->fields->map(fn ($field) => $field->process());
     }
 
-    protected function data(): Collection
+    protected function defaultValues(): Collection
     {
-        return collect($this->data);
-    }
-
-    protected function set(string $key, mixed $value): self
-    {
-        $this->data[$key] = $value;
-
-        return $this;
-    }
-
-    protected function get(string $key): mixed
-    {
-        return $this->data[$key] ?? null;
+        return $this->fields->map(fn ($field) => $field->default());
     }
 
     protected function captchaValue(): array
     {
-        return $this->data()
-            ->only($this->fields->getByType('captcha')->first()?->handle ?? [])
+        return $this->fields
+            ->whereInstanceOf(Captcha::class)
             ->all();
     }
 
-    protected function normalizedDataForSubmission(): array
+    protected function get(string $key): mixed
     {
-        return $this->data()->map(function ($value, $key) {
-            $field = $this->fields->get($key);
-
-            // Return early if a field can't be found, else we'll run into errors with the below code.
-            if (is_null($field)) {
-                return null;
-            }
-
-            // Only keep values of fields that should be submitted, e.g. if 'always_save' is on.
-            if (! $this->fieldsToSubmit[$field->handle] ?? null) {
-                return null;
-            }
-
-            return $field->process($value);
-        })->all();
+        return $this->fields->get($key)->value();
     }
 
-    protected function temporaryUploadedFiles(): array
+    protected function set(string $key, mixed $value): self
     {
-        return $this->data()
-            ->whereInstanceOf(TemporaryUploadedFile::class)
-            ->all();
+        $this->fields->get($key)->value($value);
+
+        return $this;
     }
 }

@@ -9,14 +9,9 @@ trait HandlesSuccess
         // Flash the success message.
         session()->flash('success', $this->successMessage());
 
-        // Reset the data while preserving the captcha.
-        $this->data = collect($this->defaultData)
-            ->merge($this->captchaValue())
-            ->all();
-
-        // Reset asset fields using this trick: https://talltips.novate.co.uk/livewire/livewire-file-uploads-using-s3#removing-filename-from-input-field-after-upload
-        $this->fields->getByType('assets')
-            ->each(fn ($field) => $field->id($field->id().'_'.rand()));
+        // Reset the fields while preserving the captcha.
+        $this->fields = $this->fields()
+            ->merge($this->captchaValue());
 
         return $this;
     }

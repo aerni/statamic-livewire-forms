@@ -13,7 +13,6 @@ trait SubmitsForm
 
     public function submit(): void
     {
-        dd($this->synthFields->values());
         $this->validate();
 
         try {

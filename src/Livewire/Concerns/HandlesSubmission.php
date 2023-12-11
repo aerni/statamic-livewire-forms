@@ -2,13 +2,13 @@
 
 namespace Aerni\LivewireForms\Livewire\Concerns;
 
-use Illuminate\Support\Facades\URL;
-use Statamic\Contracts\Forms\Submission;
-use Statamic\Events\FormSubmitted;
-use Statamic\Events\SubmissionCreated;
-use Statamic\Exceptions\SilentFormFailureException;
 use Statamic\Facades\Site;
 use Statamic\Forms\SendEmails;
+use Statamic\Events\FormSubmitted;
+use Illuminate\Support\Facades\URL;
+use Statamic\Events\SubmissionCreated;
+use Statamic\Contracts\Forms\Submission;
+use Statamic\Exceptions\SilentFormFailureException;
 
 trait HandlesSubmission
 {
@@ -41,11 +41,11 @@ trait HandlesSubmission
     {
         $this->submission = $this->form->makeSubmission();
 
-        $assetIds = $this->submission->uploadFiles($this->temporaryUploadedFiles());
-
-        $data = array_merge($this->normalizedDataForSubmission(), $assetIds);
-
-        $processedValues = $this->form->blueprint()->fields()->addValues($data)->process()->values();
+        $processedValues = $this->form->blueprint()
+            ->fields()
+            ->addValues($this->processedValues()->all())
+            ->process()
+            ->values();
 
         $this->submission->data($processedValues);
 

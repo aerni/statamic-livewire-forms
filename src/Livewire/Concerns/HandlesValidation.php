@@ -11,11 +11,15 @@ trait HandlesValidation
 
     protected function rules(): array
     {
-        return $this->fields->validationRules();
+        return $this->fields
+            ->mapWithKeys(fn ($field) => $field->rules())
+            ->toArray();
     }
 
     protected function validationAttributes(): array
     {
-        return $this->fields->validationAttributes();
+        return $this->fields
+            ->mapWithKeys(fn ($field) => $field->validationAttributes())
+            ->toArray();
     }
 }

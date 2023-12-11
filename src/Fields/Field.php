@@ -17,12 +17,14 @@ use Aerni\LivewireForms\Fields\Properties\WithShowLabel;
 use Aerni\LivewireForms\Fields\Properties\WithView;
 use Aerni\LivewireForms\Fields\Properties\WithWidth;
 use Aerni\LivewireForms\Fields\Properties\WithWireModel;
+use Illuminate\Contracts\Support\Arrayable;
 use Statamic\Fields\Field as StatamicField;
 use Statamic\Support\Str;
+use Statamic\Support\Traits\FluentlyGetsAndSets;
 
-abstract class Field
+abstract class Field implements Arrayable
 {
-    use WithAlwaysSave;
+    use FluentlyGetsAndSets;
     use WithConditions;
     use WithDefault;
     use WithHandle;
@@ -38,11 +40,12 @@ abstract class Field
     use WithWidth;
     use WithWireModel;
 
+    protected bool $submittable = true;
+
     protected mixed $value;
 
     public function __construct(protected StatamicField $field, protected string $id)
     {
-        // TODO: Can we move this initialization somewhere else?
         $this->value = $this->default;
     }
 
@@ -66,24 +69,43 @@ abstract class Field
         return [$this->key => $this->label];
     }
 
-    public function process(mixed $value): mixed
+    public function process(): mixed
     {
-        if ($this->cast_booleans && in_array($value, ['true', 'false'])) {
-            return Str::toBool($value);
+        if (! $this->submittable()) {
+            return null;
         }
 
-        return $value;
+        if ($this->cast_booleans && in_array($this->value, ['true', 'false'])) {
+            return Str::toBool($this->value);
+        }
+
+        return $this->value;
     }
 
     public function value(mixed $value = null): mixed
     {
-        if (is_null($value)) {
-            return $this->value;
-        }
+        return $this->fluentlyGetOrSet('value')->args(func_get_args());
+    }
 
-        $this->value = $value;
+    public function submittable(bool $submittable = null): bool|self
+    {
+        return $this->fluentlyGetOrSet('submittable')
+            ->getter(function ($submittable) {
+                return $this->field->get('always_save')
+                    ? true : $submittable;
+            })
+            ->args(func_get_args());
+    }
 
-        return $this;
+    public function toArray(): array
+    {
+        return [
+            'id' => $this->id,
+            'handle' => $this->field->handle(),
+            'config' => $this->field->config(),
+            'value' => $this->value(),
+            'submittable' => $this->submittable(),
+        ];
     }
 
     protected function get(string $key): mixed

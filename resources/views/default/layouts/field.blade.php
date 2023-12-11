@@ -1,10 +1,17 @@
 <div
     x-data="{
+        fields: $wire.$entangle('fields'),
         show() {
             return @json($field->hidden) ? false : this.passesConditions()
         },
         passesConditions() {
-            return Statamic.$conditions.showField({{ $field->conditions }}, $wire.data)
+            return Statamic.$conditions.showField({{ $field->conditions }}, this.values())
+        },
+        values() {
+            return Object.entries(this.fields).reduce((values, [key, field]) => {
+                values[key] = field.value
+                return values
+            }, {});
         },
     }"
     x-show="show"

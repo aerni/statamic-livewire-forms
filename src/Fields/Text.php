@@ -21,12 +21,14 @@ class Text extends Field
             : parent::hiddenProperty();
     }
 
-    public function process(mixed $value): mixed
+    public function process(): mixed
     {
-        if ($this->input_type !== 'number') {
-            return $value;
+        $value = parent::process();
+
+        if ($this->input_type === 'number') {
+            return is_null($value) ? null : (int) $value;
         }
 
-        return is_null($value) ? null : (int) $value;
+        return $value;
     }
 }
