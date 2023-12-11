@@ -1,4 +1,7 @@
 <form wire:submit="submit" x-cloak>
+    {{-- <input type="text" wire:model.change="address.street"> --}}
+    <input type="text" wire:model.change="synthFields.values.first_name">
+    <input type="text" wire:model.change="synthFields.values.last_name">
     <div class="grid gap-y-16">
         @formView('layouts.sections')
         <div class="grid gap-y-4">

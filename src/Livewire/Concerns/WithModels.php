@@ -2,7 +2,10 @@
 
 namespace Aerni\LivewireForms\Livewire\Concerns;
 
+use Livewire\Attributes\Locked;
+
 trait WithModels
 {
-    protected array $models = [];
+    #[Locked]
+    public array $models = [];
 }

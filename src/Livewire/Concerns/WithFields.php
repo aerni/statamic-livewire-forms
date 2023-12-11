@@ -12,8 +12,30 @@ trait WithFields
 {
     use WithModels;
 
+    public Fields $synthFields;
+
     #[Locked]
     public array $fieldsToSubmit = [];
+
+    public function mountWithFields()
+    {
+        $this->synthFields = Fields::make($this->form, $this->getId())
+            ->models($this->models)
+            ->hydrate();
+
+        $this->hydrateSynthFields($this->synthFields);
+    }
+
+    public function hydrateSynthFields(Fields $fields): void
+    {
+        //
+    }
+
+    public function updatedSynthFields()
+    {
+        $this->synthFields->get('first_name')->value('John');
+        ray($this->synthFields);
+    }
 
     #[Computed]
     public function fields(): Fields
@@ -26,7 +48,11 @@ trait WithFields
 
     protected function hydratedFields(Fields $fields): void
     {
-        //
+        // This is set before the component is first rendered. Resulting in no flash.
+        $this->set('first_name', 'John');
+        // $fields->get('first_name')->value('John');
+
+        // dd($fields);
     }
 
     #[Renderless]

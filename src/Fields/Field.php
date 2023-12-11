@@ -38,9 +38,12 @@ abstract class Field
     use WithWidth;
     use WithWireModel;
 
+    protected mixed $value;
+
     public function __construct(protected StatamicField $field, protected string $id)
     {
-        //
+        // TODO: Can we move this initialization somewhere else?
+        $this->value = $this->default;
     }
 
     public static function make(StatamicField $field, string $id): self
@@ -70,6 +73,17 @@ abstract class Field
         }
 
         return $value;
+    }
+
+    public function value(mixed $value = null): mixed
+    {
+        if (is_null($value)) {
+            return $this->value;
+        }
+
+        $this->value = $value;
+
+        return $this;
     }
 
     protected function get(string $key): mixed

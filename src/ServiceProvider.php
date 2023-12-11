@@ -2,13 +2,15 @@
 
 namespace Aerni\LivewireForms;
 
-use Aerni\LivewireForms\Facades\Captcha;
-use Aerni\LivewireForms\Livewire\DynamicForm;
-use Aerni\LivewireForms\Livewire\Form;
-use Illuminate\Support\Facades\Blade;
-use Illuminate\Support\Facades\Validator;
 use Livewire\Livewire;
+use App\Dtos\AddressSynth;
+use Illuminate\Support\Facades\Blade;
+use Aerni\LivewireForms\Livewire\Form;
+use Aerni\LivewireForms\Facades\Captcha;
+use Illuminate\Support\Facades\Validator;
 use Statamic\Providers\AddonServiceProvider;
+use Aerni\LivewireForms\Livewire\DynamicForm;
+use Aerni\LivewireForms\Livewire\Synthesizers\FieldsSynth;
 
 class ServiceProvider extends AddonServiceProvider
 {
@@ -29,7 +31,7 @@ class ServiceProvider extends AddonServiceProvider
             ->registerTranslations()
             ->registerBladeDirectives()
             ->registerValidators()
-            ->registerLivewireComponents()
+            ->registerLivewire()
             ->registerSelectableFieldtypes();
     }
 
@@ -58,10 +60,13 @@ class ServiceProvider extends AddonServiceProvider
         return $this;
     }
 
-    protected function registerLivewireComponents(): self
+    protected function registerLivewire(): self
     {
         Livewire::component('form', DynamicForm::class);
         Livewire::component('default-form', Form::class);
+        Livewire::propertySynthesizer(FieldsSynth::class);
+        Livewire::propertySynthesizer(AddressSynth::class);
+
 
         return $this;
     }

@@ -40,6 +40,17 @@ class Fields
         return $this;
     }
 
+    public function values(?array $values = null): array|self
+    {
+        if (is_null($values)) {
+            return $this->fields->map(fn ($field) => $field->value())->all();
+        }
+
+        collect($values)->each(fn ($value, $field) => $this->get($field)->value($value));
+
+        return $this;
+    }
+
     public function all(): Collection
     {
         return $this->fields;
@@ -92,6 +103,7 @@ class Fields
         return $this->hydrateFields()->runHydratedCallbacks();
     }
 
+    // TODO: Can we get rid of this, now that we have a fieldsSynth?
     protected function runHydratedCallbacks(): self
     {
         foreach ($this->hydratedCallbacks as $callback) {
@@ -136,6 +148,7 @@ class Fields
         );
     }
 
+    // TODO: Probably don't need this anymore as each field is setting its default value.
     public function defaultValues(): Collection
     {
         return $this->fields->mapWithKeys(fn ($field, $handle) => [$handle => $field->default]);
