@@ -2,9 +2,9 @@
 
 namespace Aerni\LivewireForms\Fields;
 
+use Aerni\LivewireForms\Fields\Properties\WithMultiple;
 use Illuminate\Support\Arr;
 use Statamic\Forms\Uploaders\AssetsUploader;
-use Aerni\LivewireForms\Fields\Properties\WithMultiple;
 
 class Assets extends Field
 {

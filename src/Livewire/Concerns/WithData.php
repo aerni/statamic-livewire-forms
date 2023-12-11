@@ -2,9 +2,9 @@
 
 namespace Aerni\LivewireForms\Livewire\Concerns;
 
-use Livewire\WithFileUploads;
-use Illuminate\Support\Collection;
 use Aerni\LivewireForms\Fields\Captcha;
+use Illuminate\Support\Collection;
+use Livewire\WithFileUploads;
 
 trait WithData
 {

@@ -2,7 +2,6 @@
 
 namespace Aerni\LivewireForms\Fields;
 
-use Aerni\LivewireForms\Fields\Properties\WithAlwaysSave;
 use Aerni\LivewireForms\Fields\Properties\WithConditions;
 use Aerni\LivewireForms\Fields\Properties\WithDefault;
 use Aerni\LivewireForms\Fields\Properties\WithHandle;
@@ -87,7 +86,7 @@ abstract class Field implements Arrayable
         return $this->fluentlyGetOrSet('value')->args(func_get_args());
     }
 
-    public function submittable(bool $submittable = null): bool|self
+    public function submittable(?bool $submittable = null): bool|self
     {
         return $this->fluentlyGetOrSet('submittable')
             ->getter(function ($submittable) {

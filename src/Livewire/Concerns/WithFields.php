@@ -52,10 +52,10 @@ trait WithFields
     #[Computed(true)]
     public function honeypot(): Honeypot
     {
-        return (Honeypot::make(
+        return Honeypot::make(
             new Field($this->form->honeypot(), []),
             $this->getId()
-        ));
+        );
     }
 
     public function sections(): Collection

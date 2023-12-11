@@ -25,7 +25,7 @@ class FieldSynth extends Synth
 
         return [
             $data,
-            ['class' => get_class($target)]
+            ['class' => get_class($target)],
         ];
     }
 

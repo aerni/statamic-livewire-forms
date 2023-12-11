@@ -2,13 +2,13 @@
 
 namespace Aerni\LivewireForms\Livewire\Concerns;
 
+use Illuminate\Support\Facades\URL;
+use Statamic\Contracts\Forms\Submission;
+use Statamic\Events\FormSubmitted;
+use Statamic\Events\SubmissionCreated;
+use Statamic\Exceptions\SilentFormFailureException;
 use Statamic\Facades\Site;
 use Statamic\Forms\SendEmails;
-use Statamic\Events\FormSubmitted;
-use Illuminate\Support\Facades\URL;
-use Statamic\Events\SubmissionCreated;
-use Statamic\Contracts\Forms\Submission;
-use Statamic\Exceptions\SilentFormFailureException;
 
 trait HandlesSubmission
 {
