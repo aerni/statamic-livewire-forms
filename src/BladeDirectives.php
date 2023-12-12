@@ -37,7 +37,7 @@ class BladeDirectives
     {
         return Blade::compileString("
             @formView('layouts.section', [
-                'section' => \$this->fields->section($expression),
+                'section' => \$this->section($expression),
             ])
         ");
     }

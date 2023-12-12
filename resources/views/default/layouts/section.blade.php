@@ -4,17 +4,17 @@
         init() {
             this.fields = Object.fromEntries(Object.keys(this.fields).map(key => [key, true]))
         },
-        updateFields(event) {
-            if (this.fields.hasOwnProperty(event.detail.field)) {
-                this.fields[event.detail.field] = event.detail.evaluation
-            }
-        },
         show() {
             return Object.values(this.fields).some(value => value === true)
         },
+        updateFields(event) {
+            if (this.fields.hasOwnProperty(event.detail.field)) {
+                this.fields[event.detail.field] = event.detail.passesConditions
+            }
+        },
     }"
     x-show="show"
-    x-on:field-conditions-evaluated="updateFields($event)"
+    x-on:field-conditions-updated="updateFields($event)"
     wire:key="{{ $section['id'] }}"
     aria-labelledby="{{ $section['id'] }}-label"
     aria-describedby="{{ $section['id'] }}-instructions"

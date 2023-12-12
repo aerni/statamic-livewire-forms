@@ -3,7 +3,6 @@
 namespace Aerni\LivewireForms\Livewire\Concerns;
 
 use Aerni\LivewireForms\Fields\Honeypot;
-use Aerni\LivewireForms\Form\Fields;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use Livewire\Attributes\Computed;
@@ -22,17 +21,18 @@ trait WithFields
     {
         $this->fields = $this->fields();
 
-        // $this->mountFields();
+        $this->mountedFields();
     }
 
-    // public function mountFields(): void
-    // {
-    //     $this->fields->get('first_name')->display('Mounted');
-    // }
+    protected function mountedFields(): void
+    {
+        //
+    }
 
+    // TODO: This doesn't work in conjunnction with the update fields event.
     // public function hydrateFields(Collection $fields): void
     // {
-    //     $fields->get('first_name')->display(rand(1, 100));
+    //     $fields->get('toggle')->display(rand(1, 100));
     // }
 
     public function fields(): Collection
@@ -87,7 +87,7 @@ trait WithFields
 
     #[Renderless]
     #[On('field-conditions-updated')]
-    public function submitFieldValue(string $field, bool $passesConditions): void
+    public function updateFieldSubmittable(string $field, bool $passesConditions): void
     {
         $this->fields->get($field)->submittable($passesConditions);
     }
