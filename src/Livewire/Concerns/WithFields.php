@@ -9,7 +9,6 @@ use Livewire\Attributes\Computed;
 use Livewire\Attributes\On;
 use Livewire\Attributes\Renderless;
 use Statamic\Fields\Field;
-use Statamic\Fields\Section;
 
 trait WithFields
 {
@@ -67,22 +66,17 @@ trait WithFields
                 return [
                     'handle' => $handle,
                     'id' => "{$this->getId()}-section-{$index}-{$handle}",
-                    'display' => $section->display(),
-                    'instructions' => $section->instructions(),
-                    'fields' => $this->sectionFields($section),
+                    'display' => $section->display(), // TODO: Make translatable.
+                    'instructions' => $section->instructions(), // TODO: Make translatable
+                    'fields' => $this->fields->intersectByKeys($section->fields()->all()),
                 ];
             })
-            ->filter(fn ($section) => $section['fields']->isNotEmpty()); // Hide empty sections with no fields.
+            ->filter(fn ($section) => $section['fields']->isNotEmpty()); // Remove empty sections with no fields.
     }
 
     public function section(string $handle): ?array
     {
         return $this->sections()->firstWhere('handle', $handle);
-    }
-
-    protected function sectionFields(Section $section): Collection
-    {
-        return $this->fields->intersectByKeys($section->fields()->all()); // Only keep the fields that are part of the section
     }
 
     #[Renderless]
