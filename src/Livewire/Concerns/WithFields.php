@@ -20,10 +20,10 @@ trait WithFields
     {
         $this->fields = $this->fields();
 
-        $this->mountedFields();
+        $this->mountedFields($this->fields);
     }
 
-    protected function mountedFields(): void
+    public function mountedFields($fields)
     {
         //
     }
