@@ -27,13 +27,8 @@ trait WithFields
     public function mountedFields($fields)
     {
         //
-    }
 
-    // TODO: This doesn't work in conjunnction with the update fields event.
-    // public function hydrateFields(Collection $fields): void
-    // {
-    //     $fields->get('toggle')->display(rand(1, 100));
-    // }
+    }
 
     public function fields(): Collection
     {
