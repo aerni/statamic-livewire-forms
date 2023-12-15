@@ -81,7 +81,7 @@ abstract class Field implements Arrayable
     public function value(mixed $value = null): mixed
     {
         return $this->fluentlyGetOrSet('value')
-            ->getter(fn ($value) => is_null($value) ? $this->default : $value)
+            ->getter(fn ($value) => $value ?? $this->default)
             ->args(func_get_args());
     }
 
