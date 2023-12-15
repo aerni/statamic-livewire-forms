@@ -35,10 +35,10 @@ class FieldSynth extends Synth
             $value[$key] = $hydrateChild($key, $child);
         }
 
-        $field = new StatamicField($value['handle'], $value['config']);
-        $id = $this->context->component->getId();
-
-        return $meta['class']::make($field, $id)
+        return $meta['class']::make(
+            field: new StatamicField($value['handle'], $value['config']),
+            id: $this->context->component->getId()
+        )
             ->properties($value['properties'])
             ->value($value['value'])
             ->submittable($value['submittable']);
