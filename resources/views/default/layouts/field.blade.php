@@ -1,20 +1,5 @@
 <div
-    x-data="{
-        show() {
-            return @json($field->hidden) ? false : this.passesConditions()
-        },
-        passesConditions() {
-            return Statamic.$conditions.showField({{ $field->conditions }}, this.data())
-        },
-        data() {
-            return Object.entries($wire.fields).reduce((values, [key, field]) => {
-                values[key] = field.value
-                return values
-            }, {});
-        },
-    }"
-    x-show="show"
-    x-effect="$dispatch('field-conditions-updated', { field: '{{ $field->handle }}', passesConditions: passesConditions() })"
+    x-show="showField('{{ $field->handle }}')"
     wire:key="{{ $field->id }}"
     class="space-y-2 col-span-1
         {{ $field->width === 25 ? 'md:col-span-3' : '' }}

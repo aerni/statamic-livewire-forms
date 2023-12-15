@@ -7,8 +7,6 @@ use Aerni\LivewireForms\Fields\Honeypot;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use Livewire\Attributes\Computed;
-use Livewire\Attributes\On;
-use Livewire\Attributes\Renderless;
 use Statamic\Fields\Field;
 
 trait WithFields
@@ -79,12 +77,5 @@ trait WithFields
     public function section(string $handle): ?array
     {
         return $this->sections()->firstWhere('handle', $handle);
-    }
-
-    #[Renderless]
-    #[On('field-conditions-updated')]
-    public function updateFieldSubmittable(string $field, bool $passesConditions): void
-    {
-        $this->fields->get($field)->submittable($passesConditions);
     }
 }

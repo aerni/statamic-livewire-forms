@@ -4,8 +4,8 @@ namespace Aerni\LivewireForms\Fields\Properties;
 
 trait WithConditions
 {
-    protected function conditionsProperty(): string
+    protected function conditionsProperty(): array
     {
-        return json_encode($this->field->conditions());
+        return $this->field->conditions();
     }
 }
