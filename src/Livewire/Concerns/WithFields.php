@@ -27,7 +27,6 @@ trait WithFields
     public function mountedFields($fields)
     {
         //
-
     }
 
     protected function fields(): Collection
@@ -68,12 +67,12 @@ trait WithFields
                 return [
                     'handle' => $handle,
                     'id' => "{$this->getId()}-section-{$index}-{$handle}",
-                    'display' => $section->display(), // TODO: Make translatable.
-                    'instructions' => $section->instructions(), // TODO: Make translatable
+                    'display' => $section->display(),
+                    'instructions' => $section->instructions(),
                     'fields' => $this->fields->intersectByKeys($section->fields()->all()),
                 ];
             })
-            ->filter(fn ($section) => $section['fields']->isNotEmpty()); // Remove empty sections with no fields.
+            ->filter(fn ($section) => $section['fields']->isNotEmpty());
     }
 
     public function section(string $handle): ?array
