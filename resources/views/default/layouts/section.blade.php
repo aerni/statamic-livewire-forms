@@ -24,12 +24,12 @@
     @if($section['display'])
         <div>
             <h3 id="{{ $section['id'] }}-label" class="text-lg font-medium text-gray-900">
-                {{ __($section['display']) }}
+                {{ $section['display'] }}
             </h3>
 
             @if($section['instructions'])
                 <p id="{{ $section['id'] }}-instructions" class="text-base text-gray-500">
-                    {{ __($section['instructions']) }}
+                    {{ $section['instructions'] }}
                 </p>
             @endif
         </div>

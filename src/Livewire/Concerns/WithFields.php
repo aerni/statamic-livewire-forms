@@ -67,8 +67,8 @@ trait WithFields
                 return [
                     'handle' => $handle,
                     'id' => "{$this->getId()}-section-{$index}-{$handle}",
-                    'display' => $section->display(),
-                    'instructions' => $section->instructions(),
+                    'display' => __($section->display()),
+                    'instructions' => __($section->instructions()),
                     'fields' => $this->fields->intersectByKeys($section->fields()->all()),
                 ];
             })
