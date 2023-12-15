@@ -30,7 +30,7 @@ trait WithFields
 
     }
 
-    public function fields(): Collection
+    protected function fields(): Collection
     {
         return $this->form->fields()->map(function ($field) {
             $fieldtype = $field->fieldtype()::class;
