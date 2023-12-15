@@ -13,6 +13,7 @@ use Statamic\Fields\Field;
 
 trait WithFields
 {
+    use HandlesValues;
     use WithModels;
 
     public Collection $fields;

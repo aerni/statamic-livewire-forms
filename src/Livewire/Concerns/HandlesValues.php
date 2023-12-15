@@ -5,7 +5,7 @@ namespace Aerni\LivewireForms\Livewire\Concerns;
 use Illuminate\Support\Collection;
 use Livewire\WithFileUploads;
 
-trait WithData
+trait HandlesValues
 {
     use WithFileUploads;
 
