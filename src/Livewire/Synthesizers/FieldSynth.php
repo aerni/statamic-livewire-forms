@@ -36,8 +36,10 @@ class FieldSynth extends Synth
         }
 
         $field = new StatamicField($value['handle'], $value['config']);
+        $id = $this->context->component->getId();
 
-        return $meta['class']::make($field, $this->context->component->getId())
+        return $meta['class']::make($field, $id)
+            ->properties($value['properties'])
             ->value($value['value'])
             ->submittable($value['submittable']);
     }

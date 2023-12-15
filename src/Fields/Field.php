@@ -2,6 +2,7 @@
 
 namespace Aerni\LivewireForms\Fields;
 
+use Aerni\LivewireForms\Fields\Concerns\HandlesProperties;
 use Aerni\LivewireForms\Fields\Properties\WithConditions;
 use Aerni\LivewireForms\Fields\Properties\WithDefault;
 use Aerni\LivewireForms\Fields\Properties\WithHandle;
@@ -24,6 +25,7 @@ use Statamic\Support\Traits\FluentlyGetsAndSets;
 abstract class Field implements Arrayable
 {
     use FluentlyGetsAndSets;
+    use HandlesProperties;
     use WithConditions;
     use WithDefault;
     use WithHandle;
@@ -39,23 +41,17 @@ abstract class Field implements Arrayable
     use WithWidth;
     use WithWireModel;
 
+    protected mixed $value = null;
     protected bool $submittable = true;
-
-    protected mixed $value;
 
     public function __construct(protected StatamicField $field, protected string $id)
     {
-        $this->value = $this->default;
+        //
     }
 
     public static function make(StatamicField $field, string $id): self
     {
         return new static($field, $id);
-    }
-
-    public function field(): StatamicField
-    {
-        return $this->field;
     }
 
     public function rules(): array
@@ -83,65 +79,26 @@ abstract class Field implements Arrayable
 
     public function value(mixed $value = null): mixed
     {
-        return $this->fluentlyGetOrSet('value')->args(func_get_args());
+        return $this->fluentlyGetOrSet('value')
+            ->getter(fn ($value) => is_null($value) ? $this->default : $value)
+            ->args(func_get_args());
     }
 
     public function submittable(?bool $submittable = null): bool|self
     {
         return $this->fluentlyGetOrSet('submittable')
-            ->getter(function ($submittable) {
-                return $this->field->get('always_save')
-                    ? true : $submittable;
-            })
+            ->getter(fn ($submittable) => $this->always_save ? true : $submittable)
             ->args(func_get_args());
     }
 
     public function toArray(): array
     {
         return [
-            'id' => $this->id,
             'handle' => $this->field->handle(),
             'config' => $this->field->config(),
+            'properties' => $this->properties(),
             'value' => $this->value(),
             'submittable' => $this->submittable(),
         ];
-    }
-
-    protected function get(string $key): mixed
-    {
-        $method = collect(get_class_methods($this))
-            ->first(fn ($method) => $method === Str::camel($key).'Property');
-
-        return $method
-            ? $this->$method()
-            : $this->field->get(Str::snake($key));
-    }
-
-    protected function set(string $key, mixed $value): self
-    {
-        $newConfig = collect($this->field->config())
-            ->put(Str::snake($key), $value)
-            ->all();
-
-        $this->field->setConfig($newConfig);
-
-        return $this;
-    }
-
-    public function __get(string $key): mixed
-    {
-        return $this->get($key);
-    }
-
-    public function __set(string $key, mixed $value): void
-    {
-        $this->set($key, $value);
-    }
-
-    public function __call(string $property, array $arguments): mixed
-    {
-        return $arguments
-            ? $this->set($property, $arguments[0])
-            : $this->get($property);
     }
 }
