@@ -42,6 +42,7 @@ abstract class Field implements Arrayable
     use WithWireModel;
 
     protected mixed $value = null;
+
     protected bool $submittable = true;
 
     public function __construct(protected StatamicField $field, protected string $id)

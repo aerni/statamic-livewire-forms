@@ -2,14 +2,14 @@
 
 namespace Aerni\LivewireForms\Livewire\Concerns;
 
-use Statamic\Fields\Field;
-use Illuminate\Support\Str;
-use Livewire\Attributes\On;
-use Livewire\Attributes\Computed;
-use Illuminate\Support\Collection;
-use Livewire\Attributes\Renderless;
 use Aerni\LivewireForms\Fields\Captcha;
 use Aerni\LivewireForms\Fields\Honeypot;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
+use Livewire\Attributes\Computed;
+use Livewire\Attributes\On;
+use Livewire\Attributes\Renderless;
+use Statamic\Fields\Field;
 
 trait WithFields
 {

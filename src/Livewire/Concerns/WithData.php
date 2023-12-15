@@ -2,7 +2,6 @@
 
 namespace Aerni\LivewireForms\Livewire\Concerns;
 
-use Aerni\LivewireForms\Fields\Captcha;
 use Illuminate\Support\Collection;
 use Livewire\WithFileUploads;
 
