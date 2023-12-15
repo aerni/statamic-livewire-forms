@@ -6,12 +6,15 @@ trait HandlesSuccess
 {
     protected function handleSuccess(): self
     {
-        // Flash the success message.
         session()->flash('success', $this->successMessage());
 
-        // Reset the fields while preserving the captcha.
-        $this->fields = $this->fields()
-            ->merge($this->captchaValue());
+        // Get the captcha value before we are resetting all field values.
+        $captcha = $this->captchaValue();
+
+        $this->resetValues();
+
+        // Preserve the captcha state by setting it's value again.
+        $this->captcha()?->value($captcha);
 
         return $this;
     }

@@ -57,6 +57,11 @@ trait WithFields
         );
     }
 
+    protected function captcha(): ?Captcha
+    {
+        return $this->fields->whereInstanceOf(Captcha::class)->first();
+    }
+
     public function sections(): Collection
     {
         return $this->form->blueprint()->tabs()->first()->sections()

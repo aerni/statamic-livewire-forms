@@ -20,16 +20,14 @@ trait WithData
         return $this->fields->map(fn ($field) => $field->process());
     }
 
-    protected function defaultValues(): Collection
+    protected function resetValues(): Collection
     {
-        return $this->fields->map(fn ($field) => $field->default());
+        return $this->fields->each(fn ($field) => $field->resetValue());
     }
 
-    protected function captchaValue(): array
+    protected function captchaValue(): ?string
     {
-        return $this->fields
-            ->whereInstanceOf(Captcha::class)
-            ->all();
+        return $this->captcha()?->value();
     }
 
     protected function get(string $key): mixed
