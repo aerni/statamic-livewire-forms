@@ -24,11 +24,6 @@ trait HandlesValues
         return $this->fields->each(fn ($field) => $field->resetValue());
     }
 
-    protected function captchaValue(): ?string
-    {
-        return $this->captcha()?->value();
-    }
-
     protected function get(string $key): mixed
     {
         return $this->fields->get($key)->value();

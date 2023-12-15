@@ -8,12 +8,12 @@ trait HandlesSuccess
     {
         session()->flash('success', $this->successMessage());
 
-        // Get the captcha value before we are resetting all field values.
-        $captcha = $this->captchaValue();
+        // Get the captcha value before we are resetting the field values.
+        $captcha = $this->captcha()?->value();
 
         $this->resetValues();
 
-        // Preserve the captcha state by setting it's value again.
+        // Preserve the captcha state by setting the value to its previous state.
         $this->captcha()?->value($captcha);
 
         return $this;
