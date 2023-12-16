@@ -42,20 +42,6 @@ trait WithFields
         })->put($this->honeypot->handle, $this->honeypot);
     }
 
-    #[Computed(true)]
-    public function honeypot(): Honeypot
-    {
-        return Honeypot::make(
-            field: new Field($this->form->honeypot(), []),
-            id: $this->getId()
-        );
-    }
-
-    protected function captcha(): ?Captcha
-    {
-        return $this->fields->whereInstanceOf(Captcha::class)->first();
-    }
-
     #[Computed]
     public function sections(): Collection
     {
@@ -77,5 +63,19 @@ trait WithFields
     public function section(string $handle): ?array
     {
         return $this->sections()->firstWhere('handle', $handle);
+    }
+
+    #[Computed(true)]
+    public function honeypot(): Honeypot
+    {
+        return Honeypot::make(
+            field: new Field($this->form->honeypot(), []),
+            id: $this->getId()
+        );
+    }
+
+    protected function captcha(): ?Captcha
+    {
+        return $this->fields->whereInstanceOf(Captcha::class)->first();
     }
 }
