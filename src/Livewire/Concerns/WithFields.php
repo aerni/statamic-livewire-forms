@@ -23,7 +23,7 @@ trait WithFields
         $this->mountedFields($this->fields);
     }
 
-    public function mountedFields($fields)
+    public function mountedFields(Collection $fields): void
     {
         //
     }

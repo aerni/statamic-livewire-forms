@@ -2,6 +2,7 @@
 
 namespace Aerni\LivewireForms\Livewire\Concerns;
 
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\URL;
 use Statamic\Contracts\Forms\Submission;
 use Statamic\Events\FormSubmitted;
@@ -12,34 +13,42 @@ use Statamic\Forms\SendEmails;
 
 trait HandlesSubmission
 {
+    protected array $submittableFields = [];
+
     protected Submission $submission;
 
     protected function handleSubmission(): self
     {
-        return $this
-            ->runSubmittingFormHook()
-            ->makeSubmission()
-            ->runCreatedSubmissionFormHook()
-            ->handleSubmissionEvents()
-            ->storeSubmission()
-            ->runSubmittedFormHook();
-    }
+        $this->updateSubmittableFields();
 
-    protected function runSubmittingFormHook(): self
-    {
-        $this->submittingForm();
+        $this->submittingForm($this->fields);
+
+        $this->submission = $this->makeSubmission();
+
+        $this->createdSubmission($this->submission);
+
+        $this->handleSubmissionEvents();
+
+        $this->saveSubmission();
+
+        $this->submittedForm($this->submission);
 
         return $this;
     }
 
-    protected function submittingForm(): void
+    protected function updateSubmittableFields(): void
+    {
+        collect($this->submittableFields)->each(fn ($submittable, $field) => $this->fields->get($field)->submittable($submittable));
+    }
+
+    public function submittingForm(Collection $fields): void
     {
         //
     }
 
-    protected function makeSubmission(): self
+    protected function makeSubmission(): Submission
     {
-        $this->submission = $this->form->makeSubmission();
+        $submission = $this->form->makeSubmission();
 
         $processedValues = $this->form->blueprint()
             ->fields()
@@ -47,24 +56,16 @@ trait HandlesSubmission
             ->process()
             ->values();
 
-        $this->submission->data($processedValues);
-
-        return $this;
+        return $submission->data($processedValues);
     }
 
-    protected function runCreatedSubmissionFormHook(): self
-    {
-        $this->createdSubmission($this->submission);
-
-        return $this;
-    }
-
-    protected function createdSubmission(Submission $submission): void
+    public function createdSubmission(Submission $submission): void
     {
         //
     }
 
-    protected function handleSubmissionEvents(): self
+    // TODO: Refactor this?
+    protected function handleSubmissionEvents(): void
     {
         $this->dispatch('formSubmitted');
         $formSubmitted = FormSubmitted::dispatch($this->submission);
@@ -78,27 +79,16 @@ trait HandlesSubmission
 
         $site = Site::findByUrl(URL::previous()); // TODO: Does URL::previous still work in Livewire 3?
         SendEmails::dispatch($this->submission, $site);
-
-        return $this;
     }
 
-    protected function storeSubmission(): self
+    protected function saveSubmission(): void
     {
         if ($this->form->store()) {
             $this->submission->save();
         }
-
-        return $this;
     }
 
-    protected function runSubmittedFormHook(): self
-    {
-        $this->submittedForm();
-
-        return $this;
-    }
-
-    protected function submittedForm(): void
+    public function submittedForm(Submission $submission): void
     {
         //
     }

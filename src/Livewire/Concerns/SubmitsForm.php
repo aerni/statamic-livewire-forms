@@ -15,20 +15,12 @@ trait SubmitsForm
     {
         $this->validate();
 
+        $this->submittableFields = $submittableFields;
+
         try {
-            $this->updateSubmittableFields($submittableFields)
-                ->handleSpam()
-                ->handleSubmission()
-                ->handleSuccess();
+            $this->handleSpam()->handleSubmission()->handleSuccess();
         } catch (SilentFormFailureException) {
             $this->handleSuccess();
         }
-    }
-
-    protected function updateSubmittableFields(array $submittableFields): self
-    {
-        collect($submittableFields)->each(fn ($submittable, $field) => $this->fields->get($field)->submittable($submittable));
-
-        return $this;
     }
 }
