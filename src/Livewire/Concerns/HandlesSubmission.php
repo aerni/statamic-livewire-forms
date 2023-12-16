@@ -54,11 +54,11 @@ trait HandlesSubmission
     {
         $this->formSubmitting($this->submission);
 
-        $this->dispatch('formSubmitting', $this->submission);
+        $this->dispatch('form-submitting', $this->submission);
 
         throw_if(FormSubmitted::dispatch($this->submission) === false, new SilentFormFailureException);
 
-        $this->dispatch('formSubmitted', $this->submission);
+        $this->dispatch('form-submitted', $this->submission);
 
         return $this;
     }
@@ -67,7 +67,7 @@ trait HandlesSubmission
     {
         $this->submissionCreating($this->submission);
 
-        $this->dispatch('submissionCreating', $this->submission);
+        $this->dispatch('submission-creating', $this->submission);
 
         /**
          * When the submission is saved, the same events will be dispatched.
@@ -81,7 +81,7 @@ trait HandlesSubmission
             SubmissionCreated::dispatch($this->submission);
         }
 
-        $this->dispatch('submissionCreated', $this->submission);
+        $this->dispatch('submission-created', $this->submission);
 
         return $this;
     }
