@@ -106,7 +106,6 @@ abstract class Field implements Arrayable
             'config' => $this->field->config(),
             'properties' => $this->properties(),
             'value' => $this->value(),
-            'submittable' => $this->submittable(),
         ];
     }
 }

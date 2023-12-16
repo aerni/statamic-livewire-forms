@@ -40,8 +40,7 @@ class FieldSynth extends Synth
             id: $this->context->component->getId()
         )
             ->properties($value['properties'])
-            ->value($value['value'])
-            ->submittable($value['submittable']);
+            ->value($value['value']);
     }
 
     public function get(&$target, $key)
