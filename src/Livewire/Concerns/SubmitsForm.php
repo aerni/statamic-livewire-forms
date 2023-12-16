@@ -27,7 +27,7 @@ trait SubmitsForm
 
     protected function updateSubmittableFields(array $submittableFields): self
     {
-        collect($submittableFields)->each(fn ($value, $key) => $this->fields->get($key)->submittable($value));
+        collect($submittableFields)->each(fn ($submittable, $field) => $this->fields->get($field)->submittable($submittable));
 
         return $this;
     }
