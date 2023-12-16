@@ -2,6 +2,7 @@ import FieldConditions from '../../vendor/statamic/cms/resources/js/frontend/com
 
 export default () => ({
     fields: {},
+
     conditions: new FieldConditions,
 
     processFields(fields) {
