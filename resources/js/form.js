@@ -6,13 +6,13 @@ export default () => ({
     conditions: new FieldConditions,
 
     processFields(fields) {
-        this.fields = Object.entries(fields).reduce((fields, [key, field]) => {
-            fields[key] = {
-                value: field.value,
-                conditions: field.properties.conditions ?? [],
+        this.fields = Object.entries(fields).reduce((field, [key, value]) => {
+            field[key] = {
+                value: value.value,
+                conditions: value.properties.conditions ?? [],
                 visible: true,
             }
-            return fields;
+            return field;
         }, {});
     },
 
@@ -25,16 +25,16 @@ export default () => ({
     },
 
     values() {
-        return Object.entries(this.fields).reduce((fields, [key, field]) => {
-            fields[key] = field.value
-            return fields;
+        return Object.entries(this.fields).reduce((field, [key, value]) => {
+            field[key] = value.value
+            return field;
         }, {});
     },
 
     submittableFields() {
-        return Object.entries(this.fields).reduce((fields, [key, field]) => {
-            fields[key] = field.visible
-            return fields;
+        return Object.entries(this.fields).reduce((field, [key, value]) => {
+            field[key] = value.visible
+            return field;
         }, {});
     },
 })
