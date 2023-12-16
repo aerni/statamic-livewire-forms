@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\URL;
 use Statamic\Contracts\Forms\Submission;
 use Statamic\Events\FormSubmitted;
 use Statamic\Events\SubmissionCreated;
+use Statamic\Events\SubmissionCreating;
 use Statamic\Exceptions\SilentFormFailureException;
 use Statamic\Facades\Site;
 use Statamic\Forms\SendEmails;
@@ -22,7 +23,7 @@ trait HandlesSubmission
             ->updateSubmittableFields()
             ->makeSubmission()
             ->handleFormEvents()
-            ->handleSubmissionEvents()
+            ->saveSubmission()
             ->sendEmails();
     }
 
@@ -53,9 +54,37 @@ trait HandlesSubmission
     {
         $this->formSubmitting($this->submission);
 
+        throw_if(FormSubmitted::dispatch($this->submission) === false, new SilentFormFailureException);
+
         $this->dispatch('formSubmitted');
 
-        throw_if(FormSubmitted::dispatch($this->submission) === false, new SilentFormFailureException);
+        return $this;
+    }
+
+    protected function saveSubmission(): self
+    {
+        $this->submissionCreating($this->submission);
+
+        /**
+         * When the submission is saved, the same events will be dispatched.
+         * We'll also fire them here if submissions are not configured to be stored
+         * so that developers may continue to listen and modify it as needed.
+         */
+        if ($this->form->store()) {
+            $this->submission->save();
+        } else {
+            SubmissionCreating::dispatch($this->submission);
+            SubmissionCreated::dispatch($this->submission);
+        }
+
+        $this->dispatch('submissionCreated');
+
+        return $this;
+    }
+
+    protected function sendEmails(): self
+    {
+        SendEmails::dispatch($this->submission, Site::findByUrl(URL::previous()));
 
         return $this;
     }
@@ -65,35 +94,8 @@ trait HandlesSubmission
         //
     }
 
-    protected function handleSubmissionEvents(): self
-    {
-        $this->submissionCreating($this->submission);
-
-        $this->dispatch('submissionCreated');
-
-        if ($this->form->store()) {
-            $this->submission->save();
-        } else {
-            /**
-             * When the submission is saved, this same created event will be dispatched.
-             * We'll also fire it here if submissions are not configured to be stored
-             * so that developers may continue to listen and modify it as needed.
-             */
-            SubmissionCreated::dispatch($this->submission);
-        }
-
-        return $this;
-    }
-
     public function submissionCreating(Submission $submission): void
     {
         //
-    }
-
-    protected function sendEmails(): self
-    {
-        SendEmails::dispatch($this->submission, Site::findByUrl(URL::previous()));
-
-        return $this;
     }
 }
