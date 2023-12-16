@@ -19,34 +19,23 @@ trait HandlesSubmission
 
     protected function handleSubmission(): self
     {
-        $this->updateSubmittableFields();
+        return $this
+            ->updateSubmittableFields()
+            ->makeSubmission()
+            ->handleFormEvents()
+            ->handleSubmissionEvents()
+            ->sendEmails();
+    }
 
-        $this->submittingForm($this->fields);
-
-        $this->submission = $this->makeSubmission();
-
-        $this->createdSubmission($this->submission);
-
-        $this->handleSubmissionEvents();
-
-        $this->saveSubmission();
-
-        $this->submittedForm($this->submission);
+    // TODO: Remove submittable on the field?
+    protected function updateSubmittableFields(): self
+    {
+        collect($this->submittableFields)->each(fn ($submittable, $field) => $this->fields->get($field)->submittable($submittable));
 
         return $this;
     }
 
-    protected function updateSubmittableFields(): void
-    {
-        collect($this->submittableFields)->each(fn ($submittable, $field) => $this->fields->get($field)->submittable($submittable));
-    }
-
-    public function submittingForm(Collection $fields): void
-    {
-        //
-    }
-
-    protected function makeSubmission(): Submission
+    protected function makeSubmission(): self
     {
         $submission = $this->form->makeSubmission();
 
@@ -56,40 +45,58 @@ trait HandlesSubmission
             ->process()
             ->values();
 
-        return $submission->data($processedValues);
+        $this->submission = $submission->data($processedValues);
+
+        return $this;
     }
 
-    public function createdSubmission(Submission $submission): void
+    protected function handleFormEvents(): self
+    {
+        $this->formSubmitting($this->submission);
+
+        $this->dispatch('formSubmitted');
+
+        throw_if(FormSubmitted::dispatch($this->submission) === false, new SilentFormFailureException);
+
+        return $this;
+    }
+
+    public function formSubmitted(Submission $submission): void
     {
         //
     }
 
-    // TODO: Refactor this?
-    protected function handleSubmissionEvents(): void
+    protected function handleSubmissionEvents(): self
     {
-        $this->dispatch('formSubmitted');
-        $formSubmitted = FormSubmitted::dispatch($this->submission);
-
-        if ($formSubmitted === false) {
-            throw new SilentFormFailureException();
-        }
+        $this->submissionCreating($this->submission);
 
         $this->dispatch('submissionCreated');
-        SubmissionCreated::dispatch($this->submission);
 
-        $site = Site::findByUrl(URL::previous()); // TODO: Does URL::previous still work in Livewire 3?
-        SendEmails::dispatch($this->submission, $site);
-    }
-
-    protected function saveSubmission(): void
-    {
         if ($this->form->store()) {
             $this->submission->save();
+        } else {
+            /**
+             * When the submission is saved, this same created event will be dispatched.
+             * We'll also fire it here if submissions are not configured to be stored
+             * so that developers may continue to listen and modify it as needed.
+             */
+            SubmissionCreated::dispatch($this->submission);
         }
+
+        return $this;
     }
 
-    public function submittedForm(Submission $submission): void
+    public function submissionCreating(Submission $submission): void
     {
         //
+    }
+
+    protected function sendEmails(): self
+    {
+        $site = Site::findByUrl(URL::previous()); // TODO: Does URL::previous still work in Livewire 3?
+
+        SendEmails::dispatch($this->submission, $site);
+
+        return $this;
     }
 }
