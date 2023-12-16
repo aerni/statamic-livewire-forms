@@ -11,16 +11,13 @@ export default () => ({
                 value: field.value,
                 conditions: field.properties.conditions ?? [],
                 visible: true,
-                hidden: field.properties.hidden,
             }
             return fields;
         }, {});
     },
 
     showField(field) {
-        return this.fields[field].visible = this.fields[field].hidden
-            ? false // We never want to show explicitly hidden fields.
-            : this.conditions.showField(this.fields[field].conditions, this.values())
+        return this.fields[field].visible = this.conditions.showField(this.fields[field].conditions, this.values())
     },
 
     showSection(fields) {
