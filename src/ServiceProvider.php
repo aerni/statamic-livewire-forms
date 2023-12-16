@@ -24,6 +24,10 @@ class ServiceProvider extends AddonServiceProvider
         Fieldtypes\Captcha::class,
     ];
 
+    protected $scripts = [
+        __DIR__.'/../resources/dist/js/livewire-forms.js',
+    ];
+
     public function bootAddon()
     {
         $this
