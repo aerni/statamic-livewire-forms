@@ -8,9 +8,7 @@ trait HandlesSpam
 {
     protected function handleSpam(): self
     {
-        if ($this->isSpam()) {
-            throw new SilentFormFailureException();
-        }
+        throw_if($this->isSpam(), new SilentFormFailureException);
 
         return $this;
     }

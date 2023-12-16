@@ -2,7 +2,6 @@
 
 namespace Aerni\LivewireForms\Livewire\Concerns;
 
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\URL;
 use Statamic\Contracts\Forms\Submission;
 use Statamic\Events\FormSubmitted;
@@ -93,9 +92,7 @@ trait HandlesSubmission
 
     protected function sendEmails(): self
     {
-        $site = Site::findByUrl(URL::previous()); // TODO: Does URL::previous still work in Livewire 3?
-
-        SendEmails::dispatch($this->submission, $site);
+        SendEmails::dispatch($this->submission, Site::findByUrl(URL::previous()));
 
         return $this;
     }
