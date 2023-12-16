@@ -5,6 +5,7 @@ namespace App\Livewire;
 use Aerni\LivewireForms\Form\Fields;
 use Aerni\LivewireForms\Livewire\Concerns\WithStatamicFormBuilder;
 use Livewire\Component;
+use Statamic\Contracts\Forms\Submission;
 
 class DummyForm extends Component
 {
@@ -33,7 +34,7 @@ class DummyForm extends Component
     |--------------------------------------------------------------------------
     |
     | You may add unique models that only apply to this form component.
-    | Use a field's handle as the key to only use the model for that field.
+    | Use a field's handle as the key to only use the model for that particular field.
     |
     */
 
@@ -44,34 +45,29 @@ class DummyForm extends Component
 
     /*
     |--------------------------------------------------------------------------
-    | Callbacks & Hooks
+    | Lifecycle Hooks
     |--------------------------------------------------------------------------
     |
-    | You may use the following callbacks and hooks to modify fields and data
-    | at various lifecycle steps.
+    | You may use the following lifecycle hooks to modify fields and data
+    | at various steps in the component lifecycle.
     |
     */
 
-    // protected function hydratedFields(Fields $fields): void
+    // public function mountedFields($fields): void
     // {
     //     $fields->get('name')->label('Your name');
     // }
 
-    // protected function submittingForm(): void
+    // public function hydrateFields($fields): void
     // {
-    //     $this->data['success'] = true;
+    //     $fields->get('name')->label('Your name');
     // }
 
-    // protected function createdSubmission(Submission $submission): void
+    // public function formSubmitted(Submission $submission): void
     // {
-    //     $title = $submission->augmentedValue('entry')->value()->title;
-    //
-    //     $submission->set('entry_title', $title);
-    // }
+    //     $submission->set('created_at', now()->timestamp);
 
-    // protected function submittedForm(): void
-    // {
-    //     Newsletter::subscribe($this->data['email']);
+    //     Newsletter::subscribe($submission->get('email'));
     // }
 
     /*
@@ -86,12 +82,12 @@ class DummyForm extends Component
 
     // public function successMessage(): string
     // {
-    //     return __("Thank you, {$this->data['name']}!");
+    //     return __("Thank you, {$this->submission->get('name')}!");
     // }
 
     // public function errorMessage(): string
     // {
-    // return __("Something went terribly wrong!");
+    //     return __('Something went terribly wrong!');
     // }
 
     // public function submitButtonLabel(): string
