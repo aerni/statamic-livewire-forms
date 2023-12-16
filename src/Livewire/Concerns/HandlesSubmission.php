@@ -52,23 +52,17 @@ trait HandlesSubmission
 
     protected function handleFormEvents(): self
     {
-        $this->formSubmitting($this->submission);
+        $this->formSubmitted($this->submission);
 
-        $this->dispatch('form-submitting', $this->submission);
+        $this->dispatch('form-submitted', data: $this->submission->data());
 
         throw_if(FormSubmitted::dispatch($this->submission) === false, new SilentFormFailureException);
-
-        $this->dispatch('form-submitted', $this->submission);
 
         return $this;
     }
 
     protected function saveSubmission(): self
     {
-        $this->submissionCreating($this->submission);
-
-        $this->dispatch('submission-creating', $this->submission);
-
         /**
          * When the submission is saved, the same events will be dispatched.
          * We'll also fire them here if submissions are not configured to be stored
@@ -81,8 +75,6 @@ trait HandlesSubmission
             SubmissionCreated::dispatch($this->submission);
         }
 
-        $this->dispatch('submission-created', $this->submission);
-
         return $this;
     }
 
@@ -94,11 +86,6 @@ trait HandlesSubmission
     }
 
     public function formSubmitted(Submission $submission): void
-    {
-        //
-    }
-
-    public function submissionCreating(Submission $submission): void
     {
         //
     }
