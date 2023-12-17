@@ -11,11 +11,9 @@ trait SubmitsForm
     use HandlesSuccess;
     use HandlesValidation;
 
-    public function submit(array $submittableFields): void
+    public function submit(): void
     {
         $this->validate();
-
-        $this->submittableFields = $submittableFields;
 
         try {
             $this->handleSpam()->handleSubmission()->handleSuccess();

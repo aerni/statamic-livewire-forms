@@ -2,7 +2,7 @@
     x-data="form"
     x-effect="processFields($wire.fields)"
     x-cloak
-    wire:submit="submit(submittableFields())"
+    wire:submit="submit"
 >
     <div class="grid gap-y-16">
         @formView('layouts.sections')

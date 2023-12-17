@@ -6,35 +6,31 @@ export default () => ({
     conditions: new FieldConditions,
 
     processFields(fields) {
-        this.fields = Object.entries(fields).reduce((field, [key, value]) => {
-            field[key] = {
-                value: value.value,
-                conditions: value.properties.conditions ?? [],
-                visible: true,
+        const values = Object.entries(fields).reduce((fields, [key, field]) => {
+            fields[key] = field.value
+
+            return fields
+        }, {})
+
+        this.fields = Object.entries(fields).reduce((fields, [key, field]) => {
+            const passesConditions = this.conditions.showField(field.properties.conditions, values)
+
+            fields[key] = {
+                visible: passesConditions && !field.properties.hidden,
+                submittable: field.properties.always_save || passesConditions
             }
-            return field;
-        }, {});
+
+            this.$wire.submittableFields[key] = fields[key].submittable
+
+            return fields
+        }, {})
     },
 
     showField(field) {
-        return this.fields[field].visible = this.conditions.showField(this.fields[field].conditions, this.values())
+        return this.fields[field].visible
     },
 
     showSection(fields) {
         return Object.entries(fields).some(([field]) => this.fields[field].visible)
-    },
-
-    values() {
-        return Object.entries(this.fields).reduce((field, [key, value]) => {
-            field[key] = value.value
-            return field;
-        }, {});
-    },
-
-    submittableFields() {
-        return Object.entries(this.fields).reduce((field, [key, value]) => {
-            field[key] = value.visible
-            return field;
-        }, {});
-    },
+    }
 })

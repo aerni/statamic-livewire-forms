@@ -43,8 +43,6 @@ abstract class Field implements Arrayable
 
     protected mixed $value = null;
 
-    protected bool $submittable = true;
-
     public function __construct(protected StatamicField $field, protected string $id)
     {
         //
@@ -67,10 +65,6 @@ abstract class Field implements Arrayable
 
     public function process(): mixed
     {
-        if (! $this->submittable()) {
-            return null;
-        }
-
         if ($this->cast_booleans && in_array($this->value, ['true', 'false'])) {
             return Str::toBool($this->value);
         }
@@ -90,13 +84,6 @@ abstract class Field implements Arrayable
         $this->value = $this->default;
 
         return $this;
-    }
-
-    public function submittable(?bool $submittable = null): bool|self
-    {
-        return $this->fluentlyGetOrSet('submittable')
-            ->getter(fn ($submittable) => $this->always_save ? true : $submittable)
-            ->args(func_get_args());
     }
 
     public function toArray(): array

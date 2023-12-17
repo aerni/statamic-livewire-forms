@@ -9,6 +9,8 @@ trait HandlesValues
 {
     use WithFileUploads;
 
+    public array $submittableFields = [];
+
     protected function values(): Collection
     {
         return $this->fields->map(fn ($field) => $field->value());
@@ -16,7 +18,10 @@ trait HandlesValues
 
     protected function processedValues(): Collection
     {
-        return $this->fields->map(fn ($field) => $field->process());
+        return $this->fields
+            ->filter(fn ($field) => $this->submittableFields[$field->handle])
+            ->filter(fn ($field) => $field->handle !== $this->honeypot->handle)
+            ->map(fn ($field) => $field->process());
     }
 
     protected function resetValues(): Collection

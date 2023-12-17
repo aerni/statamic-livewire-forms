@@ -13,26 +13,15 @@ use Statamic\Forms\SendEmails;
 
 trait HandlesSubmission
 {
-    protected array $submittableFields = [];
-
     protected Submission $submission;
 
     protected function handleSubmission(): self
     {
         return $this
-            ->updateSubmittableFields()
             ->makeSubmission()
             ->handleFormEvents()
             ->saveSubmission()
             ->sendEmails();
-    }
-
-    // TODO: Remove submittable on the field?
-    protected function updateSubmittableFields(): self
-    {
-        collect($this->submittableFields)->each(fn ($submittable, $field) => $this->fields->get($field)->submittable($submittable));
-
-        return $this;
     }
 
     protected function makeSubmission(): self
