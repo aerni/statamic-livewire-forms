@@ -41,10 +41,11 @@ abstract class Field implements Arrayable
     use WithWidth;
     use WithWireModel;
 
-    protected mixed $value = null;
-
-    public function __construct(protected StatamicField $field, protected string $id)
-    {
+    public function __construct(
+        protected StatamicField $field,
+        protected string $id,
+        protected mixed $value = null
+    ) {
         //
     }
 
