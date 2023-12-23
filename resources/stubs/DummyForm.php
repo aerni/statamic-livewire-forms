@@ -3,14 +3,12 @@
 namespace App\Livewire;
 
 use Aerni\LivewireForms\Form\Fields;
-use Aerni\LivewireForms\Livewire\Concerns\WithStatamicFormBuilder;
-use Livewire\Component;
+use Aerni\LivewireForms\Livewire\Form;
+use Illuminate\Support\Collection;
 use Statamic\Contracts\Forms\Submission;
 
-class DummyForm extends Component
+class DummyForm extends Form
 {
-    use WithStatamicFormBuilder;
-
     /*
     |--------------------------------------------------------------------------
     | Initializing Properties
@@ -49,16 +47,16 @@ class DummyForm extends Component
     |--------------------------------------------------------------------------
     |
     | You may use the following lifecycle hooks to modify fields and data
-    | at various steps in the component lifecycle.
+    | at various steps in the forms lifecycle.
     |
     */
 
-    // public function mountedFields($fields): void
+    // public function mountedFields(Collection $fields): void
     // {
     //     $fields->get('name')->label('Your name');
     // }
 
-    // public function hydrateFields($fields): void
+    // public function hydrateFields(Collection $fields): void
     // {
     //     $fields->get('name')->label('Your name');
     // }
@@ -66,7 +64,6 @@ class DummyForm extends Component
     // public function formSubmitted(Submission $submission): void
     // {
     //     $submission->set('created_at', now()->timestamp);
-
     //     Newsletter::subscribe($submission->get('email'));
     // }
 
