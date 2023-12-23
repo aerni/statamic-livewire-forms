@@ -23,6 +23,6 @@ class Integer extends Field
     {
         $value = parent::process();
 
-        return is_null($$value) ? null : (int) $$value;
+        return is_null($value) ? null : (int) $value;
     }
 }
