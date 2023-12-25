@@ -23,9 +23,9 @@ trait HandlesValues
             ->map(fn ($field) => $field->process());
     }
 
-    protected function resetValues(): Collection
+    protected function resetValues(): void
     {
-        return $this->fields->each(fn ($field) => $field->resetValue());
+        $this->fields->each(fn ($field) => $field->resetValue());
     }
 
     protected function get(string $key): mixed
