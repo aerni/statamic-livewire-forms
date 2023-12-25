@@ -2,14 +2,11 @@
 
 namespace Aerni\LivewireForms\Fields;
 
-use Aerni\LivewireForms\Fields\Properties\WithMultiple;
 use Illuminate\Support\Arr;
 use Statamic\Forms\Uploaders\AssetsUploader;
 
 class Assets extends Field
 {
-    use WithMultiple;
-
     protected string $view = 'assets';
 
     public function process(): mixed
@@ -28,14 +25,14 @@ class Assets extends Field
 
     protected function defaultProperty(): ?array
     {
-        return $this->multipleProperty() ? [] : null;
+        return $this->multiple ? [] : null;
     }
 
     protected function rulesProperty(): array
     {
         $rules = parent::rulesProperty();
 
-        if ($this->multipleProperty()) {
+        if ($this->multiple) {
             return $rules;
         }
 

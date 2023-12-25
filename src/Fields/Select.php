@@ -21,13 +21,13 @@ class Select extends Field
     protected function defaultProperty(): string|array|null
     {
         $default = $this->field->defaultValue();
-        $options = $this->optionsProperty();
+        $options = $this->options;
 
         // A default is only valid if it exists in the options.
         $default = collect($options)->only($default ?? [])->keys();
 
         // Return all defaults if the Select field has multiple enabled.
-        if ($this->multipleProperty()) {
+        if ($this->multiple) {
             return $default->toArray();
         }
 
@@ -37,7 +37,7 @@ class Select extends Field
         }
 
         // If there is a placeholder we don't want to return a default.
-        if ($this->placeholderProperty()) {
+        if ($this->placeholder) {
             return null;
         }
 
