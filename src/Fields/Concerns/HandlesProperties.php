@@ -2,6 +2,7 @@
 
 namespace Aerni\LivewireForms\Fields\Concerns;
 
+use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use Statamic\Support\Traits\FluentlyGetsAndSets;
 
@@ -14,53 +15,50 @@ trait HandlesProperties
     public function properties(?array $properties = null): array|self
     {
         return $this->fluentlyGetOrSet('properties')
-            ->getter(function ($properties) {
-                return empty($properties)
-                    ? $this->processProperties()->properties()
-                    : $properties;
+            ->getter(function () {
+                return $this->propertyKeys()
+                    ->mapWithKeys(fn ($property) => [$property => $this->property($property)])
+                    ->all();
             })
             ->args(func_get_args());
     }
 
-    protected function property(string $key): mixed
+    public function property(string $key): mixed
     {
-        return $this->properties[$key] ?? null;
-    }
+        if (array_key_exists($key, $this->properties)) {
+            return $this->properties[$key];
+        }
 
-    protected function processProperties(): self
-    {
-        $this->properties = $this->field->toArray();
-
-        collect(get_class_methods($this))
-            ->filter(fn ($method) => $this->isPropertyMethod($method))
-            ->each(fn ($method) => $this->processProperty($this->propertyKeyFromMethod($method)));
-
-        return $this;
-    }
-
-    protected function processProperty(string $key): self
-    {
         $method = $this->propertyMethodFromKey($key);
 
         $value = method_exists($this, $method)
             ? $this->$method()
             : $this->field->get($key);
 
-        if (! is_null($value)) {
-            $this->properties[$key] = $value;
-        }
+        return $value;
+    }
 
-        return $this;
+    protected function propertyKeys(): Collection
+    {
+        $methodProperties = collect(get_class_methods($this))
+            ->filter(fn ($method) => $this->isPropertyMethod($method))
+            ->map(fn ($method) => $this->propertyKeyFromMethod($method));
+
+        $configProperties = array_keys($this->field->config());
+
+        return $methodProperties
+            ->merge($configProperties)
+            ->unique();
     }
 
     protected function isPropertyMethod(string $method): bool
     {
-        return Str::endsWith($method, 'Property') && $method !== 'processProperty';
+        return Str::endsWith($method, 'Property');
     }
 
     protected function propertyKeyFromMethod(string $method): string
     {
-        return Str::of($method)->beforeLast('Property')->snake()->toString();
+        return Str::of($method)->beforeLast('Property')->snake();
     }
 
     protected function propertyMethodFromKey(string $key): string
@@ -70,10 +68,7 @@ trait HandlesProperties
 
     protected function get(string $key): mixed
     {
-        $key = Str::snake($key);
-
-        return $this->property($key)
-            ?? $this->processProperty($key)->property($key);
+        return $this->property(Str::snake($key));
     }
 
     protected function set(string $key, mixed $value): self
