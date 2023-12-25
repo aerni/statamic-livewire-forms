@@ -2,7 +2,6 @@
 
 namespace Aerni\LivewireForms\Fields;
 
-use Statamic\Support\Str;
 use Illuminate\Contracts\Support\Arrayable;
 use Statamic\Fields\Field as StatamicField;
 use Statamic\Support\Traits\FluentlyGetsAndSets;
