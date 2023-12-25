@@ -40,10 +40,6 @@ abstract class Field implements Arrayable
 
     public function process(): mixed
     {
-        if ($this->cast_booleans && in_array($this->value, ['true', 'false'])) {
-            return Str::toBool($this->value);
-        }
-
         return $this->value;
     }
 

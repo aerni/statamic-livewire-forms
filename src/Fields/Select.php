@@ -2,16 +2,14 @@
 
 namespace Aerni\LivewireForms\Fields;
 
-use Aerni\LivewireForms\Fields\Properties\WithAutocomplete;
-use Aerni\LivewireForms\Fields\Properties\WithCastBooleans;
-use Aerni\LivewireForms\Fields\Properties\WithMultiple;
 use Aerni\LivewireForms\Fields\Properties\WithOptions;
+use Aerni\LivewireForms\Fields\Properties\WithMultiple;
 use Aerni\LivewireForms\Fields\Properties\WithPlaceholder;
+use Aerni\LivewireForms\Fields\Properties\WithAutocomplete;
 
 class Select extends Field
 {
     use WithAutocomplete;
-    use WithCastBooleans;
     use WithMultiple;
     use WithOptions;
     use WithPlaceholder;
