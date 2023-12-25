@@ -23,12 +23,10 @@ class Text extends Field
 
     public function process(): mixed
     {
-        $value = parent::process();
-
         if ($this->input_type === 'number') {
-            return is_null($value) ? null : (int) $value;
+            return is_null($this->value) ? null : (int) $this->value;
         }
 
-        return $value;
+        return $this->value;
     }
 }

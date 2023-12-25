@@ -19,8 +19,6 @@ class Integer extends Field
 
     public function process(): mixed
     {
-        $value = parent::process();
-
-        return is_null($value) ? null : (int) $value;
+        return is_null($this->value) ? null : (int) $this->value;
     }
 }

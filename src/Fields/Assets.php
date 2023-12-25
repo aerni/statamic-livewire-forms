@@ -9,15 +9,6 @@ class Assets extends Field
 {
     protected string $view = 'assets';
 
-    public function process(): mixed
-    {
-        $value = parent::process();
-
-        return collect(Arr::wrap($value))
-            ->flatMap(fn ($file) => AssetsUploader::field($this->handle)->upload($file))
-            ->all();
-    }
-
     protected function multipleProperty(): bool
     {
         return $this->field->get('max_files') !== 1;
@@ -38,6 +29,13 @@ class Assets extends Field
 
         return collect($rules)
             ->filter(fn ($rule) => ! in_array($rule, ['array', 'max:1']))
+            ->all();
+    }
+
+    public function process(): array
+    {
+        return collect(Arr::wrap($this->value))
+            ->flatMap(fn ($file) => AssetsUploader::field($this->handle)->upload($file))
             ->all();
     }
 }
