@@ -35,6 +35,8 @@ trait HandlesProperties
             ? $this->$method()
             : $this->field->get($key);
 
+        $this->set($key, $value);
+
         return $value;
     }
 
