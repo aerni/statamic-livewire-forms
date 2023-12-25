@@ -15,6 +15,6 @@ trait HandlesSpam
 
     protected function isSpam(): bool
     {
-        return $this->fields->get($this->honeypot->handle)->value() !== null;
+        return $this->honeypot->value() !== null;
     }
 }

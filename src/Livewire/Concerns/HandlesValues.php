@@ -20,7 +20,6 @@ trait HandlesValues
     {
         return $this->fields
             ->filter(fn ($field) => $this->submittableFields[$field->handle])
-            ->filter(fn ($field) => $field->handle !== $this->honeypot->handle)
             ->map(fn ($field) => $field->process());
     }
 

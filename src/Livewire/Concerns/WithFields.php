@@ -30,7 +30,7 @@ trait WithFields
 
     protected function fields(): Collection
     {
-        return $this->form->fields()->map(function ($field) {
+        $fields = $this->form->fields()->map(function ($field) {
             $fieldtype = $field->fieldtype()::class;
 
             $class = $this->models()->get($field->handle())
@@ -39,7 +39,14 @@ trait WithFields
             return $class
                 ? $class::make(field: $field, id: $this->getId())
                 : throw new \Exception("The field model binding for fieldtype [{$fieldtype}] cannot be found.");
-        })->put($this->honeypot->handle, $this->honeypot);
+        });
+
+        $honeypot = Honeypot::make(
+            field: new Field($this->form->honeypot(), []),
+            id: $this->getId()
+        );
+
+        return $fields->put($honeypot->handle, $honeypot);
     }
 
     #[Computed]
@@ -65,13 +72,10 @@ trait WithFields
         return $this->sections()->firstWhere('handle', $handle);
     }
 
-    #[Computed(true)]
+    #[Computed]
     public function honeypot(): Honeypot
     {
-        return Honeypot::make(
-            field: new Field($this->form->honeypot(), []),
-            id: $this->getId()
-        );
+        return $this->fields->whereInstanceOf(Honeypot::class)->first();
     }
 
     protected function captcha(): ?Captcha
