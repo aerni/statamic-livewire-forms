@@ -78,6 +78,15 @@ trait HandlesProperties
         return $this;
     }
 
+    public function unset(string|array $properties): self
+    {
+        $this->properties = collect($this->properties)
+            ->forget($properties)
+            ->all();
+
+        return $this;
+    }
+
     public function __get(string $key): mixed
     {
         return $this->get($key);
