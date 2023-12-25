@@ -16,9 +16,4 @@ class Integer extends Field
     {
         return 'number';
     }
-
-    public function process(): mixed
-    {
-        return is_null($this->value) ? null : (int) $this->value;
-    }
 }

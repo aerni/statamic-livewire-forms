@@ -26,15 +26,7 @@ trait HandlesSubmission
 
     protected function makeSubmission(): self
     {
-        $submission = $this->form->makeSubmission();
-
-        $processedValues = $this->form->blueprint()
-            ->fields()
-            ->addValues($this->processedValues()->all())
-            ->process()
-            ->values();
-
-        $this->submission = $submission->data($processedValues);
+        $this->submission = $this->form->makeSubmission()->data($this->processedValues());
 
         return $this;
     }

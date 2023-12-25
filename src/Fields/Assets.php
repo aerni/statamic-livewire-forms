@@ -32,10 +32,11 @@ class Assets extends Field
             ->all();
     }
 
-    public function process(): array
+    public function process(): mixed
     {
-        return collect(Arr::wrap($this->value))
-            ->flatMap(fn ($file) => AssetsUploader::field($this->handle)->upload($file))
-            ->all();
+        $this->value = collect(Arr::wrap($this->value))
+            ->flatMap(fn ($file) => AssetsUploader::field($this->handle)->upload($file));
+
+        return parent::process();
     }
 }
