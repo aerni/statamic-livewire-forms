@@ -2,11 +2,11 @@
 
 namespace Aerni\LivewireForms\Fields;
 
+use Aerni\LivewireForms\Fields\Concerns\HandlesProperties;
+use Aerni\LivewireForms\Fields\Concerns\WithDefaultProperties;
 use Illuminate\Contracts\Support\Arrayable;
 use Statamic\Fields\Field as StatamicField;
 use Statamic\Support\Traits\FluentlyGetsAndSets;
-use Aerni\LivewireForms\Fields\Concerns\HandlesProperties;
-use Aerni\LivewireForms\Fields\Concerns\WithDefaultProperties;
 
 abstract class Field implements Arrayable
 {
