@@ -14,10 +14,9 @@ class Radio extends Field
 
     protected function defaultProperty(): ?string
     {
-        $default = $this->field->defaultValue();
-        $options = $this->options;
-
-        // A default is only valid if it exists in the options.
-        return collect($options)->only($default ?? [])->keys()->first();
+        return collect($this->options)
+            ->only($this->field->defaultValue() ?? [])
+            ->keys()
+            ->first();
     }
 }
