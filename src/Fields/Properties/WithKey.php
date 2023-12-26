@@ -6,6 +6,6 @@ trait WithKey
 {
     protected function keyProperty(): string
     {
-        return "fields.{$this->handle()}.value";
+        return "fields.{$this->handle}.value";
     }
 }
