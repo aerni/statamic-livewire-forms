@@ -2,10 +2,10 @@
 
 namespace Aerni\LivewireForms\Fields;
 
-use Aerni\LivewireForms\Fields\Properties\WithOptions;
-use Aerni\LivewireForms\Fields\Properties\WithMultiple;
-use Aerni\LivewireForms\Fields\Properties\WithPlaceholder;
 use Aerni\LivewireForms\Fields\Properties\WithAutocomplete;
+use Aerni\LivewireForms\Fields\Properties\WithMultiple;
+use Aerni\LivewireForms\Fields\Properties\WithOptions;
+use Aerni\LivewireForms\Fields\Properties\WithPlaceholder;
 
 class Select extends Field
 {
