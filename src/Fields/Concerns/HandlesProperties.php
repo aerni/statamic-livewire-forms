@@ -2,6 +2,7 @@
 
 namespace Aerni\LivewireForms\Fields\Concerns;
 
+use Aerni\LivewireForms\Exceptions\ProtectedPropertyException;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use ReflectionMethod;
@@ -10,6 +11,12 @@ use Statamic\Support\Traits\FluentlyGetsAndSets;
 trait HandlesProperties
 {
     use FluentlyGetsAndSets;
+
+    /**
+     * TODO: Instead of using this array, we could make the fields actual protected class properties
+     * And then use normal methods for them instead of propertyMethods.
+     */
+    protected array $protectedProperties = ['handle', 'id', 'key'];
 
     protected array $properties = [];
 
@@ -79,6 +86,10 @@ trait HandlesProperties
     protected function set(string $key, mixed $value, bool $processValue = true): self
     {
         $key = Str::snake($key);
+
+        if (in_array($key, $this->protectedProperties)) {
+            throw new ProtectedPropertyException($key);
+        }
 
         $method = $this->propertyMethodFromKey($key);
 
