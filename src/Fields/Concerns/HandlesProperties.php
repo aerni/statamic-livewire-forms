@@ -4,6 +4,7 @@ namespace Aerni\LivewireForms\Fields\Concerns;
 
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
+use ReflectionMethod;
 use Statamic\Support\Traits\FluentlyGetsAndSets;
 
 trait HandlesProperties
@@ -75,7 +76,7 @@ trait HandlesProperties
         return $this->property(Str::snake($key));
     }
 
-    protected function set(string $key, mixed $value): self
+    protected function set(string $key, mixed $value, bool $processValue = true): self
     {
         $key = Str::snake($key);
 
@@ -85,7 +86,7 @@ trait HandlesProperties
          * If the property has a method that accepts an argument, we want to use it to transform the value.
          * This is useful for properties like `view` where we want the final value to be `fields.{view}`.
          */
-        if (method_exists($this, $method)) {
+        if ($processValue && method_exists($this, $method)) {
             $method = new ReflectionMethod($this, $method);
 
             $value = $method->getNumberOfParameters() > 0
@@ -120,7 +121,7 @@ trait HandlesProperties
     public function __call(string $property, array $arguments): mixed
     {
         return $arguments
-            ? $this->set($property, $arguments[0])
+            ? $this->set(key: $property, value: $arguments[0], processValue: $arguments[1] ?? true)
             : $this->get($property);
     }
 }
