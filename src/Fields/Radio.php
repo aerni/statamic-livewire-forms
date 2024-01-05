@@ -12,10 +12,10 @@ class Radio extends Field
 
     protected string $view = 'radio';
 
-    protected function defaultProperty(): ?string
+    protected function defaultProperty(?string $default = null): ?string
     {
         return collect($this->options)
-            ->only($this->field->defaultValue() ?? [])
+            ->only($default ?? $this->field->defaultValue() ?? [])
             ->keys()
             ->first();
     }

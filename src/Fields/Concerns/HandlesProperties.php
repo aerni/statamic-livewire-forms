@@ -25,6 +25,8 @@ trait HandlesProperties
 
     public function property(string $key): mixed
     {
+        $key = Str::snake($key);
+
         if (array_key_exists($key, $this->properties)) {
             return $this->properties[$key];
         }
@@ -35,7 +37,7 @@ trait HandlesProperties
             ? $this->$method()
             : $this->field->get($key);
 
-        $this->set($key, $value);
+        $this->properties[$key] = $value;
 
         return $value;
     }
@@ -75,7 +77,23 @@ trait HandlesProperties
 
     protected function set(string $key, mixed $value): self
     {
-        $this->properties[Str::snake($key)] = $value;
+        $key = Str::snake($key);
+
+        $method = $this->propertyMethodFromKey($key);
+
+        /**
+         * If the property has a method that accepts an argument, we want to use it to transform the value.
+         * This is useful for properties like `view` where we want the final value to be `fields.{view}`.
+         */
+        if (method_exists($this, $method)) {
+            $method = new ReflectionMethod($this, $method);
+
+            $value = $method->getNumberOfParameters() > 0
+                ? $method->invoke($this, $value)
+                : $value;
+        }
+
+        $this->properties[$key] = $value;
 
         return $this;
     }

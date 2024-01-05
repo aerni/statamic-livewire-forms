@@ -28,11 +28,6 @@ abstract class Field implements Arrayable
         return new static($field, $component);
     }
 
-    public function rules(): array
-    {
-        return [$this->key => $this->rules];
-    }
-
     public function validationAttributes(): array
     {
         return [$this->key => $this->label];

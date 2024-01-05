@@ -19,17 +19,19 @@ class Assets extends Field
         return $this->multiple ? [] : null;
     }
 
-    protected function rulesProperty(): array
+    protected function rulesProperty(string|array|null $rules = null): array
     {
-        $rules = parent::rulesProperty();
+        $rules = parent::rulesProperty($rules);
 
         if ($this->multiple) {
             return $rules;
         }
 
-        return collect($rules)
+        $rules = collect(array_first($rules))
             ->filter(fn ($rule) => ! in_array($rule, ['array', 'max:1']))
-            ->all();
+            ->values()->all();
+
+        return [$this->key => $rules];
     }
 
     public function process(): mixed
