@@ -22,7 +22,7 @@ trait WithView
         }
 
         // Autoload the view by form handle if it exists.
-        if (view()->exists("livewire-forms::{$this->handle}")) {
+        if (view()->exists(config('livewire-forms.view_path')."/{$this->handle}")) {
             return $this->handle;
         }
 

@@ -22,7 +22,7 @@ trait WithTheme
         }
 
         // Autoload the theme by form handle if it exists.
-        if (is_dir(resource_path("views/vendor/livewire-forms/{$this->handle}"))) {
+        if (is_dir(resource_path('views/'.config('livewire-forms.view_path')."/{$this->handle}"))) {
             return $this->handle;
         }
 
@@ -32,9 +32,8 @@ trait WithTheme
 
     protected function evaluatedThemeView(string $view): string
     {
-        $defaultTheme = config('livewire-forms.theme', 'default');
-        $themeView = "livewire-forms::{$this->theme}.{$view}";
-        $defaultThemeView = "livewire-forms::{$defaultTheme}.{$view}";
+        $themeView = config('livewire-forms.view_path')."/{$this->theme}/{$view}";
+        $defaultThemeView = config('livewire-forms.view_path').'/'.config('livewire-forms.theme', 'default')."/{$view}";
 
         return view()->exists($themeView) ? $themeView : $defaultThemeView;
     }

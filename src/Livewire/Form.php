@@ -24,6 +24,6 @@ class Form extends Component
 
     public function render(): View
     {
-        return view("livewire-forms::{$this->view}");
+        return view(config('livewire-forms.view_path')."/{$this->view}");
     }
 }
