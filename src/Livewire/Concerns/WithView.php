@@ -2,6 +2,7 @@
 
 namespace Aerni\LivewireForms\Livewire\Concerns;
 
+use Aerni\LivewireForms\Facades\ViewManager;
 use Livewire\Attributes\Locked;
 
 trait WithView
@@ -22,11 +23,11 @@ trait WithView
         }
 
         // Autoload the view by form handle if it exists.
-        if (view()->exists(config('livewire-forms.view_path')."/{$this->handle}")) {
+        if (ViewManager::viewExists($this->handle)) {
             return $this->handle;
         }
 
         // Fall back to the default view.
-        return config('livewire-forms.view', 'default');
+        return ViewManager::defaultView();
     }
 }

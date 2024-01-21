@@ -26,7 +26,7 @@ class BladeDirectives
         $arguments = $variables[1] ?? '[]';
 
         return Blade::compileString("
-            @include(\$this->evaluatedThemeView($view), $arguments)
+            @include(\Aerni\LivewireForms\Facades\ViewManager::themeViewPath($view), $arguments)
         ");
     }
 
@@ -58,7 +58,7 @@ class BladeDirectives
                     \$field->\$property(\$value);
                 }
 
-                echo view(\$this->evaluatedThemeView('layouts.field'), ['field' => \$field]);
+                echo view(\Aerni\LivewireForms\Facades\ViewManager::themeViewPath('layouts.field'), ['field' => \$field]);
             }
         ?>";
     }
