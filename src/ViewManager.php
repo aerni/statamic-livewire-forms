@@ -15,7 +15,7 @@ class ViewManager
 
     public function viewPath(string $view): string
     {
-        return config('livewire-forms.view_path', 'livewire/forms') . "/{$view}";
+        return config('livewire-forms.view_path', 'livewire/forms')."/{$view}";
     }
 
     public function themeViewPath(string $view): string
