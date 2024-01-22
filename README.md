@@ -184,7 +184,7 @@ There are a couple of blade directives you may use in your form views. The direc
 | Directive                | Description                                                                 | View                      |
 | ------------------------ | --------------------------------------------------------------------------- | ------------------------- |
 | `@formSection('handle')` | Render a specific from section, e.g., `@formSection('contact_information')` | section.blade.php         |
-| `@formField('handle')`   | Render a specific form field, e.g., @formField('first_name')                | field.blade.php           |
+| `@formField('handle')`   | Render a specific form field, e.g., `@formField('first_name')`              | field.blade.php           |
 | `@formView('view')`      | Render a specific form view, e.g., `@formView('messages.label')`            | Whatever view you provide |
 
 ### Customization Example
@@ -205,26 +205,24 @@ You can access the properties in the field's view like this:
 {{ $field->tooltip }}
 ```
 
->**Note:** There are a few properties such as options, default, and conditions that won't work correctly when assigned in the view. This is due to the hydration lifecycle of Livewire. If you want to change those properties, you should create a custom component instead.
-
 ## Themes
 
-Themes allow you to customize the style and logic of your form fields. You may have any number of themes and use them for any of your forms. If a field's view doesn't exist in the configured theme, it will fall back to the default theme. You can set the default theme in `config/livewire-forms.php`.
+Themes allow you to customize the style and logic of your form views. You may have any number of themes. If a view doesn't exist in the theme applied to a form, it will fall back to the default theme set in `config/livewire-forms.php`.
 
-Use the following command to create a new theme:
+Use the `livewire-forms:theme` command to create a new theme:
 
 ```bash
 php please livewire-forms:theme
 ```
 
-> **Important:** It's very likely that future releases will introduce breaking changes to the theme views. If that happens, you will have to manually update your themes.
+> **Good to know:**Future releases of this addon will likely introduce breaking changes to your views. In that case, you will have to manually update your views according to the changes.
 
 ### Field Views
-Each field will load the view defined by its type by default. A `subscription` field of `type: radio`, for example, will load the `radio.blade.php` view.
+Each field will load the view by its type by default. For example, a `subscription` field of `type: radio`, will load the `radio.blade.php` view.
 
-Sometimes you may want to load a different view for a field. In this example, we want to display a fancy radio button group. Simply create a `subscription.blade.php` view within the theme's `fields` folder to autoload your custom view.
+Sometimes you may want to load a different view for a given field, like a fancy radio button group for selecting a subscription. Field views are autoloaded by the field's handle. In this example, you can simply create a `subscription.blade.php` view under the theme's `fields` folder to autoload your custom view.
 
-You may also manually override a field's view by adding `view: {the_name_of_the_view}` to the config in the blueprint.
+You may also manually override a field's view by adding `view: {the_name_of_the_view}` to the field's config in the blueprint.
 
 ## Components
 
