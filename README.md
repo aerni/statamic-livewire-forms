@@ -30,29 +30,6 @@ The following config will be published to `config/livewire-forms.php`:
 
 ```php
 return [
-
-    /*
-    |--------------------------------------------------------------------------
-    | Default View
-    |--------------------------------------------------------------------------
-    |
-    | This view will be used if you don't specify one on the component.
-    |
-    */
-
-    'view' => 'default',
-
-    /*
-    |--------------------------------------------------------------------------
-    | Default Theme
-    |--------------------------------------------------------------------------
-    |
-    | This theme will be used if you don't specify one on the component.
-    |
-    */
-
-    'theme' => 'default',
-
     /*
     |--------------------------------------------------------------------------
     | Field Models
@@ -63,17 +40,51 @@ return [
     */
 
     'models' => [
-        \Aerni\LivewireForms\Fieldtypes\Captcha::class => \Aerni\LivewireForms\Fields\Captcha::class,
-        \Statamic\Fieldtypes\Assets\Assets::class => \Aerni\LivewireForms\Fields\Assets::class,
-        \Statamic\Fieldtypes\Checkboxes::class => \Aerni\LivewireForms\Fields\Checkboxes::class,
-        \Statamic\Fieldtypes\Integer::class => \Aerni\LivewireForms\Fields\Integer::class,
-        \Statamic\Fieldtypes\Radio::class => \Aerni\LivewireForms\Fields\Radio::class,
-        \Statamic\Fieldtypes\Select::class => \Aerni\LivewireForms\Fields\Select::class,
-        \Statamic\Fieldtypes\Spacer::class => \Aerni\LivewireForms\Fields\Spacer::class,
-        \Statamic\Fieldtypes\Text::class => \Aerni\LivewireForms\Fields\Text::class,
-        \Statamic\Fieldtypes\Textarea::class => \Aerni\LivewireForms\Fields\Textarea::class,
-        \Statamic\Fieldtypes\Toggle::class => \Aerni\LivewireForms\Fields\Toggle::class,
+        Aerni\LivewireForms\Fieldtypes\Captcha::class => Aerni\LivewireForms\Fields\Captcha::class,
+        Statamic\Fieldtypes\Assets\Assets::class => Aerni\LivewireForms\Fields\Assets::class,
+        Statamic\Fieldtypes\Checkboxes::class => Aerni\LivewireForms\Fields\Checkboxes::class,
+        Statamic\Fieldtypes\Hidden::class => Aerni\LivewireForms\Fields\Hidden::class,
+        Statamic\Fieldtypes\Integer::class => Aerni\LivewireForms\Fields\Integer::class,
+        Statamic\Fieldtypes\Radio::class => Aerni\LivewireForms\Fields\Radio::class,
+        Statamic\Fieldtypes\Select::class => Aerni\LivewireForms\Fields\Select::class,
+        Statamic\Fieldtypes\Spacer::class => Aerni\LivewireForms\Fields\Spacer::class,
+        Statamic\Fieldtypes\Text::class => Aerni\LivewireForms\Fields\Text::class,
+        Statamic\Fieldtypes\Textarea::class => Aerni\LivewireForms\Fields\Textarea::class,
+        Statamic\Fieldtypes\Toggle::class => Aerni\LivewireForms\Fields\Toggle::class,
     ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | View Path
+    |--------------------------------------------------------------------------
+    |
+    | The path under resources/views where the form views are published and loaded from.
+    |
+    */
+
+    'view_path' => 'livewire/forms',
+
+    /*
+    |--------------------------------------------------------------------------
+    | Default View
+    |--------------------------------------------------------------------------
+    |
+    | The default view that is used if you don't specify one on the component.
+    |
+    */
+
+    'view' => 'default',
+
+    /*
+    |--------------------------------------------------------------------------
+    | Default Theme
+    |--------------------------------------------------------------------------
+    |
+    | The default theme that is used if you don't specify one on the component.
+    |
+    */
+
+    'theme' => 'default',
 
     /*
     |--------------------------------------------------------------------------
@@ -87,7 +98,7 @@ return [
 
     'captcha' => [
         'key' => env('CAPTCHA_KEY'),
-        'secret' => env('CAPTCHA_SECRET')
+        'secret' => env('CAPTCHA_SECRET'),
     ],
 
 ];
@@ -108,11 +119,11 @@ There are a number of helpful commands to help you create views, themes and comp
 
 ### Prerequisite
 
-This addon provides configured and styled form views for all Statamic form fieldtypes. The components are styled with [Tailwind CSS](https://tailwindcss.com/) and make use of the [@tailwindcss/forms](https://github.com/tailwindlabs/tailwindcss-forms) plugin. If you want to use the default styling, you'll need a working Tailwind setup.
+The default views of this addon are styled with [Tailwind CSS](https://tailwindcss.com/) and [@tailwindcss/forms](https://github.com/tailwindlabs/tailwindcss-forms).
 
 ### Run the setup command
 
-Go ahead and run the following command in your console. It will guide you through creating your first [view](https://github.com/aerni/statamic-livewire-forms#views) and [theme](https://github.com/aerni/statamic-livewire-forms#themes). Optionally, you may also create a [component](https://github.com/aerni/statamic-livewire-forms#components) to customize the form's behavior.
+Go ahead and run the `livewire-forms:setup` command in your console. It will guide you through creating your first [view](https://github.com/aerni/statamic-livewire-forms#views) and [theme](https://github.com/aerni/statamic-livewire-forms#themes). Optionally, you may also create a [component](https://github.com/aerni/statamic-livewire-forms#components) for complete control of your form.
 
 ```bash
 php please livewire-forms:setup
@@ -140,7 +151,7 @@ You can also dynamically render a form that was selected via Statamic's Form fie
 <livewire:form :handle="field:handle">
 ```
 
-Use the `view` and `theme` parameter if you want to use a view or theme that is different to the one defined in `config/livewire-forms.php`.
+Use the `view` and `theme` parameters if you want to use a view or theme that is different from the one defined in `config/livewire-forms.php`.
 
 ```blade
 <!-- Antlers -->
@@ -152,43 +163,29 @@ Use the `view` and `theme` parameter if you want to use a view or theme that is 
 
 #### Available Properties
 
-| Property | Description                                        |
-| -------- | -------------------------------------------------- |
-| `handle` | The handle of the form you want to use (required)  |
-| `view`   | The component view you want to use                 |
-| `theme`  | The theme you want to use                          |
+| Property | Description                                       |
+| -------- | ------------------------------------------------- |
+| `handle` | The handle of the form you want to use (required) |
+| `view`   | The component view you want to use (optional)     |
+| `theme`  | The theme you want to use (optional)              |
 
 ## Views
 
-Use the following command to create a new view:
+Use the `livewire-forms:view` command to create a new view and customize it to your liking:
 
 ```bash
 php please livewire-forms:view
-```
-
-This is the default view. You may customize it to your liking.
-
-```blade
-<form wire:submit.prevent="submit" class="w-full max-w-2xl">
-    <div class="flex flex-col gap-y-16">
-        @formSections
-        @formHoneypot
-        @formSubmit
-        @formErrors
-        @formSuccess
-    </div>
-</form>
 ```
 
 ### Blade Directives
 
 There are a couple of blade directives you may use in your form views. The directives are aware of the form's theme and will render the views accordingly.
 
-| Directive                | Description                                        | View                      |
-| ------------------------ | -------------------------------------------------- | ------------------------- |
-| `@formSection('handle')` | Render a specific from section                     | section.blade.php         |
-| `@formField('handle')`   | Render a specific form field                       | field.blade.php           |
-| `@formView('view')`      | Render a specific form view                        | Whatever view you give it |
+| Directive                | Description                                                                 | View                      |
+| ------------------------ | --------------------------------------------------------------------------- | ------------------------- |
+| `@formSection('handle')` | Render a specific from section, e.g., `@formSection('contact_information')` | section.blade.php         |
+| `@formField('handle')`   | Render a specific form field, e.g., @formField('first_name')                | field.blade.php           |
+| `@formView('view')`      | Render a specific form view, e.g., `@formView('messages.label')`            | Whatever view you provide |
 
 ### Customization Example
 
@@ -196,21 +193,19 @@ Sometimes you need more control over the markup of your form. If you decide to g
 
 ```blade
 @formField('name', [
-    'view' => 'nameInput',
+    'label' => 'Name',
     'tooltip' => 'Please enter your full name'
 ])
 ```
 
-Use the properties in the field's view like this:
+You can access the properties in the field's view like this:
 
 ```blade
-{{ $field->view }}
+{{ $field->label }}
 {{ $field->tooltip }}
 ```
 
->**Note:** The `view` property will look for the view in the theme's fields directory: `{theme}/fields/{view}.blade.php`.
-
->**Note:** There are a few properties such as options, default and conditions that won't work correctly when assigned in the view. This is due to the hydration lifecycle of Livewire. If you want to change those properties, you should create a custom component instead.
+>**Note:** There are a few properties such as options, default, and conditions that won't work correctly when assigned in the view. This is due to the hydration lifecycle of Livewire. If you want to change those properties, you should create a custom component instead.
 
 ## Themes
 
