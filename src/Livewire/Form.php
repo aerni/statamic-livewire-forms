@@ -10,7 +10,6 @@ use Aerni\LivewireForms\Livewire\Concerns\WithHandle;
 use Aerni\LivewireForms\Livewire\Concerns\WithMessages;
 use Aerni\LivewireForms\Livewire\Concerns\WithTheme;
 use Aerni\LivewireForms\Livewire\Concerns\WithView;
-use Aerni\LivewireForms\Livewire\Concerns\WithViewManager;
 use Illuminate\Contracts\View\View;
 use Livewire\Component;
 
@@ -22,7 +21,6 @@ class Form extends Component
     use WithFields;
     use WithForm;
     use WithMessages;
-    use WithViewManager;
     use SubmitsForm;
 
     public function render(): View

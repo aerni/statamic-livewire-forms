@@ -11,8 +11,8 @@ trait WithView
         $configViewName = "fields.{$this->field->get('view')}";
         $handleViewName = "fields.{$this->handle}";
 
-        $configView = ViewManager::themeViewPath($configViewName);
-        $handleView = ViewManager::themeViewPath($handleViewName);
+        $configView = ViewManager::themeViewPath($this->component->theme, $configViewName);
+        $handleView = ViewManager::themeViewPath($this->component->theme, $handleViewName);
 
         return match (true) {
             view()->exists($configView) => $configViewName, // Try to load a user-defined view first.

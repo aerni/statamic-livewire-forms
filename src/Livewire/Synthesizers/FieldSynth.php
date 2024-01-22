@@ -37,7 +37,7 @@ class FieldSynth extends Synth
 
         return $meta['class']::make(
             field: new StatamicField($value['handle'], $value['config']),
-            id: $this->context->component->getId()
+            component: $this->context->component
         )
             ->properties($value['properties'])
             ->value($value['value']);

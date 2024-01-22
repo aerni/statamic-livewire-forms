@@ -37,13 +37,13 @@ trait WithFields
                 ?? $this->models()->get($fieldtype);
 
             return $class
-                ? $class::make(field: $field, id: $this->getId())
+                ? $class::make(field: $field, component: $this)
                 : throw new \Exception("The field model binding for fieldtype [{$fieldtype}] cannot be found.");
         });
 
         $honeypot = Honeypot::make(
             field: new Field($this->form->honeypot(), []),
-            id: $this->getId()
+            component: $this
         );
 
         return $fields->put($honeypot->handle, $honeypot);

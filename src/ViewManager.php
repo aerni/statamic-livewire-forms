@@ -2,25 +2,16 @@
 
 namespace Aerni\LivewireForms;
 
-use Livewire\Component;
-
 class ViewManager
 {
-    protected Component $component;
-
-    public function boot(Component $component): void
-    {
-        $this->component = $component;
-    }
-
     public function viewPath(string $view): string
     {
         return config('livewire-forms.view_path', 'livewire/forms')."/{$view}";
     }
 
-    public function themeViewPath(string $view): string
+    public function themeViewPath(string $theme, string $view): string
     {
-        $themeView = $this->viewPath("{$this->component->theme}/{$view}");
+        $themeView = $this->viewPath("{$theme}/{$view}");
         $defaultThemeView = $this->viewPath("{$this->defaultTheme()}/{$view}");
 
         return view()->exists($themeView) ? $themeView : $defaultThemeView;

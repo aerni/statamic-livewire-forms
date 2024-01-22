@@ -5,7 +5,8 @@ namespace Aerni\LivewireForms\Fields;
 use Aerni\LivewireForms\Fields\Concerns\HandlesProperties;
 use Aerni\LivewireForms\Fields\Concerns\WithDefaultProperties;
 use Illuminate\Contracts\Support\Arrayable;
-use Statamic\Fields\Field as StatamicField;
+use Livewire\Component;
+use Statamic\Fields\Field as FormField;
 use Statamic\Support\Traits\FluentlyGetsAndSets;
 
 abstract class Field implements Arrayable
@@ -14,17 +15,17 @@ abstract class Field implements Arrayable
     use HandlesProperties;
     use WithDefaultProperties;
 
+    protected mixed $value = null;
+
     public function __construct(
-        protected StatamicField $field,
-        protected string $id,
-        protected mixed $value = null
+        protected FormField $field,
+        protected Component $component,
     ) {
-        //
     }
 
-    public static function make(StatamicField $field, string $id): self
+    public static function make(FormField $field, Component $component): self
     {
-        return new static($field, $id);
+        return new static($field, $component);
     }
 
     public function rules(): array
