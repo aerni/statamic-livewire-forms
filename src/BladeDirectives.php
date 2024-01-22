@@ -47,7 +47,7 @@ class BladeDirectives
      */
     public static function formField(string $expression): string
     {
-        $variables = explode(', ', $expression);
+        $variables = explode(', ', $expression, 2);
 
         $field = $variables[0];
         $properties = $variables[1] ?? '[]';
