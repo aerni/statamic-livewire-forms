@@ -151,7 +151,7 @@ You can also dynamically render a form that was selected via Statamic's Form fie
 <livewire:form :handle="field:handle">
 ```
 
-Use the `view` and `theme` parameters if you want to use a view or theme that is different from the one defined in `config/livewire-forms.php`.
+Use the `view` and `theme` parameters if you want to use a view or theme that is different from the defaults defined in `config/livewire-forms.php`.
 
 ```blade
 <!-- Antlers -->
@@ -175,6 +175,14 @@ Use the `livewire-forms:view` command to create a new view and customize it to y
 
 ```bash
 php please livewire-forms:view
+```
+
+### Autoloading
+
+Views are autoloaded by the handle of a form. In the example below, it will try to load the `contact.blade.php` view. If it doesn't exist, it will fall back to the default view defined in `config/livewire-forms.php`.
+
+```blade
+{{ livewire:form handle="contact" }}
 ```
 
 ### Blade Directives
@@ -215,7 +223,15 @@ Use the `livewire-forms:theme` command to create a new theme:
 php please livewire-forms:theme
 ```
 
-> **Good to know:**Future releases of this addon will likely introduce breaking changes to your views. In that case, you will have to manually update your views according to the changes.
+### Autoloading
+
+Themes are autoloaded by the handle of a form. In the example below, it will try to load the `contact` theme. If it doesn't exist, it will fall back to the default theme defined in `config/livewire-forms.php`.
+
+```blade
+{{ livewire:form handle="contact" }}
+```
+
+> **Good to know:** Future releases of this addon will likely introduce breaking changes to your views. In that case, you will have to manually update your views according to the changes.
 
 ### Field Views
 Each field will load the view by its type by default. For example, a `subscription` field of `type: radio`, will load the `radio.blade.php` view.
@@ -234,9 +250,9 @@ Get started by creating a new component. The following example will create a new
 php please livewire-forms:component ContactForm
 ```
 
-### Render the component
+### Autoloading
 
-Livewire Forms is smart enough to autoload custom components by matching the class name with the form's handle. The following example will look for a `App\Livewire\ContactForm.php` component. If there is no class with that name, the default form component will be loaded instead.
+Custom components are autoloaded by matching the class name with the form's handle. In the example below, it will try to load the `App\Livewire\ContactForm.php` component. If this component doesn't exist, it will fall back to the default form component.
 
 ```blade
 <!-- Antlers -->
@@ -246,7 +262,19 @@ Livewire Forms is smart enough to autoload custom components by matching the cla
 <livewire:form handle="contact">
 ```
 
->**Note:** The component's name needs to end with `Form`. This is necessary for Livewire Forms to do its autoloading magic.
+>**Note:** The component's name needs to end with `Form`, .e.g., `ContactForm.php` This is necessary for Livewire Forms to do its autoloading magic.
+
+### Explicit Loading
+
+You can also explicitly load a custom component by name like you would with any other Livewire component. This is useful if need to pass additional properties to the component.
+
+```blade
+<!-- Antlers -->
+{{ livewire:contact-form my-custom-prop="value" }}
+
+<!-- Blade -->
+<livewire:contact-form my-custom-prop="value">
+```
 
 ### Field Models
 
