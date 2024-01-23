@@ -262,7 +262,7 @@ Custom components are autoloaded by matching the class name with the form's hand
 <livewire:form handle="contact">
 ```
 
->**Note:** The component's name needs to end with `Form`, .e.g., `ContactForm.php` This is necessary for Livewire Forms to do its autoloading magic.
+>**Note:** The component's name needs to end with `Form` for Livewire Forms to do its autoloading magic, e.g., `ContactForm.php`.
 
 ### Explicit Loading
 
@@ -278,9 +278,11 @@ You can also explicitly load a custom component by name like you would with any 
 
 ### Field Models
 
-Field models are responsible for generating a field's properties like `view`, `label`, and `rules`. For instance, all the fields of type `\Statamic\Fieldtypes\Select::class` are bound to the `\Aerni\LivewireForms\Fields\Select::class` model. A field property is created for each model method ending with `Property`, e.g. `optionsProperty()` will generate an `options` property.
+Each Statamic fieldtype is mapped to a Livewire Forms field model. Models are responsible for generating a field's properties like `view`, `label`, `instructions`, `options`, and so on. You can find the default mappings in `config/livewire-forms.php`.
 
-To change a fields default model, simply change the binding in the `models` property in your component:
+For instance, all the fields of type `\Statamic\Fieldtypes\Select::class` are bound to the `\Aerni\LivewireForms\Fields\Select::class` model. A field property is created for each model method ending with `Property`, e.g. `optionsProperty()` will generate an `options` property.
+
+To change a field's default model, simply change the binding in the `models` property in your component:
 
 ```php
 protected array $models = [
@@ -300,51 +302,29 @@ protected array $models = [
 
 ### Callbacks & Hooks
 
-There are a couple of callbacks and hooks that let you modify fields and data at various lifecycle steps.
+There are a couple of hooks that let you modify fields and data at various lifecycle steps.
 
-#### Hydrated Fields
+#### Mounted Fields
 
-Use this callback to modify the fields before they are rendered, e.g. a field's label. This is often the simpler route when changing a single thing, rather than adding a new field model binding.
+Use this hook to modify the fields after they are mounted.
 
 ```php
-protected function hydratedFields(Fields $fields): void
+public function mountedFields(Collection $fields): void
 {
     $fields->get('name')->label('Your name');
 }
 ```
 
-#### Submitting Form
+#### Form Submitted
 
-Use this hook to modify data before the form submission is created. Note, that you can only modify data of fields that are part of the form blueprint. You can't add data for nonexistent fields. In the example below: The form blueprint needs a `full_name` field.
-
-```php
-protected function submittingForm(): void
-{
-    $this->data['full_name'] = "{$this->data['first_name']} {$this->data['last_name']}";
-}
-```
-
-#### Created Submission
-
-Use this callback to modify the data of the submission before it gets saved and events are triggered.
+Use this hook to modify the form submission before it is processed by Statamic.
 
 ```php
-protected function createdSubmission(Submission $submission): void
+public function formSubmitted(Submission $submission): void
 {
     $title = $submission->augmentedValue('entry')->value()->title;
 
     $submission->set('entry_title', $title);
-}
-```
-
-#### Submitted Form
-
-Use this hook to perform an action after the form has been submitted.
-
-```php
-protected function submittedForm(): void
-{
-    Newsletter::subscribe($this->data['email']);
 }
 ```
 
@@ -364,7 +344,7 @@ use Statamic\Facades\Entry;
 
 class SelectProduct extends Select
 {
-    protected static string $view = 'select_product';
+    protected string $view = 'select_product';
 
     public function optionsProperty(): array
     {
@@ -380,9 +360,9 @@ Next, we need to tell the form which field we want to use the `SelectProduct` mo
 ```php
 namespace App\Livewire;
 
-use Aerni\LivewireForms\Livewire\BaseForm;
+use Aerni\LivewireForms\Livewire\Form;
 
-class ContactForm extends BaseForm
+class ContactForm extends Form
 {
     protected array $models = [
         'products' => \App\Fields\SelectProduct::class,
@@ -390,18 +370,18 @@ class ContactForm extends BaseForm
 }
 ```
 
-#### Using the hydratedFields callback
+#### Using the mountedFields hook
 
-Instead of defining a new field model, we can also achieve the same thing using the `hydratedFields` callback.
+Instead of defining a new field model, we can also achieve the same thing using the `mountedFields` hook.
 
 ```php
 namespace App\Livewire;
 
-use Aerni\LivewireForms\Livewire\BaseForm;
+use Aerni\LivewireForms\Livewire\Form;
 
-class ContactForm extends BaseForm
+class ContactForm extends Form
 {
-    protected function hydratedFields(Fields $fields): void
+    public function mountedFields(Collection $fields): void
     {
         $options = Entry::whereCollection('products')
             ->mapWithKeys(fn ($product) => [$product->slug() => $product->get('title')])
