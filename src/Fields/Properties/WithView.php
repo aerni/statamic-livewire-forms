@@ -6,18 +6,22 @@ use Aerni\LivewireForms\Facades\ViewManager;
 
 trait WithView
 {
-    protected function viewProperty(): string
+    protected function viewProperty(?string $view = null): string
     {
-        $configViewName = "fields.{$this->field->get('view')}";
-        $handleViewName = "fields.{$this->handle}";
-
-        $configView = ViewManager::themeViewPath($this->component->theme, $configViewName);
-        $handleView = ViewManager::themeViewPath($this->component->theme, $handleViewName);
+        $overrideView = "fields.{$view}";
+        $configView = "fields.{$this->field->get('view')}";
+        $handleView = "fields.{$this->handle}";
 
         return match (true) {
-            view()->exists($configView) => $configViewName, // Try to load a user-defined view first.
-            view()->exists($handleView) => $handleViewName, // Try to autoload the view by field handle.
-            default => "fields.{$this->view}" // Fall back to the default field view.
+            $this->viewExists($overrideView) => $overrideView, // Load a view defined in the component.
+            $this->viewExists($configView) => $configView, // Load a view defined in the config.
+            $this->viewExists($handleView) => $handleView, // Autoload the view by field handle.
+            default => "fields/{$this->view}" // Fall back to the default field view.
         };
+    }
+
+    protected function viewExists(string $view): bool
+    {
+        return ViewManager::themeViewExists($this->component->theme, $view);
     }
 }

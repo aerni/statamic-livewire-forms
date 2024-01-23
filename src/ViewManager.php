@@ -17,6 +17,11 @@ class ViewManager
         return view()->exists($themeView) ? $themeView : $defaultThemeView;
     }
 
+    public function themeViewExists(string $theme, string $view): bool
+    {
+        return view()->exists($this->themeViewPath($theme, $view));
+    }
+
     public function viewExists(string $view): bool
     {
         return view()->exists($this->viewPath($view));
