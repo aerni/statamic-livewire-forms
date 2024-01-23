@@ -12,7 +12,7 @@ class Radio extends Field
 
     protected string $view = 'radio';
 
-    protected function defaultProperty(?string $default = null): ?string
+    protected function defaultProperty(mixed $default = null): ?string
     {
         return collect($this->options)
             ->only($default ?? $this->field->defaultValue() ?? [])

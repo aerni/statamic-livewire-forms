@@ -4,8 +4,8 @@ namespace Aerni\LivewireForms\Fields\Properties;
 
 trait WithInstructionsPosition
 {
-    protected function instructionsPositionProperty(): string
+    protected function instructionsPositionProperty(?string $instructionsPosition = null): string
     {
-        return $this->field->get('instructions_position', 'above');
+        return $instructionsPosition ?? $this->field->get('instructions_position', 'above');
     }
 }

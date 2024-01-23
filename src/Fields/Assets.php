@@ -9,12 +9,12 @@ class Assets extends Field
 {
     protected string $view = 'assets';
 
-    protected function multipleProperty(): bool
+    protected function multipleProperty(?bool $multiple = null): bool
     {
-        return $this->field->get('max_files') !== 1;
+        return $multiple ?? $this->field->get('max_files') !== 1;
     }
 
-    protected function defaultProperty(): ?array
+    protected function defaultProperty(mixed $default = null): ?array
     {
         return $this->multiple ? [] : null;
     }

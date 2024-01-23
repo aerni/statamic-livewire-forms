@@ -12,7 +12,7 @@ class Checkboxes extends Field
 
     protected string $view = 'checkboxes';
 
-    protected function defaultProperty(string|array|null $default = null): array
+    protected function defaultProperty(mixed $default = null): array
     {
         return collect($this->options)
             ->only($default ?? $this->field->defaultValue() ?? [])

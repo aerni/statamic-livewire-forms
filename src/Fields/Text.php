@@ -14,10 +14,9 @@ class Text extends Field
 
     protected string $view = 'default';
 
-    protected function hiddenProperty(): bool
+    protected function hiddenProperty(?bool $hidden = null): bool
     {
-        return $this->input_type === 'hidden'
-            ? true
-            : parent::hiddenProperty();
+        return $hidden ?? $this->input_type === 'hidden'
+            ? true : parent::hiddenProperty();
     }
 }

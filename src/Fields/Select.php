@@ -16,7 +16,7 @@ class Select extends Field
 
     protected string $view = 'select';
 
-    protected function defaultProperty(?string $default = null): string|array|null
+    protected function defaultProperty(mixed $default = null): string|array|null
     {
         $default = $default ?? $this->field->defaultValue();
         $options = $this->options;

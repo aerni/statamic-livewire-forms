@@ -4,8 +4,8 @@ namespace Aerni\LivewireForms\Fields\Properties;
 
 trait WithRows
 {
-    protected function rowsProperty(): ?int
+    protected function rowsProperty(?int $rows = null): ?int
     {
-        return $this->field->get('rows');
+        return $rows ?? $this->field->get('rows');
     }
 }

@@ -4,8 +4,8 @@ namespace Aerni\LivewireForms\Fields\Properties;
 
 trait WithHidden
 {
-    protected function hiddenProperty(): bool
+    protected function hiddenProperty(?bool $hidden = null): bool
     {
-        return $this->field->get('hidden', false);
+        return $hidden ?? $this->field->get('hidden', false);
     }
 }

@@ -4,8 +4,8 @@ namespace Aerni\LivewireForms\Fields\Properties;
 
 trait WithDefault
 {
-    protected function defaultProperty(): mixed
+    protected function defaultProperty(mixed $default = null): mixed
     {
-        return $this->field->defaultValue();
+        return $default ?? $this->field->defaultValue();
     }
 }

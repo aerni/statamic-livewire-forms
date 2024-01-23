@@ -2,21 +2,14 @@
 
 namespace Aerni\LivewireForms\Fields\Concerns;
 
-use Aerni\LivewireForms\Exceptions\ProtectedPropertyException;
+use Aerni\LivewireForms\Exceptions\ReadOnlyPropertyException;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
-use ReflectionMethod;
 use Statamic\Support\Traits\FluentlyGetsAndSets;
 
 trait HandlesProperties
 {
     use FluentlyGetsAndSets;
-
-    /**
-     * TODO: Instead of using this array, we could make the fields actual protected class properties
-     * And then use normal methods for them instead of propertyMethods.
-     */
-    protected array $protectedProperties = ['handle', 'id', 'key'];
 
     protected array $properties = [];
 
@@ -25,29 +18,10 @@ trait HandlesProperties
         return $this->fluentlyGetOrSet('properties')
             ->getter(function () {
                 return $this->propertyKeys()
-                    ->mapWithKeys(fn ($property) => [$property => $this->property($property)])
+                    ->mapWithKeys(fn ($property) => [$property => $this->get($property)])
                     ->all();
             })
             ->args(func_get_args());
-    }
-
-    public function property(string $key): mixed
-    {
-        $key = Str::snake($key);
-
-        if (array_key_exists($key, $this->properties)) {
-            return $this->properties[$key];
-        }
-
-        $method = $this->propertyMethodFromKey($key);
-
-        $value = method_exists($this, $method)
-            ? $this->$method()
-            : $this->field->get($key);
-
-        $this->properties[$key] = $value;
-
-        return $value;
     }
 
     protected function propertyKeys(): Collection
@@ -58,8 +32,11 @@ trait HandlesProperties
 
         $configProperties = array_keys($this->field->config());
 
+        $existingProperties = array_keys($this->properties);
+
         return $methodProperties
             ->merge($configProperties)
+            ->merge($existingProperties)
             ->unique();
     }
 
@@ -73,39 +50,53 @@ trait HandlesProperties
         return Str::of($method)->beforeLast('Property')->snake();
     }
 
-    protected function propertyMethodFromKey(string $key): string
+    protected function propertyMethodNameFromKey(string $key): string
     {
         return Str::camel($key).'Property';
     }
 
     protected function get(string $key): mixed
     {
-        return $this->property(Str::snake($key));
+        $key = Str::snake($key);
+
+        if (array_key_exists($key, $this->properties)) {
+            return $this->properties[$key];
+        }
+
+        $method = $this->propertyMethodNameFromKey($key);
+
+        $value = method_exists($this, $method)
+            ? $this->$method()
+            : $this->field->get($key);
+
+        $this->properties[$key] = $value;
+
+        return $value;
     }
 
-    protected function set(string $key, mixed $value, bool $processValue = true): self
+    protected function set(string $key, mixed $value): self
     {
         $key = Str::snake($key);
 
-        if (in_array($key, $this->protectedProperties)) {
-            throw new ProtectedPropertyException($key);
+        $method = $this->propertyMethodNameFromKey($key);
+
+        /* Allow setting arbitary properties and setting properties to null. */
+        if (! method_exists($this, $method) || is_null($value)) {
+            $this->properties[$key] = $value;
+
+            return $this;
         }
 
-        $method = $this->propertyMethodFromKey($key);
+        $method = new \ReflectionMethod($this, $method);
 
-        /**
-         * If the property has a method that accepts an argument, we want to use it to transform the value.
-         * This is useful for properties like `view` where we want the final value to be `fields.{view}`.
+        /*
+         * Process properties according to their methods.
+         * Properties are considered read-only if their method doesn't accept an argument.
+         * This is useful for properties like 'handle' or 'key' that shouldn't be changed.
          */
-        if ($processValue && method_exists($this, $method)) {
-            $method = new ReflectionMethod($this, $method);
-
-            $value = $method->getNumberOfParameters() > 0
-                ? $method->invoke($this, $value)
-                : $value;
-        }
-
-        $this->properties[$key] = $value;
+        $this->properties[$key] = $method->getNumberOfParameters() > 0
+            ? $method->invoke($this, $value)
+            : throw new ReadOnlyPropertyException($key);
 
         return $this;
     }
@@ -132,7 +123,7 @@ trait HandlesProperties
     public function __call(string $property, array $arguments): mixed
     {
         return $arguments
-            ? $this->set(key: $property, value: $arguments[0], processValue: $arguments[1] ?? true)
+            ? $this->set(key: $property, value: $arguments[0])
             : $this->get($property);
     }
 }
