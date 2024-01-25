@@ -22,6 +22,7 @@
         "laravel/framework": "^10.0",
         "laravel/prompts": "^0.1.13",
         "livewire/livewire": "^3.2",
+        "spatie/invade": "^2.0",
         "statamic/cms": "^4.9"
     },
     "require-dev": {
