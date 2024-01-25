@@ -1,13 +1,14 @@
 <?php
 
-use Aerni\LivewireForms\Fields\Text;
 use Livewire\Livewire;
 use Statamic\Facades\Blueprint;
+use Aerni\LivewireForms\Fields\Text;
 use Statamic\Facades\Form as StatamicForm;
+use Aerni\LivewireForms\Exceptions\ReadOnlyPropertyException;
 
 beforeEach(function () {
     Blueprint::makeFromFields([
-        'name' => ['type' => 'text'],
+        'name' => ['type' => 'text', 'display' => 'Name', 'validate' => 'required', 'some_custom_config' => 'value'],
     ])->setHandle('contact')->setNamespace('forms')->save();
 
     StatamicForm::make('contact')->save();
@@ -39,41 +40,91 @@ it('can reset the value', function () {
     expect($this->field->value())->toBe(null);
 });
 
-it('processed a property through its method', function () {
-    expect($this->field->id)->toBe("{$this->component->getId()}-field-name");
+it('can process the value', function () {
+    $this->field->value('Michael');
+
+    expect($this->field->process())->toBe('Michael');
 });
 
-it('caches a property when it is called', function () {
-    $this->field->handle();
-    $this->field->default;
-
-    expect(invade($this->field)->properties)->toEqual(['handle' => 'name', 'default' => null]);
+it('can get the validation attributes', function () {
+    expect($this->field->validationAttributes())->toBe(['fields.name.value' => 'Name']);
 });
 
-it('can set and get an arbitary property', function () {
-    $this->field->foo('value');
-    $this->field->bar = 'value';
+it('can get properties', function () {
+    expect($this->field->properties())->not->toBeEmpty();
+});
 
-    expect($this->field->foo)->toBe('value');
-    expect($this->field->bar())->toBe('value');
+it('can set properties', function () {
+    $this->field->properties(['foo' => 'bar']);
+
+    expect(invade($this->field)->properties)->toEqual(['foo' => 'bar']);
+});
+
+it('can set a property', function () {
+    expect(method_exists($this->field, 'fooProperty'))->toBeFalse();
+
+    $this->field->foo('bar');
+
+    expect($this->field->foo())->toBe('bar');
 });
 
 it('can set a property to null', function () {
-    $this->field->foo('value');
+    $this->field->properties();
 
-    $this->field->foo(null);
+    expect(invade($this->field)->properties)->toMatchArray(['display' => 'Name']);
 
-    expect($this->field->foo)->toBeNull();
+    $this->field->display(null);
+
+    expect(invade($this->field)->properties)->toMatchArray(['display' => null]);
 });
 
 it('can unset a property', function () {
-    $this->field->foo('value');
+    $this->field->properties();
 
-    $this->field->unset('foo');
+    $this->field->unset('display');
 
-    expect(array_keys($this->field->properties()))->not->toContain('foo');
+    expect(invade($this->field)->properties)->not->toHaveKey('display');
 });
 
-it('can get all properties', function () {
-    expect($this->field->properties())->not->toBeEmpty();
+it('processes properties through property methods', function () {
+    expect(method_exists($this->field, 'rulesProperty'))->toBeTrue();
+
+    expect($this->field->rules())->toEqual(['fields.name.value' => ['required']]);
+
+    $this->field->rules('required|email');
+
+    expect($this->field->rules())->toEqual(['fields.name.value' => ['required', 'email']]);
+});
+
+it('throws an exception when trying to set a read-only property', function () {
+    expect(fn() => $this->field->id('foo'))->toThrow(ReadOnlyPropertyException::class);
+});
+
+it('gets properties from the field config', function () {
+    expect(method_exists($this->field, 'someCustomConfigProperty'))->toBeFalse();
+
+    expect($this->field->someCustomConfig())->toBe('value');
+});
+
+it('caches a property when getting its value', function () {
+    $handle = $this->field->handle();
+    $display = $this->field->display;
+    $custom = $this->field->someCustomConfig;
+
+    expect($handle)->toBe('name');
+    expect($display)->toBe('Name');
+    expect($custom)->toBe('value');
+
+    expect(invade($this->field)->properties)->toEqual(['handle' => 'name', 'display' => 'Name', 'some_custom_config' => 'value']);
+});
+
+it('can get an array of the field', function () {
+    $array = [
+        'handle' => invade($this->field)->field->handle(),
+        'config' => invade($this->field)->field->config(),
+        'properties' => $this->field->properties(),
+        'value' => $this->field->value(),
+    ];
+
+    expect($array)->toEqual($this->field->toArray());
 });
