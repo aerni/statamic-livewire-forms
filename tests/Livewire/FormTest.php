@@ -1,16 +1,16 @@
 <?php
 
+use Aerni\LivewireForms\Livewire\DynamicForm;
+use Aerni\LivewireForms\Livewire\Form;
 use Livewire\Livewire;
 use Statamic\Facades\Blueprint;
-use Aerni\LivewireForms\Livewire\Form;
 use Statamic\Facades\Form as StatamicForm;
-use Aerni\LivewireForms\Livewire\DynamicForm;
 
 beforeEach(function () {
     Blueprint::makeFromFields([
         'name' => ['type' => 'text', 'display' => 'Name'],
         'email' => ['type' => 'text', 'display' => 'Email'],
-        'message' => ['type' => 'textarea', 'display' => 'Message']
+        'message' => ['type' => 'textarea', 'display' => 'Message'],
     ])->setHandle('contact')->setNamespace('forms')->save();
 
     StatamicForm::make('contact')
