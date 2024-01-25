@@ -300,9 +300,9 @@ protected array $models = [
 
 >**Tip:** You may change the default bindings in `config/livewire-forms.php`. If you have a fieldtype that's not supported by this addon, simply create a new model and add the binding to the config.
 
-### Callbacks & Hooks
+### Hooks
 
-There are a couple of hooks that let you modify fields and data at various lifecycle steps.
+There are a couple of hooks that let you modify fields and submission data at various lifecycle steps.
 
 #### Mounted Fields
 
@@ -325,6 +325,35 @@ public function formSubmitted(Submission $submission): void
     $title = $submission->augmentedValue('entry')->value()->title;
 
     $submission->set('entry_title', $title);
+}
+```
+
+### Events
+
+This addon dispatches the following Events.
+
+#### Form Submitted
+
+The `form-submitted` Livewire and `FormSubmitted` Statamic event is dispatched right after the Form Submitted hook. You can listen to this event as follows.
+
+**Livewire**
+```js
+@script
+<script>
+    $wire.on('form-submitted', () => {
+        //
+    });
+</script>
+@endscript
+```
+
+**Statamic**
+`Statamic\Events\FormSubmitted`
+
+```php
+public function handle(FormSubmitted $event)
+{
+    $event->submission; // The Submission object
 }
 ```
 
@@ -551,64 +580,6 @@ tabs:
 This addon comes with a `Captcha` fieldtype that lets you add a `Google reCAPTCHA v2 (checkbox)` captcha to your form. The Captcha fieldtype is available in the form blueprint builder like any other fieldtype.
 
 >**Note:** Make sure to add your captcha key and secret in your `.env` file.
-
-## Events
-
-This addon dispatches the following Events. Learn more about [Statamic Events](https://statamic.dev/extending/events) and [Livewire Events](https://laravel-livewire.com/docs/2.x/events) events.
-
-### FormSubmitted
-
-Dispatched when a Form is submitted on the front-end before the Submission is created.
-
-#### Statamic
-
-`Statamic\Events\FormSubmitted`
-
-```php
-public function handle(FormSubmitted $event)
-{
-    $event->submission; // The Submission object
-}
-```
-
-#### Livewire
-
-`formSubmitted`
-
-```js
-// JavaScript Example
-
-Livewire.on('formSubmitted', () => {
-    ...
-})
-```
-
-### SubmissionCreated
-
-Dispatched after a form submission has been created. This happens after a form has been submitted on the front-end.
-
-#### Statamic
-
-`Statamic\Events\SubmissionCreated`
-
-```php
-public function handle(SubmissionCreated $event)
-{
-    $event->submission;
-}
-```
-
-#### Livewire
-
-`submissionCreated`
-
-```js
-// JavaScript Example
-
-Livewire.on('submissionCreated', () => {
-    ...
-})
-```
 
 ## License
 Livewire Forms is **commercial software** but has an open-source codebase. If you want to use it in production, you'll need to [buy a license from the Statamic Marketplace](https://statamic.com/addons/aerni/livewire-forms).
