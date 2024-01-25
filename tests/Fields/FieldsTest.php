@@ -1,10 +1,10 @@
 <?php
 
+use Aerni\LivewireForms\Exceptions\ReadOnlyPropertyException;
+use Aerni\LivewireForms\Fields\Text;
 use Livewire\Livewire;
 use Statamic\Facades\Blueprint;
-use Aerni\LivewireForms\Fields\Text;
 use Statamic\Facades\Form as StatamicForm;
-use Aerni\LivewireForms\Exceptions\ReadOnlyPropertyException;
 
 beforeEach(function () {
     Blueprint::makeFromFields([
@@ -97,7 +97,7 @@ it('processes properties through property methods', function () {
 });
 
 it('throws an exception when trying to set a read-only property', function () {
-    expect(fn() => $this->field->id('foo'))->toThrow(ReadOnlyPropertyException::class);
+    expect(fn () => $this->field->id('foo'))->toThrow(ReadOnlyPropertyException::class);
 });
 
 it('gets properties from the field config', function () {
