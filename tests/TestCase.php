@@ -2,11 +2,13 @@
 
 namespace Aerni\LivewireForms\Tests;
 
+use Statamic\Facades\File;
+use Statamic\Extend\Manifest;
+use Livewire\LivewireServiceProvider;
 use Aerni\LivewireForms\ServiceProvider;
 use Illuminate\Contracts\Config\Repository;
-use Livewire\LivewireServiceProvider;
+use Aerni\LivewireForms\Facades\ViewManager;
 use Orchestra\Testbench\TestCase as Orchestra;
-use Statamic\Extend\Manifest;
 use Statamic\Providers\StatamicServiceProvider;
 
 class TestCase extends Orchestra
@@ -33,9 +35,19 @@ class TestCase extends Orchestra
 
         tap($app['config'], function (Repository $config) {
             $config->set('livewire-forms', require (__DIR__.'/../config/livewire-forms.php'));
-            $config->set('livewire-forms.view_path', '/');
-
-            $config->set('view.paths', [__DIR__.'/../resources/views']);
         });
+
+        $this->copyResources();
+    }
+
+    protected function copyResources(): void
+    {
+        if (! ViewManager::themeExists('default')) {
+            File::copyDirectory(__DIR__.'/../resources/views/default/', resource_path('views'.'/'.config('livewire-forms.view_path').'/default'));
+        }
+
+        if (! ViewManager::viewExists('default')) {
+            File::copy(__DIR__.'/../resources/views/default.blade.php', resource_path('views'.'/'.config('livewire-forms.view_path').'/default.blade.php'));
+        }
     }
 }
