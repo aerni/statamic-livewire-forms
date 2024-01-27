@@ -12,7 +12,6 @@ use Aerni\LivewireForms\Fields\Properties\WithInstructionsPosition;
 use Aerni\LivewireForms\Fields\Properties\WithKey;
 use Aerni\LivewireForms\Fields\Properties\WithLabel;
 use Aerni\LivewireForms\Fields\Properties\WithRules;
-use Aerni\LivewireForms\Fields\Properties\WithShowLabel;
 use Aerni\LivewireForms\Fields\Properties\WithView;
 use Aerni\LivewireForms\Fields\Properties\WithWidth;
 use Aerni\LivewireForms\Fields\Properties\WithWireModel;
@@ -29,7 +28,6 @@ trait WithDefaultProperties
     use WithKey;
     use WithLabel;
     use WithRules;
-    use WithShowLabel;
     use WithView;
     use WithWidth;
     use WithWireModel;
