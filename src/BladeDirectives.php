@@ -20,7 +20,7 @@ class BladeDirectives
      */
     public static function formView(string $expression): string
     {
-        $variables = explode(', ', $expression);
+        $variables = explode(', ', $expression, 2);
 
         $view = $variables[0];
         $arguments = $variables[1] ?? '[]';
