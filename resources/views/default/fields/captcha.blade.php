@@ -1,7 +1,7 @@
 <div>
     @formView('messages.label')
 
-    @if($field->instructions_position == 'above')
+    @if($field->instructions && $field->instructions_position === 'above')
         @formView('messages.instructions')
     @endif
 </div>
@@ -19,13 +19,11 @@
     @endif
 ></div>
 
-<div>
-    @if($field->instructions_position == 'below')
-        @formView('messages.instructions')
-    @endif
-
+@if($errors->has($field->key))
     @formView('messages.error')
-</div>
+@elseif($field->instructions && $field->instructions_position === 'below')
+    @formView('messages.instructions')
+@endif
 
 @assets
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>

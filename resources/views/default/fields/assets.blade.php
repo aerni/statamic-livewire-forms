@@ -1,7 +1,7 @@
 <div>
     @formView('messages.label')
 
-    @if($field->instructions_position == 'above')
+    @if($field->instructions && $field->instructions_position === 'above')
         @formView('messages.instructions')
     @endif
 </div>
@@ -11,14 +11,14 @@
     name="{{ $field->id }}"
     type="file"
 
+    @if($field->multiple)
+        multiple
+    @endif
+
     @if($field->wire_model)
         wire:model.{{ $field->wire_model }}="{{ $field->key }}"
     @else
         wire:model="{{ $field->key }}"
-    @endif
-
-    @if($field->multiple)
-        multiple
     @endif
 
     @if(! $errors->has($field->key))
@@ -27,16 +27,14 @@
             aria-describedby="{{ $field->id }}-instructions"
         @endif
     @else
-        class="block w-full text-red-800"
+        class="block w-full text-red-900"
         aria-invalid="true"
         aria-describedby="{{ $field->id }}-error"
     @endif
 />
 
-<div>
-    @if($field->instructions_position == 'below')
-        @formView('messages.instructions')
-    @endif
-
+@if($errors->has($field->key))
     @formView('messages.error')
-</div>
+@elseif($field->instructions && $field->instructions_position === 'below')
+    @formView('messages.instructions')
+@endif

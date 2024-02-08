@@ -2,14 +2,14 @@
     <div>
         @formView('messages.legend')
 
-        @if($field->instructions_position == 'above')
+        @if($field->instructions && $field->instructions_position === 'above')
             @formView('messages.instructions')
         @endif
     </div>
 
-    <div class="flex {{ $field->inline ? 'items-start space-x-6' : 'flex-col space-y-3' }}">
+    <div class="flex {{ $field->inline ? 'items-start gap-x-6' : 'flex-col gap-y-2' }}">
         @foreach($field->options as $option => $label)
-            <div wire:key="{{ $field->id }}-{{ $option }}" class="flex items-start">
+            <div wire:key="{{ $field->id }}-{{ $option }}" class="flex items-start gap-x-3">
                 <div class="flex items-center h-5">
                     <input
                         id="{{ $field->id }}-{{ $option }}"
@@ -35,10 +35,11 @@
                         @endif
                     />
                 </div>
-                <div class="ml-3 text-sm">
+
+                <div class="text-sm leading-5">
                     <label
                         for="{{ $field->id }}-{{ $option }}"
-                        class="font-medium {{ $errors->has($field->key) ? 'text-red-700' : 'text-gray-700' }}"
+                        class="font-medium {{ $errors->has($field->key) ? 'text-red-800' : 'text-gray-900' }}"
                     >
                         {{ $label }}
                     </label>
@@ -47,11 +48,9 @@
         @endforeach
     </div>
 
-    <div>
-        @if($field->instructions_position == 'below')
-            @formView('messages.instructions')
-        @endif
-
+    @if($errors->has($field->key))
         @formView('messages.error')
-    </div>
+    @elseif($field->instructions && $field->instructions_position === 'below')
+        @formView('messages.instructions')
+    @endif
 </fieldset>

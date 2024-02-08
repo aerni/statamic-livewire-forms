@@ -1,6 +1,6 @@
 <legend
     id="{{ $field->id }}-legend"
-    class="text-sm font-medium text-gray-700"
+    class="text-sm font-medium text-gray-900"
 >
     {{ $field->label }}
 </legend>
