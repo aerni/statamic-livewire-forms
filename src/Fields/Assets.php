@@ -27,8 +27,11 @@ class Assets extends Field
             return $rules;
         }
 
+        /* Remove validation rules that would only work if multiple is enabled */
         $rules = collect(array_first($rules))
-            ->filter(fn ($rule) => ! in_array($rule, ['array', 'max:1']))
+            ->filter(fn ($rule) => $rule !== 'array')
+            ->filter(fn ($rule) => $rule !== "min:{$this->min_files}")
+            ->filter(fn ($rule) => $rule !== "max:{$this->max_files}")
             ->values()->all();
 
         return [$this->key => $rules];
