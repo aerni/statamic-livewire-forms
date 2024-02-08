@@ -42,4 +42,15 @@ class Select extends Field
         // Fall back to simply return the first option.
         return array_key_first($options);
     }
+
+    protected function rulesProperty(string|array|null $rules = null): array
+    {
+        $rules = array_first(parent::rulesProperty($rules));
+
+        if ($this->multiple && $this->max_items) {
+            $rules[] = "max:{$this->max_items}";
+        }
+
+        return [$this->key => $rules];
+    }
 }
