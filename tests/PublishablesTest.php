@@ -1,7 +1,5 @@
 <?php
 
-use Aerni\LivewireForms\Facades\ViewManager;
-
 it('publishes assets after install', function () {
     Artisan::call('statamic:install');
 

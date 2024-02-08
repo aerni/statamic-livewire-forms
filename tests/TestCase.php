@@ -2,13 +2,13 @@
 
 namespace Aerni\LivewireForms\Tests;
 
-use Statamic\Facades\File;
-use Statamic\Extend\Manifest;
-use Livewire\LivewireServiceProvider;
+use Aerni\LivewireForms\Facades\ViewManager;
 use Aerni\LivewireForms\ServiceProvider;
 use Illuminate\Contracts\Config\Repository;
-use Aerni\LivewireForms\Facades\ViewManager;
+use Livewire\LivewireServiceProvider;
 use Orchestra\Testbench\TestCase as Orchestra;
+use Statamic\Extend\Manifest;
+use Statamic\Facades\File;
 use Statamic\Providers\StatamicServiceProvider;
 
 class TestCase extends Orchestra
