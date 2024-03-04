@@ -31,13 +31,13 @@ class ServiceProvider extends AddonServiceProvider
     public function bootAddon()
     {
         $this
-            ->registerBladeDirectives()
-            ->registerValidators()
-            ->registerLivewire()
-            ->registerSelectableFieldtypes();
+            ->bootBladeDirectives()
+            ->bootValidators()
+            ->bootLivewire()
+            ->bootSelectableFieldtypes();
     }
 
-    protected function registerBladeDirectives(): self
+    protected function bootBladeDirectives(): self
     {
         foreach (get_class_methods(BladeDirectives::class) as $method) {
             Blade::directive($method, [BladeDirectives::class, $method]);
@@ -46,7 +46,7 @@ class ServiceProvider extends AddonServiceProvider
         return $this;
     }
 
-    protected function registerValidators(): self
+    protected function bootValidators(): self
     {
         Validator::extend('captcha', function ($attribute, $value) {
             return Captcha::verifyResponse($value, request()->getClientIp());
@@ -55,7 +55,7 @@ class ServiceProvider extends AddonServiceProvider
         return $this;
     }
 
-    protected function registerLivewire(): self
+    protected function bootLivewire(): self
     {
         Livewire::component('form', DynamicForm::class);
         Livewire::component('default-form', Form::class);
@@ -64,7 +64,7 @@ class ServiceProvider extends AddonServiceProvider
         return $this;
     }
 
-    protected function registerSelectableFieldtypes(): self
+    protected function bootSelectableFieldtypes(): self
     {
         \Statamic\Fieldtypes\Hidden::makeSelectableInForms();
 
