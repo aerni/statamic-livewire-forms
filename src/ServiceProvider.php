@@ -31,18 +31,10 @@ class ServiceProvider extends AddonServiceProvider
     public function bootAddon()
     {
         $this
-            ->registerTranslations()
             ->registerBladeDirectives()
             ->registerValidators()
             ->registerLivewire()
             ->registerSelectableFieldtypes();
-    }
-
-    protected function registerTranslations(): self
-    {
-        $this->loadTranslationsFrom(__DIR__.'/../resources/lang', 'livewire-forms');
-
-        return $this;
     }
 
     protected function registerBladeDirectives(): self
