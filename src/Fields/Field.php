@@ -2,13 +2,13 @@
 
 namespace Aerni\LivewireForms\Fields;
 
-use Livewire\Component;
-use Illuminate\Support\Arr;
-use Statamic\Fields\Field as FormField;
-use Illuminate\Contracts\Support\Arrayable;
-use Statamic\Support\Traits\FluentlyGetsAndSets;
 use Aerni\LivewireForms\Fields\Concerns\HandlesProperties;
 use Aerni\LivewireForms\Fields\Concerns\WithDefaultProperties;
+use Illuminate\Contracts\Support\Arrayable;
+use Illuminate\Support\Arr;
+use Livewire\Component;
+use Statamic\Fields\Field as FormField;
+use Statamic\Support\Traits\FluentlyGetsAndSets;
 
 abstract class Field implements Arrayable
 {
