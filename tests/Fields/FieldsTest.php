@@ -16,7 +16,7 @@ beforeEach(function () {
     $this->component = Livewire::test('default-form', [
         'handle' => 'contact',
         'theme' => 'default',
-        'view' => 'default'
+        'view' => 'default',
     ])->instance();
 
     $this->field = Text::make(
