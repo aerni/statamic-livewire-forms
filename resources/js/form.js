@@ -17,7 +17,8 @@ export default () => ({
 
             fields[key] = {
                 visible: passesConditions && !field.properties.hidden,
-                submittable: field.properties.always_save || passesConditions
+                submittable: field.properties.always_save || passesConditions,
+                section: field.section
             }
 
             this.$wire.submittableFields[key] = fields[key].submittable
@@ -26,11 +27,25 @@ export default () => ({
         }, {})
     },
 
+    fieldsBySection(section) {
+        return Object.entries(this.fields).reduce((sections, [key, field]) => {
+            let section = field.section;
+
+            if (! sections[section]) {
+                sections[section] = {};
+            }
+
+            sections[section][key] = field;
+
+            return sections;
+        }, {})[section];
+    },
+
     showField(field) {
         return this.fields[field].visible
     },
 
-    showSection(fields) {
-        return Object.entries(fields).some(([field]) => this.fields[field].visible)
-    }
+    showSection(section) {
+        return Object.entries(this.fieldsBySection(section)).some(([field]) => this.fields[field].visible)
+    },
 })

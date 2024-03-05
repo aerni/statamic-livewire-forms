@@ -1,5 +1,5 @@
 <section
-    x-show="showSection({{ $section['fields'] }})"
+    x-show="showSection('{{ $section['handle'] }}')"
     wire:key="{{ $section['id'] }}"
     aria-labelledby="{{ $section['id'] }}-label"
     aria-describedby="{{ $section['id'] }}-instructions"

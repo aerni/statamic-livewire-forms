@@ -2,12 +2,13 @@
 
 namespace Aerni\LivewireForms\Fields;
 
+use Livewire\Component;
+use Illuminate\Support\Arr;
+use Statamic\Fields\Field as FormField;
+use Illuminate\Contracts\Support\Arrayable;
+use Statamic\Support\Traits\FluentlyGetsAndSets;
 use Aerni\LivewireForms\Fields\Concerns\HandlesProperties;
 use Aerni\LivewireForms\Fields\Concerns\WithDefaultProperties;
-use Illuminate\Contracts\Support\Arrayable;
-use Livewire\Component;
-use Statamic\Fields\Field as FormField;
-use Statamic\Support\Traits\FluentlyGetsAndSets;
 
 abstract class Field implements Arrayable
 {
@@ -52,10 +53,19 @@ abstract class Field implements Arrayable
         return $this;
     }
 
+    public function section(): ?string
+    {
+        $section = $this->component->sections()
+            ->firstWhere(fn ($section) => $section['fields']->has($this->handle));
+
+        return Arr::get($section, 'handle');
+    }
+
     public function toArray(): array
     {
         return [
             'handle' => $this->field->handle(),
+            'section' => $this->section(),
             'config' => $this->field->config(),
             'properties' => $this->properties(),
             'value' => $this->value(),
