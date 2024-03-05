@@ -4,8 +4,8 @@ namespace Aerni\LivewireForms\Fields\Properties;
 
 trait WithInstructions
 {
-    protected function instructionsProperty(): ?string
+    protected function instructionsProperty(?string $instructions = null): ?string
     {
-        return __($this->field->get('instructions'));
+        return __($instructions ?? $this->field->get('instructions'));
     }
 }

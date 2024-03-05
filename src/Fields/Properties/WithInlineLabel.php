@@ -4,8 +4,8 @@ namespace Aerni\LivewireForms\Fields\Properties;
 
 trait WithInlineLabel
 {
-    protected function inlineLabelProperty(): ?string
+    protected function inlineLabelProperty(?string $inlineLabel = null): ?string
     {
-        return __($this->field->get('inline_label'));
+        return __($inlineLabel ?? $this->field->get('inline_label'));
     }
 }

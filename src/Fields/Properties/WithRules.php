@@ -2,10 +2,16 @@
 
 namespace Aerni\LivewireForms\Fields\Properties;
 
+use Statamic\Fields\Validator;
+
 trait WithRules
 {
-    protected function rulesProperty(): array
+    protected function rulesProperty(string|array|null $rules = null): array
     {
-        return array_flatten($this->field->rules());
+        $rules = is_null($rules)
+            ? array_flatten($this->field->rules())
+            : Validator::explodeRules($rules);
+
+        return [$this->key => $rules];
     }
 }

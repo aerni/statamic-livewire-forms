@@ -6,6 +6,6 @@ trait WithId
 {
     protected function idProperty(): string
     {
-        return "{$this->id}_{$this->handle()}";
+        return "{$this->component->getId()}-field-{$this->handle}";
     }
 }

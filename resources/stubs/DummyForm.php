@@ -3,21 +3,28 @@
 namespace App\Livewire;
 
 use Aerni\LivewireForms\Form\Fields;
-use Aerni\LivewireForms\Livewire\BaseForm;
+use Aerni\LivewireForms\Livewire\Form;
+use Illuminate\Support\Collection;
+use Statamic\Contracts\Forms\Submission;
 
-class DummyForm extends BaseForm
+class DummyForm extends Form
 {
     /*
     |--------------------------------------------------------------------------
-    | Initialize Properties
+    | Initializing Properties
     |--------------------------------------------------------------------------
     |
-    | You may override the form's view and theme.
+    | You may assign the public properties in the mount instead of passing them
+    | to the component in the view.
     |
     */
 
-    // protected static $VIEW = 'default';
-    // protected static $THEME = 'default';
+    // public function mount(): void
+    // {
+    //     $this->handle = 'contact';
+    //     $this->theme = 'secondary';
+    //     $this->view = 'default';
+    // }
 
     /*
     |--------------------------------------------------------------------------
@@ -25,7 +32,7 @@ class DummyForm extends BaseForm
     |--------------------------------------------------------------------------
     |
     | You may add unique models that only apply to this form component.
-    | Use a field's handle as the key to only use the model for that field.
+    | Use a field's handle as the key to only use the model for that particular field.
     |
     */
 
@@ -36,34 +43,28 @@ class DummyForm extends BaseForm
 
     /*
     |--------------------------------------------------------------------------
-    | Callbacks & Hooks
+    | Lifecycle Hooks
     |--------------------------------------------------------------------------
     |
-    | You may use the following callbacks and hooks to modify fields and data
-    | at various lifecycle steps.
+    | You may use the following lifecycle hooks to modify fields and data
+    | at various steps in the forms lifecycle.
     |
     */
 
-    // protected function hydratedFields(Fields $fields): void
+    // public function mountedFields(Collection $fields): void
     // {
     //     $fields->get('name')->label('Your name');
     // }
 
-    // protected function submittingForm(): void
+    // public function hydrateFields(Collection $fields): void
     // {
-    //     $this->data['success'] = true;
+    //     $fields->get('name')->label('Your name');
     // }
 
-    // protected function createdSubmission(Submission $submission): void
+    // public function formSubmitted(Submission $submission): void
     // {
-    //     $title = $submission->augmentedValue('entry')->value()->title;
-    //
-    //     $submission->set('entry_title', $title);
-    // }
-
-    // protected function submittedForm(): void
-    // {
-    //     Newsletter::subscribe($this->data['email']);
+    //     $submission->set('created_at', now()->timestamp);
+    //     Newsletter::subscribe($submission->get('email'));
     // }
 
     /*
@@ -78,12 +79,12 @@ class DummyForm extends BaseForm
 
     // public function successMessage(): string
     // {
-    //     return __("Thank you, {$this->data['name']}!");
+    //     return __("Thank you, {$this->submission->get('name')}!");
     // }
 
     // public function errorMessage(): string
     // {
-    // return __("Something went terribly wrong!");
+    //     return __('Something went terribly wrong!');
     // }
 
     // public function submitButtonLabel(): string

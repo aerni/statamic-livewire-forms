@@ -17,4 +17,9 @@ class Captcha extends Fieldtype
     protected $rules = ['required', 'captcha'];
 
     protected $icon = 'lock';
+
+    public function process($data)
+    {
+        return null;
+    }
 }

@@ -3,7 +3,6 @@
 namespace Aerni\LivewireForms\Fields;
 
 use Aerni\LivewireForms\Fields\Properties\WithAutocomplete;
-use Aerni\LivewireForms\Fields\Properties\WithCastBooleans;
 use Aerni\LivewireForms\Fields\Properties\WithMultiple;
 use Aerni\LivewireForms\Fields\Properties\WithOptions;
 use Aerni\LivewireForms\Fields\Properties\WithPlaceholder;
@@ -11,23 +10,22 @@ use Aerni\LivewireForms\Fields\Properties\WithPlaceholder;
 class Select extends Field
 {
     use WithAutocomplete;
-    use WithCastBooleans;
     use WithMultiple;
     use WithOptions;
     use WithPlaceholder;
 
-    protected static string $view = 'select';
+    protected string $view = 'select';
 
-    protected function defaultProperty(): string|array|null
+    protected function defaultProperty(mixed $default = null): string|array|null
     {
-        $default = $this->field->defaultValue();
-        $options = $this->optionsProperty();
+        $default = $default ?? $this->field->defaultValue();
+        $options = $this->options;
 
         // A default is only valid if it exists in the options.
         $default = collect($options)->only($default ?? [])->keys();
 
         // Return all defaults if the Select field has multiple enabled.
-        if ($this->multipleProperty()) {
+        if ($this->multiple) {
             return $default->toArray();
         }
 
@@ -37,11 +35,22 @@ class Select extends Field
         }
 
         // If there is a placeholder we don't want to return a default.
-        if ($this->placeholderProperty()) {
+        if ($this->placeholder) {
             return null;
         }
 
         // Fall back to simply return the first option.
         return array_key_first($options);
+    }
+
+    protected function rulesProperty(string|array|null $rules = null): array
+    {
+        $rules = array_first(parent::rulesProperty($rules));
+
+        if ($this->multiple && $this->max_items) {
+            $rules[] = "max:{$this->max_items}";
+        }
+
+        return [$this->key => $rules];
     }
 }

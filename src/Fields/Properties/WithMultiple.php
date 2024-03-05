@@ -4,8 +4,8 @@ namespace Aerni\LivewireForms\Fields\Properties;
 
 trait WithMultiple
 {
-    protected function multipleProperty(): bool
+    protected function multipleProperty(?bool $multiple = null): bool
     {
-        return (bool) $this->field->get('multiple');
+        return $multiple ?? (bool) $this->field->get('multiple');
     }
 }

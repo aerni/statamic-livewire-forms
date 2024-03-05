@@ -4,8 +4,8 @@ namespace Aerni\LivewireForms\Fields\Properties;
 
 trait WithLabel
 {
-    protected function labelProperty(): ?string
+    protected function labelProperty(?string $label = null): ?string
     {
-        return __($this->field->get('display'));
+        return __($label ?? $this->field->get('display'));
     }
 }

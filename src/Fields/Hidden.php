@@ -4,15 +4,10 @@ namespace Aerni\LivewireForms\Fields;
 
 class Hidden extends Field
 {
-    protected static string $view = 'input';
+    protected string $view = 'default';
 
-    protected function alwaysSaveProperty(): bool
+    protected function hiddenProperty(?bool $hidden = null): bool
     {
         return true;
-    }
-
-    protected function showProperty(): bool
-    {
-        return false;
     }
 }
