@@ -13,8 +13,11 @@ beforeEach(function () {
 
     StatamicForm::make('contact')->save();
 
-    $this->component = Livewire::new('form');
-    $this->component->fill(['handle' => 'contact', 'theme' => 'default', 'view' => 'default']);
+    $this->component = Livewire::test('default-form', [
+        'handle' => 'contact',
+        'theme' => 'default',
+        'view' => 'default'
+    ])->instance();
 
     $this->field = Text::make(
         field: StatamicForm::find('contact')->fields()->get('name'),
@@ -121,6 +124,7 @@ it('caches a property when getting its value', function () {
 it('can get an array of the field', function () {
     $array = [
         'handle' => invade($this->field)->field->handle(),
+        'section' => $this->field->section(),
         'config' => invade($this->field)->field->config(),
         'properties' => $this->field->properties(),
         'value' => $this->field->value(),
