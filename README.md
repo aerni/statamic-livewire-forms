@@ -30,6 +30,7 @@ The following config will be published to `config/livewire-forms.php`:
 
 ```php
 return [
+
     /*
     |--------------------------------------------------------------------------
     | Field Models
@@ -119,7 +120,7 @@ There are a number of helpful commands to help you create views, themes and comp
 
 ### Prerequisite
 
-The default views of this addon are styled with [Tailwind CSS](https://tailwindcss.com/) and [@tailwindcss/forms](https://github.com/tailwindlabs/tailwindcss-forms).
+The views of this addon are styled with [Tailwind CSS](https://tailwindcss.com/) and [@tailwindcss/forms](https://github.com/tailwindlabs/tailwindcss-forms). However, you are free to change the views however you please.
 
 ### Run the setup command
 
@@ -171,7 +172,11 @@ Use the `view` and `theme` parameters if you want to use a view or theme that is
 
 ## Views
 
-Use the `livewire-forms:view` command to create a new view and customize it to your liking:
+Views are the entry point of your forms. You may use the same view for each form.
+
+### Creating a view
+
+Use the `livewire-forms:view` command to create a new view:
 
 ```bash
 php please livewire-forms:view
@@ -189,24 +194,30 @@ Views are autoloaded by the handle of a form. In the example below, it will try 
 
 There are a couple of blade directives you may use in your form views. The directives are aware of the form's theme and will render the views accordingly.
 
-| Directive                | Description                                                                 | View                      |
-| ------------------------ | --------------------------------------------------------------------------- | ------------------------- |
-| `@formSection('handle')` | Render a specific from section, e.g., `@formSection('contact_information')` | section.blade.php         |
-| `@formField('handle')`   | Render a specific form field, e.g., `@formField('first_name')`              | field.blade.php           |
-| `@formView('view')`      | Render a specific form view, e.g., `@formView('messages.label')`            | Whatever view you provide |
+| Directive                | Description                                                                      | View                      |
+| ------------------------ | -------------------------------------------------------------------------------- | ------------------------- |
+| `@formSection('handle')` | Render a specific form section, e.g., `@formSection('contact_information')`      | section.blade.php         |
+| `@formField('handle')`   | Render a specific form field, e.g., `@formField('first_name')`                   | field.blade.php           |
+| `@formView('view')`      | Render a specific view of the current theme, e.g., `@formView('messages.label')` | Whatever view you provide |
 
 ### Customization Example
 
-Sometimes you need more control over the markup of your form. If you decide to go completely custom, you can render single fields using the `@formField` directive. You may also add or override field properties using an array as the second argument.
+Sometimes you need more control over the markup of your form. Rather than relying on the form's blueprint, you may decide to go fully custom and render individual fields using the `@formField` directive.
+
+```blade
+@formField('name')
+```
+
+You may also add or override field properties using an array as the second argument.
 
 ```blade
 @formField('name', [
-    'label' => 'Name',
+    'label' => 'Your Name',
     'tooltip' => 'Please enter your full name'
 ])
 ```
 
-You can access the properties in the field's view like this:
+You can then access the properties in the field's view.
 
 ```blade
 {{ $field->label }}
@@ -215,7 +226,9 @@ You can access the properties in the field's view like this:
 
 ## Themes
 
-Themes allow you to customize the style and logic of your form views. You may have any number of themes. If a view doesn't exist in the theme applied to a form, it will fall back to the default theme set in `config/livewire-forms.php`.
+Themes allow you to fully customize each individual form view. You may have any number of themes.
+
+### Creating a theme
 
 Use the `livewire-forms:theme` command to create a new theme:
 
@@ -225,7 +238,7 @@ php please livewire-forms:theme
 
 ### Autoloading
 
-Themes are autoloaded by the handle of a form. In the example below, it will try to load the `contact` theme. If it doesn't exist, it will fall back to the default theme defined in `config/livewire-forms.php`.
+Themes are autoloaded by the handle of a form. In the example below, it will try to load the views of the `contact` theme. If the theme doesn't exist, it will fall back to the default theme defined in `config/livewire-forms.php`. If a single view of the selected theme doesn't exist, it will fall back to the default theme for that particular view.
 
 ```blade
 {{ livewire:form handle="contact" }}
@@ -234,15 +247,18 @@ Themes are autoloaded by the handle of a form. In the example below, it will try
 > **Good to know:** Future releases of this addon will likely introduce breaking changes to your views. In that case, you will have to manually update your views according to the changes.
 
 ### Field Views
-Each field will load the view by its type by default. For example, a `subscription` field of `type: radio`, will load the `radio.blade.php` view.
+
+By default, each field will load the view by its type. For example, a `subscription` field of `type: radio` will load the `radio.blade.php` view.
 
 Sometimes you may want to load a different view for a given field, like a fancy radio button group for selecting a subscription. Field views are autoloaded by the field's handle. In this example, you can simply create a `subscription.blade.php` view under the theme's `fields` folder to autoload your custom view.
 
-You may also manually override a field's view by adding `view: {the_name_of_the_view}` to the field's config in the blueprint.
+You may manually override a field's view by adding `view: {the_name_of_the_view}` to the field's config in the blueprint.
 
 ## Components
 
-Sometimes you need more control over your form. For instance, if you want to dynamically populate a select field's options. There are a couple of concepts that help you customize your form experience.
+Sometimes, you need more control over your form. For instance, if you want to dynamically populate a select field's options. There are a couple of concepts that help you customize your form experience.
+
+#### Creating a component
 
 Get started by creating a new component. The following example will create a new form component in `app/Livewire/ContactForm.php`
 
@@ -262,11 +278,11 @@ Custom components are autoloaded by matching the class name with the form's hand
 <livewire:form handle="contact">
 ```
 
->**Note:** The component's name needs to end with `Form` for Livewire Forms to do its autoloading magic, e.g., `ContactForm.php`.
+>**Note:** For the autoloading magic to work, the component's name needs to end with `Form`, e.g., `ContactForm.php.`
 
 ### Explicit Loading
 
-You can also explicitly load a custom component by name like you would with any other Livewire component. This is useful if need to pass additional properties to the component.
+You can also explicitly load a custom component by name like you would with any other Livewire component. This is necessary if you need to pass additional custom properties to the component.
 
 ```blade
 <!-- Antlers -->
@@ -494,24 +510,9 @@ protected function messages(): array
 }
 ```
 
-## Field configuration
-
-There are a couple of configuration options for your form fields:
-
-| Parameter       | Type                                    | Supported by                   | Description                                                                                                                            |
-| :-------------- | :-------------------------------------- | :----------------------------- | :------------------------------------------------------------------------------------------------------------------------------------- |
-| `autocomplete`  | `string`                                | `default`, `textarea`, `select`  | Set the field's [autocomplete](https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/autocomplete) attribute. Defaults to `on`. |
-| `cast_booleans` | `boolean`                               | `radio`, `select`              | String values of `true` and `false` will be saved as booleans. |
-| `default`       | `array`, `boolean`, `integer`, `string` | All fieldtypes except `assets` | Set the field's default value |
-| `inline`        | `boolean`                               | `checkboxes`, `radio`          | Set to `true` to display the fields inline |
-| `placeholder`   | `string`                                | `default`, `textarea`            | Set the field's placeholder value |
-| `show_label`    | `boolean`                               | All fieldtypes                 | Set to `false` to hide the field's label and instructions. |
-| `width`         | `integer`                               | All fieldtypes                 | Set the desired width of the field. |
-| `wire_model`    | `string`                                | All fieldtypes                 | Customize `wire:model`, e.g. `wire_model: live.debounce.150ms`. |
-
 ## Localization
 
-There are a few default message strings like the `submit button label` and `success message` that you might want to change. You can change the messages globally or on a per form level.
+There are a few default message strings, like the `submit button label` and `success message` that you might want to change. You can change the messages globally or on a per-form level.
 
 ### Globally
 
