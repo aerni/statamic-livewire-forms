@@ -497,7 +497,7 @@ You can customize the validation messages of your fields by creating a [custom f
 
 ```php
 protected $messages = [
-    'data.name.required' => 'What is your name darling?',
+    'fields.name.value.required' => 'What is your name, darling?',
 ];
 ```
 
@@ -507,7 +507,7 @@ protected $messages = [
 protected function messages(): array
 {
     return [
-        'data.name.required' => 'What is your name darling?',
+        'fields.name.value.required' => 'What is your name, darling?',
     ];
 }
 ```
