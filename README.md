@@ -455,11 +455,13 @@ Lastly, we need to render our new `ContactForm` component in the template.
 
 ### Validation Rules
 
-You can use any validation rule you want. Simply add it to the field in the form blueprint or use the blueprint builder in the CP. If you have validation rules like `required_if`, make sure to prefix the field with `data`.
+You can use any validation rule you want. Simply add it to the field in the form blueprint or use the blueprint builder in the CP. 
+
+To validate against the value of another field, you need to get its value like in the following example:
 
 ```yaml
 validate:
-  - 'required_if:data.newsletter,true'
+  - 'required_if:fields.newsletter.value,true'
 ```
 
 ### Real-time Validation
