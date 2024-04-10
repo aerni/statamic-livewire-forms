@@ -2,14 +2,15 @@
 
 namespace Aerni\LivewireForms;
 
-use Aerni\LivewireForms\Facades\Captcha;
-use Aerni\LivewireForms\Livewire\DynamicForm;
-use Aerni\LivewireForms\Livewire\Form;
-use Aerni\LivewireForms\Livewire\Synthesizers\FieldSynth;
-use Illuminate\Support\Facades\Blade;
-use Illuminate\Support\Facades\Validator;
 use Livewire\Livewire;
+use Illuminate\Support\Facades\Blade;
+use Aerni\LivewireForms\Livewire\Form;
+use Aerni\LivewireForms\Facades\Captcha;
+use Illuminate\Support\Facades\Validator;
 use Statamic\Providers\AddonServiceProvider;
+use Aerni\LivewireForms\Livewire\DynamicForm;
+use Aerni\LivewireForms\Livewire\Synthesizers\RuleSynth;
+use Aerni\LivewireForms\Livewire\Synthesizers\FieldSynth;
 
 class ServiceProvider extends AddonServiceProvider
 {
@@ -60,6 +61,7 @@ class ServiceProvider extends AddonServiceProvider
         Livewire::component('form', DynamicForm::class);
         Livewire::component('default-form', Form::class);
         Livewire::propertySynthesizer(FieldSynth::class);
+        Livewire::propertySynthesizer(RuleSynth::class);
 
         return $this;
     }

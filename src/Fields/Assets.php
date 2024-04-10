@@ -27,6 +27,7 @@ class Assets extends Field
             return $rules;
         }
 
+        // TODO: Do we still need this?
         /* Remove validation rules that would only work if multiple is enabled */
         $rules = collect(array_first($rules))
             ->filter(fn ($rule) => $rule !== 'array')

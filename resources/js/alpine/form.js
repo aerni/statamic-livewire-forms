@@ -1,4 +1,4 @@
-import FieldConditions from '../../vendor/statamic/cms/resources/js/frontend/components/FieldConditions.js';
+import FieldConditions from '../../../vendor/statamic/cms/resources/js/frontend/components/FieldConditions.js';
 
 export default () => ({
     fields: {},
@@ -18,7 +18,8 @@ export default () => ({
             fields[key] = {
                 visible: passesConditions && !field.properties.hidden,
                 submittable: field.properties.always_save || passesConditions,
-                section: field.section
+                section: field.section,
+                config: field.properties
             }
 
             this.$wire.submittableFields[key] = fields[key].submittable

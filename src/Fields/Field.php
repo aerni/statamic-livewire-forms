@@ -15,7 +15,7 @@ abstract class Field implements Arrayable
     use HandlesProperties;
     use WithDefaultProperties;
 
-    protected mixed $value = null;
+    public mixed $value = null;
 
     public function __construct(protected FormField $field)
     {
