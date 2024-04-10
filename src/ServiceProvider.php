@@ -2,15 +2,15 @@
 
 namespace Aerni\LivewireForms;
 
-use Livewire\Livewire;
-use Illuminate\Support\Facades\Blade;
-use Aerni\LivewireForms\Livewire\Form;
 use Aerni\LivewireForms\Facades\Captcha;
-use Illuminate\Support\Facades\Validator;
-use Statamic\Providers\AddonServiceProvider;
 use Aerni\LivewireForms\Livewire\DynamicForm;
-use Aerni\LivewireForms\Livewire\Synthesizers\RuleSynth;
+use Aerni\LivewireForms\Livewire\Form;
 use Aerni\LivewireForms\Livewire\Synthesizers\FieldSynth;
+use Aerni\LivewireForms\Livewire\Synthesizers\RuleSynth;
+use Illuminate\Support\Facades\Blade;
+use Illuminate\Support\Facades\Validator;
+use Livewire\Livewire;
+use Statamic\Providers\AddonServiceProvider;
 
 class ServiceProvider extends AddonServiceProvider
 {
