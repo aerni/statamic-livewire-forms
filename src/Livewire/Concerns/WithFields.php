@@ -28,6 +28,11 @@ trait WithFields
         //
     }
 
+    public function updatedFields($value, $key): void
+    {
+        $this->validateOnly("fields.{$key}");
+    }
+
     protected function fields(): Collection
     {
         $fields = $this->form->fields()->map(function ($field) {
