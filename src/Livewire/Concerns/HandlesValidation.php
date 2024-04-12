@@ -4,7 +4,7 @@ namespace Aerni\LivewireForms\Livewire\Concerns;
 
 trait HandlesValidation
 {
-    public function updated(string $field): void
+    public function updatedFields(string $field): void
     {
         $this->validateOnly($field);
     }
