@@ -60,11 +60,11 @@ trait WithFields
     {
         return $this->form->blueprint()->tabs()->first()->sections()
             ->map(function ($section, $index) {
-                $handle = $section->display() ? Str::snake($section->display()) : $index;
+                $order = $index + 1;
 
                 return [
-                    'handle' => $handle,
-                    'id' => "{$this->getId()}-section-{$index}-{$handle}",
+                    'handle' => Str::snake($section->display() ?? $order),
+                    'id' => "{$this->getId()}-section-{$order}",
                     'display' => __($section->display()),
                     'instructions' => __($section->instructions()),
                     'fields' => $this->fields->intersectByKeys($section->fields()->all()),
