@@ -2,13 +2,13 @@
 
 namespace Aerni\LivewireForms\Fields;
 
+use Livewire\Livewire;
+use Illuminate\Support\Arr;
+use Statamic\Fields\Field as FormField;
+use Illuminate\Contracts\Support\Arrayable;
+use Statamic\Support\Traits\FluentlyGetsAndSets;
 use Aerni\LivewireForms\Fields\Concerns\HandlesProperties;
 use Aerni\LivewireForms\Fields\Concerns\WithDefaultProperties;
-use Illuminate\Contracts\Support\Arrayable;
-use Illuminate\Support\Arr;
-use Livewire\Component;
-use Statamic\Fields\Field as FormField;
-use Statamic\Support\Traits\FluentlyGetsAndSets;
 
 abstract class Field implements Arrayable
 {
@@ -18,15 +18,14 @@ abstract class Field implements Arrayable
 
     protected mixed $value = null;
 
-    public function __construct(
-        protected FormField $field,
-        protected Component $component,
-    ) {
+    public function __construct(protected FormField $field)
+    {
+        //
     }
 
-    public static function make(FormField $field, Component $component): self
+    public static function make(FormField $field): self
     {
-        return new static($field, $component);
+        return new static($field);
     }
 
     public function validationAttributes(): array
@@ -55,7 +54,7 @@ abstract class Field implements Arrayable
 
     public function section(): ?string
     {
-        $section = $this->component->sections()
+        $section = Livewire::current()->sections()
             ->firstWhere(fn ($section) => $section['fields']->has($this->handle));
 
         return Arr::get($section, 'handle');

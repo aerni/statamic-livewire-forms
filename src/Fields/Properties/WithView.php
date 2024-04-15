@@ -2,6 +2,7 @@
 
 namespace Aerni\LivewireForms\Fields\Properties;
 
+use Livewire\Livewire;
 use Aerni\LivewireForms\Facades\ViewManager;
 
 trait WithView
@@ -22,6 +23,6 @@ trait WithView
 
     protected function viewExists(string $view): bool
     {
-        return ViewManager::themeViewExists($this->component->theme, $view);
+        return ViewManager::themeViewExists(Livewire::current()->theme, $view);
     }
 }
