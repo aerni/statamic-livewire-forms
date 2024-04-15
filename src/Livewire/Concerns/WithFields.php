@@ -59,6 +59,8 @@ trait WithFields
     public function sections(): Collection
     {
         return $this->form->blueprint()->tabs()->first()->sections()
+            ->filter(fn ($section) => $section->fields()->all()->isNotEmpty())
+            ->values()
             ->map(function ($section, $index) {
                 $order = $index + 1;
 
@@ -69,8 +71,7 @@ trait WithFields
                     'instructions' => __($section->instructions()),
                     'fields' => $this->fields->intersectByKeys($section->fields()->all()),
                 ];
-            })
-            ->filter(fn ($section) => $section['fields']->isNotEmpty());
+            });
     }
 
     public function section(string $handle): ?array
