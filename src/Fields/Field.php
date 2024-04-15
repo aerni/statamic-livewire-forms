@@ -5,7 +5,6 @@ namespace Aerni\LivewireForms\Fields;
 use Aerni\LivewireForms\Fields\Concerns\HandlesProperties;
 use Aerni\LivewireForms\Fields\Concerns\WithDefaultProperties;
 use Illuminate\Contracts\Support\Arrayable;
-use Illuminate\Support\Arr;
 use Livewire\Livewire;
 use Statamic\Fields\Field as FormField;
 use Statamic\Support\Traits\FluentlyGetsAndSets;

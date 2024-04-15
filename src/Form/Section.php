@@ -2,8 +2,8 @@
 
 namespace Aerni\LivewireForms\Form;
 
-use Illuminate\Support\Str;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
 use Livewire\Livewire;
 
 class Section
