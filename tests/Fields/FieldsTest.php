@@ -1,10 +1,11 @@
 <?php
 
-use Aerni\LivewireForms\Exceptions\ReadOnlyPropertyException;
-use Aerni\LivewireForms\Fields\Text;
 use Livewire\Livewire;
 use Statamic\Facades\Blueprint;
+use Aerni\LivewireForms\Fields\Text;
 use Statamic\Facades\Form as StatamicForm;
+use Livewire\Mechanisms\HandleComponents\HandleComponents;
+use Aerni\LivewireForms\Exceptions\ReadOnlyPropertyException;
 
 beforeEach(function () {
     Blueprint::makeFromFields([
@@ -13,16 +14,15 @@ beforeEach(function () {
 
     StatamicForm::make('contact')->save();
 
-    $this->component = Livewire::test('default-form', [
+    $component = Livewire::test('default-form', [
         'handle' => 'contact',
         'theme' => 'default',
         'view' => 'default',
     ])->instance();
 
-    $this->field = Text::make(
-        field: StatamicForm::find('contact')->fields()->get('name'),
-        component: $this->component
-    );
+    array_push(app(HandleComponents::class)::$componentStack, $component);
+
+    $this->field = Text::make(StatamicForm::find('contact')->fields()->get('name'));
 });
 
 afterEach(function () {
