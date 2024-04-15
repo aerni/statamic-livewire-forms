@@ -34,7 +34,7 @@ class Setup extends Command
 
     protected function makeComponent(): void
     {
-        if (confirm(label: 'Do you want to create a form component to customize the default behaviour?')) {
+        if (confirm(label: 'Do you want to create a Livewire component to customize the behaviour of the form?')) {
             $this->call('livewire-forms:component');
         }
     }
