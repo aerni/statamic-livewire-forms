@@ -35,11 +35,15 @@ class BladeDirectives
      */
     public static function formSection(string $expression): string
     {
-        return Blade::compileString("
-            @formView('layouts.section', [
-                'section' => \$this->section($expression),
-            ])
-        ");
+        return "<?php
+            \$section = \$this->section($expression);
+
+            if (! \$section) {
+                throw new \InvalidArgumentException(\"The section $expression doesn't exist in the form's blueprint.\");
+            }
+
+            echo view(\Aerni\LivewireForms\Facades\ViewManager::themeViewPath(\$this->theme, 'layouts.section'), ['section' => \$section]);
+        ?>";
     }
 
     /**
@@ -53,13 +57,17 @@ class BladeDirectives
         $properties = $variables[1] ?? '[]';
 
         return "<?php
-            if (\$field = \$this->fields->get($field)) {
-                foreach ($properties as \$property => \$value) {
-                    \$field->\$property(\$value);
-                }
+            \$field = \$this->fields->get($field);
 
-                echo view(\Aerni\LivewireForms\Facades\ViewManager::themeViewPath(\$this->theme, 'layouts.field'), ['field' => \$field]);
+            if (! \$field) {
+                throw new \InvalidArgumentException(\"The field $field doesn't exist in the form's blueprint.\");
             }
+
+            foreach ($properties as \$property => \$value) {
+                \$field->\$property(\$value);
+            }
+
+            echo view(\Aerni\LivewireForms\Facades\ViewManager::themeViewPath(\$this->theme, 'layouts.field'), ['field' => \$field]);
         ?>";
     }
 }
