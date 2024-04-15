@@ -2,8 +2,8 @@
 
 namespace Aerni\LivewireForms\Fields\Properties;
 
-use Livewire\Livewire;
 use Aerni\LivewireForms\Facades\ViewManager;
+use Livewire\Livewire;
 
 trait WithView
 {

@@ -8,6 +8,6 @@ trait WithId
 {
     protected function idProperty(): string
     {
-        return Livewire::current()->getId() . '-field-' . $this->handle;
+        return Livewire::current()->getId().'-field-'.$this->handle;
     }
 }
