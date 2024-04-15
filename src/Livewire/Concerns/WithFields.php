@@ -2,12 +2,12 @@
 
 namespace Aerni\LivewireForms\Livewire\Concerns;
 
-use Aerni\LivewireForms\Fields\Captcha;
-use Aerni\LivewireForms\Fields\Field;
-use Aerni\LivewireForms\Fields\Honeypot;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Str;
 use Livewire\Attributes\Computed;
+use Illuminate\Support\Collection;
+use Aerni\LivewireForms\Fields\Field;
+use Aerni\LivewireForms\Form\Section;
+use Aerni\LivewireForms\Fields\Captcha;
+use Aerni\LivewireForms\Fields\Honeypot;
 use Statamic\Fields\Field as StatamicField;
 
 trait WithFields
@@ -61,22 +61,17 @@ trait WithFields
         return $this->form->blueprint()->tabs()->first()->sections()
             ->filter(fn ($section) => $section->fields()->all()->isNotEmpty())
             ->values()
-            ->map(function ($section, $index) {
-                $order = $index + 1;
-
-                return [
-                    'handle' => Str::snake($section->display() ?? $order),
-                    'id' => "{$this->getId()}-section-{$order}",
-                    'display' => __($section->display()),
-                    'instructions' => __($section->instructions()),
-                    'fields' => $this->fields->intersectByKeys($section->fields()->all()),
-                ];
-            });
+            ->map(fn ($section, $index) => (new Section(
+                fields: $this->fields->intersectByKeys($section->fields()->all()),
+                order: $index + 1,
+                display: $section->display(),
+                instructions: $section->instructions(),
+            )));
     }
 
-    public function section(string $handle): ?array
+    public function section(string $handle): ?Section
     {
-        return $this->sections()->firstWhere('handle', $handle);
+        return $this->sections->firstWhere(fn ($section) => $section->handle() === $handle);
     }
 
     #[Computed]

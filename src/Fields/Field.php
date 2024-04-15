@@ -54,10 +54,9 @@ abstract class Field implements Arrayable
 
     public function section(): ?string
     {
-        $section = Livewire::current()->sections()
-            ->firstWhere(fn ($section) => $section['fields']->has($this->handle));
-
-        return Arr::get($section, 'handle');
+        return Livewire::current()->sections()
+            ->firstWhere(fn ($section) => $section->fields()->has($this->handle))
+            ?->handle(); /* The honeypot field doesn't have a section, which is why this will return */
     }
 
     public function toArray(): array
