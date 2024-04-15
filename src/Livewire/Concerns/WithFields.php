@@ -3,11 +3,12 @@
 namespace Aerni\LivewireForms\Livewire\Concerns;
 
 use Aerni\LivewireForms\Fields\Captcha;
+use Aerni\LivewireForms\Fields\Field;
 use Aerni\LivewireForms\Fields\Honeypot;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use Livewire\Attributes\Computed;
-use Statamic\Fields\Field;
+use Statamic\Fields\Field as StatamicField;
 
 trait WithFields
 {
@@ -35,20 +36,23 @@ trait WithFields
 
     protected function fields(): Collection
     {
-        $fields = $this->form->fields()->map(function ($field) {
-            $fieldtype = $field->fieldtype()::class;
+        $honeypot = Honeypot::make(new StatamicField($this->form->honeypot(), []));
 
-            $class = $this->models()->get($field->handle())
-                ?? $this->models()->get($fieldtype);
+        return $this->form->fields()
+            ->map(fn ($field) => $this->makeFieldFromModel($field))
+            ->put($honeypot->handle, $honeypot);
+    }
 
-            return $class
-                ? $class::make($field)
-                : throw new \Exception("The field model binding for fieldtype [{$fieldtype}] cannot be found.");
-        });
+    protected function makeFieldFromModel(StatamicField $field): Field
+    {
+        $fieldtype = $field->fieldtype()::class;
 
-        $honeypot = Honeypot::make(new Field($this->form->honeypot(), []));
+        $class = $this->models()->get($field->handle())
+            ?? $this->models()->get($fieldtype);
 
-        return $fields->put($honeypot->handle, $honeypot);
+        return $class
+            ? $class::make($field)
+            : throw new \Exception("The field model binding for fieldtype [{$fieldtype}] cannot be found.");
     }
 
     #[Computed]
