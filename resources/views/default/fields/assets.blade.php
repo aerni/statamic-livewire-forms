@@ -6,14 +6,27 @@
     @endif
 </div>
 
-<div x-data="filepond({
-        field: '{{ $field->handle }}',
-        locale: @antlers'{{ site:attributes:filepond_locale ?? 'en-en' }}'@endantlers,
-    })"
-    x-on:form-reset.window="reset($event.detail.id)"
-    wire:ignore
+<div
+    id="{{ $field->id }}"
+    @if(! $errors->has($field->key))
+        @if($field->instructions)
+            aria-describedby="{{ $field->id }}-instructions"
+        @endif
+    @else
+        aria-invalid="true"
+        aria-describedby="{{ $field->id }}-error"
+    @endif
 >
-    <input type="file" x-ref="input" />
+    <div
+        x-data="filepond({
+            field: '{{ $field->handle }}',
+            locale: @antlers'{{ site:attributes:filepond_locale ?? 'en-en' }}'@endantlers,
+        })"
+        x-on:form-reset.window="reset($event.detail.id)"
+        wire:ignore
+    >
+        <input type="file" x-ref="input" />
+    </div>
 </div>
 
 @if($errors->has($field->key))
