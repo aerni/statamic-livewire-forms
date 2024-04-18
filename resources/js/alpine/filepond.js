@@ -1,7 +1,8 @@
 import * as FilePond from 'filepond';
-// import FilePondPluginFileValidateSize from 'filepond-plugin-file-validate-size';
-// import FilePondPluginFileValidateType from 'filepond-plugin-file-validate-type';
+import FilePondPluginFileValidateSize from 'filepond-plugin-file-validate-size';
+import FilePondPluginFileValidateType from 'filepond-plugin-file-validate-type';
 import FilePondPluginImagePreview from 'filepond-plugin-image-preview';
+import FilePondPluginImageValidateSize from 'filepond-plugin-image-validate-size';
 import ar_AR from 'filepond/locale/ar-ar';
 import az_AZ from 'filepond/locale/az-az';
 import cs_CZ from 'filepond/locale/cs-cz';
@@ -74,23 +75,29 @@ const locales = {
 
 export default (config) => ({
     init() {
-        let fieldConfig = this.$wire.fields[config.field].properties;
+        const field = this.$wire.fields[config.field].properties;
 
         FilePond.registerPlugin(FilePondPluginFileValidateSize);
         FilePond.registerPlugin(FilePondPluginFileValidateType);
         FilePond.registerPlugin(FilePondPluginImagePreview);
+        FilePond.registerPlugin(FilePondPluginImageValidateSize);
 
         FilePond.setOptions({
-            allowMultiple: fieldConfig.multiple ? 'true' : 'false',
-            // maxFileSize: '500KB',
-            // acceptedFileTypes: ['image/jpg'],
+            allowMultiple: field.multiple,
+            minFileSize: field.file_size.min ? `${field.file_size.min}KB` : null,
+            maxFileSize: field.file_size.max ? `${field.file_size.max}KB` : null,
+            acceptedFileTypes: field.file_types,
+            imageValidateSizeMinWidth: field.dimensions.min_width ?? 1,
+            imageValidateSizeMinHeight: field.dimensions.min_height ?? 1,
+            imageValidateSizeMaxWidth: field.dimensions.max_width ?? 65535,
+            imageValidateSizeMaxHeight: field.dimensions.max_height ?? 65535,
             credits: false,
             server: {
                 process: (fieldName, file, metadata, load, error, progress, abort, transfer, options) => {
-                    this.$wire.upload(fieldConfig.key, file, load, error, progress)
+                    this.$wire.upload(field.key, file, load, error, progress)
                 },
                 revert: (filename, load) => {
-                    this.$wire.removeUpload(fieldConfig.key, filename, load)
+                    this.$wire.removeUpload(field.key, filename, load)
                 },
             },
         });

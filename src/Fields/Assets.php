@@ -2,8 +2,15 @@
 
 namespace Aerni\LivewireForms\Fields;
 
-use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
+use Symfony\Component\Mime\MimeTypes;
+use Statamic\Fieldtypes\Assets\MaxRule;
+use Statamic\Fieldtypes\Assets\MinRule;
+use Statamic\Fieldtypes\Assets\ImageRule;
+use Statamic\Fieldtypes\Assets\MimesRule;
 use Statamic\Forms\Uploaders\AssetsUploader;
+use Statamic\Fieldtypes\Assets\MimetypesRule;
+use Statamic\Fieldtypes\Assets\DimensionsRule;
 
 class Assets extends Field
 {
@@ -14,33 +21,52 @@ class Assets extends Field
         return $multiple ?? $this->field->get('max_files') !== 1;
     }
 
-    protected function defaultProperty(mixed $default = null): ?array
+    protected function fileSizeProperty(): array
     {
-        return $this->multiple ? [] : null;
+        $rules = collect($this->rules)->flatten();
+
+        $minFileSize = $rules->whereInstanceOf(MinRule::class)
+            ->flatMap(fn ($rule) => invade($rule)->parameters)
+            ->first();
+
+        $maxFileSize = $rules->whereInstanceOf(MaxRule::class)
+            ->flatMap(fn ($rule) => invade($rule)->parameters)
+            ->first();
+
+        return [
+            'min' => $minFileSize,
+            'max' => $maxFileSize,
+        ];
     }
 
-    protected function rulesProperty(string|array|null $rules = null): array
+    protected function fileTypesProperty(): array
     {
-        $rules = parent::rulesProperty($rules);
+        return collect($this->rules)
+            ->flatten()
+            ->map(fn ($rule) => match (true) {
+                $rule instanceof ImageRule => ['image/*'],
+                $rule instanceof MimetypesRule => invade($rule)->parameters,
+                $rule instanceof MimesRule => collect(invade($rule)->parameters)
+                    ->flatMap(fn ($mime) => (new MimeTypes)->getMimeTypes($mime)),
+                default => null,
+            })
+            ->filter()
+            ->first() ?? [];
+    }
 
-        if ($this->multiple) {
-            return $rules;
-        }
-
-        // TODO: Do we still need this?
-        /* Remove validation rules that would only work if multiple is enabled */
-        $rules = collect(array_first($rules))
-            ->filter(fn ($rule) => $rule !== 'array')
-            ->filter(fn ($rule) => $rule !== "min:{$this->min_files}")
-            ->filter(fn ($rule) => $rule !== "max:{$this->max_files}")
-            ->values()->all();
-
-        return [$this->key => $rules];
+    protected function dimensionsProperty(): array
+    {
+        return collect($this->rules)
+            ->flatten()
+            ->whereInstanceOf(DimensionsRule::class)
+            ->flatMap(fn ($rule) => invade($rule)->parameters)
+            ->mapWithKeys(fn ($dimension) => [Str::before($dimension, '=') => Str::after($dimension, '=')])
+            ->toArray();
     }
 
     public function process(): mixed
     {
-        $this->value = collect(Arr::wrap($this->value))
+        $this->value = collect($this->value)
             ->flatMap(fn ($file) => AssetsUploader::field($this->handle)->upload($file));
 
         return parent::process();
