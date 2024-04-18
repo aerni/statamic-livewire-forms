@@ -8,13 +8,16 @@ trait HandlesSuccess
     {
         session()->flash('success', $this->successMessage());
 
-        // Get the captcha value before we are resetting the field values.
+        /* Get the captcha value before we are resetting the field values. */
         $captcha = $this->captcha()?->value();
 
         $this->resetValues();
 
-        // Preserve the captcha state by setting the value to its previous state.
+        /* Preserve the captcha state by setting the value to its previous state. */
         $this->captcha()?->value($captcha);
+
+        /* Dispatch event so we can reset the FilePond field. */
+        $this->dispatch('form-reset', id: $this->getId());
 
         return $this;
     }

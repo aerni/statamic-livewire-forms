@@ -8,9 +8,11 @@
 
 <div x-data="filepond({
         field: '{{ $field->handle }}',
-        locale: @antlers'{{ site:attributes:filepond_locale }}'@endantlers,
+        locale: @antlers'{{ site:attributes:filepond_locale ?? 'en-en' }}'@endantlers,
     })"
-    wire:ignore>
+    x-on:form-reset.window="reset($event.detail.id)"
+    wire:ignore
+>
     <input type="file" x-ref="input" />
 </div>
 

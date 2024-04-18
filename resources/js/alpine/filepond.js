@@ -75,14 +75,14 @@ const locales = {
 
 export default (config) => ({
     init() {
-        const field = this.$wire.fields[config.field].properties;
-
         FilePond.registerPlugin(FilePondPluginFileValidateSize);
         FilePond.registerPlugin(FilePondPluginFileValidateType);
         FilePond.registerPlugin(FilePondPluginImagePreview);
         FilePond.registerPlugin(FilePondPluginImageValidateSize);
 
-        FilePond.setOptions({
+        const field = this.$wire.fields[config.field].properties;
+
+        FilePond.create(this.$refs.input, {
             allowMultiple: field.multiple,
             minFileSize: field.file_size.min ? `${field.file_size.min}KB` : null,
             maxFileSize: field.file_size.max ? `${field.file_size.max}KB` : null,
@@ -100,12 +100,14 @@ export default (config) => ({
                     this.$wire.removeUpload(field.key, filename, load)
                 },
             },
+            ...locales[config.locale],
         });
+    },
 
-        if (locales[config.locale]) {
-            FilePond.setOptions(locales[config.locale]);
-        }
+    reset(livewireId) {
+        // Only reset the FilePond instance if the form-reset event was fired by the same Livewire component
+        if (livewireId !== this.$wire.id) return;
 
-        FilePond.create(this.$refs.input);
+        FilePond.find(this.$el.querySelector('.filepond--root')).removeFiles();
     }
 })
