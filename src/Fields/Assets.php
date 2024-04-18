@@ -3,14 +3,14 @@
 namespace Aerni\LivewireForms\Fields;
 
 use Illuminate\Support\Str;
-use Symfony\Component\Mime\MimeTypes;
-use Statamic\Fieldtypes\Assets\MaxRule;
-use Statamic\Fieldtypes\Assets\MinRule;
-use Statamic\Fieldtypes\Assets\ImageRule;
-use Statamic\Fieldtypes\Assets\MimesRule;
-use Statamic\Forms\Uploaders\AssetsUploader;
-use Statamic\Fieldtypes\Assets\MimetypesRule;
 use Statamic\Fieldtypes\Assets\DimensionsRule;
+use Statamic\Fieldtypes\Assets\ImageRule;
+use Statamic\Fieldtypes\Assets\MaxRule;
+use Statamic\Fieldtypes\Assets\MimesRule;
+use Statamic\Fieldtypes\Assets\MimetypesRule;
+use Statamic\Fieldtypes\Assets\MinRule;
+use Statamic\Forms\Uploaders\AssetsUploader;
+use Symfony\Component\Mime\MimeTypes;
 
 class Assets extends Field
 {
