@@ -22,7 +22,7 @@
             field: '{{ $field->handle }}',
             locale: @antlers'{{ site:attributes:filepond_locale ?? 'en-en' }}'@endantlers,
         })"
-        x-on:form-reset.window="reset($event.detail.id)"
+        x-on:form-success.window="reset($event.detail.id)"
         wire:ignore
     >
         <input type="file" x-ref="input" />

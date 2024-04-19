@@ -105,7 +105,7 @@ export default (config) => ({
     },
 
     reset(livewireId) {
-        // Only reset the FilePond instance if the form-reset event was fired by the same Livewire component
+        // Only reset the FilePond instance if the form-success event was fired by the same Livewire component
         if (livewireId !== this.$wire.id) return;
 
         FilePond.find(this.$el.querySelector('.filepond--root')).removeFiles();

@@ -17,7 +17,7 @@ trait HandlesSuccess
         $this->captcha()?->value($captcha);
 
         /* Dispatch event so we can reset the FilePond field. */
-        $this->dispatch('form-reset', id: $this->getId());
+        $this->dispatch('form-success', id: $this->getId());
 
         return $this;
     }
