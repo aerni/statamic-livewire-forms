@@ -18,8 +18,7 @@ export default () => ({
             fields[key] = {
                 visible: passesConditions && !field.properties.hidden,
                 submittable: field.properties.always_save || passesConditions,
-                section: field.section,
-                config: field.properties
+                section: field.section
             }
 
             this.$wire.submittableFields[key] = fields[key].submittable
