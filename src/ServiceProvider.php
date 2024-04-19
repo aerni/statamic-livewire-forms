@@ -6,6 +6,7 @@ use Aerni\LivewireForms\Facades\Captcha;
 use Aerni\LivewireForms\Livewire\DynamicForm;
 use Aerni\LivewireForms\Livewire\Form;
 use Aerni\LivewireForms\Livewire\Synthesizers\FieldSynth;
+use Aerni\LivewireForms\Livewire\Synthesizers\RuleSynth;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Validator;
 use Livewire\Livewire;
@@ -60,6 +61,7 @@ class ServiceProvider extends AddonServiceProvider
         Livewire::component('form', DynamicForm::class);
         Livewire::component('default-form', Form::class);
         Livewire::propertySynthesizer(FieldSynth::class);
+        Livewire::propertySynthesizer(RuleSynth::class);
 
         return $this;
     }
