@@ -40,4 +40,9 @@ class Section
     {
         return $this->fields;
     }
+
+    public function order(): int
+    {
+        return $this->order;
+    }
 }

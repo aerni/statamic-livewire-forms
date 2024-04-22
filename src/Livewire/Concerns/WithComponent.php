@@ -2,7 +2,6 @@
 
 namespace Aerni\LivewireForms\Livewire\Concerns;
 
-use Illuminate\Support\Str;
 use Livewire\Attributes\Computed;
 use Livewire\Livewire;
 
@@ -11,8 +10,10 @@ trait WithComponent
     #[Computed(true)]
     public function component(): string
     {
-        $component = Str::replace('_', '-', $this->handle).'-form';
+        $component = str($this->handle)->replace('_', '-')->append('-form');
 
-        return Livewire::isDiscoverable($component) ? $component : 'default-form';
+        return Livewire::isDiscoverable($component)
+            ? $component
+            : "{$this->type}-form";
     }
 }

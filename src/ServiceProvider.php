@@ -7,6 +7,8 @@ use Aerni\LivewireForms\Livewire\DynamicForm;
 use Aerni\LivewireForms\Livewire\Form;
 use Aerni\LivewireForms\Livewire\Synthesizers\FieldSynth;
 use Aerni\LivewireForms\Livewire\Synthesizers\RuleSynth;
+use Aerni\LivewireForms\Livewire\Synthesizers\StepSynth;
+use Aerni\LivewireForms\Livewire\WizardForm;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Validator;
 use Livewire\Livewire;
@@ -60,8 +62,10 @@ class ServiceProvider extends AddonServiceProvider
     {
         Livewire::component('form', DynamicForm::class);
         Livewire::component('default-form', Form::class);
+        Livewire::component('wizard-form', WizardForm::class);
         Livewire::propertySynthesizer(FieldSynth::class);
         Livewire::propertySynthesizer(RuleSynth::class);
+        Livewire::propertySynthesizer(StepSynth::class);
 
         return $this;
     }
