@@ -55,6 +55,7 @@ trait WithFields
             : throw new \Exception("The field model binding for fieldtype [{$fieldtype}] cannot be found.");
     }
 
+    // TODO: Move sections into its own trait like steps.
     #[Computed]
     public function sections(): Collection
     {

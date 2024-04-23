@@ -3,19 +3,50 @@
 namespace Aerni\LivewireForms\Form;
 
 use Livewire\Livewire;
+use Illuminate\Support\Str;
+use Illuminate\Support\Collection;
 use Aerni\LivewireForms\Enums\StepStatus;
+use Illuminate\Contracts\Support\Arrayable;
 
-class Step
+class Step implements Arrayable
 {
     public function __construct(
         public int $number,
         public StepStatus $status,
+        protected Collection $fields,
+        protected ?string $display,
+        protected ?string $instructions,
     ) {
+    }
+
+    public function handle(): string
+    {
+        return Str::snake($this->display ?? $this->number);
     }
 
     public function id(): string
     {
-        return $this->number . '-step';
+        return Livewire::current()->getId().'-step-'.$this->number;
+    }
+
+    public function display(): ?string
+    {
+        return __($this->display);
+    }
+
+    public function instructions(): ?string
+    {
+        return __($this->instructions);
+    }
+
+    public function fields(): Collection
+    {
+        return $this->fields;
+    }
+
+    public function number(): int
+    {
+        return $this->number;
     }
 
     public function isPrevious(): bool
@@ -38,13 +69,14 @@ class Step
         return "showStep({$this->number})";
     }
 
-    public function section(): Section
+    public function toArray(): array
     {
-        return Livewire::current()->sections->firstWhere(fn (Section $section) => $section->order () === $this->number);
-    }
-
-    public function __call($name, $arguments)
-    {
-        return $this->section()->$name($arguments);
+        return [
+            'number' => $this->number,
+            'fields' => $this->fields,
+            'status' => $this->status->value,
+            'display' => $this->display,
+            'instructions' => $this->instructions,
+        ];
     }
 }

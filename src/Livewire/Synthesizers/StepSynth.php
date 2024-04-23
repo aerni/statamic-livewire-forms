@@ -15,16 +15,32 @@ class StepSynth extends Synth
         return $target instanceof Step;
     }
 
-    public function dehydrate($target)
+    public function dehydrate($target, $dehydrateChild)
     {
-        return [[
-            'number' => $target->number,
-            'status' => $target->status->value,
-        ], []];
+        $data = $target->toArray();
+
+        foreach ($data as $key => $child) {
+            $data[$key] = $dehydrateChild($key, $child);
+        }
+
+        return [
+            $data,
+            ['class' => get_class($target)],
+        ];
     }
 
-    public function hydrate($value)
+    public function hydrate($value, $meta, $hydrateChild)
     {
-        return new Step($value['number'], StepStatus::from($value['status']));
+        foreach ($value as $key => $child) {
+            $value[$key] = $hydrateChild($key, $child);
+        }
+
+        return new Step(
+            number: $value['number'],
+            fields: $value['fields'],
+            display: $value['display'],
+            instructions: $value['instructions'],
+            status: StepStatus::from($value['status']),
+        );
     }
 }

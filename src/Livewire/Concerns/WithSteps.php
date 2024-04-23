@@ -11,6 +11,7 @@ use Illuminate\Support\Collection;
 
 trait WithSteps
 {
+    // TODO: Do we really need a synth or can we just use a computed property?
     public Collection $steps;
 
     public function mountWithSteps(): void
@@ -20,13 +21,20 @@ trait WithSteps
 
     protected function steps(): Collection
     {
-        return $this->sections
-            ->mapWithKeys(function (Section $section) {
-                $status = $section->order() === 1
-                    ? StepStatus::Current : StepStatus::Next;
+        return $this->form->blueprint()->tabs()->first()->sections()
+            ->filter(fn ($section) => $section->fields()->all()->isNotEmpty())
+            ->values()
+            ->mapWithKeys(function ($section, $index) {
+                $number =  $index + 1;
 
-                return [$section->order() => new Step($section->order(), $status)];
-        });
+                return [$number => new Step(
+                    number: $number,
+                    status: $number === 1 ? StepStatus::Current : StepStatus::Next,
+                    fields: $this->fields->intersectByKeys($section->fields()->all()),
+                    display: $section->display(),
+                    instructions: $section->instructions(),
+                )];
+            });
     }
 
     public function currentStep(): Step
