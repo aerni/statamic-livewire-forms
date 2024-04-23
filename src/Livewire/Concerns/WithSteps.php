@@ -2,12 +2,12 @@
 
 namespace Aerni\LivewireForms\Livewire\Concerns;
 
-use Statamic\Fields\Section;
-use Livewire\Attributes\Computed;
-use Aerni\LivewireForms\Form\Step;
-use Illuminate\Support\Collection;
 use Aerni\LivewireForms\Enums\StepStatus;
 use Aerni\LivewireForms\Exceptions\StepDoesNotExist;
+use Aerni\LivewireForms\Form\Step;
+use Illuminate\Support\Collection;
+use Livewire\Attributes\Computed;
+use Statamic\Fields\Section;
 
 trait WithSteps
 {
@@ -22,7 +22,7 @@ trait WithSteps
             ->filter(fn (Section $section) => $section->fields()->all()->isNotEmpty())
             ->values()
             ->mapWithKeys(function (Section $section, int $index) use (&$currentFound) {
-                $number =  $index + 1;
+                $number = $index + 1;
                 $status = $currentFound ? StepStatus::Next : StepStatus::Previous;
 
                 if ($number === $this->currentStep) {
