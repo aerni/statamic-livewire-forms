@@ -13,34 +13,64 @@ trait WithSteps
 {
     public Collection $steps;
 
-    public int $currentStep = 1;
-
     public function mountWithSteps(): void
     {
         $this->steps = $this->steps();
     }
 
-    public function steps(): Collection
+    protected function steps(): Collection
     {
-        $currentFound = false;
-        $currentStepName = $this->currentStep;
-
         return $this->sections
-            ->mapWithKeys(function (Section $section)  use (&$currentFound, $currentStepName) {
-                $status = $currentFound ? StepStatus::Next : StepStatus::Previous;
-
-                if ($section->order() === $currentStepName) {
-                    $currentFound = true;
-                    $status = StepStatus::Current;
-                }
+            ->mapWithKeys(function (Section $section) {
+                $status = $section->order() === 1
+                    ? StepStatus::Current : StepStatus::Next;
 
                 return [$section->order() => new Step($section->order(), $status)];
-            });
+        });
     }
 
     public function currentStep(): Step
     {
-        return $this->steps->get($this->currentStep);
+        return $this->steps->firstWhere(fn (Step $step) => $step->isCurrent());
+    }
+
+    public function previousStep(): void
+    {
+        $previousStep = $this->steps->before(fn (Step $step) => $step->isCurrent());
+
+        throw_unless($previousStep, StepDoesNotExist::noPreviousStep($this->currentStep()->number));
+
+        $this->showStep($previousStep->number);
+    }
+
+    public function nextStep(): void
+    {
+        $nextStep = $this->steps->after(fn (Step $step) => $step->isCurrent());
+
+        throw_unless($nextStep, StepDoesNotExist::noNextStep($this->currentStep()->number));
+
+        $this->showStep($nextStep->number);
+    }
+
+    public function showStep(int $stepNumber): void
+    {
+        $step = $this->steps->get($stepNumber);
+
+        throw_unless($step, StepDoesNotExist::stepNotFound($step->number));
+
+        if ($step->isCurrent()) {
+            return;
+        }
+
+        $step->status = StepStatus::Current;
+
+        $this->steps
+            ->filter(fn (Step $step) => $step->number < $stepNumber)
+            ->each(fn (Step $step) => $step->status = StepStatus::Previous);
+
+        $this->steps
+            ->filter(fn (Step $step) => $step->number > $stepNumber)
+            ->each(fn (Step $step) => $step->status = StepStatus::Next);
     }
 
     #[Computed]
@@ -53,29 +83,5 @@ trait WithSteps
     public function hasNextStep(): bool
     {
         return (bool) $this->steps->after(fn ($step) => $step->isCurrent());
-    }
-
-    public function previousStep(): void
-    {
-        $previousStep = $this->steps->before(fn (Step $step) => $step->isCurrent());
-
-        throw_unless($previousStep, StepDoesNotExist::noPreviousStep($this->currentStep));
-
-        $this->showStep($previousStep->number);
-    }
-
-    public function nextStep(): void
-    {
-        $nextStep = $this->steps->after(fn (Step $step) => $step->isCurrent());
-
-        throw_unless($nextStep, StepDoesNotExist::noNextStep($this->currentStep));
-
-        $this->showStep($nextStep->number);
-    }
-
-    public function showStep(int $step)
-    {
-        $this->currentStep = $step;
-        $this->steps = $this->steps();
     }
 }
