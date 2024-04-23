@@ -28,7 +28,7 @@ class WizardForm extends Component
     public function render(): View
     {
         return view(ViewManager::viewPath($this->view), [
-            'steps' => $this->steps,
+            'step' => $this->currentStep(),
         ]);
     }
 }

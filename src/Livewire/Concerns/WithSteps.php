@@ -6,16 +6,16 @@ use Livewire\Attributes\Computed;
 use Aerni\LivewireForms\Form\Step;
 use Aerni\LivewireForms\Form\Section;
 use Aerni\LivewireForms\Enums\StepStatus;
-use Aerni\LivewireForms\Exceptions\StepNotFoundException;
+use Aerni\LivewireForms\Exceptions\StepDoesNotExist;
 use Illuminate\Support\Collection;
 
 trait WithSteps
 {
     public Collection $steps;
 
-    public int $currentStepNumber = 1;
+    public int $currentStep = 1;
 
-    public function bootedWithSteps(): void
+    public function mountWithSteps(): void
     {
         $this->steps = $this->steps();
     }
@@ -23,10 +23,10 @@ trait WithSteps
     public function steps(): Collection
     {
         $currentFound = false;
-        $currentStepName = $this->currentStepNumber;
+        $currentStepName = $this->currentStep;
 
         return $this->sections
-            ->map(function (Section $section)  use (&$currentFound, $currentStepName) {
+            ->mapWithKeys(function (Section $section)  use (&$currentFound, $currentStepName) {
                 $status = $currentFound ? StepStatus::Next : StepStatus::Previous;
 
                 if ($section->order() === $currentStepName) {
@@ -34,59 +34,48 @@ trait WithSteps
                     $status = StepStatus::Current;
                 }
 
-                return new Step($section->order(), $status);
+                return [$section->order() => new Step($section->order(), $status)];
             });
     }
 
-    #[Computed]
-    public function currentStep()
+    public function currentStep(): Step
     {
-        return $this->steps->get($this->currentStepNumber - 1);
+        return $this->steps->get($this->currentStep);
     }
 
     #[Computed]
     public function hasPreviousStep(): bool
     {
-        return $this->steps
-            ->filter(fn ($step) => $step->order() === $this->currentStepNumber - 1)
-            ->isNotEmpty();
+        return (bool) $this->steps->before(fn ($step) => $step->isCurrent());
     }
 
     #[Computed]
     public function hasNextStep(): bool
     {
-        return $this->steps
-            ->filter(fn ($step) => $step->order() === $this->currentStepNumber + 1)
-            ->isNotEmpty();
+        return (bool) $this->steps->after(fn ($step) => $step->isCurrent());
     }
 
-    public function previousStep()
+    public function previousStep(): void
     {
-        $previousStep = $this->steps
-            ->before(fn (Step $step) => $step->order() === $this->currentStepNumber);
+        $previousStep = $this->steps->before(fn (Step $step) => $step->isCurrent());
 
-        if (! $previousStep) {
-            throw new StepNotFoundException($this->currentStepNumber, $this->currentStepNumber - 1);
-        }
+        throw_unless($previousStep, StepDoesNotExist::noPreviousStep($this->currentStep));
 
-        $this->toStep($previousStep->order());
+        $this->showStep($previousStep->number);
     }
 
-    public function nextStep()
+    public function nextStep(): void
     {
-        $nextStep = $this->steps
-            ->after(fn (Step $step) => $step->order() === $this->currentStepNumber);
+        $nextStep = $this->steps->after(fn (Step $step) => $step->isCurrent());
 
-        if (! $nextStep) {
-            throw new StepNotFoundException($this->currentStepNumber, $this->currentStepNumber + 1);
-        }
+        throw_unless($nextStep, StepDoesNotExist::noNextStep($this->currentStep));
 
-        $this->toStep($nextStep->order());
+        $this->showStep($nextStep->number);
     }
 
-    public function toStep(int $step)
+    public function showStep(int $step)
     {
-        $this->currentStepNumber = $step;
+        $this->currentStep = $step;
         $this->steps = $this->steps();
     }
 }

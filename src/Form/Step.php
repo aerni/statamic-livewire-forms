@@ -35,7 +35,7 @@ class Step
 
     public function show(): string
     {
-        return "showStep('{$this->number}')";
+        return "showStep({$this->number})";
     }
 
     public function section(): Section
