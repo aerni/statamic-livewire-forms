@@ -65,7 +65,6 @@ class ServiceProvider extends AddonServiceProvider
         Livewire::component('wizard-form', WizardForm::class);
         Livewire::propertySynthesizer(FieldSynth::class);
         Livewire::propertySynthesizer(RuleSynth::class);
-        Livewire::propertySynthesizer(StepSynth::class);
 
         return $this;
     }

@@ -2,34 +2,37 @@
 
 namespace Aerni\LivewireForms\Livewire\Concerns;
 
+use Statamic\Fields\Section;
 use Livewire\Attributes\Computed;
 use Aerni\LivewireForms\Form\Step;
-use Aerni\LivewireForms\Form\Section;
+use Illuminate\Support\Collection;
 use Aerni\LivewireForms\Enums\StepStatus;
 use Aerni\LivewireForms\Exceptions\StepDoesNotExist;
-use Illuminate\Support\Collection;
 
 trait WithSteps
 {
-    // TODO: Do we really need a synth or can we just use a computed property?
-    public Collection $steps;
+    public int $currentStep = 1;
 
-    public function mountWithSteps(): void
+    #[Computed]
+    public function steps(): Collection
     {
-        $this->steps = $this->steps();
-    }
+        $currentFound = false;
 
-    protected function steps(): Collection
-    {
         return $this->form->blueprint()->tabs()->first()->sections()
-            ->filter(fn ($section) => $section->fields()->all()->isNotEmpty())
+            ->filter(fn (Section $section) => $section->fields()->all()->isNotEmpty())
             ->values()
-            ->mapWithKeys(function ($section, $index) {
+            ->mapWithKeys(function (Section $section, int $index) use (&$currentFound) {
                 $number =  $index + 1;
+                $status = $currentFound ? StepStatus::Next : StepStatus::Previous;
+
+                if ($number === $this->currentStep) {
+                    $currentFound = true;
+                    $status = StepStatus::Current;
+                }
 
                 return [$number => new Step(
                     number: $number,
-                    status: $number === 1 ? StepStatus::Current : StepStatus::Next,
+                    status: $status,
                     fields: $this->fields->intersectByKeys($section->fields()->all()),
                     display: $section->display(),
                     instructions: $section->instructions(),
@@ -46,7 +49,7 @@ trait WithSteps
     {
         $previousStep = $this->steps->before(fn (Step $step) => $step->isCurrent());
 
-        throw_unless($previousStep, StepDoesNotExist::noPreviousStep($this->currentStep()->number));
+        throw_unless($previousStep, StepDoesNotExist::noPreviousStep($this->currentStep));
 
         $this->showStep($previousStep->number);
     }
@@ -55,41 +58,33 @@ trait WithSteps
     {
         $nextStep = $this->steps->after(fn (Step $step) => $step->isCurrent());
 
-        throw_unless($nextStep, StepDoesNotExist::noNextStep($this->currentStep()->number));
+        throw_unless($nextStep, StepDoesNotExist::noNextStep($this->currentStep));
 
         $this->showStep($nextStep->number);
     }
 
-    public function showStep(int $stepNumber): void
+    public function showStep(int $step): void
     {
-        $step = $this->steps->get($stepNumber);
-
-        throw_unless($step, StepDoesNotExist::stepNotFound($step->number));
-
-        if ($step->isCurrent()) {
+        if ($step === $this->currentStep) {
             return;
         }
 
-        $step->status = StepStatus::Current;
+        throw_unless($this->steps->has($step), StepDoesNotExist::stepNotFound($step));
 
-        $this->steps
-            ->filter(fn (Step $step) => $step->number < $stepNumber)
-            ->each(fn (Step $step) => $step->status = StepStatus::Previous);
+        $this->currentStep = $step;
 
-        $this->steps
-            ->filter(fn (Step $step) => $step->number > $stepNumber)
-            ->each(fn (Step $step) => $step->status = StepStatus::Next);
+        unset($this->steps);
     }
 
     #[Computed]
     public function hasPreviousStep(): bool
     {
-        return (bool) $this->steps->before(fn ($step) => $step->isCurrent());
+        return (bool) $this->steps->before(fn (Step $step) => $step->isCurrent());
     }
 
     #[Computed]
     public function hasNextStep(): bool
     {
-        return (bool) $this->steps->after(fn ($step) => $step->isCurrent());
+        return (bool) $this->steps->after(fn (Step $step) => $step->isCurrent());
     }
 }
