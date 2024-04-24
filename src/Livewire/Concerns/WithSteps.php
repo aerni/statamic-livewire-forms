@@ -56,6 +56,8 @@ trait WithSteps
 
     public function nextStep(): void
     {
+        $this->validateStep($this->currentStep());
+
         $nextStep = $this->steps->after(fn (Step $step) => $step->isCurrent());
 
         throw_unless($nextStep, StepDoesNotExist::noNextStep($this->currentStep));
@@ -70,6 +72,8 @@ trait WithSteps
         }
 
         throw_unless($this->steps->has($step), StepDoesNotExist::stepNotFound($step));
+
+        $this->validateStep($this->currentStep());
 
         $this->currentStep = $step;
 

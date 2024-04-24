@@ -2,6 +2,9 @@
 
 namespace Aerni\LivewireForms\Livewire\Concerns;
 
+use Aerni\LivewireForms\Form\Step;
+use Aerni\LivewireForms\Fields\Field;
+
 trait HandlesValidation
 {
     public function bootHandlesValidation(): void
@@ -30,5 +33,12 @@ trait HandlesValidation
         return $this->fields
             ->mapWithKeys(fn ($field) => $field->validationAttributes())
             ->toArray();
+    }
+
+    protected function validateStep(Step $step): void
+    {
+        $rules = $step->fields()->mapWithKeys(fn (Field $field) => $field->rules())->toArray();
+
+        $this->validate($rules);
     }
 }
