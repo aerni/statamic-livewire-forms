@@ -7,7 +7,6 @@ use Aerni\LivewireForms\Livewire\DynamicForm;
 use Aerni\LivewireForms\Livewire\Form;
 use Aerni\LivewireForms\Livewire\Synthesizers\FieldSynth;
 use Aerni\LivewireForms\Livewire\Synthesizers\RuleSynth;
-use Aerni\LivewireForms\Livewire\Synthesizers\StepSynth;
 use Aerni\LivewireForms\Livewire\WizardForm;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Validator;

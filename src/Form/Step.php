@@ -2,11 +2,11 @@
 
 namespace Aerni\LivewireForms\Form;
 
-use Livewire\Livewire;
-use Illuminate\Support\Str;
-use Illuminate\Support\Collection;
 use Aerni\LivewireForms\Enums\StepStatus;
 use Illuminate\Contracts\Support\Arrayable;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
+use Livewire\Livewire;
 
 class Step implements Arrayable
 {
