@@ -42,7 +42,10 @@ trait WithSteps
 
     public function currentStep(): Step
     {
-        return $this->steps->firstWhere(fn (Step $step) => $step->isCurrent());
+        return throw_unless(
+            $this->steps->firstWhere(fn (Step $step) => $step->isCurrent()),
+            StepDoesNotExist::stepNotFound($this->currentStep)
+        );
     }
 
     public function previousStep(): void
