@@ -91,4 +91,10 @@ trait WithSteps
     {
         return (bool) $this->steps->after(fn (Step $step) => $step->isCurrent());
     }
+
+    #[Computed]
+    public function isLastStep(): bool
+    {
+        return $this->steps->last()->isCurrent();
+    }
 }
