@@ -4,12 +4,11 @@ namespace Aerni\LivewireForms\Form;
 
 use Aerni\LivewireForms\Enums\StepStatus;
 use Aerni\LivewireForms\Fields\Field;
-use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use Livewire\Livewire;
 
-class Step implements Arrayable
+class Step
 {
     public function __construct(
         public int $number,
@@ -95,16 +94,5 @@ class Step implements Arrayable
         * To prevent this, we restore the previous error bag after the validation.
         */
         $component->setErrorBag($previousErrorBag);
-    }
-
-    public function toArray(): array
-    {
-        return [
-            'number' => $this->number,
-            'fields' => $this->fields,
-            'status' => $this->status->value,
-            'display' => $this->display,
-            'instructions' => $this->instructions,
-        ];
     }
 }
