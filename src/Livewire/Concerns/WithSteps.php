@@ -18,26 +18,23 @@ trait WithSteps
     {
         $currentFound = false;
 
-        return $this->form->blueprint()->tabs()->first()->sections()
-            ->filter(fn (Section $section) => $section->fields()->all()->isNotEmpty())
-            ->values()
-            ->mapWithKeys(function (Section $section, int $index) use (&$currentFound) {
-                $number = $index + 1;
-                $status = $currentFound ? StepStatus::Next : StepStatus::Previous;
+        return $this->formSections->mapWithKeys(function (Section $section, int $index) use (&$currentFound) {
+            $number = $index + 1;
+            $status = $currentFound ? StepStatus::Next : StepStatus::Previous;
 
-                if ($number === $this->currentStep) {
-                    $currentFound = true;
-                    $status = StepStatus::Current;
-                }
+            if ($number === $this->currentStep) {
+                $currentFound = true;
+                $status = StepStatus::Current;
+            }
 
-                return [$number => new Step(
-                    number: $number,
-                    status: $status,
-                    fields: $this->fields->intersectByKeys($section->fields()->all()),
-                    display: $section->display(),
-                    instructions: $section->instructions(),
-                )];
-            });
+            return [$number => new Step(
+                number: $number,
+                status: $status,
+                fields: $this->fields->intersectByKeys($section->fields()->all()),
+                display: $section->display(),
+                instructions: $section->instructions(),
+            )];
+        });
     }
 
     public function currentStep(): Step

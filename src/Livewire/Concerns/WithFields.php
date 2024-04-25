@@ -59,15 +59,14 @@ trait WithFields
     #[Computed]
     public function sections(): Collection
     {
-        return $this->form->blueprint()->tabs()->first()->sections()
-            ->filter(fn ($section) => $section->fields()->all()->isNotEmpty())
-            ->values()
-            ->map(fn ($section, $index) => (new Section(
+        return $this->formSections->map(function ($section, $index) {
+            return new Section(
                 fields: $this->fields->intersectByKeys($section->fields()->all()),
                 order: $index + 1,
                 display: $section->display(),
                 instructions: $section->instructions(),
-            )));
+            );
+        });
     }
 
     public function section(string $handle): ?Section
