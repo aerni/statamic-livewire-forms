@@ -69,6 +69,11 @@ class Step implements Arrayable
         return "showStep({$this->number})";
     }
 
+    public function hasErrors(): bool
+    {
+        return Livewire::current()->getErrorBag()->hasAny($this->fields->map->key()->all());
+    }
+
     public function toArray(): array
     {
         return [

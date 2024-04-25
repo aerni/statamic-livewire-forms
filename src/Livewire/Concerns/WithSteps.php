@@ -11,6 +11,7 @@ use Statamic\Fields\Section;
 
 trait WithSteps
 {
+    // TODO: Rename to $currentStepName?
     public int $currentStep = 1;
 
     #[Computed]
@@ -40,6 +41,7 @@ trait WithSteps
             });
     }
 
+    // TODO: Make this a computed property?
     public function currentStep(): Step
     {
         return throw_unless(
@@ -48,39 +50,45 @@ trait WithSteps
         );
     }
 
-    public function previousStep(): void
+    public function previousStep(?int $step = null): void
     {
-        $previousStep = $this->steps->before(fn (Step $step) => $step->isCurrent());
+        $previousStep = $this->steps->get($step)
+            ?? $this->steps->before(fn (Step $step) => $step->isCurrent());
 
         throw_unless($previousStep, StepDoesNotExist::noPreviousStep($this->currentStep));
 
-        $this->showStep($previousStep->number);
+        $this->currentStep = $previousStep->number;
+
+        unset($this->steps);
     }
 
-    public function nextStep(): void
+    public function nextStep(?int $step = null): void
     {
-        $this->validateStep($this->currentStep());
+        if ($this->currentStep()->hasErrors()) {
+            return;
+        }
 
-        $nextStep = $this->steps->after(fn (Step $step) => $step->isCurrent());
+        $nextStep = $this->steps->get($step)
+            ?? $this->steps->after(fn (Step $step) => $step->isCurrent());
 
         throw_unless($nextStep, StepDoesNotExist::noNextStep($this->currentStep));
 
-        $this->showStep($nextStep->number);
+        $this->validateStep($this->currentStep());
+
+        $this->currentStep = $nextStep->number;
+
+        unset($this->steps);
     }
 
     public function showStep(int $step): void
     {
-        if ($step === $this->currentStep) {
-            return;
-        }
-
         throw_unless($this->steps->has($step), StepDoesNotExist::stepNotFound($step));
 
-        $this->validateStep($this->currentStep());
-
-        $this->currentStep = $step;
-
-        unset($this->steps);
+        match (true) {
+            ($step > $this->currentStep) => $this->nextStep($step),
+            ($step < $this->currentStep) => $this->previousStep($step),
+            default => null
+        };
     }
 
     #[Computed]
