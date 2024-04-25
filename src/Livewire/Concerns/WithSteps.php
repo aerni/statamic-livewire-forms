@@ -108,4 +108,9 @@ trait WithSteps
     {
         return $this->steps->last()->isCurrent();
     }
+
+    public function canNavigatetoStep(int $step): bool
+    {
+        return $step < $this->currentStep || $step === $this->currentStep + 1;
+    }
 }
