@@ -11,7 +11,6 @@ use Statamic\Fields\Section;
 
 trait WithSteps
 {
-    // TODO: Rename to $currentStepName?
     public int $currentStep = 1;
 
     #[Computed]
@@ -41,7 +40,6 @@ trait WithSteps
             });
     }
 
-    // TODO: Make this a computed property?
     public function currentStep(): Step
     {
         return throw_unless(
