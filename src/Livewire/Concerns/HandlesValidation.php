@@ -34,22 +34,4 @@ trait HandlesValidation
             ->mapWithKeys(fn ($field) => $field->validationAttributes())
             ->toArray();
     }
-
-    protected function validateStep(Step $step): void
-    {
-        $previousErrorBag = $this->getErrorBag();
-
-        $rules = $step->fields()
-            ->mapWithKeys(fn (Field $field) => $field->rules())
-            ->toArray();
-
-        $this->validate($rules);
-
-        /*
-        * The error bag is reset when the current step is validated.
-        * This leads to error messages of other steps being reset as well.
-        * To prevent this, we restore the previous error bag after the validation.
-        */
-        $this->setErrorBag($previousErrorBag);
-    }
 }

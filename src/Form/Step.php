@@ -3,6 +3,7 @@
 namespace Aerni\LivewireForms\Form;
 
 use Aerni\LivewireForms\Enums\StepStatus;
+use Aerni\LivewireForms\Fields\Field;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
@@ -71,7 +72,29 @@ class Step implements Arrayable
 
     public function hasErrors(): bool
     {
-        return Livewire::current()->getErrorBag()->hasAny($this->fields->map->key()->all());
+        return Livewire::current()
+            ->getErrorBag()
+            ->hasAny($this->fields->map->key()->all());
+    }
+
+    public function validate(): void
+    {
+        $component = Livewire::current();
+
+        $previousErrorBag = $component->getErrorBag();
+
+        $rules = $this->fields()
+            ->mapWithKeys(fn (Field $field) => $field->rules())
+            ->toArray();
+
+        $component->validate($rules);
+
+        /*
+        * The error bag is reset when the current step is validated.
+        * This leads to error messages of other steps being reset as well.
+        * To prevent this, we restore the previous error bag after the validation.
+        */
+        $component->setErrorBag($previousErrorBag);
     }
 
     public function toArray(): array

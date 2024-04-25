@@ -73,7 +73,7 @@ trait WithSteps
 
         throw_unless($nextStep, StepDoesNotExist::noNextStep($this->currentStep));
 
-        $this->validateStep($this->currentStep());
+        $this->currentStep()->validate();
 
         $this->currentStep = $nextStep->number;
 
