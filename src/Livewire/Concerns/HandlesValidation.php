@@ -2,9 +2,6 @@
 
 namespace Aerni\LivewireForms\Livewire\Concerns;
 
-use Aerni\LivewireForms\Form\Step;
-use Aerni\LivewireForms\Fields\Field;
-
 trait HandlesValidation
 {
     public function bootHandlesValidation(): void
