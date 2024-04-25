@@ -49,6 +49,6 @@ class FieldSynth extends Synth
 
     public function set(&$target, $key, $value)
     {
-        $target->get($key)->value($value);
+        $target->value($value);
     }
 }
