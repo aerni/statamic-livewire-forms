@@ -78,6 +78,12 @@ class Step
 
     public function validate(): bool
     {
+        /**
+         * The error bag is reset when the validation of the current step passes.
+         * This leads to error messages of other steps being reset as well.
+         * To prevent this, we can just return early if the current step has errors.
+         * The fields of the step are still being validated with validateOnly() in the updatedFields() method.
+         */
         if ($this->hasErrors()) {
             return false;
         }
