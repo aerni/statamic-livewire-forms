@@ -59,7 +59,7 @@ trait WithSteps
 
     public function nextStep(?int $step = null): void
     {
-        if ($this->currentStep()->hasErrors()) {
+        if (! $this->currentStep()->validate()) {
             return;
         }
 
@@ -67,8 +67,6 @@ trait WithSteps
             ?? $this->steps->after(fn (Step $step) => $step->isCurrent());
 
         throw_unless($nextStep, StepDoesNotExist::noNextStep($this->currentStep));
-
-        $this->currentStep()->validate();
 
         $this->currentStep = $nextStep->number;
 

@@ -76,23 +76,27 @@ class Step
             ->hasAny($this->fields->map->key()->all());
     }
 
-    public function validate(): void
+    public function validate(): bool
     {
-        $component = Livewire::current();
+        if ($this->hasErrors()) {
+            return false;
+        }
 
-        $previousErrorBag = $component->getErrorBag();
+        $errorBag = Livewire::current()->getErrorBag();
 
         $rules = $this->fields()
             ->mapWithKeys(fn (Field $field) => $field->rules())
             ->toArray();
 
-        $component->validate($rules);
+        Livewire::current()->validate($rules);
 
         /*
         * The error bag is reset when the current step is validated.
         * This leads to error messages of other steps being reset as well.
         * To prevent this, we restore the previous error bag after the validation.
         */
-        $component->setErrorBag($previousErrorBag);
+        Livewire::current()->setErrorBag($errorBag);
+
+        return true;
     }
 }
