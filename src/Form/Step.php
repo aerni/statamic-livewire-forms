@@ -2,11 +2,12 @@
 
 namespace Aerni\LivewireForms\Form;
 
-use Aerni\LivewireForms\Enums\StepStatus;
-use Aerni\LivewireForms\Fields\Field;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Str;
 use Livewire\Livewire;
+use Illuminate\Support\Str;
+use Illuminate\Support\Collection;
+use Aerni\LivewireForms\Fields\Field;
+use Aerni\LivewireForms\Enums\StepStatus;
+use Illuminate\Support\MessageBag;
 
 class Step
 {
@@ -88,7 +89,7 @@ class Step
             return false;
         }
 
-        $errorBag = Livewire::current()->getErrorBag();
+        Livewire::current()->storeAllStepErrors();
 
         $rules = $this->fields()
             ->mapWithKeys(fn (Field $field) => $field->rules())
@@ -101,7 +102,7 @@ class Step
         * This leads to error messages of other steps being reset as well.
         * To prevent this, we restore the previous error bag after the validation.
         */
-        Livewire::current()->setErrorBag($errorBag);
+        Livewire::current()->restoreAllStepErrors();
 
         return true;
     }
