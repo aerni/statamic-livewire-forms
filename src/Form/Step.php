@@ -2,12 +2,11 @@
 
 namespace Aerni\LivewireForms\Form;
 
-use Livewire\Livewire;
-use Illuminate\Support\Str;
-use Illuminate\Support\Collection;
-use Aerni\LivewireForms\Fields\Field;
 use Aerni\LivewireForms\Enums\StepStatus;
-use Illuminate\Support\MessageBag;
+use Aerni\LivewireForms\Fields\Field;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
+use Livewire\Livewire;
 
 class Step
 {
