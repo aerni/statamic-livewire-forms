@@ -18,7 +18,7 @@ trait WithType
     {
         return match ($this->type ?? null) {
             'wizard' => 'wizard',
-            default => 'default',
+            default => 'basic',
         };
     }
 }

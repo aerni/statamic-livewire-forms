@@ -13,7 +13,7 @@ use Aerni\LivewireForms\Livewire\Concerns\WithView;
 use Illuminate\Contracts\View\View;
 use Livewire\Component;
 
-class Form extends Component
+class BasicForm extends Component
 {
     use WithHandle;
     use WithTheme;
