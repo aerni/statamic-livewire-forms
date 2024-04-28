@@ -2,10 +2,12 @@
 
 namespace Aerni\LivewireForms\Livewire\Concerns;
 
+use Livewire\Attributes\Locked;
 use Illuminate\Support\MessageBag;
 
 trait HandlesValidation
 {
+    #[Locked]
     public array $allStepErrors = [];
 
     public function bootHandlesValidation(): void
