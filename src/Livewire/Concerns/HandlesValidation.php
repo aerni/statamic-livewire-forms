@@ -2,8 +2,8 @@
 
 namespace Aerni\LivewireForms\Livewire\Concerns;
 
-use Livewire\Attributes\Locked;
 use Illuminate\Support\MessageBag;
+use Livewire\Attributes\Locked;
 
 trait HandlesValidation
 {

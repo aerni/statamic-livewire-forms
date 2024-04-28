@@ -2,9 +2,8 @@
 
 namespace Aerni\LivewireForms\Livewire\Concerns;
 
-use Livewire\Attributes\Locked;
-use Aerni\LivewireForms\Livewire\Concerns\WithForm;
 use Aerni\LivewireForms\Exceptions\HandleNotFoundException;
+use Livewire\Attributes\Locked;
 
 trait WithHandle
 {
