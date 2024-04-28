@@ -2,10 +2,9 @@
 
 namespace Aerni\LivewireForms\Livewire\Concerns;
 
-use Aerni\LivewireForms\Exceptions\HandleNotFoundException;
-use Aerni\LivewireForms\Livewire\BasicForm;
-use Aerni\LivewireForms\Livewire\WizardForm;
 use Livewire\Attributes\Locked;
+use Aerni\LivewireForms\Livewire\Concerns\WithForm;
+use Aerni\LivewireForms\Exceptions\HandleNotFoundException;
 
 trait WithHandle
 {
@@ -25,8 +24,7 @@ trait WithHandle
         }
 
         // Get the handle from the name of the component, e.g. 'contact-us-form' will load the 'contact_us' form.
-        // TODO: Make sure this still works as expected.
-        if ($this instanceof BasicForm || $this instanceof WizardForm) {
+        if (in_array(WithForm::class, class_uses_recursive($this))) {
             return str($this->getName())->beforeLast('-form')->replace('-', '_');
         }
 
