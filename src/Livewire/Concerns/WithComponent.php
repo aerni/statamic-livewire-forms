@@ -10,7 +10,7 @@ trait WithComponent
     #[Computed(true)]
     public function component(): string
     {
-        $component = str($this->handle)->replace('_', '-')->append('-form');
+        $component = str($this->handle)->replace('_', '-')->append('-form')->__toString();
 
         return Livewire::isDiscoverable($component)
             ? $component
