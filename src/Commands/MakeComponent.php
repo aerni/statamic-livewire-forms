@@ -16,22 +16,41 @@ class MakeComponent extends Command
 {
     use RunsInPlease;
 
-    protected $signature = 'livewire-forms:component {name?}';
+    protected $signature = 'livewire-forms:component';
 
-    protected $description = 'Create a new Livewire form component';
+    protected $description = 'Create a new Livewire Forms component';
 
     public function handle(): void
     {
-        $name = $this->argument('name') ?? select(
+        $name = select(
             label: 'Select the form for which you want to create a Livewire component.',
             options: Form::all()->mapWithKeys(fn ($form) => [$form->handle() => $form->title()]),
         );
 
-        $filename = Str::of($name)->endsWith('Form') ? $name : Str::of($name)->append('Form')->studly();
+        $formClass = select(
+            label: 'Select which type of form you want to create.',
+            options: [
+                'BasicForm' => 'Basic Form',
+                'WizardForm' => 'Wizard Form',
+            ],
+        );
 
-        $stub = File::get(__DIR__.'/../../resources/stubs/DummyForm.php');
-        $stub = str_replace('DummyForm', $filename, $stub);
-        $path = app_path("Livewire/{$filename}.php");
+        $formClassImport = match ($formClass) {
+            'BasicForm' => 'Aerni\LivewireForms\Livewire\BasicForm',
+            'WizardForm' => 'Aerni\LivewireForms\Livewire\WizardForm',
+        };
+
+        $className = Str::of($name)->endsWith('Form') ? $name : Str::of($name)->append('Form')->studly();
+
+        $stub = File::get(__DIR__.'/form.stub');
+
+        $stub = preg_replace(
+            ['/\[className\]/', '/\[formClass\]/', '/\[formClassImport\]/'],
+            [$className, $formClass, $formClassImport],
+            $stub
+        );
+
+        $path = app_path("Livewire/{$className}.php");
 
         if (! File::exists($path) || confirm(label: 'A component with this name already exists. Do you want to overwrite it?', default: false)) {
             File::ensureDirectoryExists(app_path('Livewire'));

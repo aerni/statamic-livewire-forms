@@ -16,7 +16,7 @@ class MakeView extends Command
 
     protected $signature = 'livewire-forms:view {name?}';
 
-    protected $description = 'Create a new Livewire form view';
+    protected $description = 'Create a new Livewire Forms view';
 
     public function handle(): void
     {

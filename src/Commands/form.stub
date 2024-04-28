@@ -2,12 +2,12 @@
 
 namespace App\Livewire;
 
+use [formClassImport];
 use Aerni\LivewireForms\Form\Fields;
-use Aerni\LivewireForms\Livewire\Form;
 use Illuminate\Support\Collection;
 use Statamic\Contracts\Forms\Submission;
 
-class DummyForm extends Form
+class [className] extends [formClass]
 {
     /*
     |--------------------------------------------------------------------------

@@ -16,7 +16,7 @@ class MakeTheme extends Command
 
     protected $signature = 'livewire-forms:theme {name?}';
 
-    protected $description = 'Create a new Livewire form theme';
+    protected $description = 'Create a new Livewire Forms theme';
 
     public function handle(): void
     {
