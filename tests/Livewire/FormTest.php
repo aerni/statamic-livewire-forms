@@ -1,7 +1,8 @@
 <?php
 
+use Aerni\LivewireForms\Livewire\BasicForm;
 use Aerni\LivewireForms\Livewire\DynamicForm;
-use Aerni\LivewireForms\Livewire\Form;
+use Aerni\LivewireForms\Livewire\WizardForm;
 use Livewire\Livewire;
 use Statamic\Facades\Blueprint;
 use Statamic\Facades\Form as StatamicForm;
@@ -28,7 +29,12 @@ it('renders dynamic-form successfully', function () {
         ->assertStatus(200);
 });
 
-it('renders form successfully', function () {
-    Livewire::test(Form::class, ['handle' => 'contact'])
+it('renders basic-form successfully', function () {
+    Livewire::test(BasicForm::class, ['handle' => 'contact'])
+        ->assertStatus(200);
+});
+
+it('renders wizard-form successfully', function () {
+    Livewire::test(WizardForm::class, ['handle' => 'contact'])
         ->assertStatus(200);
 });
