@@ -64,6 +64,11 @@ class Step
         return $this->status === StepStatus::Next;
     }
 
+    public function isInvisible(): bool
+    {
+        return $this->status === StepStatus::Invisible;
+    }
+
     public function show(): string
     {
         return "showStep({$this->number})";

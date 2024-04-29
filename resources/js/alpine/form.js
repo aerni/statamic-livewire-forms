@@ -48,4 +48,17 @@ export default () => ({
     showSection(section) {
         return Object.entries(this.fieldsBySection(section)).some(([field]) => this.fields[field].visible)
     },
+
+    showStep(step) {
+        const visible = Object.entries(this.fieldsBySection(step)).some(([field]) => this.fields[field].visible)
+
+        this.$wire.stepVisibility[step] = visible
+
+        // TODO: We are dispatching the event every time this method is triggered.
+        // Can we just dispatch it once after all the steps have been processed?
+        // TODO: This currently leads to weird behavior as it triggers a component update whenever I type in a wire:model field.
+        this.$dispatch('trigger-mutation')
+
+        return visible
+    },
 })
