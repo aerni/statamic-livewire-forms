@@ -2,13 +2,13 @@
 
 namespace Aerni\LivewireForms\Livewire\Concerns;
 
-use Livewire\Attributes\On;
-use Statamic\Fields\Section;
-use Livewire\Attributes\Computed;
-use Aerni\LivewireForms\Form\Step;
-use Illuminate\Support\Collection;
 use Aerni\LivewireForms\Enums\StepStatus;
 use Aerni\LivewireForms\Exceptions\StepDoesNotExist;
+use Aerni\LivewireForms\Form\Step;
+use Illuminate\Support\Collection;
+use Livewire\Attributes\Computed;
+use Livewire\Attributes\On;
+use Statamic\Fields\Section;
 
 trait WithSteps
 {
