@@ -2,6 +2,8 @@
 
 namespace Aerni\LivewireForms\Livewire\Concerns;
 
+use Livewire\Attributes\Computed;
+
 trait HandlesSuccess
 {
     protected function handleSuccess(): self
@@ -20,5 +22,11 @@ trait HandlesSuccess
         $this->dispatch('form-success', id: $this->getId());
 
         return $this;
+    }
+
+    #[Computed]
+    public function success(): bool
+    {
+        return session()->has('success');
     }
 }
