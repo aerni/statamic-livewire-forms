@@ -19,7 +19,7 @@ trait WithSteps
     #[Computed]
     public function steps(): Collection
     {
-        return $this->formSections
+        $steps = $this->formSections
             ->map(fn (Section $section, int $index) => new Step(
                 number: $index + 1,
                 status: StepStatus::Next,
@@ -28,11 +28,19 @@ trait WithSteps
                 instructions: $section->instructions(),
             ))
             ->mapWithKeys(fn (Step $step) => [$step->number => $this->assignStepStatus($step)]);
+
+        /**
+         * We have to unset this variable so that we can correctly
+         * assign the step status on subsequent requests.
+         */
+        unset($this->foundCurrentStep);
+
+        return $steps;
     }
 
     protected function assignStepStatus(Step $step): Step
     {
-        $this->currentFound ??= false;
+        $this->foundCurrentStep ??= false;
 
         if (! $this->stepIsVisible($step->handle())) {
             $step->status = StepStatus::Invisible;
@@ -40,12 +48,12 @@ trait WithSteps
             return $step;
         }
 
-        $step->status = $this->currentFound
+        $step->status = $this->foundCurrentStep
             ? StepStatus::Next
             : StepStatus::Previous;
 
         if ($step->number === $this->currentStep) {
-            $this->currentFound = true;
+            $this->foundCurrentStep = true;
             $step->status = StepStatus::Current;
         }
 
