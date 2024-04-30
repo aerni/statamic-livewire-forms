@@ -25,6 +25,8 @@ class WizardForm extends Component
     use WithSteps;
     use SubmitsForm;
 
+    protected bool $resetValuesOnSuccess = false;
+
     public function render(): View
     {
         return view(ViewManager::viewPath($this->view), [
