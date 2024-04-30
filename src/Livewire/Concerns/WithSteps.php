@@ -156,12 +156,9 @@ trait WithSteps
         return $this->stepVisibility[$handle] ?? true;
     }
 
-    #[On('trigger-mutation')]
-    public function triggerMutation(): void
+    #[On('update-step-visibility')]
+    public function updateStepVisibility(array $steps): void
     {
-        /**
-         * We need this method to immediately trigger an update of the $stepVisibility array
-         * after the conditions have been evaluated on the frontend.
-         */
+        $this->stepVisibility = $steps;
     }
 }
