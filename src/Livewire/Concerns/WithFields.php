@@ -63,7 +63,7 @@ trait WithFields
             ->values()
             ->map(fn ($section, $index) => (new Section(
                 fields: $this->fields->intersectByKeys($section->fields()->all()),
-                order: $index + 1,
+                number: $index + 1,
                 display: $section->display(),
                 instructions: $section->instructions(),
             )));

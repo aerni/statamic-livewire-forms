@@ -10,7 +10,7 @@ class Section
 {
     public function __construct(
         protected Collection $fields,
-        protected int $order,
+        protected int $number,
         protected ?string $display,
         protected ?string $instructions,
     ) {
@@ -18,12 +18,12 @@ class Section
 
     public function handle(): string
     {
-        return Str::snake($this->display ?? $this->order);
+        return Str::snake($this->display ?? $this->number);
     }
 
     public function id(): string
     {
-        return Livewire::current()->getId().'-section-'.$this->order;
+        return Livewire::current()->getId().'-section-'.$this->number;
     }
 
     public function display(): ?string
