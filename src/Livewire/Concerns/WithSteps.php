@@ -29,7 +29,7 @@ trait WithSteps
                 display: $section->display(),
                 instructions: $section->instructions(),
             ))
-            ->mapWithKeys(fn (Step $step) => [$step->number => $this->assignStepStatus($step)]);
+            ->mapWithKeys(fn (Step $step) => [$step->number() => $this->assignStepStatus($step)]);
     }
 
     protected function assignStepStatus(Step $step): Step
@@ -46,7 +46,7 @@ trait WithSteps
             ? StepStatus::Next
             : StepStatus::Previous;
 
-        if ($step->number === $this->currentStep) {
+        if ($step->number() === $this->currentStep) {
             $this->foundCurrentStep = true;
             $step->status = StepStatus::Current;
         }
@@ -78,7 +78,7 @@ trait WithSteps
 
         throw_unless($previousStep, StepDoesNotExist::noPreviousStep($this->currentStep));
 
-        $this->setCurrentStep($previousStep->number);
+        $this->setCurrentStep($previousStep->number());
     }
 
     public function nextStep(): void
@@ -91,7 +91,7 @@ trait WithSteps
 
         throw_unless($nextStep, StepDoesNotExist::noNextStep($this->currentStep));
 
-        $this->setCurrentStep($nextStep->number);
+        $this->setCurrentStep($nextStep->number());
     }
 
     public function showStep(int $step): void
