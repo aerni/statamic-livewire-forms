@@ -7,7 +7,6 @@ use Aerni\LivewireForms\Exceptions\StepDoesNotExist;
 use Aerni\LivewireForms\Form\Step;
 use Illuminate\Support\Collection;
 use Livewire\Attributes\Computed;
-use Livewire\Attributes\On;
 use Statamic\Fields\Section;
 
 trait WithSteps
@@ -154,11 +153,5 @@ trait WithSteps
     protected function stepIsVisible(string $handle): bool
     {
         return $this->stepVisibility[$handle] ?? true;
-    }
-
-    #[On('update-step-visibility')]
-    public function updateStepVisibility(array $steps): void
-    {
-        $this->stepVisibility = $steps;
     }
 }

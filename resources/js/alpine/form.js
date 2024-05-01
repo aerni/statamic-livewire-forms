@@ -2,13 +2,8 @@ import FieldConditions from '../../../vendor/statamic/cms/resources/js/frontend/
 
 export default () => ({
     fields: {},
-    steps: {},
 
     conditions: new FieldConditions,
-
-    init() {
-        this.$watch('steps', value => this.$wire.dispatchSelf('update-step-visibility', { steps: value }))
-    },
 
     processFields(fields) {
         const values = Object.entries(fields).reduce((fields, [key, field]) => {
@@ -55,6 +50,13 @@ export default () => ({
     },
 
     showStep(step) {
-        return this.steps[step] = this.showSection(step)
+        let visible = this.showSection(step)
+
+        if (this.$wire.stepVisibility[step] !== visible) {
+            this.$wire.stepVisibility[step] = visible
+            this.$wire.$refresh()
+        }
+
+        return visible
     },
 })
