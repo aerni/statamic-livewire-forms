@@ -23,6 +23,8 @@ class BasicForm extends Component
     use WithMessages;
     use SubmitsForm;
 
+    protected bool $resetFormOnSuccess = true;
+
     public function render(): View
     {
         return view(ViewManager::viewPath($this->view));
