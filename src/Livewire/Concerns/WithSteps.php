@@ -54,20 +54,22 @@ trait WithSteps
         return $step;
     }
 
-    protected function step(int $number): Step
+    protected function setCurrentStep(int $step): void
     {
-        $step = $this->steps->get($number);
+        $this->currentStep = $step;
 
-        throw_unless($step, StepDoesNotExist::stepNotFound($number));
-
-        throw_if($step->isInvisible(), StepDoesNotExist::stepIsInvisible($number));
-
-        return $step;
+        unset($this->steps);
     }
 
     public function currentStep(): Step
     {
-        return $this->step($this->currentStep);
+        $step = $this->steps->get($this->currentStep);
+
+        throw_unless($step, StepDoesNotExist::stepNotFound($this->currentStep));
+
+        throw_if($step->isInvisible(), StepDoesNotExist::stepIsInvisible($this->currentStep));
+
+        return $step;
     }
 
     public function previousStep(): void
@@ -76,9 +78,7 @@ trait WithSteps
 
         throw_unless($previousStep, StepDoesNotExist::noPreviousStep($this->currentStep));
 
-        $this->currentStep = $previousStep->number;
-
-        unset($this->steps);
+        $this->setCurrentStep($previousStep->number);
     }
 
     public function nextStep(): void
@@ -91,23 +91,21 @@ trait WithSteps
 
         throw_unless($nextStep, StepDoesNotExist::noNextStep($this->currentStep));
 
-        $this->currentStep = $nextStep->number;
-
-        unset($this->steps);
+        $this->setCurrentStep($nextStep->number);
     }
 
-    public function showStep(int $number): void
+    public function showStep(int $step): void
     {
-        $step = $this->step($number);
-
-        /* Only validate if we are navigating forward */
-        if ($step->number > $this->currentStep && ! $this->currentStep()->validate()) {
+        if ($step === $this->currentStep) {
             return;
         }
 
-        $this->currentStep = $step->number;
+        /* Only validate if we are navigating forward */
+        if ($step > $this->currentStep && ! $this->currentStep()->validate()) {
+            return;
+        }
 
-        unset($this->steps);
+        $this->setCurrentStep($step);
     }
 
     #[Computed]
@@ -128,9 +126,9 @@ trait WithSteps
         return ! $this->hasNextStep;
     }
 
-    public function canNavigateToStep(int $number): bool
+    public function canNavigateToStep(int $step): bool
     {
-        $step = $this->steps->get($number);
+        $step = $this->steps->get($step);
 
         /* Allow navigation to all previous steps. */
         if ($step->isPrevious()) {
