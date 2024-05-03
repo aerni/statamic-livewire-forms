@@ -2,45 +2,73 @@
 
 namespace Aerni\LivewireForms\Livewire\Concerns;
 
-use Illuminate\Support\MessageBag;
 use Livewire\Attributes\Locked;
+use Aerni\LivewireForms\Enums\StepStatus;
+use Illuminate\Contracts\Validation\Validator;
 
 trait HandlesValidation
 {
+    // TODO: Should this only be added for the WizardForm?
     #[Locked]
-    public array $allStepErrors = [];
+    public array $stepErrors = [];
 
     public function bootHandlesValidation(): void
     {
-        /**
-         * Remove all fields that are not submittable from the data before validation to replicate
-         * Statamic's suggested validation pattern: https://statamic.dev/conditional-fields#validation
-         * This allows us to conditionally apply validation to conditionally shown fields using the 'sometimes' rule.
-         */
         $this->withValidator(function ($validator) {
+
+            /**
+             * Remove all fields that are not submittable from the data before validation to replicate
+             * Statamic's suggested validation pattern: https://statamic.dev/conditional-fields#validation
+             * This allows us to conditionally apply validation to conditionally shown fields using the 'sometimes' rule.
+             */
             collect($validator->getValue('fields'))
                 ->filter(fn ($value, $field) => $this->submittableFields[$field])
                 ->pipe(fn ($fields) => $validator->setValue('fields', $fields));
+
+            /**
+             * Validation errors in a WizardForm need special treatment.
+             */
+            if (property_exists($this, 'currentStep')) {
+                $validator->after(function ($validator) {
+                    /* Store the current errors so that we can restore them later. */
+                    $this->storeStepErrors($validator);
+
+                    /**
+                     * If the validation of the current step fails, we need to merge all previously stored errors
+                     * to ensure that we don't reset the validation state of other steps in the process.
+                     */
+                    if ($validator->errors()->hasAny($this->currentStep()->fields()->map->key()->all())) {
+                        /* Ensure we don't add errors that already exist. */
+                        $errors = array_diff_key($this->stepErrors, $validator->errors()->messages());
+                        $validator->errors()->merge($errors);
+                    }
+                });
+            }
+
         });
     }
 
-    public function storeAllStepErrors(): void
+    protected function storeStepErrors(Validator $validator): void
     {
-        $currentErrors = $this->getErrorBag()->messages();
+        $currentErrors = $validator->errors()->messages();
 
-        $stepFields = $this->currentStep()->fields()->map->key()->flip();
+        $currentStepFields = $this->currentStep()->fields()->map->key()->flip();
 
-        $resolvedErrors = collect($stepFields)->diffKeys($currentErrors);
+        $hiddenStepFields = $this->steps->where('status', StepStatus::Invisible)->flatMap->fields()->map->key()->flip();
 
-        $this->allStepErrors = collect($this->allStepErrors)
+        $fieldsWithNoErrors = $currentStepFields->merge($hiddenStepFields)->diffKeys($currentErrors);
+
+        $this->stepErrors = collect($this->stepErrors)
             ->merge($currentErrors)
-            ->diffKeys($resolvedErrors)
+            ->diffKeys($fieldsWithNoErrors) /* Ensure we remove resolved errors */
             ->toArray();
+
+        $this->setStepErrors();
     }
 
-    public function restoreAllStepErrors(): void
+    public function setStepErrors(): void
     {
-        $this->setErrorBag(new MessageBag($this->allStepErrors));
+        $this->setErrorBag($this->stepErrors);
     }
 
     protected function rules(): array

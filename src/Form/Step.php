@@ -83,18 +83,6 @@ class Step
 
     public function validate(): bool
     {
-        /**
-         * The error bag is reset when the validation of the current step passes.
-         * This leads to error messages of other steps being reset as well.
-         * To prevent this, we can just return early if the current step has errors.
-         * The fields of the step are still being validated with validateOnly() in the updatedFields() method.
-         */
-        if ($this->hasErrors()) {
-            return false;
-        }
-
-        Livewire::current()->storeAllStepErrors();
-
         $rules = $this->fields()
             ->mapWithKeys(fn (Field $field) => $field->rules())
             ->toArray();
@@ -102,11 +90,11 @@ class Step
         Livewire::current()->validate($rules);
 
         /*
-        * The error bag is reset when the current step is validated.
+        * The error bag is reset when the validation of a step passes.
         * This leads to error messages of other steps being reset as well.
-        * To prevent this, we restore the previous error bag after the validation.
+        * To prevent this, we restore the previous error bag.
         */
-        Livewire::current()->restoreAllStepErrors();
+        Livewire::current()->setStepErrors();
 
         return true;
     }
