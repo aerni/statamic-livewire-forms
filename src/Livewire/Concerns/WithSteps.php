@@ -83,9 +83,7 @@ trait WithSteps
 
     public function nextStep(): void
     {
-        if (! $this->currentStep()->validate()) {
-            return;
-        }
+        $this->currentStep()->validate();
 
         $nextStep = $this->steps->first(fn (Step $step) => $step->isNext());
 
@@ -100,9 +98,9 @@ trait WithSteps
             return;
         }
 
-        /* Only validate if we are navigating forward */
-        if ($step > $this->currentStep && ! $this->currentStep()->validate()) {
-            return;
+        /* Only validate if we are navigating forward. */
+        if ($step > $this->currentStep) {
+            $this->currentStep()->validate();
         }
 
         $this->setCurrentStep($step);
@@ -146,5 +144,13 @@ trait WithSteps
     protected function stepIsVisible(string $handle): bool
     {
         return $this->stepVisibility[$handle] ?? true;
+    }
+
+    public function updatedStepVisibility(bool $visible, string $key): void
+    {
+        /* Remove validation errors of hidden steps. */
+        if (! $visible) {
+            $this->steps->firstWhere(fn ($step) => $step->handle() === $key)->forgetErrors();
+        }
     }
 }

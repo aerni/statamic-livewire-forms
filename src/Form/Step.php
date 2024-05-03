@@ -81,7 +81,13 @@ class Step
             ->hasAny($this->fields->map->key()->all());
     }
 
-    public function validate(): bool
+    public function forgetErrors(): void
+    {
+        Livewire::current()
+            ->forgetStepErrors($this->fields->map->key()->values()->all());
+    }
+
+    public function validate(): void
     {
         $rules = $this->fields()
             ->mapWithKeys(fn (Field $field) => $field->rules())
@@ -94,8 +100,6 @@ class Step
         * This leads to error messages of other steps being reset as well.
         * To prevent this, we restore the previous error bag.
         */
-        Livewire::current()->setStepErrors();
-
-        return true;
+        Livewire::current()->setErrorBag(Livewire::current()->stepErrors);
     }
 }

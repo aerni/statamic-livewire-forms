@@ -29,9 +29,17 @@ trait WithFields
         //
     }
 
-    public function updatedFields($value, $key): void
+    public function updatedFields(mixed $value, string $key): void
     {
         $this->validateOnly("fields.{$key}");
+
+        /**
+         * Explicitly forget the errors of this field after validation has passed
+         * so that we don't restore them in some edge case scenarios.
+         */
+        if (property_exists($this, 'currentStep')) {
+            $this->forgetStepErrors("fields.{$key}");
+        }
     }
 
     protected function fields(): Collection

@@ -2,8 +2,6 @@
 
 namespace Aerni\LivewireForms\Livewire\Concerns;
 
-use Aerni\LivewireForms\Enums\StepStatus;
-use Illuminate\Contracts\Validation\Validator;
 use Livewire\Attributes\Locked;
 
 trait HandlesValidation
@@ -15,7 +13,6 @@ trait HandlesValidation
     public function bootHandlesValidation(): void
     {
         $this->withValidator(function ($validator) {
-
             /**
              * Remove all fields that are not submittable from the data before validation to replicate
              * Statamic's suggested validation pattern: https://statamic.dev/conditional-fields#validation
@@ -30,8 +27,8 @@ trait HandlesValidation
              */
             if (property_exists($this, 'currentStep')) {
                 $validator->after(function ($validator) {
-                    /* Store the current errors so that we can restore them later. */
-                    $this->storeStepErrors($validator);
+                    /* Store the current errors so that we can restore them after successfull validation. */
+                    $this->stepErrors = array_merge($this->stepErrors, $validator->errors()->messages());
 
                     /**
                      * If the validation of the current step fails, we need to merge all previously stored errors
@@ -44,31 +41,14 @@ trait HandlesValidation
                     }
                 });
             }
-
         });
     }
 
-    protected function storeStepErrors(Validator $validator): void
+    public function forgetStepErrors(string|array $keys): void
     {
-        $currentErrors = $validator->errors()->messages();
+        array_forget($this->stepErrors, $keys);
 
-        $currentStepFields = $this->currentStep()->fields()->map->key()->flip();
-
-        $hiddenStepFields = $this->steps->where('status', StepStatus::Invisible)->flatMap->fields()->map->key()->flip();
-
-        $fieldsWithNoErrors = $currentStepFields->merge($hiddenStepFields)->diffKeys($currentErrors);
-
-        $this->stepErrors = collect($this->stepErrors)
-            ->merge($currentErrors)
-            ->diffKeys($fieldsWithNoErrors) /* Ensure we remove resolved errors */
-            ->toArray();
-
-        $this->setStepErrors();
-    }
-
-    public function setStepErrors(): void
-    {
-        $this->setErrorBag($this->stepErrors);
+        $this->resetErrorBag($this->stepErrors);
     }
 
     protected function rules(): array
