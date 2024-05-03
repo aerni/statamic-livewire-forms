@@ -2,9 +2,9 @@
 
 namespace Aerni\LivewireForms\Livewire\Concerns;
 
-use Livewire\Attributes\Locked;
 use Aerni\LivewireForms\Enums\StepStatus;
 use Illuminate\Contracts\Validation\Validator;
+use Livewire\Attributes\Locked;
 
 trait HandlesValidation
 {
