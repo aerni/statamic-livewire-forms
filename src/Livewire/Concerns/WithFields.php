@@ -38,7 +38,7 @@ trait WithFields
          * so that we don't restore them in some edge case scenarios.
          */
         if (property_exists($this, 'currentStep')) {
-            $this->forgetStepErrors("fields.{$key}");
+            $this->resetStepErrorBag("fields.{$key}");
         }
     }
 

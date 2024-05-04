@@ -150,7 +150,7 @@ trait WithSteps
     {
         /* Remove validation errors of hidden steps. */
         if (! $visible) {
-            $this->steps->firstWhere(fn ($step) => $step->handle() === $key)->forgetErrors();
+            $this->steps->firstWhere(fn ($step) => $step->handle() === $key)->resetErrorBag();
         }
     }
 }

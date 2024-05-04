@@ -44,11 +44,11 @@ trait HandlesValidation
         });
     }
 
-    public function forgetStepErrors(string|array $keys): void
+    public function resetStepErrorBag(string|array $keys): void
     {
         array_forget($this->stepErrors, $keys);
 
-        $this->resetErrorBag($this->stepErrors);
+        $this->setErrorBag($this->stepErrors);
     }
 
     protected function rules(): array
