@@ -2,13 +2,14 @@
 
 namespace Aerni\LivewireForms\Livewire\Concerns;
 
-use Aerni\LivewireForms\Fields\Captcha;
-use Aerni\LivewireForms\Fields\Field;
-use Aerni\LivewireForms\Fields\Honeypot;
-use Aerni\LivewireForms\Form\Section;
-use Illuminate\Support\Collection;
 use Livewire\Attributes\Computed;
+use Illuminate\Support\Collection;
+use Aerni\LivewireForms\Fields\Field;
+use Aerni\LivewireForms\Form\Section;
+use Aerni\LivewireForms\Fields\Captcha;
+use Aerni\LivewireForms\Fields\Honeypot;
 use Statamic\Fields\Field as StatamicField;
+use Aerni\LivewireForms\Livewire\WizardForm;
 
 trait WithFields
 {
@@ -37,7 +38,7 @@ trait WithFields
          * Explicitly forget the errors of this field after validation has passed
          * so that we don't restore them in some edge case scenarios.
          */
-        if (property_exists($this, 'currentStep')) {
+        if ($this instanceof WizardForm) {
             $this->resetStepErrorBag("fields.{$key}");
         }
     }

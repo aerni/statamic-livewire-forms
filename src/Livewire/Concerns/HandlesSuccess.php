@@ -2,6 +2,7 @@
 
 namespace Aerni\LivewireForms\Livewire\Concerns;
 
+use Aerni\LivewireForms\Livewire\WizardForm;
 use Livewire\Attributes\Computed;
 
 trait HandlesSuccess
@@ -30,7 +31,7 @@ trait HandlesSuccess
         /* Preserve the captcha state by setting the value to its previous state. */
         $this->captcha()?->value($captcha);
 
-        if (property_exists($this, 'currentStep')) {
+        if ($this instanceof WizardForm) {
             $this->reset('currentStep');
         }
     }

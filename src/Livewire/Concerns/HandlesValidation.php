@@ -3,6 +3,7 @@
 namespace Aerni\LivewireForms\Livewire\Concerns;
 
 use Livewire\Attributes\Locked;
+use Aerni\LivewireForms\Livewire\WizardForm;
 
 trait HandlesValidation
 {
@@ -25,7 +26,7 @@ trait HandlesValidation
             /**
              * Validation errors in a WizardForm need special treatment.
              */
-            if (property_exists($this, 'currentStep')) {
+            if ($this instanceof WizardForm) {
                 $validator->after(function ($validator) {
                     /* Store the current errors so that we can restore them after successfull validation. */
                     $this->stepErrors = array_merge($this->stepErrors, $validator->errors()->messages());
