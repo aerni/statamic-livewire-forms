@@ -3,17 +3,18 @@
         <li
             x-show="showStep('{{ $step->handle() }}')"
             wire:key="{{ $step->id() }}"
-            class="whitespace-nowrap flex items-center gap-x-3
-                @if($step->hasErrors())
-                    text-red-600
-                @else
-                    {{ $step->isCurrent() ? 'text-indigo-600' : 'text-gray-400' }}
-                @endif
-            "
+            class="flex items-center whitespace-nowrap gap-x-3"
         >
             <button
                 type="button"
-                class="flex items-center"
+                class="
+                    inline-flex transition-all focus:outline-none focus:rounded focus:ring-2 focus:ring-indigo-500
+                    @if($step->hasErrors())
+                        text-red-600
+                    @else
+                        {{ $step->isCurrent() ? 'text-indigo-600' : 'text-gray-400 hover:text-indigo-400' }}
+                    @endif
+                "
                 @if($this->canNavigateToStep($step->number()))
                     wire:click="{{ $step->show() }}"
                 @else
