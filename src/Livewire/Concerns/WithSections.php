@@ -13,8 +13,8 @@ trait WithSections
     {
         return $this->formSections->map(function ($section, $index) {
             return new Section(
+                number: $index + 1,
                 fields: $this->fields->intersectByKeys($section->fields()->all()),
-                order: $index + 1,
                 display: $section->display(),
                 instructions: $section->instructions(),
             );

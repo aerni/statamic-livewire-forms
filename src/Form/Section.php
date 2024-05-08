@@ -9,8 +9,8 @@ use Livewire\Livewire;
 class Section
 {
     public function __construct(
+        protected int $number,
         protected Collection $fields,
-        protected int $order,
         protected ?string $display,
         protected ?string $instructions,
     ) {
@@ -18,12 +18,12 @@ class Section
 
     public function handle(): string
     {
-        return Str::snake($this->display ?? $this->order);
+        return Str::snake($this->display ?? $this->number);
     }
 
     public function id(): string
     {
-        return Livewire::current()->getId().'-section-'.$this->order;
+        return Livewire::current()->getId().'-section-'.$this->number;
     }
 
     public function display(): ?string
@@ -41,8 +41,8 @@ class Section
         return $this->fields;
     }
 
-    public function order(): int
+    public function number(): int
     {
-        return $this->order;
+        return $this->number;
     }
 }
