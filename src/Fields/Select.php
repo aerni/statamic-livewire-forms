@@ -21,25 +21,25 @@ class Select extends Field
         $default = $default ?? $this->field->defaultValue();
         $options = $this->options;
 
-        // A default is only valid if it exists in the options.
+        /* A default is only valid if it exists in the options. */
         $default = collect($options)->only($default ?? [])->keys();
 
-        // Return all defaults if the Select field has multiple enabled.
+        /* Return all defaults if the Select field has multiple enabled. */
         if ($this->multiple) {
             return $default->toArray();
         }
 
-        // If there are any defaults, return the first.
+        /* If there are any defaults, return the first. */
         if ($default->isNotEmpty()) {
             return $default->first();
         }
 
-        // If there is a placeholder we don't want to return a default.
+        /* If there is a placeholder we don't want to return a default. */
         if ($this->placeholder) {
             return null;
         }
 
-        // Fall back to simply return the first option.
+        /* Fall back to simply return the first option. */
         return array_key_first($options);
     }
 

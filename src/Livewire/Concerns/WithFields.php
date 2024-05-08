@@ -5,7 +5,6 @@ namespace Aerni\LivewireForms\Livewire\Concerns;
 use Aerni\LivewireForms\Fields\Captcha;
 use Aerni\LivewireForms\Fields\Field;
 use Aerni\LivewireForms\Fields\Honeypot;
-use Aerni\LivewireForms\Form\Section;
 use Illuminate\Support\Collection;
 use Livewire\Attributes\Computed;
 use Statamic\Fields\Field as StatamicField;
@@ -29,9 +28,17 @@ trait WithFields
         //
     }
 
-    public function updatedFields($value, $key): void
+    public function updatedFields(mixed $value, string $key): void
     {
         $this->validateOnly("fields.{$key}");
+
+        /**
+         * Explicitly forget the errors of this field after validation has passed
+         * so that we don't restore them in some edge case scenarios.
+         */
+        if ($this->isWizardForm()) {
+            $this->resetStepErrorBag("fields.{$key}");
+        }
     }
 
     protected function fields(): Collection
@@ -53,25 +60,6 @@ trait WithFields
         return $class
             ? $class::make($field)
             : throw new \Exception("The field model binding for fieldtype [{$fieldtype}] cannot be found.");
-    }
-
-    #[Computed]
-    public function sections(): Collection
-    {
-        return $this->form->blueprint()->tabs()->first()->sections()
-            ->filter(fn ($section) => $section->fields()->all()->isNotEmpty())
-            ->values()
-            ->map(fn ($section, $index) => (new Section(
-                fields: $this->fields->intersectByKeys($section->fields()->all()),
-                number: $index + 1,
-                display: $section->display(),
-                instructions: $section->instructions(),
-            )));
-    }
-
-    public function section(string $handle): ?Section
-    {
-        return $this->sections->firstWhere(fn ($section) => $section->handle() === $handle);
     }
 
     #[Computed]

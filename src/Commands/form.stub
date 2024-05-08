@@ -3,11 +3,11 @@
 namespace App\Livewire;
 
 use Aerni\LivewireForms\Form\Fields;
-use Aerni\LivewireForms\Livewire\Form;
+use Aerni\LivewireForms\Livewire\BaseForm;
 use Illuminate\Support\Collection;
 use Statamic\Contracts\Forms\Submission;
 
-class DummyForm extends Form
+class [className] extends BaseForm
 {
     /*
     |--------------------------------------------------------------------------
@@ -23,6 +23,7 @@ class DummyForm extends Form
     // {
     //     $this->handle = 'contact';
     //     $this->theme = 'secondary';
+    //     $this->type = 'wizard';
     //     $this->view = 'default';
     // }
 

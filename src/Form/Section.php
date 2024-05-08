@@ -9,8 +9,8 @@ use Livewire\Livewire;
 class Section
 {
     public function __construct(
-        protected Collection $fields,
         protected int $number,
+        protected Collection $fields,
         protected ?string $display,
         protected ?string $instructions,
     ) {
@@ -39,5 +39,10 @@ class Section
     public function fields(): Collection
     {
         return $this->fields;
+    }
+
+    public function number(): int
+    {
+        return $this->number;
     }
 }

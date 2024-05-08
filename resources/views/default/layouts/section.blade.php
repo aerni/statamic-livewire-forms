@@ -3,7 +3,7 @@
     wire:key="{{ $section->id() }}"
     aria-labelledby="{{ $section->id() }}-label"
     aria-describedby="{{ $section->id() }}-instructions"
-    class="grid gap-y-8"
+    class="flex flex-col gap-y-8"
 >
 
     @if($section->display())

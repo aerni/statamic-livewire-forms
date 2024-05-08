@@ -3,7 +3,7 @@
 namespace Aerni\LivewireForms\Livewire\Concerns;
 
 use Aerni\LivewireForms\Exceptions\HandleNotFoundException;
-use Aerni\LivewireForms\Livewire\Form;
+use Aerni\LivewireForms\Livewire\BaseForm;
 use Livewire\Attributes\Locked;
 
 trait WithHandle
@@ -18,13 +18,13 @@ trait WithHandle
 
     protected function handle(): string
     {
-        // Get the handle passed to the component in the view.
+        /* Get the handle passed to the component. */
         if (isset($this->handle)) {
             return $this->handle;
         }
 
-        // Get the handle from the name of the component, e.g. 'contact-us-form' will load the 'contact_us' form.
-        if ($this instanceof Form) {
+        /* Get the handle from the name of the component, e.g. 'contact-us-form' will load the 'contact_us' form. */
+        if ($this instanceof BaseForm) {
             return str($this->getName())->beforeLast('-form')->replace('-', '_');
         }
 

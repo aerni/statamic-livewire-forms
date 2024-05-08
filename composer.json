@@ -17,7 +17,7 @@
         }
     ],
     "require": {
-        "php": "^8.1",
+        "php": "^8.2",
         "jonassiewertsen/statamic-livewire": "^3.0",
         "laravel/framework": "^10.0",
         "laravel/prompts": "^0.1.13",

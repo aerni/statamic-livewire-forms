@@ -48,4 +48,15 @@ export default () => ({
     showSection(section) {
         return Object.entries(this.fieldsBySection(section)).some(([field]) => this.fields[field].visible)
     },
+
+    showStep(step) {
+        let visible = this.showSection(step)
+
+        if (this.$wire.stepVisibility[step] !== visible) {
+            this.$wire.stepVisibility[step] = visible
+            this.$wire.$refresh()
+        }
+
+        return visible
+    },
 })

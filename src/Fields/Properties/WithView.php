@@ -14,10 +14,10 @@ trait WithView
         $handleView = "fields.{$this->handle}";
 
         return match (true) {
-            $this->viewExists($overrideView) => $overrideView, // Load a view defined in the component.
-            $this->viewExists($configView) => $configView, // Load a view defined in the config.
-            $this->viewExists($handleView) => $handleView, // Autoload the view by field handle.
-            default => "fields/{$this->view}" // Fall back to the default field view.
+            $this->viewExists($overrideView) => $overrideView, /* Load a view defined in the component. */
+            $this->viewExists($configView) => $configView, /* Load a view defined in the config. */
+            $this->viewExists($handleView) => $handleView, /* Autoload the view by field handle. */
+            default => "fields/{$this->view}" /* Fall back to the default field view. */
         };
     }
 

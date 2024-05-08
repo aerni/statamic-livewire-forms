@@ -3,8 +3,8 @@
 namespace Aerni\LivewireForms;
 
 use Aerni\LivewireForms\Facades\Captcha;
+use Aerni\LivewireForms\Livewire\BaseForm;
 use Aerni\LivewireForms\Livewire\DynamicForm;
-use Aerni\LivewireForms\Livewire\Form;
 use Aerni\LivewireForms\Livewire\Synthesizers\FieldSynth;
 use Aerni\LivewireForms\Livewire\Synthesizers\RuleSynth;
 use Illuminate\Support\Facades\Blade;
@@ -59,7 +59,8 @@ class ServiceProvider extends AddonServiceProvider
     protected function bootLivewire(): self
     {
         Livewire::component('form', DynamicForm::class);
-        Livewire::component('default-form', Form::class);
+        Livewire::component('base-form', BaseForm::class);
+
         Livewire::propertySynthesizer(FieldSynth::class);
         Livewire::propertySynthesizer(RuleSynth::class);
 
