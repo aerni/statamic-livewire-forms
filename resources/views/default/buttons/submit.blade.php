@@ -1,9 +1,9 @@
 <button
     type="submit"
-    class="relative inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-white transition-all ease-in-out bg-indigo-600 border border-transparent rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
     wire:loading.delay.attr="disabled"
     wire:loading.delay.class="cursor-not-allowed opacity-60 pl-11"
     wire:target="submit"
+    class="relative inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-white transition-all ease-in-out bg-indigo-600 border border-transparent rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
 >
     <svg
         class="absolute left-0 w-5 h-5 ml-3 text-white animate-spin"
