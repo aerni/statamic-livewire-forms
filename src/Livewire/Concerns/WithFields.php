@@ -62,7 +62,6 @@ trait WithFields
             : throw new \Exception("The field model binding for fieldtype [{$fieldtype}] cannot be found.");
     }
 
-    #[Computed]
     public function honeypot(): Honeypot
     {
         return $this->fields->whereInstanceOf(Honeypot::class)->first();
