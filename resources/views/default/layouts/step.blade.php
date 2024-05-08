@@ -27,12 +27,10 @@
     </div>
 
     <div class="flex flex-row-reverse flex-wrap items-center justify-start gap-x-3 gap-y-2">
-        @if($this->isLastStep)
-            @formView('buttons.submit')
-        @endif
-
         @if($this->hasNextStep)
             @formView('buttons.next')
+        @else
+            @formView('buttons.submit')
         @endif
 
         @if($this->hasPreviousStep)

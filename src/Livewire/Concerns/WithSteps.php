@@ -118,12 +118,6 @@ trait WithSteps
         return (bool) $this->steps->first(fn (Step $step) => $step->isNext());
     }
 
-    #[Computed]
-    public function isLastStep(): bool
-    {
-        return ! $this->hasNextStep;
-    }
-
     public function canNavigateToStep(int $step): bool
     {
         $step = $this->steps->get($step);
