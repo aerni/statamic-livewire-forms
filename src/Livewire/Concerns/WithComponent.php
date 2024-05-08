@@ -13,6 +13,6 @@ trait WithComponent
     {
         $component = Str::replace('_', '-', $this->handle).'-form';
 
-        return Livewire::isDiscoverable($component) ? $component : "base-form";
+        return Livewire::isDiscoverable($component) ? $component : 'base-form';
     }
 }

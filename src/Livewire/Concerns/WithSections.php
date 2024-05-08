@@ -2,9 +2,9 @@
 
 namespace Aerni\LivewireForms\Livewire\Concerns;
 
-use Livewire\Attributes\Computed;
-use Illuminate\Support\Collection;
 use Aerni\LivewireForms\Form\Section;
+use Illuminate\Support\Collection;
+use Livewire\Attributes\Computed;
 
 trait WithSections
 {
