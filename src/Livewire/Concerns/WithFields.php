@@ -6,6 +6,7 @@ use Aerni\LivewireForms\Fields\Captcha;
 use Aerni\LivewireForms\Fields\Field;
 use Aerni\LivewireForms\Fields\Honeypot;
 use Illuminate\Support\Collection;
+use Livewire\Attributes\Computed;
 use Statamic\Fields\Field as StatamicField;
 
 trait WithFields
@@ -61,6 +62,7 @@ trait WithFields
             : throw new \Exception("The field model binding for fieldtype [{$fieldtype}] cannot be found.");
     }
 
+    #[Computed]
     public function honeypot(): Honeypot
     {
         return $this->fields->whereInstanceOf(Honeypot::class)->first();
