@@ -1,12 +1,10 @@
 <?php
 
+use Aerni\LivewireForms\Livewire\BaseForm;
+use Aerni\LivewireForms\Livewire\DynamicForm;
 use Livewire\Livewire;
 use Statamic\Facades\Blueprint;
-use Aerni\LivewireForms\Livewire\BaseForm;
 use Statamic\Facades\Form as StatamicForm;
-use Aerni\LivewireForms\Livewire\BasicForm;
-use Aerni\LivewireForms\Livewire\WizardForm;
-use Aerni\LivewireForms\Livewire\DynamicForm;
 
 beforeEach(function () {
     Blueprint::makeFromFields([
