@@ -1,11 +1,12 @@
 <?php
 
-use Aerni\LivewireForms\Livewire\BasicForm;
-use Aerni\LivewireForms\Livewire\DynamicForm;
-use Aerni\LivewireForms\Livewire\WizardForm;
 use Livewire\Livewire;
 use Statamic\Facades\Blueprint;
+use Aerni\LivewireForms\Livewire\BaseForm;
 use Statamic\Facades\Form as StatamicForm;
+use Aerni\LivewireForms\Livewire\BasicForm;
+use Aerni\LivewireForms\Livewire\WizardForm;
+use Aerni\LivewireForms\Livewire\DynamicForm;
 
 beforeEach(function () {
     Blueprint::makeFromFields([
@@ -30,11 +31,6 @@ it('renders dynamic-form successfully', function () {
 });
 
 it('renders basic-form successfully', function () {
-    Livewire::test(BasicForm::class, ['handle' => 'contact'])
-        ->assertStatus(200);
-});
-
-it('renders wizard-form successfully', function () {
-    Livewire::test(WizardForm::class, ['handle' => 'contact'])
+    Livewire::test(BaseForm::class, ['handle' => 'contact'])
         ->assertStatus(200);
 });

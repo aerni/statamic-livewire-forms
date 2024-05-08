@@ -14,7 +14,7 @@ beforeEach(function () {
 
     StatamicForm::make('contact')->save();
 
-    $component = Livewire::test('basic-form', [
+    $component = Livewire::test('base-form', [
         'handle' => 'contact',
         'theme' => 'default',
         'view' => 'default',
