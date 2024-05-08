@@ -4,17 +4,9 @@
     x-cloak
     wire:submit="submit"
 >
-    <div class="grid gap-y-16">
-        @formView('layouts.sections')
-        <div class="grid gap-y-4">
-            @formView('fields.honeypot')
-            @formView('layouts.submit')
-            @formView('messages.errors')
-            @formView('messages.success')
-        </div>
-    </div>
+    @formView("forms.{$this->type}")
 </form>
 
-@once
+@assets
     <script type="module" src="/vendor/livewire-forms/js/livewire-forms.js"></script>
-@endonce
+@endassets
