@@ -11,8 +11,8 @@ use Livewire\Livewire;
 class Step
 {
     public function __construct(
-        protected int $number,
         public StepStatus $status,
+        protected int $number,
         protected Collection $fields,
         protected ?string $display,
         protected ?string $instructions,

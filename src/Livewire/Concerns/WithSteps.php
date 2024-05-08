@@ -23,8 +23,8 @@ trait WithSteps
 
         return $this->formSections
             ->map(fn (Section $section, int $index) => new Step(
-                number: $index + 1,
                 status: StepStatus::Next,
+                number: $index + 1,
                 fields: $this->fields->intersectByKeys($section->fields()->all()),
                 display: $section->display(),
                 instructions: $section->instructions(),
