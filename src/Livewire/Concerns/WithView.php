@@ -17,17 +17,17 @@ trait WithView
 
     protected function view(): string
     {
-        // Get the view passed to the component in the view.
+        /* Get the view passed to the component in the view. */
         if (isset($this->view)) {
             return $this->view;
         }
 
-        // Autoload the view by form handle if it exists.
+        /* Autoload the view by form handle if it exists. */
         if (ViewManager::viewExists($this->handle)) {
             return $this->handle;
         }
 
-        // Fall back to the default view.
+        /* Fall back to the default view. */
         return ViewManager::defaultView();
     }
 }

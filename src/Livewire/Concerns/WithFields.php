@@ -5,11 +5,9 @@ namespace Aerni\LivewireForms\Livewire\Concerns;
 use Livewire\Attributes\Computed;
 use Illuminate\Support\Collection;
 use Aerni\LivewireForms\Fields\Field;
-use Aerni\LivewireForms\Form\Section;
 use Aerni\LivewireForms\Fields\Captcha;
 use Aerni\LivewireForms\Fields\Honeypot;
 use Statamic\Fields\Field as StatamicField;
-use Aerni\LivewireForms\Livewire\WizardForm;
 
 trait WithFields
 {
@@ -38,7 +36,7 @@ trait WithFields
          * Explicitly forget the errors of this field after validation has passed
          * so that we don't restore them in some edge case scenarios.
          */
-        if ($this instanceof WizardForm) {
+        if ($this->isWizardForm()) {
             $this->resetStepErrorBag("fields.{$key}");
         }
     }
@@ -62,25 +60,6 @@ trait WithFields
         return $class
             ? $class::make($field)
             : throw new \Exception("The field model binding for fieldtype [{$fieldtype}] cannot be found.");
-    }
-
-    // TODO: Move sections into its own trait like steps.
-    #[Computed]
-    public function sections(): Collection
-    {
-        return $this->formSections->map(function ($section, $index) {
-            return new Section(
-                fields: $this->fields->intersectByKeys($section->fields()->all()),
-                order: $index + 1,
-                display: $section->display(),
-                instructions: $section->instructions(),
-            );
-        });
-    }
-
-    public function section(string $handle): ?Section
-    {
-        return $this->sections->firstWhere(fn ($section) => $section->handle() === $handle);
     }
 
     #[Computed]

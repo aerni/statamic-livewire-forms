@@ -3,11 +3,9 @@
 namespace Aerni\LivewireForms\Livewire\Concerns;
 
 use Livewire\Attributes\Locked;
-use Aerni\LivewireForms\Livewire\WizardForm;
 
 trait HandlesValidation
 {
-    // TODO: Should this only be added for the WizardForm?
     #[Locked]
     public array $stepErrors = [];
 
@@ -24,9 +22,9 @@ trait HandlesValidation
                 ->pipe(fn ($fields) => $validator->setValue('fields', $fields));
 
             /**
-             * Validation errors in a WizardForm need special treatment.
+             * Validation errors in a Wizard form need special treatment.
              */
-            if ($this instanceof WizardForm) {
+            if ($this->isWizardForm()) {
                 $validator->after(function ($validator) {
                     /* Store the current errors so that we can restore them after successfull validation. */
                     $this->stepErrors = array_merge($this->stepErrors, $validator->errors()->messages());

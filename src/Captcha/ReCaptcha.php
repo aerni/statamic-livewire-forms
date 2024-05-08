@@ -12,7 +12,7 @@ class ReCaptcha
      */
     public function verifyResponse(string $response, string $clientIp): bool
     {
-        // Hash the response to comply with memory limit of some cache drivers.
+        /* Hash the response to comply with memory limit of some cache drivers. */
         $hashedResponse = md5($response);
 
         /**

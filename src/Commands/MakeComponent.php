@@ -27,28 +27,11 @@ class MakeComponent extends Command
             options: Form::all()->mapWithKeys(fn ($form) => [$form->handle() => $form->title()]),
         );
 
-        $formClass = select(
-            label: 'Select which type of form you want to create.',
-            options: [
-                'BasicForm' => 'Basic Form',
-                'WizardForm' => 'Wizard Form',
-            ],
-        );
-
-        $formClassImport = match ($formClass) {
-            'BasicForm' => 'Aerni\LivewireForms\Livewire\BasicForm',
-            'WizardForm' => 'Aerni\LivewireForms\Livewire\WizardForm',
-        };
-
         $className = Str::of($name)->endsWith('Form') ? $name : Str::of($name)->append('Form')->studly();
 
         $stub = File::get(__DIR__.'/form.stub');
 
-        $stub = preg_replace(
-            ['/\[className\]/', '/\[formClass\]/', '/\[formClassImport\]/'],
-            [$className, $formClass, $formClassImport],
-            $stub
-        );
+        $stub = str_replace('[className]', $className, $stub);
 
         $path = app_path("Livewire/{$className}.php");
 

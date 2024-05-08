@@ -13,22 +13,26 @@ use Aerni\LivewireForms\Livewire\Concerns\WithFields;
 use Aerni\LivewireForms\Livewire\Concerns\WithHandle;
 use Aerni\LivewireForms\Livewire\Concerns\SubmitsForm;
 use Aerni\LivewireForms\Livewire\Concerns\WithMessages;
+use Aerni\LivewireForms\Livewire\Concerns\WithSections;
+use Aerni\LivewireForms\Livewire\Concerns\WithSteps;
 
-class BasicForm extends Component
+class BaseForm extends Component
 {
     use WithHandle;
     use WithTheme;
-    use WithView;
-    use WithFields;
-    use WithForm;
     use WithType;
+    use WithView;
+    use WithForm;
+    use WithFields;
+    use WithSections;
+    use WithSteps;
     use WithMessages;
     use SubmitsForm;
 
-    protected bool $resetFormOnSuccess = true;
-
     public function render(): View
     {
-        return view(ViewManager::viewPath($this->view));
+        return view(ViewManager::viewPath($this->view), [
+            'step' => $this->currentStep(),
+        ]);
     }
 }

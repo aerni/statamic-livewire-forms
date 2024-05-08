@@ -2,7 +2,6 @@
 
 namespace Aerni\LivewireForms\Livewire\Concerns;
 
-use Aerni\LivewireForms\Livewire\WizardForm;
 use Livewire\Attributes\Computed;
 
 trait HandlesSuccess
@@ -11,7 +10,7 @@ trait HandlesSuccess
     {
         session()->flash('success', $this->successMessage());
 
-        if ($this->resetFormOnSuccess) {
+        if (! $this->isWizardForm()) {
             $this->resetForm();
         }
 
@@ -26,14 +25,14 @@ trait HandlesSuccess
         /* Get the captcha value before we are resetting the field values. */
         $captcha = $this->captcha()?->value();
 
+        /* Reset the field values to the initial state. */
         $this->resetValues();
 
         /* Preserve the captcha state by setting the value to its previous state. */
         $this->captcha()?->value($captcha);
 
-        if ($this instanceof WizardForm) {
-            $this->reset('currentStep');
-        }
+        /* Reset the wizard steps to the initial state. */
+        $this->reset('currentStep');
     }
 
     #[Computed]
