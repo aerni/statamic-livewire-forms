@@ -10,7 +10,7 @@ This addon provides a powerful framework to use Statamic forms with Laravel Live
 - One source of truth for your validation rules
 - Spam protection with Google reCAPTCHA v2 and honeypot field
 - Support for display conditions set in your form blueprint
-- Multi-site support; translate your form labels, instructions, placeholders, etc.
+- Multi-site support; translate your form display labels, instructions, placeholders, etc.
 - Configured and styled form views
 
 ## Installation
@@ -198,7 +198,7 @@ There are a couple of blade directives you may use in your form views. The direc
 | ------------------------ | -------------------------------------------------------------------------------- | ------------------------- |
 | `@formSection('handle')` | Render a specific form section, e.g., `@formSection('contact_information')`      | section.blade.php         |
 | `@formField('handle')`   | Render a specific form field, e.g., `@formField('first_name')`                   | field.blade.php           |
-| `@formView('view')`      | Render a specific view of the current theme, e.g., `@formView('messages.label')` | Whatever view you provide |
+| `@formView('view')`      | Render a specific view of the current theme, e.g., `@formView('messages.display')` | Whatever view you provide |
 
 ### Customization Example
 
@@ -212,7 +212,7 @@ You may also add or override field properties using an array as the second argum
 
 ```blade
 @formField('name', [
-    'label' => 'Your Name',
+    'display' => 'Your Name',
     'tooltip' => 'Please enter your full name'
 ])
 ```
@@ -220,7 +220,7 @@ You may also add or override field properties using an array as the second argum
 You can then access the properties in the field's view.
 
 ```blade
-{{ $field->label }}
+{{ $field->display }}
 {{ $field->tooltip }}
 ```
 
@@ -294,7 +294,7 @@ You can also explicitly load a custom component by name like you would with any 
 
 ### Field Models
 
-Each Statamic fieldtype is mapped to a Livewire Forms field model. Models are responsible for generating a field's properties like `view`, `label`, `instructions`, `options`, and so on. You can find the default mappings in `config/livewire-forms.php`.
+Each Statamic fieldtype is mapped to a Livewire Forms field model. Models are responsible for generating a field's properties like `view`, `display`, `instructions`, `options`, and so on. You can find the default mappings in `config/livewire-forms.php`.
 
 For instance, all the fields of type `\Statamic\Fieldtypes\Select::class` are bound to the `\Aerni\LivewireForms\Fields\Select::class` model. A field property is created for each model method ending with `Property`, e.g. `optionsProperty()` will generate an `options` property.
 
@@ -327,7 +327,7 @@ Use this hook to modify the fields after they are mounted.
 ```php
 public function mountedFields(Collection $fields): void
 {
-    $fields->get('name')->label('Your name');
+    $fields->get('name')->display('Your name');
 }
 ```
 
@@ -548,7 +548,7 @@ return [
 
 ### Translating sections and fields
 
-You can translate your field labels, instructions, options, and placeholders using JSON files. Create a translation file for each language, e.g. `resources/lang/de.json`.
+You can translate your field display labels, instructions, options, and placeholders using JSON files. Create a translation file for each language, e.g. `resources/lang/de.json`.
 
 ### Example
 
