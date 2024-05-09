@@ -30,7 +30,7 @@ trait WithSteps
                 instructions: $section->instructions(),
             );
         })
-        ->mapWithKeys(fn (Step $step) => [$step->number() => $this->assignStepStatus($step)]);
+            ->mapWithKeys(fn (Step $step) => [$step->number() => $this->assignStepStatus($step)]);
     }
 
     protected function assignStepStatus(Step $step): Step
