@@ -4,6 +4,7 @@ namespace Aerni\LivewireForms\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Str;
 use Statamic\Console\RunsInPlease;
 
 use function Laravel\Prompts\confirm;
@@ -22,7 +23,7 @@ class MakeView extends Command
     {
         $name = $this->argument('name') ?? text(label: 'What do you want to name the view?', required: true);
         $stub = File::get(__DIR__.'/../../resources/views/default.blade.php');
-        $filename = str_slug($name).'.blade.php';
+        $filename = Str::slug($name).'.blade.php';
         $path = resource_path('views/'.config('livewire-forms.view_path')."/{$filename}");
 
         if (! File::exists($path) || confirm(label: 'A view with this name already exists. Do you want to overwrite it?', default: false)) {
