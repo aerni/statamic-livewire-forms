@@ -21,7 +21,7 @@ class MakeTheme extends Command
 
     public function handle(): void
     {
-        $name = $this->argument('name') ?? text(label: 'What do you want to name the theme?', required: true);
+        $name = $this->argument('name') ?? text(label: 'What do you want to name the theme?', default: config('livewire-forms.theme'), required: true);
         $path = resource_path('views/'.config('livewire-forms.view_path').'/'.Str::snake($name));
 
         if (! File::exists($path) || confirm(label: 'A theme with this name already exists. Do you want to overwrite it?', default: false)) {
