@@ -6,6 +6,7 @@ use Aerni\LivewireForms\Fields\Properties\WithAutocomplete;
 use Aerni\LivewireForms\Fields\Properties\WithMultiple;
 use Aerni\LivewireForms\Fields\Properties\WithOptions;
 use Aerni\LivewireForms\Fields\Properties\WithPlaceholder;
+use Illuminate\Support\Arr;
 
 class Select extends Field
 {
@@ -45,7 +46,7 @@ class Select extends Field
 
     protected function rulesProperty(string|array|null $rules = null): array
     {
-        $rules = array_first(parent::rulesProperty($rules));
+        $rules = Arr::first(parent::rulesProperty($rules));
 
         if ($this->multiple && $this->max_items) {
             $rules[] = "max:{$this->max_items}";

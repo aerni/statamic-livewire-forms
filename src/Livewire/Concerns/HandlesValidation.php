@@ -2,6 +2,7 @@
 
 namespace Aerni\LivewireForms\Livewire\Concerns;
 
+use Illuminate\Support\Arr;
 use Livewire\Attributes\Locked;
 
 trait HandlesValidation
@@ -45,7 +46,7 @@ trait HandlesValidation
 
     public function resetStepErrorBag(string|array $keys): void
     {
-        array_forget($this->stepErrors, $keys);
+        Arr::forget($this->stepErrors, $keys);
 
         $this->setErrorBag($this->stepErrors);
     }
