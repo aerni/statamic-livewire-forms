@@ -29,7 +29,7 @@ abstract class Field implements Arrayable
 
     public function validationAttributes(): array
     {
-        return [$this->key => $this->label];
+        return [$this->key => $this->display];
     }
 
     public function process(): mixed

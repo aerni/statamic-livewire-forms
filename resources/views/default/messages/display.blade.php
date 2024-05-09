@@ -3,5 +3,5 @@
     id="{{ $field->id }}-label"
     class="block text-sm font-medium text-gray-700"
 >
-    {{ $field->label }}
+    {{ $field->display }}
 </label>

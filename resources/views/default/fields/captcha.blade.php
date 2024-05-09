@@ -1,5 +1,5 @@
 <div>
-    @formView('messages.label')
+    @formView('messages.display')
 
     @if($field->instructions && $field->instructions_position === 'above')
         @formView('messages.instructions')

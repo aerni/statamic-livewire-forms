@@ -54,12 +54,12 @@ class [className] extends BaseForm
 
     // public function mountedFields(Collection $fields): void
     // {
-    //     $fields->get('name')->label('Your name');
+    //     $fields->get('name')->display('Your name');
     // }
 
     // public function hydrateFields(Collection $fields): void
     // {
-    //     $fields->get('name')->label('Your name');
+    //     $fields->get('name')->display('Your name');
     // }
 
     // public function formSubmitted(Submission $submission): void
