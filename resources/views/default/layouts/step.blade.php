@@ -1,9 +1,15 @@
 <section
     x-show="showStep('{{ $step->handle() }}')"
     wire:key="{{ $step->id() }}"
-    aria-labelledby="{{ $step->id() }}-label"
-    aria-describedby="{{ $step->id() }}-instructions"
     class="flex flex-col p-8 bg-white border rounded-lg gap-y-8"
+
+    @if($step->display())
+        aria-labelledby="{{ $step->id() }}-label"
+    @endif
+
+    @if($step->instructions())
+        aria-describedby="{{ $step->id() }}-instructions"
+    @endif
 >
 
     @if($step->display())

@@ -1,9 +1,15 @@
 <section
     x-show="showSection('{{ $section->handle() }}')"
     wire:key="{{ $section->id() }}"
-    aria-labelledby="{{ $section->id() }}-label"
-    aria-describedby="{{ $section->id() }}-instructions"
     class="flex flex-col gap-y-8"
+
+    @if($section->display())
+        aria-labelledby="{{ $section->id() }}-label"
+    @endif
+
+    @if($section->instructions())
+        aria-describedby="{{ $section->id() }}-instructions"
+    @endif
 >
 
     @if($section->display())
