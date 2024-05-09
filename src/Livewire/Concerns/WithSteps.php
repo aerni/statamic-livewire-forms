@@ -21,15 +21,16 @@ trait WithSteps
         /* Ensure the step status can be assigned correctly on subsequent requests. */
         unset($this->foundCurrentStep);
 
-        return $this->formSections
-            ->map(fn (Section $section, int $index) => new Step(
+        return $this->formSections->map(function (Section $section, int $index) {
+            return new Step(
                 status: StepStatus::Next,
                 number: $index + 1,
-                fields: $this->fields->intersectByKeys($section->fields()->all()),
+                fields: $section->fields()->all()->keys()->all(),
                 display: $section->display(),
                 instructions: $section->instructions(),
-            ))
-            ->mapWithKeys(fn (Step $step) => [$step->number() => $this->assignStepStatus($step)]);
+            );
+        })
+        ->mapWithKeys(fn (Step $step) => [$step->number() => $this->assignStepStatus($step)]);
     }
 
     protected function assignStepStatus(Step $step): Step

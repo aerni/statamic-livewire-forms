@@ -10,10 +10,15 @@ class Section
 {
     public function __construct(
         protected int $number,
-        protected Collection $fields,
+        protected array $fields,
         protected ?string $display,
         protected ?string $instructions,
     ) {
+    }
+
+    public function number(): int
+    {
+        return $this->number;
     }
 
     public function handle(): string
@@ -38,11 +43,6 @@ class Section
 
     public function fields(): Collection
     {
-        return $this->fields;
-    }
-
-    public function number(): int
-    {
-        return $this->number;
+        return Livewire::current()->fields->intersectByKeys(array_flip($this->fields));
     }
 }

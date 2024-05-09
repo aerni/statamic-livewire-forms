@@ -15,7 +15,7 @@ trait WithSections
         return $this->formSections->map(function (FormSection $section, int $index) {
             return new Section(
                 number: $index + 1,
-                fields: $this->fields->intersectByKeys($section->fields()->all()),
+                fields: $section->fields()->all()->keys()->all(),
                 display: $section->display(),
                 instructions: $section->instructions(),
             );

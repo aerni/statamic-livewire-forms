@@ -13,10 +13,15 @@ class Step
     public function __construct(
         public StepStatus $status,
         protected int $number,
-        protected Collection $fields,
+        protected array $fields,
         protected ?string $display,
         protected ?string $instructions,
     ) {
+    }
+
+    public function number(): int
+    {
+        return $this->number;
     }
 
     public function handle(): string
@@ -41,12 +46,7 @@ class Step
 
     public function fields(): Collection
     {
-        return $this->fields;
-    }
-
-    public function number(): int
-    {
-        return $this->number;
+        return Livewire::current()->fields->intersectByKeys(array_flip($this->fields));
     }
 
     public function isPrevious(): bool
@@ -78,13 +78,13 @@ class Step
     {
         return Livewire::current()
             ->getErrorBag()
-            ->hasAny($this->fields->map->key()->all());
+            ->hasAny($this->fields()->map->key()->all());
     }
 
     public function resetErrorBag(): void
     {
         Livewire::current()
-            ->resetStepErrorBag($this->fields->map->key()->values()->all());
+            ->resetStepErrorBag($this->fields()->map->key()->values()->all());
     }
 
     public function validate(): void
