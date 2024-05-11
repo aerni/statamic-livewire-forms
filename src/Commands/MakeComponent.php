@@ -5,12 +5,12 @@ namespace Aerni\LivewireForms\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
-use Statamic\Console\RunsInPlease;
-use Statamic\Facades\Form;
-
 use function Laravel\Prompts\confirm;
+use function Laravel\Prompts\error;
 use function Laravel\Prompts\info;
 use function Laravel\Prompts\select;
+use Statamic\Console\RunsInPlease;
+use Statamic\Facades\Form;
 
 class MakeComponent extends Command
 {
@@ -22,9 +22,17 @@ class MakeComponent extends Command
 
     public function handle(): void
     {
+        $forms = Form::all();
+
+        if ($forms->isEmpty()) {
+            error('There are no Statamic forms. You need at least one form to create a Livewire component.');
+
+            return;
+        }
+
         $name = select(
             label: 'Select the form for which you want to create a Livewire component.',
-            options: Form::all()->mapWithKeys(fn ($form) => [$form->handle() => $form->title()]),
+            options: $forms->mapWithKeys(fn ($form) => [$form->handle() => $form->title()]),
         );
 
         $className = Str::of($name)->endsWith('Form') ? $name : Str::of($name)->append('Form')->studly();
