@@ -5,12 +5,13 @@ namespace Aerni\LivewireForms\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
+use Statamic\Console\RunsInPlease;
+use Statamic\Facades\Form;
+
 use function Laravel\Prompts\confirm;
 use function Laravel\Prompts\error;
 use function Laravel\Prompts\info;
 use function Laravel\Prompts\select;
-use Statamic\Console\RunsInPlease;
-use Statamic\Facades\Form;
 
 class MakeComponent extends Command
 {
