@@ -109,12 +109,12 @@ return [
 
 There are a number of helpful commands to help you create views, themes and components:
 
-| Command                            | Description                            |
-| ---------------------------------- | -------------------------------------- |
-| `livewire-forms:setup`             | Step by step wizard to get you started |
-| `livewire-forms:view {name?}`      | Create a new Livewire form view        |
-| `livewire-forms:theme {name?}`     | Create a new Livewire form theme       |
-| `livewire-forms:component {name?}` | Create a new Livewire form component   |
+| Command                        | Description                            |
+| -------------------------------| -------------------------------------- |
+| `livewire-forms:setup`         | Step by step wizard to get you started |
+| `livewire-forms:view {name?}`  | Create a new Livewire form view        |
+| `livewire-forms:theme {name?}` | Create a new Livewire form theme       |
+| `livewire-forms:component`     | Create a new Livewire form component   |
 
 ## Getting started
 
