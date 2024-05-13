@@ -2,7 +2,7 @@
     @foreach($this->steps as $step)
         <li
             x-show="showStep('{{ $step->handle() }}')"
-            wire:key="{{ $step->id() }}"
+            wire:key="{{ $step->id() }}-navigation"
             class="flex items-center whitespace-nowrap gap-x-3"
         >
             <button
