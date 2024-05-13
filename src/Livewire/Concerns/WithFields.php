@@ -2,6 +2,7 @@
 
 namespace Aerni\LivewireForms\Livewire\Concerns;
 
+use Aerni\LivewireForms\Exceptions\FormHasNoFieldsException;
 use Aerni\LivewireForms\Fields\Captcha;
 use Aerni\LivewireForms\Fields\Field;
 use Aerni\LivewireForms\Fields\Honeypot;
@@ -44,6 +45,8 @@ trait WithFields
     protected function fields(): Collection
     {
         $honeypot = Honeypot::make(new StatamicField($this->form->honeypot(), []));
+
+        throw_if($this->form->fields()->isEmpty(), new FormHasNoFieldsException($this->handle));
 
         return $this->form->fields()
             ->map(fn ($field) => $this->makeFieldFromModel($field))
