@@ -1,6 +1,6 @@
 <form
     x-data="form"
-    x-effect="processFields($wire.fields)"
+    x-effect="processForm"
     x-cloak
     wire:submit="submit"
 >

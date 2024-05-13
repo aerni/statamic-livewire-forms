@@ -141,11 +141,12 @@ trait WithSteps
         return $this->stepVisibility[$handle] ?? true;
     }
 
-    public function updatedStepVisibility(bool $visible, string $key): void
+    public function updatedStepVisibility($value): void
     {
         /* Remove validation errors of hidden steps. */
-        if (! $visible) {
-            $this->steps->firstWhere(fn ($step) => $step->handle() === $key)->resetErrorBag();
-        }
+        collect($this->stepVisibility)
+            ->filter(fn ($value) => $value === false)
+            ->each(fn ($visible, $handle) => $this->steps->firstWhere(fn ($step) => $step->handle() === $handle)->resetErrorBag());
+
     }
 }

@@ -1,9 +1,13 @@
-import FieldConditions from '../../../vendor/statamic/cms/resources/js/frontend/components/FieldConditions.js';
+import FieldConditions from '../../../vendor/statamic/cms/resources/js/frontend/components/FieldConditions.js'
 
 export default () => ({
     fields: {},
+    sections: {},
 
-    conditions: new FieldConditions,
+    processForm() {
+        this.fields = this.processFields(this.$wire.fields)
+        this.sections = this.processSections(this.fields)
+    },
 
     processFields(fields) {
         const values = Object.entries(fields).reduce((fields, [key, field]) => {
@@ -12,8 +16,8 @@ export default () => ({
             return fields
         }, {})
 
-        this.fields = Object.entries(fields).reduce((fields, [key, field]) => {
-            const passesConditions = this.conditions.showField(field.properties.conditions, values)
+        return Object.entries(fields).reduce((fields, [key, field]) => {
+            const passesConditions = new FieldConditions().showField(field.properties.conditions, values)
 
             fields[key] = {
                 visible: passesConditions && !field.properties.hidden,
@@ -27,18 +31,29 @@ export default () => ({
         }, {})
     },
 
-    fieldsBySection(section) {
-        return Object.entries(this.fields).reduce((sections, [key, field]) => {
-            let section = field.section;
-
-            if (! sections[section]) {
-                sections[section] = {};
+    processSections(fields) {
+        const visibleFieldsBySection = Object.entries(fields).reduce((sections, [key, field]) => {
+            if (field.section) {
+                sections[field.section] = sections[field.section] || []
+                sections[field.section].push(field.visible)
             }
 
-            sections[section][key] = field;
+            return sections
+        }, {})
 
-            return sections;
-        }, {})[section];
+        const sectionVisibility = Object.fromEntries(
+            Object.entries(visibleFieldsBySection).map(([section, visibilities]) => [
+                section,
+                visibilities.every(Boolean),
+            ])
+        )
+
+        if (JSON.stringify(sectionVisibility) !== JSON.stringify(this.$wire.stepVisibility)) {
+            this.$wire.stepVisibility = sectionVisibility
+            this.$wire.$refresh()
+        }
+
+        return sectionVisibility
     },
 
     showField(field) {
@@ -46,17 +61,10 @@ export default () => ({
     },
 
     showSection(section) {
-        return Object.entries(this.fieldsBySection(section)).some(([field]) => this.fields[field].visible)
+        return this.sections[section]
     },
 
     showStep(step) {
-        let visible = this.showSection(step)
-
-        if (this.$wire.stepVisibility[step] !== visible) {
-            this.$wire.stepVisibility[step] = visible
-            this.$wire.$refresh()
-        }
-
-        return visible
+        return this.sections[step]
     },
 })

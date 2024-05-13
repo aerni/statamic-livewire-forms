@@ -1,5 +1,4 @@
 <section
-    x-show="showStep('{{ $step->handle() }}')"
     wire:key="{{ $step->id() }}"
     class="flex flex-col p-8 bg-white border rounded-lg gap-y-8"
 
