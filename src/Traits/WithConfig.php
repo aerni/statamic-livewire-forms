@@ -8,7 +8,7 @@ trait WithConfig
 {
     protected array $config = [];
 
-    public function config(array $config = null): array|self
+    public function config(?array $config = null): array|self
     {
         if (! $config) {
             return $this->config;
