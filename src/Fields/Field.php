@@ -2,98 +2,70 @@
 
 namespace Aerni\LivewireForms\Fields;
 
-use Aerni\LivewireForms\Fields\Properties\WithConditions;
-use Aerni\LivewireForms\Fields\Properties\WithDefault;
-use Aerni\LivewireForms\Fields\Properties\WithHandle;
-use Aerni\LivewireForms\Fields\Properties\WithId;
-use Aerni\LivewireForms\Fields\Properties\WithInstructions;
-use Aerni\LivewireForms\Fields\Properties\WithKey;
-use Aerni\LivewireForms\Fields\Properties\WithLabel;
-use Aerni\LivewireForms\Fields\Properties\WithRules;
-use Aerni\LivewireForms\Fields\Properties\WithShow;
-use Aerni\LivewireForms\Fields\Properties\WithShowLabel;
-use Aerni\LivewireForms\Fields\Properties\WithView;
-use Aerni\LivewireForms\Fields\Properties\WithWidth;
-use Aerni\LivewireForms\Fields\Properties\WithWireModel;
-use Statamic\Fields\Field as StatamicField;
-use Statamic\Support\Str;
+use Aerni\LivewireForms\Fields\Concerns\HandlesProperties;
+use Aerni\LivewireForms\Fields\Concerns\WithDefaultProperties;
+use Illuminate\Contracts\Support\Arrayable;
+use Livewire\Livewire;
+use Statamic\Fields\Field as FormField;
+use Statamic\Support\Traits\FluentlyGetsAndSets;
 
-abstract class Field
+abstract class Field implements Arrayable
 {
-    use WithConditions;
-    use WithDefault;
-    use WithHandle;
-    use WithId;
-    use WithInstructions;
-    use WithKey;
-    use WithLabel;
-    use WithRules;
-    use WithShow;
-    use WithShowLabel;
-    use WithView;
-    use WithWidth;
-    use WithWireModel;
+    use FluentlyGetsAndSets;
+    use HandlesProperties;
+    use WithDefaultProperties;
 
-    public function __construct(protected StatamicField $field, protected string $id)
+    public mixed $value = null;
+
+    public function __construct(protected FormField $field)
     {
         //
     }
 
-    public static function make(StatamicField $field, string $id): self
+    public static function make(FormField $field): self
     {
-        return new static($field, $id);
-    }
-
-    public function field(): StatamicField
-    {
-        return $this->field;
-    }
-
-    public function rules(): array
-    {
-        return [$this->key => $this->rules];
+        return new static($field);
     }
 
     public function validationAttributes(): array
     {
-        return [$this->key => $this->label];
+        return [$this->key => $this->display];
     }
 
-    protected function get(string $key): mixed
+    public function process(): mixed
     {
-        $method = collect(get_class_methods($this))
-            ->first(fn ($method) => $method === Str::camel($key).'Property');
-
-        return $method
-            ? $this->$method()
-            : $this->field->get(Str::snake($key));
+        return $this->field->setValue($this->value)->process()->value();
     }
 
-    protected function set(string $key, mixed $value): self
+    public function value(mixed $value = null): mixed
     {
-        $newConfig = collect($this->field->config())
-            ->put(Str::snake($key), $value)
-            ->all();
+        return $this->fluentlyGetOrSet('value')
+            ->getter(fn ($value) => $value ?? $this->default)
+            ->args(func_get_args());
+    }
 
-        $this->field->setConfig($newConfig);
+    public function resetValue(): self
+    {
+        $this->value = $this->default;
 
         return $this;
     }
 
-    public function __get(string $key): mixed
+    public function section(): ?string
     {
-        return $this->get($key);
+        return Livewire::current()->sections()
+            ->firstWhere(fn ($section) => $section->fields()->has($this->handle))
+            ?->handle(); /* The honeypot field doesn't have a section, which is why this will return */
     }
 
-    public function __set(string $key, mixed $value): void
+    public function toArray(): array
     {
-        $this->set($key, $value);
-    }
-
-    public function __call(string $property, array $arguments): mixed
-    {
-        return $arguments
-            ? $this->set($property, $arguments[0])
-            : $this->get($property);
+        return [
+            'handle' => $this->field->handle(),
+            'section' => $this->section(),
+            'config' => $this->field->config(),
+            'properties' => $this->properties(),
+            'value' => $this->value(),
+        ];
     }
 }

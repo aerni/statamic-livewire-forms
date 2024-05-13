@@ -2,10 +2,14 @@
 
 namespace Aerni\LivewireForms\Commands;
 
-use Aerni\LivewireForms\Facades\Component;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Str;
 use Statamic\Console\RunsInPlease;
+
+use function Laravel\Prompts\confirm;
+use function Laravel\Prompts\info;
+use function Laravel\Prompts\text;
 
 class MakeView extends Command
 {
@@ -13,19 +17,19 @@ class MakeView extends Command
 
     protected $signature = 'livewire-forms:view {name?}';
 
-    protected $description = 'Create a new Livewire form view';
+    protected $description = 'Create a new Livewire Forms view';
 
     public function handle(): void
     {
-        $view = $this->argument('name') ?? $this->ask('What do you want to call the view?', Component::defaultView());
-        $stub = File::get(__DIR__.'/../../resources/stubs/form.blade.php');
-        $filename = "{$view}.blade.php";
-        $path = resource_path("views/livewire/forms/{$filename}");
+        $name = $this->argument('name') ?? text(label: 'What do you want to name the view?', default: config('livewire-forms.view'), required: true);
+        $stub = File::get(__DIR__.'/../../resources/views/default.blade.php');
+        $filename = Str::slug($name).'.blade.php';
+        $path = resource_path('views/'.config('livewire-forms.view_path')."/{$filename}");
 
-        if (! File::exists($path) || $this->confirm("A view with the name <comment>$filename</comment> already exists. Do you want to overwrite it?")) {
-            File::ensureDirectoryExists(resource_path('views/livewire/forms'));
+        if (! File::exists($path) || confirm(label: 'A view with this name already exists. Do you want to overwrite it?', default: false)) {
+            File::ensureDirectoryExists(resource_path('views/'.config('livewire-forms.view_path')));
             File::put($path, $stub);
-            $this->line("<info>[✓]</info> The view was successfully created: <comment>{$this->getRelativePath($path)}</comment>");
+            info("The view was successfully created: <comment>{$this->getRelativePath($path)}</comment>");
         }
     }
 

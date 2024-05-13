@@ -3,21 +3,22 @@
 namespace Aerni\LivewireForms\Fields;
 
 use Aerni\LivewireForms\Fields\Properties\WithInlineLabel;
+use Illuminate\Support\Arr;
 
 class Toggle extends Field
 {
     use WithInlineLabel;
 
-    protected static string $view = 'toggle';
+    protected string $view = 'toggle';
 
-    protected function rulesProperty(): array
+    protected function rulesProperty(string|array|null $rules = null): array
     {
-        $rules = collect(parent::rulesProperty());
+        $rules = Arr::first(parent::rulesProperty($rules));
 
-        if ($rules->contains('required')) {
-            $rules->push('accepted');
+        if (in_array('required', $rules)) {
+            $rules[] = 'accepted';
         }
 
-        return $rules->all();
+        return [$this->key => $rules];
     }
 }

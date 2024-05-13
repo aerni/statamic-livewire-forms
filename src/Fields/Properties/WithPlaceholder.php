@@ -4,8 +4,8 @@ namespace Aerni\LivewireForms\Fields\Properties;
 
 trait WithPlaceholder
 {
-    protected function placeholderProperty(): ?string
+    protected function placeholderProperty(?string $placeholder = null): ?string
     {
-        return __($this->field->get('placeholder'));
+        return __($placeholder ?? $this->field->get('placeholder'));
     }
 }

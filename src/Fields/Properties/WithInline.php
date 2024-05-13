@@ -4,8 +4,8 @@ namespace Aerni\LivewireForms\Fields\Properties;
 
 trait WithInline
 {
-    protected function inlineProperty(): bool
+    protected function inlineProperty(?bool $inline = null): bool
     {
-        return (bool) $this->field->get('inline');
+        return $inline ?? (bool) $this->field->get('inline');
     }
 }

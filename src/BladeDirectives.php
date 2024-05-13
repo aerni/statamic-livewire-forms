@@ -16,12 +16,17 @@ class BladeDirectives
     }
 
     /**
-     * Get all the fields grouped by section
+     * Get a specific form view.
      */
-    public static function formSections(): string
+    public static function formView(string $expression): string
     {
+        $variables = explode(', ', $expression, 2);
+
+        $view = $variables[0];
+        $arguments = $variables[1] ?? '[]';
+
         return Blade::compileString("
-            @include(\$this->component->getView('sections'))
+            @include(\Aerni\LivewireForms\Facades\ViewManager::themeViewPath(\$this->theme, $view), $arguments)
         ");
     }
 
@@ -30,11 +35,15 @@ class BladeDirectives
      */
     public static function formSection(string $expression): string
     {
-        return Blade::compileString("
-            @include(\$this->component->getView('section'), [
-                'section' => \$this->fields->section($expression),
-            ])
-        ");
+        return "<?php
+            \$section = \$this->section($expression);
+
+            if (! \$section) {
+                throw new \InvalidArgumentException(\"The section $expression doesn't exist in the form's blueprint.\");
+            }
+
+            echo view(\Aerni\LivewireForms\Facades\ViewManager::themeViewPath(\$this->theme, 'layouts.section'), ['section' => \$section]);
+        ?>";
     }
 
     /**
@@ -42,55 +51,23 @@ class BladeDirectives
      */
     public static function formField(string $expression): string
     {
-        $variables = explode(', ', $expression);
+        $variables = explode(', ', $expression, 2);
 
         $field = $variables[0];
         $properties = $variables[1] ?? '[]';
 
         return "<?php
-            if (\$this->fields->get($field)) {
-                echo \Aerni\LivewireForms\Facades\View::field(\$this->fields->get($field), $properties);
+            \$field = \$this->fields->get($field);
+
+            if (! \$field) {
+                throw new \InvalidArgumentException(\"The field $field doesn't exist in the form's blueprint.\");
             }
+
+            foreach ($properties as \$property => \$value) {
+                \$field->\$property(\$value);
+            }
+
+            echo view(\Aerni\LivewireForms\Facades\ViewManager::themeViewPath(\$this->theme, 'layouts.field'), ['field' => \$field]);
         ?>";
-    }
-
-    /**
-     * Get the honeypot field.
-     */
-    public static function formHoneypot(): string
-    {
-        return Blade::compileString("
-            @include(\$this->component->getView('honeypot'))
-        ");
-    }
-
-    /**
-     * Get the form submit button.
-     */
-    public static function formSubmit(): string
-    {
-        return Blade::compileString("
-            @include(\$this->component->getView('submit'))
-        ");
-    }
-
-    /**
-     * Get the form errors messages.
-     */
-    public static function formErrors(): string
-    {
-        return Blade::compileString("
-            @include(\$this->component->getView('errors'))
-        ");
-    }
-
-    /**
-     * Get the form success message.
-     */
-    public static function formSuccess(): string
-    {
-        return Blade::compileString("
-            @include(\$this->component->getView('success'))
-        ");
     }
 }

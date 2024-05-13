@@ -1,0 +1,22 @@
+{
+    "private": true,
+    "scripts": {
+        "dev": "vite",
+        "build": "vite build"
+    },
+    "dependencies": {
+        "alpinejs": "^3.13.3",
+        "filepond": "^4.30.6",
+        "filepond-plugin-file-validate-size": "^2.2.8",
+        "filepond-plugin-file-validate-type": "^1.2.9",
+        "filepond-plugin-image-preview": "^4.6.12",
+        "filepond-plugin-image-validate-size": "^1.2.7",
+        "marked": "^4.0.10",
+        "underscore": "~1.13.2",
+        "uniqid": "^5.2.0"
+    },
+    "devDependencies": {
+        "laravel-vite-plugin": "^0.7.8",
+        "vite": "^4.5.1"
+    }
+}

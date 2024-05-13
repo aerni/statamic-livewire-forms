@@ -17,15 +17,28 @@
         }
     ],
     "require": {
-        "php": "^8.1",
+        "php": "^8.2",
         "jonassiewertsen/statamic-livewire": "^3.0",
-        "laravel/framework": "^10.0",
-        "livewire/livewire": "^3.0",
-        "statamic/cms": "^4.9"
+        "laravel/framework": "^10.0 || ^11.0",
+        "laravel/prompts": "^0.1.13",
+        "livewire/livewire": "^3.2",
+        "spatie/invade": "^2.0",
+        "statamic/cms": "^5.0"
+    },
+    "require-dev": {
+        "orchestra/testbench": "^8.19",
+        "pestphp/pest": "^2.32",
+        "pestphp/pest-plugin-laravel": "^2.2",
+        "pestphp/pest-plugin-livewire": "^2.1"
     },
     "autoload": {
         "psr-4": {
             "Aerni\\LivewireForms\\": "src"
+        }
+    },
+    "autoload-dev" : {
+        "psr-4" : {
+            "Aerni\\LivewireForms\\Tests\\" : "tests"
         }
     },
     "config": {
@@ -34,8 +47,14 @@
         "sort-packages": true,
         "allow-plugins": {
             "composer/package-versions-deprecated": true,
-            "pixelfear/composer-dist-plugin": true
+            "pixelfear/composer-dist-plugin": true,
+            "pestphp/pest-plugin": true
         }
+    },
+    "scripts": {
+        "test": [
+            "./vendor/bin/pest"
+        ]
     },
     "extra": {
         "statamic": {

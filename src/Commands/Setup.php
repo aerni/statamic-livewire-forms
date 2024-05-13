@@ -5,6 +5,8 @@ namespace Aerni\LivewireForms\Commands;
 use Illuminate\Console\Command;
 use Statamic\Console\RunsInPlease;
 
+use function Laravel\Prompts\confirm;
+
 class Setup extends Command
 {
     use RunsInPlease;
@@ -32,7 +34,7 @@ class Setup extends Command
 
     protected function makeComponent(): void
     {
-        if ($this->confirm('Do you want to create a form component to customize the default behaviour?')) {
+        if (confirm(label: 'Do you want to create a Livewire component to customize the behaviour of the form?')) {
             $this->call('livewire-forms:component');
         }
     }

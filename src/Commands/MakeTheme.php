@@ -2,10 +2,14 @@
 
 namespace Aerni\LivewireForms\Commands;
 
-use Aerni\LivewireForms\Facades\Component;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Str;
 use Statamic\Console\RunsInPlease;
+
+use function Laravel\Prompts\confirm;
+use function Laravel\Prompts\info;
+use function Laravel\Prompts\text;
 
 class MakeTheme extends Command
 {
@@ -13,16 +17,16 @@ class MakeTheme extends Command
 
     protected $signature = 'livewire-forms:theme {name?}';
 
-    protected $description = 'Create a new Livewire form theme';
+    protected $description = 'Create a new Livewire Forms theme';
 
     public function handle(): void
     {
-        $theme = $this->argument('name') ?? $this->ask('What do you want to call the theme?', Component::defaultTheme());
-        $path = resource_path('views/livewire/forms/'.$theme);
+        $name = $this->argument('name') ?? text(label: 'What do you want to name the theme?', default: config('livewire-forms.theme'), required: true);
+        $path = resource_path('views/'.config('livewire-forms.view_path').'/'.Str::snake($name));
 
-        if (! File::exists($path) || $this->confirm("A theme with the name <comment>$theme</comment> already exists. Do you want to overwrite it?")) {
-            File::copyDirectory(__DIR__.'/../../resources/stubs/theme/', $path);
-            $this->line("<info>[✓]</info> The theme was successfully created: <comment>{$this->getRelativePath($path)}</comment>");
+        if (! File::exists($path) || confirm(label: 'A theme with this name already exists. Do you want to overwrite it?', default: false)) {
+            File::copyDirectory(__DIR__.'/../../resources/views/default/', $path);
+            info("The theme was successfully created: <comment>{$this->getRelativePath($path)}</comment>");
         }
     }
 

@@ -4,8 +4,8 @@ namespace Aerni\LivewireForms\Fields\Properties;
 
 trait WithWidth
 {
-    protected function widthProperty(): int
+    protected function widthProperty(?int $width = null): int
     {
-        return $this->field->get('width', 100);
+        return $width ?? $this->field->get('width', 100);
     }
 }

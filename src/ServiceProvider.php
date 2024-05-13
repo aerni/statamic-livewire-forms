@@ -3,8 +3,10 @@
 namespace Aerni\LivewireForms;
 
 use Aerni\LivewireForms\Facades\Captcha;
-use Aerni\LivewireForms\Livewire\DefaultForm;
-use Aerni\LivewireForms\Livewire\Form;
+use Aerni\LivewireForms\Livewire\BaseForm;
+use Aerni\LivewireForms\Livewire\DynamicForm;
+use Aerni\LivewireForms\Livewire\Synthesizers\FieldSynth;
+use Aerni\LivewireForms\Livewire\Synthesizers\RuleSynth;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Validator;
 use Livewire\Livewire;
@@ -23,34 +25,20 @@ class ServiceProvider extends AddonServiceProvider
         Fieldtypes\Captcha::class,
     ];
 
+    protected $scripts = [
+        __DIR__.'/../resources/dist/js/livewire-forms.js',
+    ];
+
     public function bootAddon()
     {
         $this
-            ->registerTranslations()
-            ->registerPublishables()
-            ->registerBladeDirectives()
-            ->registerValidators()
-            ->registerLivewireComponents()
-            ->registerSelectableFieldtypes();
+            ->bootBladeDirectives()
+            ->bootValidators()
+            ->bootLivewire()
+            ->bootSelectableFieldtypes();
     }
 
-    protected function registerTranslations(): self
-    {
-        $this->loadTranslationsFrom(__DIR__.'/../resources/lang', 'livewire-forms');
-
-        return $this;
-    }
-
-    protected function registerPublishables(): self
-    {
-        $this->publishes([
-            __DIR__.'/../resources/views' => resource_path('views/vendor/livewire-forms'),
-        ], 'livewire-forms-views');
-
-        return $this;
-    }
-
-    protected function registerBladeDirectives(): self
+    protected function bootBladeDirectives(): self
     {
         foreach (get_class_methods(BladeDirectives::class) as $method) {
             Blade::directive($method, [BladeDirectives::class, $method]);
@@ -59,7 +47,7 @@ class ServiceProvider extends AddonServiceProvider
         return $this;
     }
 
-    protected function registerValidators(): self
+    protected function bootValidators(): self
     {
         Validator::extend('captcha', function ($attribute, $value) {
             return Captcha::verifyResponse($value, request()->getClientIp());
@@ -68,15 +56,18 @@ class ServiceProvider extends AddonServiceProvider
         return $this;
     }
 
-    protected function registerLivewireComponents(): self
+    protected function bootLivewire(): self
     {
-        Livewire::component('form', Form::class);
-        Livewire::component('default-form', DefaultForm::class);
+        Livewire::component('form', DynamicForm::class);
+        Livewire::component('base-form', BaseForm::class);
+
+        Livewire::propertySynthesizer(FieldSynth::class);
+        Livewire::propertySynthesizer(RuleSynth::class);
 
         return $this;
     }
 
-    protected function registerSelectableFieldtypes(): self
+    protected function bootSelectableFieldtypes(): self
     {
         \Statamic\Fieldtypes\Hidden::makeSelectableInForms();
 

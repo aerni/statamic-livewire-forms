@@ -2,34 +2,73 @@
 
 namespace Aerni\LivewireForms\Fields;
 
-use Aerni\LivewireForms\Fields\Properties\WithMultiple;
+use Illuminate\Support\Str;
+use Statamic\Fieldtypes\Assets\DimensionsRule;
+use Statamic\Fieldtypes\Assets\ImageRule;
+use Statamic\Fieldtypes\Assets\MaxRule;
+use Statamic\Fieldtypes\Assets\MimesRule;
+use Statamic\Fieldtypes\Assets\MimetypesRule;
+use Statamic\Fieldtypes\Assets\MinRule;
+use Statamic\Forms\Uploaders\AssetsUploader;
+use Symfony\Component\Mime\MimeTypes;
 
 class Assets extends Field
 {
-    use WithMultiple;
+    protected string $view = 'assets';
 
-    protected static string $view = 'file';
-
-    protected function multipleProperty(): bool
+    protected function multipleProperty(?bool $multiple = null): bool
     {
-        return $this->field->get('max_files') !== 1;
+        return $multiple ?? $this->field->get('max_files') !== 1;
     }
 
-    protected function defaultProperty(): ?array
+    protected function fileSizeProperty(): array
     {
-        return $this->multipleProperty() ? [] : null;
+        $rules = collect($this->rules)->flatten();
+
+        $minFileSize = $rules->whereInstanceOf(MinRule::class)
+            ->flatMap(fn ($rule) => invade($rule)->parameters)
+            ->first();
+
+        $maxFileSize = $rules->whereInstanceOf(MaxRule::class)
+            ->flatMap(fn ($rule) => invade($rule)->parameters)
+            ->first();
+
+        return [
+            'min' => $minFileSize,
+            'max' => $maxFileSize,
+        ];
     }
 
-    protected function rulesProperty(): array
+    protected function fileTypesProperty(): array
     {
-        $rules = parent::rulesProperty();
+        return collect($this->rules)
+            ->flatten()
+            ->map(fn ($rule) => match (true) {
+                $rule instanceof ImageRule => ['image/*'],
+                $rule instanceof MimetypesRule => invade($rule)->parameters,
+                $rule instanceof MimesRule => collect(invade($rule)->parameters)
+                    ->flatMap(fn ($mime) => (new MimeTypes)->getMimeTypes($mime)),
+                default => null,
+            })
+            ->filter()
+            ->first() ?? [];
+    }
 
-        if ($this->multipleProperty()) {
-            return $rules;
-        }
+    protected function dimensionsProperty(): array
+    {
+        return collect($this->rules)
+            ->flatten()
+            ->whereInstanceOf(DimensionsRule::class)
+            ->flatMap(fn ($rule) => invade($rule)->parameters)
+            ->mapWithKeys(fn ($dimension) => [Str::before($dimension, '=') => Str::after($dimension, '=')])
+            ->toArray();
+    }
 
-        return collect($rules)
-            ->filter(fn ($rule) => ! in_array($rule, ['array', 'max:1']))
-            ->all();
+    public function process(): mixed
+    {
+        $this->value = collect($this->value)
+            ->flatMap(fn ($file) => AssetsUploader::field($this->handle)->upload($file));
+
+        return parent::process();
     }
 }
