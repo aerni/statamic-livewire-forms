@@ -20,95 +20,32 @@ Install the addon using Composer:
 composer require aerni/livewire-forms
 ```
 
-NOTE: If you are [bundling Livewire assets yourself](https://livewire.laravel.com/docs/installation#manually-bundling-livewire-and-alpine) you will need to import Livewire Form's assets yourself:
-```js
-import "../../vendor/aerni/livewire-forms/resources/dist/js/livewire-forms";
-```
-
 Publish the config of the package (optional):
 
 ```bash
 php please vendor:publish --tag=livewire-forms-config
 ```
 
-The following config will be published to `config/livewire-forms.php`:
+## Manually bundling Livewire and Alpine
 
-```php
-return [
+If you are [manually bundling Livewire and Alpine](https://livewire.laravel.com/docs/installation#manually-bundling-livewire-and-alpine), you will also need to import Livewire Forms' assets:
 
-    /*
-    |--------------------------------------------------------------------------
-    | Field Models
-    |--------------------------------------------------------------------------
-    |
-    | You may change the model of each fieldtype with your own implementation.
-    |
-    */
-
-    'models' => [
-        Aerni\LivewireForms\Fieldtypes\Captcha::class => Aerni\LivewireForms\Fields\Captcha::class,
-        Statamic\Fieldtypes\Assets\Assets::class => Aerni\LivewireForms\Fields\Assets::class,
-        Statamic\Fieldtypes\Checkboxes::class => Aerni\LivewireForms\Fields\Checkboxes::class,
-        Statamic\Fieldtypes\Hidden::class => Aerni\LivewireForms\Fields\Hidden::class,
-        Statamic\Fieldtypes\Integer::class => Aerni\LivewireForms\Fields\Integer::class,
-        Statamic\Fieldtypes\Radio::class => Aerni\LivewireForms\Fields\Radio::class,
-        Statamic\Fieldtypes\Select::class => Aerni\LivewireForms\Fields\Select::class,
-        Statamic\Fieldtypes\Spacer::class => Aerni\LivewireForms\Fields\Spacer::class,
-        Statamic\Fieldtypes\Text::class => Aerni\LivewireForms\Fields\Text::class,
-        Statamic\Fieldtypes\Textarea::class => Aerni\LivewireForms\Fields\Textarea::class,
-        Statamic\Fieldtypes\Toggle::class => Aerni\LivewireForms\Fields\Toggle::class,
-    ],
-
-    /*
-    |--------------------------------------------------------------------------
-    | View Path
-    |--------------------------------------------------------------------------
-    |
-    | The path under resources/views where the form views are published and loaded from.
-    |
-    */
-
-    'view_path' => 'livewire/forms',
-
-    /*
-    |--------------------------------------------------------------------------
-    | Default View
-    |--------------------------------------------------------------------------
-    |
-    | The default view that is used if you don't specify one on the component.
-    |
-    */
-
-    'view' => 'default',
-
-    /*
-    |--------------------------------------------------------------------------
-    | Default Theme
-    |--------------------------------------------------------------------------
-    |
-    | The default theme that is used if you don't specify one on the component.
-    |
-    */
-
-    'theme' => 'default',
-
-    /*
-    |--------------------------------------------------------------------------
-    | Captcha Configuration
-    |--------------------------------------------------------------------------
-    |
-    | Add the credentials for your captcha.
-    | This addon currently supports Google reCAPTCHA v2 (checkbox).
-    |
-    */
-
-    'captcha' => [
-        'key' => env('CAPTCHA_KEY'),
-        'secret' => env('CAPTCHA_SECRET'),
-    ],
-
-];
+```js
+import { Livewire, Alpine } from '../../vendor/livewire/livewire/dist/livewire.esm';
+import "../../vendor/aerni/livewire-forms/resources/dist/js/livewire-forms";
+ 
+Livewire.start()
 ```
+
+You can also safely remove the script from your form views:
+
+```diff
+- @assets
+-     <script type="module" src="/vendor/livewire-forms/js/livewire-forms.js"></script>
+- @endassets
+
+```
+
 
 ## Commands
 
