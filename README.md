@@ -20,6 +20,11 @@ Install the addon using Composer:
 composer require aerni/livewire-forms
 ```
 
+NOTE: If you are [bundling Livewire assets yourself](https://livewire.laravel.com/docs/installation#manually-bundling-livewire-and-alpine) you will need to import Livewire Form's assets yourself:
+```js
+import "../../vendor/aerni/livewire-forms/resources/dist/js/livewire-forms";
+```
+
 Publish the config of the package (optional):
 
 ```bash
