@@ -44,7 +44,7 @@ export default () => ({
         const sectionVisibility = Object.fromEntries(
             Object.entries(visibleFieldsBySection).map(([section, visibilities]) => [
                 section,
-                visibilities.every(Boolean),
+                visibilities.some(Boolean),
             ])
         )
 
