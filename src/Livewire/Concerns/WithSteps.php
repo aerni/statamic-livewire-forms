@@ -145,8 +145,7 @@ trait WithSteps
     {
         /* Remove validation errors of hidden steps. */
         collect($this->stepVisibility)
-            ->filter(fn ($value) => $value === false)
-            ->each(fn ($visible, $handle) => $this->steps->firstWhere(fn ($step) => $step->handle() === $handle)->resetErrorBag());
-
+            ->filter(fn (bool $value) => $value === false)
+            ->each(fn (bool $visible, string $handle) => $this->steps->firstWhere(fn ($step) => $step->handle() === $handle)->resetErrorBag());
     }
 }
