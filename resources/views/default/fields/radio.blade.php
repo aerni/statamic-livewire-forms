@@ -7,7 +7,7 @@
         @endif
     </div>
 
-    <div class="flex {{ $field->inline ? 'items-start gap-x-6' : 'flex-col gap-y-2' }}">
+    <div class="{{ $field->inline ? 'flex items-start flex-wrap gap-x-6 gap-y-2' : 'flex flex-col gap-y-2' }}">
         @foreach($field->options as $option => $label)
             <div wire:key="{{ $field->id }}-{{ $option }}" class="flex items-start gap-x-3">
                 <div class="flex items-center h-5">
