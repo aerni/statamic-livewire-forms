@@ -8,6 +8,7 @@
         {{ $field->width === 66 ? 'md:col-span-8' : '' }}
         {{ $field->width === 75 ? 'md:col-span-9' : '' }}
         {{ $field->width === 100 ? 'md:col-span-12' : '' }}
+        {{ $field->type === 'spacer' ? 'hidden md:flex' : '' }}
     "
 >
     @formView($field->view)
