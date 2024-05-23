@@ -1,4 +1,4 @@
-<fieldset class="space-y-3">
+<fieldset class="flex flex-col gap-y-3">
     <div>
         @formView('messages.legend')
 
