@@ -1,10 +1,8 @@
-<div>
-    @formView('messages.display')
+@formView('messages.display')
 
-    @if($field->instructions && $field->instructions_position === 'above')
-        @formView('messages.instructions')
-    @endif
-</div>
+@if($field->instructions && $field->instructions_position === 'above')
+    @formView('messages.instructions')
+@endif
 
 <select
     id="{{ $field->id }}"
