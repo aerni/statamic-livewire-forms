@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Livewire;
+namespace [namespace];
 
 use Aerni\LivewireForms\Form\Fields;
 use Aerni\LivewireForms\Livewire\BaseForm;
 use Illuminate\Support\Collection;
 use Statamic\Contracts\Forms\Submission;
 
-class [className] extends BaseForm
+class [class] extends BaseForm
 {
     /*
     |--------------------------------------------------------------------------
