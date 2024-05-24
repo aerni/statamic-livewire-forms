@@ -67,7 +67,8 @@ class Assets extends Field
     public function process(): mixed
     {
         $this->value = collect($this->value)
-            ->flatMap(fn ($file) => AssetsUploader::field($this->field)->upload($file));
+            ->map(fn ($file) => AssetsUploader::field($this->field)->upload($file))
+            ->flatten();
 
         return parent::process();
     }
