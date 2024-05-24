@@ -5,6 +5,7 @@ namespace Aerni\LivewireForms\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
+use Livewire\Features\SupportConsoleCommands\Commands\ComponentParser;
 use Statamic\Console\RunsInPlease;
 use Statamic\Facades\Form;
 
@@ -36,18 +37,22 @@ class MakeComponent extends Command
             options: $forms->mapWithKeys(fn ($form) => [$form->handle() => $form->title()]),
         );
 
+        $classNamespace = config('livewire.class_namespace');
         $className = Str::of($name)->endsWith('Form') ? $name : Str::of($name)->append('Form')->studly();
+        $classPath = ComponentParser::generatePathFromNamespace($classNamespace).collect()->push("{$className}.php")->implode('/');
 
         $stub = File::get(__DIR__.'/form.stub');
 
-        $stub = str_replace('[className]', $className, $stub);
+        $stub = preg_replace(
+            ['/\[namespace\]/', '/\[class\]/'],
+            [$classNamespace, $className],
+            $stub
+        );
 
-        $path = app_path("Livewire/{$className}.php");
-
-        if (! File::exists($path) || confirm(label: 'A component with this name already exists. Do you want to overwrite it?', default: false)) {
-            File::ensureDirectoryExists(app_path('Livewire'));
-            File::put($path, $stub);
-            info("The component was successfully created: <comment>{$this->getRelativePath($path)}</comment>");
+        if (! File::exists($classPath) || confirm(label: 'A component with this name already exists. Do you want to overwrite it?', default: false)) {
+            File::ensureDirectoryExists(dirname($classPath));
+            File::put($classPath, $stub);
+            info("The component was successfully created: <comment>{$this->getRelativePath($classPath)}</comment>");
         }
     }
 
