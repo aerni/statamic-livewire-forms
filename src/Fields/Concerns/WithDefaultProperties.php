@@ -7,6 +7,7 @@ use Aerni\LivewireForms\Fields\Properties\WithDefault;
 use Aerni\LivewireForms\Fields\Properties\WithDisplay;
 use Aerni\LivewireForms\Fields\Properties\WithHandle;
 use Aerni\LivewireForms\Fields\Properties\WithHidden;
+use Aerni\LivewireForms\Fields\Properties\WithHideDisplay;
 use Aerni\LivewireForms\Fields\Properties\WithId;
 use Aerni\LivewireForms\Fields\Properties\WithInstructions;
 use Aerni\LivewireForms\Fields\Properties\WithInstructionsPosition;
@@ -23,6 +24,7 @@ trait WithDefaultProperties
     use WithDisplay;
     use WithHandle;
     use WithHidden;
+    use WithHideDisplay;
     use WithId;
     use WithInstructions;
     use WithInstructionsPosition;
