@@ -26,26 +26,71 @@ Publish the config of the package (optional):
 php please vendor:publish --tag=livewire-forms-config
 ```
 
+## Static caching
+
+The automatic injection of Livewire's frontend assets only works if static caching is disabled. If you are using half/full static caching, you need to [manually include Livewire's frontend assets](https://livewire.laravel.com/docs/installation#manually-including-livewires-frontend-assets):
+
+```html
+<html>
+    <head>
+        <!-- Antlers -->
+        {{ livewire:styles }}
+    
+        <!-- Blade -->
+        @livewireStyles
+    </head>
+    <body>
+        <!-- Antlers -->
+        {{ livewire:scripts }}
+    
+        <!-- Blade -->
+        @livewireScripts
+    </body>
+</html>
+```
+
 ## Manually bundling Livewire and Alpine
 
 If you are [manually bundling Livewire and Alpine](https://livewire.laravel.com/docs/installation#manually-bundling-livewire-and-alpine), you will also need to import Livewire Forms' assets:
 
-```js
+```diff
 import { Livewire, Alpine } from '../../vendor/livewire/livewire/dist/livewire.esm';
-import "../../vendor/aerni/livewire-forms/resources/dist/js/livewire-forms";
+import Clipboard from '@ryangjchandler/alpine-clipboard'
++ import "../../vendor/aerni/livewire-forms/resources/dist/js/livewire-forms";
+
+Alpine.plugin(Clipboard)
  
 Livewire.start()
 ```
 
-You can also safely remove the script from your form views:
+Then, add the `{{ livewire:styles }}` and `{{ livewire:scriptConfig }}` tags to your layout:
+
+```html
+<html>
+    <head>
+        <!-- Antlers -->
+        {{ livewire:styles }}
+    
+        <!-- Blade -->
+        @livewireStyles
+    </head>
+    <body>
+        <!-- Antlers -->
+        {{ livewire:scriptConfig }}
+    
+        <!-- Blade -->
+        @livewireScriptConfig
+    </body>
+</html>
+```
+
+At this point, you can safely remove the `livewire-forms.js` script from your form views, as it is now included in your bundle:
 
 ```diff
 - @assets
 -     <script type="module" src="/vendor/livewire-forms/js/livewire-forms.js"></script>
 - @endassets
-
 ```
-
 
 ## Commands
 
