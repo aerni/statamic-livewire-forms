@@ -26,32 +26,9 @@ Publish the config of the package (optional):
 php please vendor:publish --tag=livewire-forms-config
 ```
 
-## Static caching
-
-The automatic injection of Livewire's frontend assets only works if static caching is disabled. If you are using half/full static caching, you need to [manually include Livewire's frontend assets](https://livewire.laravel.com/docs/installation#manually-including-livewires-frontend-assets):
-
-```html
-<html>
-    <head>
-        <!-- Antlers -->
-        {{ livewire:styles }}
-    
-        <!-- Blade -->
-        @livewireStyles
-    </head>
-    <body>
-        <!-- Antlers -->
-        {{ livewire:scripts }}
-    
-        <!-- Blade -->
-        @livewireScripts
-    </body>
-</html>
-```
-
 ## Manually bundling Livewire and Alpine
 
-If you are [manually bundling Livewire and Alpine](https://livewire.laravel.com/docs/installation#manually-bundling-livewire-and-alpine), you will also need to import Livewire Forms' assets:
+If you are [manually bundling Livewire and Alpine](https://livewire.laravel.com/docs/installation#manually-bundling-livewire-and-alpine), you will also need to import the Livewire Forms script:
 
 ```diff
 import { Livewire, Alpine } from '../../vendor/livewire/livewire/dist/livewire.esm';
