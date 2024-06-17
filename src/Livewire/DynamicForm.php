@@ -4,6 +4,7 @@ namespace Aerni\LivewireForms\Livewire;
 
 use Aerni\LivewireForms\Livewire\Concerns\WithComponent;
 use Aerni\LivewireForms\Livewire\Concerns\WithHandle;
+use Aerni\LivewireForms\Livewire\Concerns\WithRedirect;
 use Aerni\LivewireForms\Livewire\Concerns\WithTheme;
 use Aerni\LivewireForms\Livewire\Concerns\WithType;
 use Aerni\LivewireForms\Livewire\Concerns\WithView;
@@ -17,6 +18,7 @@ class DynamicForm extends Component
     use WithTheme;
     use WithType;
     use WithView;
+    use WithRedirect;
 
     public function render(): View
     {

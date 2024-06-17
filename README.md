@@ -36,7 +36,7 @@ import Clipboard from '@ryangjchandler/alpine-clipboard'
 + import "../../vendor/aerni/livewire-forms/resources/dist/js/livewire-forms";
 
 Alpine.plugin(Clipboard)
- 
+
 Livewire.start()
 ```
 
@@ -47,14 +47,14 @@ Then, add the `{{ livewire:styles }}` and `{{ livewire:scriptConfig }}` tags to 
     <head>
         <!-- Antlers -->
         {{ livewire:styles }}
-    
+
         <!-- Blade -->
         @livewireStyles
     </head>
     <body>
         <!-- Antlers -->
         {{ livewire:scriptConfig }}
-    
+
         <!-- Blade -->
         @livewireScriptConfig
     </body>
@@ -128,11 +128,12 @@ Use the `view` and `theme` parameters if you want to use a view or theme that is
 
 #### Available Properties
 
-| Property | Description                                       |
-| -------- | ------------------------------------------------- |
-| `handle` | The handle of the form you want to use (required) |
-| `view`   | The component view you want to use (optional)     |
-| `theme`  | The theme you want to use (optional)              |
+| Property   | Description                                                           |
+| ---------- | --------------------------------------------------------------------- |
+| `handle`   | The handle of the form you want to use (required)                     |
+| `view`     | The component view you want to use (optional)                         |
+| `theme`    | The theme you want to use (optional)                                  |
+| `redirect` | Redirect the user to this URL after successfull submission (optional) |
 
 ## Views
 
@@ -419,7 +420,7 @@ Lastly, we need to render our new `ContactForm` component in the template.
 
 ### Validation Rules
 
-You can use any validation rule you want. Simply add it to the field in the form blueprint or use the blueprint builder in the CP. 
+You can use any validation rule you want. Simply add it to the field in the form blueprint or use the blueprint builder in the CP.
 
 To validate against the value of another field, you need to get its value like in the following example:
 
