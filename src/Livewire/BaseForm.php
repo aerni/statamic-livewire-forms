@@ -8,6 +8,7 @@ use Aerni\LivewireForms\Livewire\Concerns\WithFields;
 use Aerni\LivewireForms\Livewire\Concerns\WithForm;
 use Aerni\LivewireForms\Livewire\Concerns\WithHandle;
 use Aerni\LivewireForms\Livewire\Concerns\WithMessages;
+use Aerni\LivewireForms\Livewire\Concerns\WithRedirect;
 use Aerni\LivewireForms\Livewire\Concerns\WithSections;
 use Aerni\LivewireForms\Livewire\Concerns\WithSteps;
 use Aerni\LivewireForms\Livewire\Concerns\WithTheme;
@@ -27,6 +28,7 @@ class BaseForm extends Component
     use WithSections;
     use WithSteps;
     use WithMessages;
+    use WithRedirect;
     use SubmitsForm;
 
     public function render(): View

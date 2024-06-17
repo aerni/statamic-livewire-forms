@@ -6,9 +6,14 @@ use Livewire\Attributes\Computed;
 
 trait HandlesSuccess
 {
-    protected function handleSuccess(): self
+    protected function handleSuccess(): self|null
     {
         session()->flash('success', $this->successMessage());
+        session()->flash('submission', $this->submission);
+
+        if (! empty($this->redirect)) {
+            return $this->redirect($this->redirect);
+        }
 
         if (! $this->isWizardForm()) {
             $this->resetForm();

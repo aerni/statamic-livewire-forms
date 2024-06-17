@@ -25,6 +25,7 @@ class [class] extends BaseForm
     //     $this->theme = 'secondary';
     //     $this->type = 'wizard';
     //     $this->view = 'default';
+    //     $this->redirect = 'thank-you';
     // }
 
     /*
