@@ -6,7 +6,7 @@ use Livewire\Attributes\Computed;
 
 trait HandlesSuccess
 {
-    protected function handleSuccess(): self|null
+    protected function handleSuccess(): ?self
     {
         session()->flash('success', $this->successMessage());
         session()->flash('submission', $this->submission);
