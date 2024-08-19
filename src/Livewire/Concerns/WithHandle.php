@@ -28,6 +28,6 @@ trait WithHandle
             return str($this->getName())->beforeLast('-form')->replace('-', '_');
         }
 
-        throw new HandleNotFoundException();
+        throw new HandleNotFoundException;
     }
 }
