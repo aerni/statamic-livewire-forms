@@ -17,7 +17,7 @@ trait WithOptions
         }
 
         return collect($options)
-            ->mapWithKeys(fn ($value) => [$value => __($value)])
+            ->mapWithKeys(fn ($value) => [$value['key'] => __($value['value']) ?? __($value['key'])])
             ->toArray();
     }
 }
