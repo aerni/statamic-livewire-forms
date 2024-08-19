@@ -16,8 +16,7 @@ class Step
         protected array $fields,
         protected ?string $display,
         protected ?string $instructions,
-    ) {
-    }
+    ) {}
 
     public function number(): int
     {
