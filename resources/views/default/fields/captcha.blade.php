@@ -5,11 +5,9 @@
 @endif
 
 <div
+    x-data="grecaptcha"
     id="{{ $field->id }}"
     class="g-recaptcha"
-    data-sitekey="@captchaKey"
-    data-callback="setResponseToken_{{ $this->getId() }}"
-    data-expired-callback="resetResponseToken_{{ $this->getId() }}"
     wire:ignore
     aria-label="{{ $field->id }}-label"
     @if($field->instructions)
@@ -24,15 +22,30 @@
 @endif
 
 @assets
-    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    <script>
+        window.grecaptchaOnloadCallback = function() {
+            window.grecaptchaIsReady = true
+        }
+    </script>
+    <script async defer src="https://www.google.com/recaptcha/api.js?onload=grecaptchaOnloadCallback&render=explicit"></script>
 @endassets
 
-<script>
-    function setResponseToken_{{ $this->getId() }}(token) {
-        @this.set('{{ $field->key }}', token)
-    }
+@script
+    <script>
+        Alpine.data('grecaptcha', () => {
+            return {
+                init() {
+                    if (typeof window.grecaptchaIsReady === 'undefined') {
+                        return setTimeout(() => this.init(), 100)
+                    }
 
-    function resetResponseToken_{{ $this->getId() }}() {
-        @this.set('{{ $field->key }}', null)
-    }
-</script>
+                    grecaptcha.render(this.$el, {
+                        'sitekey': '@captchaKey',
+                        'callback': (token) => $wire.set('{{ $field->key }}', token),
+                        'expired-callback': () => $wire.set('{{ $field->key }}', null),
+                    })
+                },
+            }
+        })
+    </script>
+@endscript
