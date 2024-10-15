@@ -17,6 +17,6 @@
     },
     "devDependencies": {
         "laravel-vite-plugin": "^0.7.8",
-        "vite": "^4.5.1"
+        "vite": "^4.5.5"
     }
 }
