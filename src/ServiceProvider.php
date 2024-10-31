@@ -2,18 +2,18 @@
 
 namespace Aerni\LivewireForms;
 
+use Aerni\LivewireForms\Facades\Captcha;
+use Aerni\LivewireForms\Livewire\BaseForm;
+use Aerni\LivewireForms\Livewire\DynamicForm;
+use Aerni\LivewireForms\Livewire\Synthesizers\FieldSynth;
+use Aerni\LivewireForms\Livewire\Synthesizers\RuleSynth;
+use Illuminate\Support\Facades\Blade;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 use Livewire\Livewire;
 use Statamic\Facades\Form;
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Blade;
-use Aerni\LivewireForms\Facades\Captcha;
-use Illuminate\Support\Facades\Validator;
-use Aerni\LivewireForms\Livewire\BaseForm;
 use Statamic\Providers\AddonServiceProvider;
-use Aerni\LivewireForms\Livewire\DynamicForm;
-use Aerni\LivewireForms\Livewire\Synthesizers\RuleSynth;
-use Aerni\LivewireForms\Livewire\Synthesizers\FieldSynth;
 
 class ServiceProvider extends AddonServiceProvider
 {

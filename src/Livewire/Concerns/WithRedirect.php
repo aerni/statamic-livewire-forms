@@ -3,8 +3,8 @@
 namespace Aerni\LivewireForms\Livewire\Concerns;
 
 use Illuminate\Support\Str;
-use Statamic\Facades\Entry;
 use Livewire\Attributes\Locked;
+use Statamic\Facades\Entry;
 
 trait WithRedirect
 {
