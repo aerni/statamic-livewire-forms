@@ -22,6 +22,11 @@ trait WithView
             return $this->view;
         }
 
+        /* Use the view configured in the form config if it exists. */
+        if (ViewManager::viewExists($this->form->view)) {
+            return $this->form->view;
+        }
+
         /* Autoload the view by form handle if it exists. */
         if (ViewManager::viewExists($this->handle)) {
             return $this->handle;

@@ -22,6 +22,11 @@ trait WithTheme
             return $this->theme;
         }
 
+        /* Use the theme configured in the form config if it exists. */
+        if (ViewManager::themeExists($this->form->theme)) {
+            return $this->form->theme;
+        }
+
         /* Autoload the theme by form handle if it exists. */
         if (ViewManager::themeExists($this->handle)) {
             return $this->handle;

@@ -16,7 +16,7 @@ trait WithType
 
     protected function type(): string
     {
-        return match ($this->type ?? null) {
+        return match ($this->type ?? $this->form->type) {
             'wizard' => 'wizard',
             default => 'basic',
         };
