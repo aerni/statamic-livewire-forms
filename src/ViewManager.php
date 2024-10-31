@@ -22,13 +22,21 @@ class ViewManager
         return view()->exists($this->themeViewPath($theme, $view));
     }
 
-    public function viewExists(string $view): bool
+    public function viewExists(?string $view): bool
     {
+        if (empty($view)) {
+            return false;
+        }
+
         return view()->exists($this->viewPath($view));
     }
 
-    public function themeExists(string $theme): bool
+    public function themeExists(?string $theme): bool
     {
+        if (empty($theme)) {
+            return false;
+        }
+
         return is_dir(resource_path("views/{$this->viewPath($theme)}"));
     }
 
