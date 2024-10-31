@@ -23,7 +23,7 @@
         "laravel/prompts": "^0.1.13",
         "livewire/livewire": "^3.2",
         "spatie/invade": "^2.0",
-        "statamic/cms": "^5.22"
+        "statamic/cms": "^5.36"
     },
     "require-dev": {
         "orchestra/testbench": "^8.19",
