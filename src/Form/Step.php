@@ -45,7 +45,9 @@ class Step
 
     public function fields(): Collection
     {
-        return Livewire::current()->fields->intersectByKeys(array_flip($this->fields));
+        return Livewire::current()->fields
+            ->intersectByKeys(array_flip($this->fields))
+            ->filter(fn ($field) => ! $field->hidden);
     }
 
     public function isPrevious(): bool
