@@ -16,6 +16,12 @@ class Assets extends Field
 {
     protected string $view = 'assets';
 
+    protected function defaultProperty(mixed $default = null): array
+    {
+        /* We need to initialize the value to an empty array for the upload to work. */
+        return [];
+    }
+
     protected function multipleProperty(?bool $multiple = null): bool
     {
         return $multiple ?? $this->field->get('max_files') !== 1;
