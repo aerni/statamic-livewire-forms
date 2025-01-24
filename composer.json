@@ -20,7 +20,7 @@
         "php": "^8.2",
         "jonassiewertsen/statamic-livewire": "^3.0",
         "laravel/framework": "^10.0 || ^11.0",
-        "laravel/prompts": "^0.1.13",
+        "laravel/prompts": "^0.1.16 || ^0.2.0 || ^0.3.0",
         "livewire/livewire": "^3.2",
         "spatie/invade": "^2.0",
         "statamic/cms": "^5.36"
