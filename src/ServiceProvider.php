@@ -95,9 +95,7 @@ class ServiceProvider extends AddonServiceProvider
                 'type' => 'select',
                 'display' => __('View'),
                 'instructions' => __('Choose the view for this form.'),
-                'options' => collect(File::files(resource_path('views/'.config('livewire-forms.view_path'))))
-                    ->map(fn ($file) => Str::before($file->getBasename(), '.'))
-                    ->mapWithKeys(fn ($view) => [$view => str($view)->replace(['_', '-'], ' ')->title()->toString()]),
+                'options' => $this->viewOptions(),
                 'clearable' => true,
                 'width' => 50,
             ],
@@ -105,9 +103,7 @@ class ServiceProvider extends AddonServiceProvider
                 'type' => 'select',
                 'display' => __('Theme'),
                 'instructions' => __('Choose the theme for this form.'),
-                'options' => collect(File::directories(resource_path('views/'.config('livewire-forms.view_path'))))
-                    ->map(fn ($directory) => basename($directory))
-                    ->mapWithKeys(fn ($theme) => [$theme => str($theme)->replace(['_', '-'], ' ')->title()->toString()]),
+                'options' => $this->themeOptions(),
                 'clearable' => true,
                 'width' => 50,
             ],
@@ -119,5 +115,33 @@ class ServiceProvider extends AddonServiceProvider
         ]);
 
         return $this;
+    }
+
+    protected function viewOptions(): ?array
+    {
+        $path = resource_path('views/'.config('livewire-forms.view_path'));
+
+        if (! File::isDirectory($path)) {
+            return null;
+        }
+
+        return collect(File::files($path))
+            ->map(fn ($file) => Str::before($file->getBasename(), '.'))
+            ->mapWithKeys(fn ($view) => [$view => str($view)->replace(['_', '-'], ' ')->title()->toString()])
+            ->all();
+    }
+
+    protected function themeOptions(): ?array
+    {
+        $path = resource_path('views/'.config('livewire-forms.view_path'));
+
+        if (! File::isDirectory($path)) {
+            return null;
+        }
+
+        return collect(File::directories($path))
+            ->map(fn ($directory) => basename($directory))
+            ->mapWithKeys(fn ($theme) => [$theme => str($theme)->replace(['_', '-'], ' ')->title()->toString()])
+            ->all();
     }
 }
