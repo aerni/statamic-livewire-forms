@@ -8,7 +8,7 @@ trait WithOptions
 {
     protected function optionsProperty(?array $options = null): array
     {
-        $options = $options ?? $this->field->get('options');
+        $options = $options ?? $this->field->get('options', []);
 
         if (Arr::isAssoc($options)) {
             return collect($options)
