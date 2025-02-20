@@ -2,12 +2,7 @@
 
 namespace Aerni\LivewireForms\Fields;
 
-use Aerni\LivewireForms\Fields\Select;
-use Statamic\Dictionaries\Dictionary as DictionaryInstance;
-use Statamic\Exceptions\DictionaryNotFoundException;
-use Statamic\Exceptions\UndefinedDictionaryException;
 use Statamic\Facades\Dictionary as Dictionaries;
-use Statamic\Support\Arr;
 
 class Dictionary extends Select
 {
@@ -18,15 +13,12 @@ class Dictionary extends Select
         return $multiple ?? is_null($this->max_items) || $this->max_items > 1;
     }
 
-    public function dictionary(): ?DictionaryInstance
+    protected function optionsProperty(?array $options = null): array
     {
         $config = is_array($config = $this->field->get('dictionary')) ? $config : ['type' => $config];
 
-        return Dictionaries::find($config['type'], $config);
-    }
+        $dictionary = Dictionaries::find($config['type'], $config);
 
-    public function optionsProperty(?array $options = null): array
-    {
-        return $this->dictionary()?->options() ?? [];
+        return $dictionary?->options() ?? [];
     }
 }
