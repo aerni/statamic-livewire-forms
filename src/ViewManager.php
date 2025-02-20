@@ -2,6 +2,9 @@
 
 namespace Aerni\LivewireForms;
 
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\File;
+
 class ViewManager
 {
     public function viewPath(string $view): string
@@ -48,5 +51,33 @@ class ViewManager
     public function defaultTheme(): string
     {
         return config('livewire-forms.theme', 'default');
+    }
+
+    public function views(): ?array
+    {
+        $path = resource_path('views/'.config('livewire-forms.view_path'));
+
+        if (! File::isDirectory($path)) {
+            return null;
+        }
+
+        return collect(File::files($path))
+            ->map(fn ($file) => Str::before($file->getBasename(), '.'))
+            ->mapWithKeys(fn ($view) => [$view => str($view)->replace(['_', '-'], ' ')->title()->toString()])
+            ->all();
+    }
+
+    public function themes(): ?array
+    {
+        $path = resource_path('views/'.config('livewire-forms.view_path'));
+
+        if (! File::isDirectory($path)) {
+            return null;
+        }
+
+        return collect(File::directories($path))
+            ->map(fn ($directory) => basename($directory))
+            ->mapWithKeys(fn ($theme) => [$theme => str($theme)->replace(['_', '-'], ' ')->title()->toString()])
+            ->all();
     }
 }
