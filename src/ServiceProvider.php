@@ -34,11 +34,23 @@ class ServiceProvider extends AddonServiceProvider
     public function bootAddon()
     {
         $this
+            ->bootFieldModels()
             ->bootBladeDirectives()
             ->bootValidators()
             ->bootLivewire()
             ->bootSelectableFieldtypes()
             ->bootFormConfigFields();
+    }
+
+    protected function bootFieldModels(): self
+    {
+        $defaultModels = data_get(require (__DIR__.'/../config/livewire-forms.php'), 'models');
+
+        $userModels = config('livewire-forms.models');
+
+        config()->set('livewire-forms.models', array_merge($defaultModels, $userModels));
+
+        return $this;
     }
 
     protected function bootBladeDirectives(): self
