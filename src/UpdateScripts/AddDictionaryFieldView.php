@@ -2,9 +2,9 @@
 
 namespace Aerni\LivewireForms\UpdateScripts;
 
+use Aerni\LivewireForms\Facades\ViewManager;
 use Illuminate\Support\Facades\File;
 use Statamic\UpdateScripts\UpdateScript;
-use Aerni\LivewireForms\Facades\ViewManager;
 
 class AddDictionaryFieldView extends UpdateScript
 {
