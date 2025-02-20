@@ -23,6 +23,7 @@ return [
         Statamic\Fieldtypes\Text::class => Aerni\LivewireForms\Fields\Text::class,
         Statamic\Fieldtypes\Textarea::class => Aerni\LivewireForms\Fields\Textarea::class,
         Statamic\Fieldtypes\Toggle::class => Aerni\LivewireForms\Fields\Toggle::class,
+        Statamic\Fieldtypes\Dictionary::class => Aerni\LivewireForms\Fields\Dictionary::class,
     ],
 
     /*
