@@ -15,7 +15,7 @@ class Dictionary extends Select
 
     protected function multipleProperty(?bool $multiple = null): bool
     {
-        return $multiple ?? (int) $this->max_items > 1;
+        return $multiple ?? is_null($this->max_items) || $this->max_items > 1;
     }
 
     public function dictionary(): DictionaryInstance
