@@ -1,1 +1,1 @@
-@include('livewire.forms.default.fields.select')
+@formView('fields.select')
