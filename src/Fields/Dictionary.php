@@ -20,9 +20,7 @@ class Dictionary extends Select
 
     public function dictionary(): DictionaryInstance
     {
-        $config = $this->field->config();
-        $config = is_array($config) ? Arr::get($config, 'dictionary') : $config;
-        $config = is_array($config) ? $config : ['type' => $config];
+        $config = is_array($config = $this->field->get('dictionary')) ? $config : ['type' => $config];
 
         if (! $handle = Arr::pull($config, 'type')) {
             throw new UndefinedDictionaryException;
