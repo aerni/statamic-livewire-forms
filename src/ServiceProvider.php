@@ -44,7 +44,7 @@ class ServiceProvider extends AddonServiceProvider
 
     protected function bootModelsConfig(): self
     {
-        $defaultModels = data_get(require(__DIR__.'/../config/livewire-forms.php'), 'models');
+        $defaultModels = data_get(require (__DIR__.'/../config/livewire-forms.php'), 'models');
 
         $userModels = config('livewire-forms.models');
 
