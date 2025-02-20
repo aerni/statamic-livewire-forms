@@ -18,23 +18,15 @@ class Dictionary extends Select
         return $multiple ?? is_null($this->max_items) || $this->max_items > 1;
     }
 
-    public function dictionary(): DictionaryInstance
+    public function dictionary(): ?DictionaryInstance
     {
         $config = is_array($config = $this->field->get('dictionary')) ? $config : ['type' => $config];
 
-        if (! $handle = Arr::pull($config, 'type')) {
-            throw new UndefinedDictionaryException;
-        }
-
-        if ($dictionary = Dictionaries::find($handle, $config)) {
-            return $dictionary;
-        }
-
-        throw new DictionaryNotFoundException($handle);
+        return Dictionaries::find($config['type'], $config);
     }
 
     public function optionsProperty(?array $options = null): array
     {
-        return $this->dictionary()->options();
+        return $this->dictionary()?->options() ?? [];
     }
 }
