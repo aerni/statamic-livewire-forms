@@ -3,6 +3,7 @@
 namespace Aerni\LivewireForms\Livewire\Concerns;
 
 use Aerni\LivewireForms\Exceptions\FormHasNoFieldsException;
+use Aerni\LivewireForms\Fields\Assets;
 use Aerni\LivewireForms\Fields\Captcha;
 use Aerni\LivewireForms\Fields\Field;
 use Aerni\LivewireForms\Fields\Honeypot;
@@ -74,5 +75,11 @@ trait WithFields
     protected function captcha(): ?Captcha
     {
         return $this->fields->whereInstanceOf(Captcha::class)->first();
+    }
+
+    #[Computed]
+    public function hasAssetsField(): bool
+    {
+        return $this->fields->whereInstanceOf(Assets::class)->isNotEmpty();
     }
 }
