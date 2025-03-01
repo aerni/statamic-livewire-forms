@@ -74,7 +74,7 @@ class BladeDirectives
     /**
      * Push the Livewire Form assets into the head.
      */
-    public static function livewireFormAssets(string $expression): string
+    public static function formAssets(): string
     {
         return Blade::compileString("
             @assets

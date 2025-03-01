@@ -7,4 +7,4 @@
     @formView("forms.{$this->type}")
 </form>
 
-@livewireFormsAssets
+@formAssets
