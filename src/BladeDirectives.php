@@ -70,4 +70,17 @@ class BladeDirectives
             echo view(\Aerni\LivewireForms\Facades\ViewManager::themeViewPath(\$this->theme, 'layouts.field'), ['field' => \$field]);
         ?>";
     }
+
+    /**
+     * Push the Livewire Form assets into the head.
+     */
+    public static function livewireFormAssets(string $expression): string
+    {
+        return Blade::compileString("
+            @assets
+                <link href='/vendor/livewire-forms/css/livewire-forms.css' rel='stylesheet' />
+                <script src='/vendor/livewire-forms/js/livewire-forms.js' type='module'></script>
+            @endassets
+        ");
+    }
 }
