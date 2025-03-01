@@ -36,6 +36,8 @@ import uk_UA from 'filepond/locale/uk-ua';
 import vi_VI from 'filepond/locale/vi-vi';
 import zh_CN from 'filepond/locale/zh-cn';
 import zh_TW from 'filepond/locale/zh-tw';
+import 'filepond/dist/filepond.min.css';
+import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.css';
 
 const locales = {
     'ar-ar': ar_AR,

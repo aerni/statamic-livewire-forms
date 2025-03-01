@@ -7,6 +7,4 @@
     @formView("forms.{$this->type}")
 </form>
 
-@assets
-    <script type="module" src="/vendor/livewire-forms/js/livewire-forms.js"></script>
-@endassets
+@formAssets
