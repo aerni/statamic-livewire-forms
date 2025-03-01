@@ -26,8 +26,8 @@
         "statamic/cms": "^5.36"
     },
     "require-dev": {
-        "orchestra/testbench": "^8.19",
-        "pestphp/pest": "^2.32",
+        "orchestra/testbench": "^8.19 || ^9.0 || ^10.0",
+        "pestphp/pest": "^2.32 || ^3.0",
         "pestphp/pest-plugin-laravel": "^2.2",
         "pestphp/pest-plugin-livewire": "^2.1"
     },
