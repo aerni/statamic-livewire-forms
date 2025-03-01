@@ -16,7 +16,6 @@
         "uniqid": "^5.2.0"
     },
     "devDependencies": {
-        "laravel-vite-plugin": "^1.2.0",
         "vite": "^6.2.0"
     }
 }
