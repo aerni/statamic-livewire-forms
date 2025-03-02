@@ -33,7 +33,7 @@ If you are [manually bundling Livewire and Alpine](https://livewire.laravel.com/
 ```diff
 import { Livewire, Alpine } from '../../vendor/livewire/livewire/dist/livewire.esm';
 import Clipboard from '@ryangjchandler/alpine-clipboard'
-+ import "../../vendor/aerni/livewire-forms/resources/dist/js/livewire-forms";
++ import "../../vendor/aerni/livewire-forms/resources/js/livewire-forms.js";
 
 Alpine.plugin(Clipboard)
 
@@ -61,12 +61,10 @@ Then, add the `{{ livewire:styles }}` and `{{ livewire:scriptConfig }}` tags to 
 </html>
 ```
 
-At this point, you can safely remove the `livewire-forms.js` script from your form views, as it is now included in your bundle:
+Don't forget to remove the `@formAssets` directive from your form views, as the styles and script are now included in your bundle:
 
 ```diff
-- @assets
--     <script type="module" src="/vendor/livewire-forms/js/livewire-forms.js"></script>
-- @endassets
+- @formAssets
 ```
 
 ## Commands
