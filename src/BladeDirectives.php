@@ -3,7 +3,10 @@
 namespace Aerni\LivewireForms;
 
 use Aerni\LivewireForms\Facades\Captcha;
+use Aerni\LivewireForms\Fields\Assets;
+use Aerni\LivewireForms\Fields\Captcha as CaptchaField;
 use Illuminate\Support\Facades\Blade;
+use Livewire\Livewire;
 
 class BladeDirectives
 {
@@ -76,10 +79,27 @@ class BladeDirectives
      */
     public static function formAssets(): string
     {
+        $styles = collect();
+        $scripts = collect(['/vendor/livewire-forms/js/form.js']);
+
+        $fields = Livewire::current()->fields;
+
+        if ($fields->contains(fn ($field) => $field instanceof Assets)) {
+            $styles->push('/vendor/livewire-forms/css/filepond.css');
+            $scripts->push('/vendor/livewire-forms/js/filepond.js');
+        }
+
+        if ($fields->contains(fn ($field) => $field instanceof CaptchaField)) {
+            $scripts->push('/vendor/livewire-forms/js/grecaptcha.js');
+        }
+
+        $styles = $styles->map(fn ($style) => "<link href='{$style}' rel='stylesheet'/>")->implode("\n");
+        $scripts = $scripts->map(fn ($script) => "<script src='{$script}' type='module'></script>")->implode("\n");
+
         return Blade::compileString("
             @assets
-                <link href='/vendor/livewire-forms/css/livewire-forms.css' rel='stylesheet' />
-                <script src='/vendor/livewire-forms/js/livewire-forms.js' type='module'></script>
+                $styles
+                $scripts
             @endassets
         ");
     }

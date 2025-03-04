@@ -75,7 +75,7 @@ const locales = {
     'zh-tw': zh_TW,
 };
 
-export default (config) => ({
+Alpine.data('filepond', (config) => ({
     init() {
         FilePond.registerPlugin(FilePondPluginFileValidateSize);
         FilePond.registerPlugin(FilePondPluginFileValidateType);
@@ -112,4 +112,4 @@ export default (config) => ({
 
         FilePond.find(this.$el.querySelector('.filepond--root')).removeFiles();
     }
-})
+}))

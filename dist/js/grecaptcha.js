@@ -1,0 +1,1 @@
+Alpine.data("grecaptcha",e=>({init(){if(typeof window.grecaptchaIsReady>"u")return setTimeout(()=>this.init(),100);window.grecaptcha.render(this.$el,{sitekey:e.siteKey,callback:i=>this.$wire.set(e.field,i),"expired-callback":()=>this.$wire.set(e.field,null)})}}));
