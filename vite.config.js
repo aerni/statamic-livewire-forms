@@ -10,6 +10,7 @@ export default defineConfig({
                 'grecaptcha': 'resources/js/grecaptcha.js',
             },
             output: {
+                dir: 'resources/dist',
                 entryFileNames: 'js/[name].js',
                 assetFileNames: 'css/[name].css'
             }
