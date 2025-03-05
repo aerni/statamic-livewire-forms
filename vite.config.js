@@ -2,13 +2,18 @@ import { defineConfig } from 'vite';
 
 export default defineConfig({
     build: {
-        outDir: 'resources/dist',
-        lib: {
-            entry: 'resources/js/livewire-forms.js',
-            name: 'livewire-forms',
-            fileName: 'js/livewire-forms',
-            cssFileName: 'css/livewire-forms',
-            formats: ['es'],
-        }
+        rollupOptions: {
+            input: {
+                'livewire-forms': 'resources/js/livewire-forms.js',
+                'form': 'resources/js/form.js',
+                'filepond': 'resources/js/filepond.js',
+                'grecaptcha': 'resources/js/grecaptcha.js',
+            },
+            output: {
+                dir: 'resources/dist',
+                entryFileNames: 'js/[name].js',
+                assetFileNames: 'css/[name].css'
+            }
+        },
     }
 });

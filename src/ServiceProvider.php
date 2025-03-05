@@ -29,10 +29,13 @@ class ServiceProvider extends AddonServiceProvider
 
     protected $scripts = [
         __DIR__.'/../resources/dist/js/livewire-forms.js',
+        __DIR__.'/../resources/dist/js/form.js',
+        __DIR__.'/../resources/dist/js/filepond.js',
+        __DIR__.'/../resources/dist/js/grecaptcha.js',
     ];
 
     protected $stylesheets = [
-        __DIR__.'/../resources/dist/css/livewire-forms.css',
+        __DIR__.'/../resources/dist/css/filepond.css',
     ];
 
     public function bootAddon()

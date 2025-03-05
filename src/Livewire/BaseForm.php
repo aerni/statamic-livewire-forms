@@ -3,6 +3,8 @@
 namespace Aerni\LivewireForms\Livewire;
 
 use Aerni\LivewireForms\Facades\ViewManager;
+use Aerni\LivewireForms\Fields\Assets;
+use Aerni\LivewireForms\Fields\Captcha;
 use Aerni\LivewireForms\Livewire\Concerns\SubmitsForm;
 use Aerni\LivewireForms\Livewire\Concerns\WithFields;
 use Aerni\LivewireForms\Livewire\Concerns\WithForm;
@@ -15,6 +17,7 @@ use Aerni\LivewireForms\Livewire\Concerns\WithTheme;
 use Aerni\LivewireForms\Livewire\Concerns\WithType;
 use Aerni\LivewireForms\Livewire\Concerns\WithView;
 use Illuminate\Contracts\View\View;
+use Livewire\Attributes\Computed;
 use Livewire\Component;
 
 class BaseForm extends Component
@@ -36,5 +39,26 @@ class BaseForm extends Component
         return view(ViewManager::viewPath($this->view), [
             'step' => $this->currentStep(),
         ]);
+    }
+
+    #[Computed]
+    public function assets(): string
+    {
+        $styles = collect();
+        $scripts = collect(['/vendor/livewire-forms/js/form.js']);
+
+        if ($this->fields->contains(fn ($field) => $field instanceof Assets)) {
+            $styles->push('/vendor/livewire-forms/css/filepond.css');
+            $scripts->push('/vendor/livewire-forms/js/filepond.js');
+        }
+
+        if ($this->fields->contains(fn ($field) => $field instanceof Captcha)) {
+            $scripts->push('/vendor/livewire-forms/js/grecaptcha.js');
+        }
+
+        $styles = $styles->map(fn ($style) => "<link href='{$style}' rel='stylesheet'/>");
+        $scripts = $scripts->map(fn ($script) => "<script src='{$script}' type='module'></script>");
+
+        return $styles->merge($scripts)->implode("\n");
     }
 }

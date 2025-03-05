@@ -1,4 +1,4 @@
-export default (config) => ({
+Alpine.data('grecaptcha', (config) => ({
     init() {
         if (typeof window.grecaptchaIsReady === 'undefined') {
             return setTimeout(() => this.init(), 100)
@@ -10,4 +10,4 @@ export default (config) => ({
             'expired-callback': () => this.$wire.set(config.field, null),
         })
     },
-})
+}))

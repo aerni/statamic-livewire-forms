@@ -73,14 +73,23 @@ class BladeDirectives
 
     /**
      * Push the Livewire Form assets into the head.
+     * This is basically a copy of Livewire's '@endassets' directive in \Livewire\Features\SupportScriptsAndAssets\SupportScriptsAndAssets
+     * We had to copy it as we ran into Blade caching issues when using the `@assets @endassets` directives directly.
      */
     public static function formAssets(): string
     {
-        return Blade::compileString("
-            @assets
-                <link href='/vendor/livewire-forms/css/livewire-forms.css' rel='stylesheet' />
-                <script src='/vendor/livewire-forms/js/livewire-forms.js' type='module'></script>
-            @endassets
-        ");
+        return <<<PHP
+            <?php
+                \$__assets = \$this->assets;
+                \$__assetKey = md5(\$__assets);
+
+                if (in_array(\$__assetKey, \Livewire\Features\SupportScriptsAndAssets\SupportScriptsAndAssets::\$alreadyRunAssetKeys)) {
+                    return;
+                }
+
+                \Livewire\Features\SupportScriptsAndAssets\SupportScriptsAndAssets::\$alreadyRunAssetKeys[] = \$__assetKey;
+                \Livewire\store(\$this)->push('assets', \$__assets, \$__assetKey);
+            ?>
+        PHP;
     }
 }

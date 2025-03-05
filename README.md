@@ -28,14 +28,33 @@ php please vendor:publish --tag=livewire-forms-config
 
 ## Manually bundling Livewire and Alpine
 
-If you are [manually bundling Livewire and Alpine](https://livewire.laravel.com/docs/installation#manually-bundling-livewire-and-alpine), you will also need to import the Livewire Forms script:
+If you are [manually bundling Livewire and Alpine](https://livewire.laravel.com/docs/installation#manually-bundling-livewire-and-alpine), you will also need to import the Livewire Forms scripts.
+
+### Full bundle
+
+The `livewire-forms.js` script is the full bundle and contains all the forms logic and external libraries like Filepond.
 
 ```diff
 import { Livewire, Alpine } from '../../vendor/livewire/livewire/dist/livewire.esm';
 import Clipboard from '@ryangjchandler/alpine-clipboard'
-+ import "../../vendor/aerni/livewire-forms/resources/js/livewire-forms.js";
++ import "../../vendor/aerni/livewire-forms/resources/dist/js/livewire-forms.js";
 
 Alpine.plugin(Clipboard)
+
+Livewire.start()
+```
+
+### Individual imports
+
+If you want more control, you may import individual scripts instead. This can be useful if you don't want to use some of the provided integrations like Filepond. At the bare minimum you should import `form.js`.
+
+```diff
+import { Livewire, Alpine } from '../../vendor/livewire/livewire/dist/livewire.esm';
+import Clipboard from '@ryangjchandler/alpine-clipboard'
++ import "../../vendor/aerni/livewire-forms/resources/dist/js/form.js";
++ import "../../vendor/aerni/livewire-forms/resources/dist/js/filepond.js";
++ import "../../vendor/aerni/livewire-forms/resources/dist/css/filepond.css";
++ import "../../vendor/aerni/livewire-forms/resources/dist/js/grecaptcha.js";
 
 Livewire.start()
 ```

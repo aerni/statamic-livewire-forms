@@ -1,6 +1,6 @@
-import FieldConditions from '../../../vendor/statamic/cms/resources/js/frontend/components/FieldConditions.js'
+import FieldConditions from '../../vendor/statamic/cms/resources/js/frontend/components/FieldConditions.js'
 
-export default () => ({
+Alpine.data('form', () => ({
     fields: {},
     sections: {},
 
@@ -67,4 +67,4 @@ export default () => ({
     showStep(step) {
         return this.sections[step]
     },
-})
+}))
