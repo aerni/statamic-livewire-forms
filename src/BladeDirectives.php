@@ -3,10 +3,7 @@
 namespace Aerni\LivewireForms;
 
 use Aerni\LivewireForms\Facades\Captcha;
-use Aerni\LivewireForms\Fields\Assets;
-use Aerni\LivewireForms\Fields\Captcha as CaptchaField;
 use Illuminate\Support\Facades\Blade;
-use Livewire\Livewire;
 
 class BladeDirectives
 {
@@ -76,31 +73,23 @@ class BladeDirectives
 
     /**
      * Push the Livewire Form assets into the head.
+     * This is basically a copy of Livewire's '@endassets' directive in \Livewire\Features\SupportScriptsAndAssets\SupportScriptsAndAssets
+     * We had to copy it as we ran into Blade caching issues when using the `@assets @endassets` directives directly.
      */
     public static function formAssets(): string
     {
-        $styles = collect();
-        $scripts = collect(['/vendor/livewire-forms/js/form.js']);
+        return <<<PHP
+            <?php
+                \$__assets = \$this->assets;
+                \$__assetKey = md5(\$__assets);
 
-        $fields = Livewire::current()->fields;
+                if (in_array(\$__assetKey, \Livewire\Features\SupportScriptsAndAssets\SupportScriptsAndAssets::\$alreadyRunAssetKeys)) {
+                    return;
+                }
 
-        if ($fields->contains(fn ($field) => $field instanceof Assets)) {
-            $styles->push('/vendor/livewire-forms/css/filepond.css');
-            $scripts->push('/vendor/livewire-forms/js/filepond.js');
-        }
-
-        if ($fields->contains(fn ($field) => $field instanceof CaptchaField)) {
-            $scripts->push('/vendor/livewire-forms/js/grecaptcha.js');
-        }
-
-        $styles = $styles->map(fn ($style) => "<link href='{$style}' rel='stylesheet'/>")->implode("\n");
-        $scripts = $scripts->map(fn ($script) => "<script src='{$script}' type='module'></script>")->implode("\n");
-
-        return Blade::compileString("
-            @assets
-                $styles
-                $scripts
-            @endassets
-        ");
+                \Livewire\Features\SupportScriptsAndAssets\SupportScriptsAndAssets::\$alreadyRunAssetKeys[] = \$__assetKey;
+                \Livewire\store(\$this)->push('assets', \$__assets, \$__assetKey);
+            ?>
+        PHP;
     }
 }
