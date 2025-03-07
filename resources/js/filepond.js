@@ -84,7 +84,7 @@ Alpine.data('filepond', (config) => ({
 
         const field = this.$wire.fields[config.field].properties;
 
-        FilePond.create(this.$refs.input, {
+        const filepond = FilePond.create(this.$refs.input, {
             allowMultiple: field.multiple,
             minFileSize: field.file_size.min ? `${field.file_size.min}KB` : null,
             maxFileSize: field.file_size.max ? `${field.file_size.max}KB` : null,
@@ -101,9 +101,29 @@ Alpine.data('filepond', (config) => ({
                 revert: (filename, load) => {
                     this.$wire.removeUpload(field.key, filename, load)
                 },
+                restore: (tmpFilename, load, error, progress, abort, headers) => {
+                    this.$wire.restoreUpload(tmpFilename)
+                        .then(file => fetch(file.url)
+                            .then(response => response.blob())
+                            .then(blob => new File([blob], file.filename, { type: blob.type }))
+                        )
+                        .then(file => {
+                            progress(true, 0, file.size)
+                            load(file)
+                        })
+                },
             },
             ...locales[config.locale],
         });
+
+        // Initialize previously uploaded files. This is necessary when using the form wizard and navigating to a previous step that contains a filepond field.
+        filepond.files = this.$wire.fields[config.field].value.map(tmpFileId => ({
+            source: tmpFileId.replace('livewire-file:',''),
+            options: {
+                type: 'limbo',
+            },
+        }));
+
     },
 
     reset(livewireId) {
