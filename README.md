@@ -38,6 +38,7 @@ The `livewire-forms.js` script is the full bundle and contains all the forms log
 import { Livewire, Alpine } from '../../vendor/livewire/livewire/dist/livewire.esm';
 import Clipboard from '@ryangjchandler/alpine-clipboard'
 + import "../../vendor/aerni/livewire-forms/resources/dist/js/livewire-forms.js";
++ import "../../vendor/aerni/livewire-forms/resources/dist/css/livewire-forms.css";
 
 Alpine.plugin(Clipboard)
 
