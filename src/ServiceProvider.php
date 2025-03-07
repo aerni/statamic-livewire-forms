@@ -35,6 +35,7 @@ class ServiceProvider extends AddonServiceProvider
     ];
 
     protected $stylesheets = [
+        __DIR__.'/../resources/dist/css/livewire-forms.css',
         __DIR__.'/../resources/dist/css/filepond.css',
     ];
 
