@@ -3,7 +3,6 @@
 namespace Aerni\LivewireForms\Livewire\Concerns;
 
 use Illuminate\Support\Collection;
-use Aerni\LivewireForms\Livewire\Concerns\WithFileUploads;
 
 trait HandlesValues
 {
