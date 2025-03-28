@@ -48,9 +48,9 @@ Alpine.data('form', () => ({
             ])
         )
 
-        if (JSON.stringify(sectionVisibility) !== JSON.stringify(this.$wire.stepVisibility)) {
+        if (this.$wire.type === 'wizard' && JSON.stringify(sectionVisibility) !== JSON.stringify(this.$wire.stepVisibility)) {
             this.$wire.stepVisibility = sectionVisibility
-            this.$wire.$refresh()
+            this.$wire.$refresh() // We need to refresh so that the "Send" button shows up instead of "Continue" if next steps are conditionally hidden.
         }
 
         return sectionVisibility
