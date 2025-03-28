@@ -5,6 +5,10 @@
             wire:key="{{ $step->id() }}-navigation"
             class="flex items-center whitespace-nowrap gap-x-3"
         >
+            @if(!$loop->first)
+                <span class="text-gray-300 select-none" aria-hidden="true">/</span>
+            @endif
+
             <button
                 type="button"
                 class="
@@ -23,10 +27,6 @@
             >
                 {{ $step->display() }}
             </button>
-
-            @if(!$loop->last)
-                <span class="text-gray-300 select-none" aria-hidden="true">/</span>
-            @endif
         </li>
     @endforeach
 </ol>
