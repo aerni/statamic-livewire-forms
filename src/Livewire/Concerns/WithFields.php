@@ -31,14 +31,21 @@ trait WithFields
 
     public function updatedFields(mixed $value, string $key): void
     {
-        $this->validateOnly("fields.{$key}");
+        /**
+         * When handling array fields like checkboxes, the $key can look like "services.value.0".
+         * This can cause issues with validation, since it targets a specific item instead of the whole array.
+         * The following code fixes this by pointing the $key to the full array "services.value" instead.
+         */
+        $key = str($key)->explode('.')->slice(0, 2)->prepend('fields')->join('.');
+
+        $this->validateOnly($key);
 
         /**
          * Explicitly forget the errors of this field after validation has passed
          * so that we don't restore them in some edge case scenarios.
          */
         if ($this->isWizardForm()) {
-            $this->resetStepErrorBag("fields.{$key}");
+            $this->resetStepErrorBag($key);
         }
     }
 
