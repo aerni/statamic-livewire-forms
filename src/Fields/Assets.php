@@ -3,14 +3,16 @@
 namespace Aerni\LivewireForms\Fields;
 
 use Illuminate\Support\Str;
-use Statamic\Fieldtypes\Assets\DimensionsRule;
-use Statamic\Fieldtypes\Assets\ImageRule;
-use Statamic\Fieldtypes\Assets\MaxRule;
-use Statamic\Fieldtypes\Assets\MimesRule;
-use Statamic\Fieldtypes\Assets\MimetypesRule;
-use Statamic\Fieldtypes\Assets\MinRule;
-use Statamic\Forms\Uploaders\AssetsUploader;
+use Statamic\Fieldtypes\Files;
 use Symfony\Component\Mime\MimeTypes;
+use Statamic\Fieldtypes\Assets\MaxRule;
+use Statamic\Fieldtypes\Assets\MinRule;
+use Statamic\Fieldtypes\Assets\ImageRule;
+use Statamic\Fieldtypes\Assets\MimesRule;
+use Statamic\Forms\Uploaders\FilesUploader;
+use Statamic\Forms\Uploaders\AssetsUploader;
+use Statamic\Fieldtypes\Assets\MimetypesRule;
+use Statamic\Fieldtypes\Assets\DimensionsRule;
 
 class Assets extends Field
 {
@@ -73,7 +75,10 @@ class Assets extends Field
     public function process(): mixed
     {
         $this->value = collect($this->value)
-            ->map(fn ($file) => AssetsUploader::field($this->field)->upload($file))
+            ->when($this->field->fieldtype() instanceof Files,
+                fn ($files) => $files->map(fn ($file) => FilesUploader::field($this->field)->upload($file)),
+                fn ($files) => $files->map(fn ($file) => AssetsUploader::field($this->field)->upload($file)),
+            )
             ->flatten();
 
         return parent::process();
