@@ -55,7 +55,8 @@ class Assets extends Field
                 $rule instanceof ImageRule => ['image/*'],
                 $rule instanceof MimetypesRule => invade($rule)->parameters,
                 $rule instanceof MimesRule => collect(invade($rule)->parameters)
-                    ->flatMap(fn ($mime) => (new MimeTypes)->getMimeTypes($mime)),
+                    ->flatMap(fn ($mime) => (new MimeTypes)->getMimeTypes($mime))
+                    ->all(),
                 default => null,
             })
             ->filter()
