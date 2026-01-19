@@ -7,7 +7,7 @@ use Aerni\LivewireForms\ServiceProvider;
 use Illuminate\Contracts\Config\Repository;
 use Livewire\LivewireServiceProvider;
 use Orchestra\Testbench\TestCase as Orchestra;
-use Statamic\Extend\Manifest;
+use Statamic\Addons\Manifest;
 use Statamic\Facades\File;
 use Statamic\Providers\StatamicServiceProvider;
 
