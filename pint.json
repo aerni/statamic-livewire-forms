@@ -1,6 +1,7 @@
 {
     "preset": "laravel",
     "rules": {
-        "ordered_traits": false
+        "ordered_traits": false,
+        "global_namespace_import": false
     }
 }
