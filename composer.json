@@ -19,7 +19,7 @@
     "require": {
         "php": "^8.3",
         "marcorieser/statamic-livewire": "^5.0",
-        "laravel/framework": "^12.0",
+        "laravel/framework": "^12.0 || ^13.0",
         "laravel/prompts": "^0.3.0",
         "livewire/livewire": "^4.1",
         "spatie/invade": "^2.0",
@@ -27,7 +27,7 @@
     },
     "require-dev": {
         "laravel/pint": "^1.27",
-        "orchestra/testbench": "^10.0",
+        "orchestra/testbench": "^10.0 || ^11.0",
         "pestphp/pest": "^4.0",
         "pestphp/pest-plugin-laravel": "^4.0",
         "pestphp/pest-plugin-livewire": "^4.0"
