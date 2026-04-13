@@ -2,10 +2,41 @@
 
 use Aerni\LivewireForms\Facades\ViewManager;
 
-it('can get the path of a view', function () {
-    config()->set('livewire-forms.view_path', 'my/custom/path');
+it('resolves view path relative to Livewire view path', function () {
+    expect(ViewManager::viewPath('view'))->toBe('livewire/forms/view');
+});
 
-    expect(ViewManager::viewPath('view'))->toBe('my/custom/path/view');
+it('resolves view path with custom Livewire view path', function () {
+    config()->set('livewire.view_path', resource_path('views/wire'));
+
+    expect(ViewManager::viewPath('view'))->toBe('wire/forms/view');
+});
+
+it('resolves view path with custom forms view path', function () {
+    config()->set('livewire-forms.view_path', 'custom');
+
+    expect(ViewManager::viewPath('view'))->toBe('livewire/custom/view');
+});
+
+it('resolves view path without a view', function () {
+    expect(ViewManager::viewPath())->toBe('livewire/forms');
+});
+
+it('resolves absolute view path', function () {
+    expect(ViewManager::absoluteViewPath())
+        ->toBe(resource_path('views/livewire/forms'));
+});
+
+it('resolves absolute view path with a subpath', function () {
+    expect(ViewManager::absoluteViewPath('default'))
+        ->toBe(resource_path('views/livewire/forms/default'));
+});
+
+it('resolves absolute view path with custom Livewire view path', function () {
+    config()->set('livewire.view_path', resource_path('views/wire'));
+
+    expect(ViewManager::absoluteViewPath('default'))
+        ->toBe(resource_path('views/wire/forms/default'));
 });
 
 it('can get the default view', function () {
@@ -29,8 +60,3 @@ it('can check if a theme view exists', function () {
     expect(ViewManager::themeViewExists('default', 'fields.default'))->toBeTrue();
     expect(ViewManager::themeViewExists('default', 'fields.nope'))->toBeFalse();
 });
-
-// it('can check if a theme exists', function () {
-//     expect(ViewManager::themeExists('default'))->toBeTrue();
-//     expect(ViewManager::themeExists('nope'))->toBeFalse();
-// });

@@ -43,11 +43,11 @@ class TestCase extends Orchestra
     protected function copyResources(): void
     {
         if (! ViewManager::themeExists('default')) {
-            File::copyDirectory(__DIR__.'/../resources/views/default/', resource_path('views'.'/'.config('livewire-forms.view_path').'/default'));
+            File::copyDirectory(__DIR__.'/../resources/views/default/', ViewManager::absoluteViewPath('default'));
         }
 
         if (! ViewManager::viewExists('default')) {
-            File::copy(__DIR__.'/../resources/views/default.blade.php', resource_path('views'.'/'.config('livewire-forms.view_path').'/default.blade.php'));
+            File::copy(__DIR__.'/../resources/views/default.blade.php', ViewManager::absoluteViewPath('default.blade.php'));
         }
     }
 }
