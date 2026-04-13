@@ -5,7 +5,6 @@ namespace Aerni\LivewireForms\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
-use Livewire\Features\SupportConsoleCommands\Commands\ComponentParser;
 use Statamic\Console\RunsInPlease;
 use Statamic\Facades\Form;
 
@@ -39,7 +38,7 @@ class MakeComponent extends Command
 
         $classNamespace = config('livewire.class_namespace');
         $className = Str::of($name)->endsWith('Form') ? $name : Str::of($name)->append('Form')->studly();
-        $classPath = ComponentParser::generatePathFromNamespace($classNamespace).collect()->push("{$className}.php")->implode('/');
+        $classPath = config('livewire.class_path', app_path('Livewire'))."/{$className}.php";
 
         $stub = File::get(__DIR__.'/form.stub');
 
