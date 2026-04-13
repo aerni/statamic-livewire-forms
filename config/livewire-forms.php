@@ -32,11 +32,13 @@ return [
     | View Path
     |--------------------------------------------------------------------------
     |
-    | The path under resources/views where the form views are published and loaded from.
+    | The subdirectory within Livewire's configured view path where form views
+    | are published and loaded from. This is relative to the 'view_path'
+    | setting in your Livewire config (default: resources/views/livewire).
     |
     */
 
-    'view_path' => 'livewire/forms',
+    'view_path' => 'forms',
 
     /*
     |--------------------------------------------------------------------------

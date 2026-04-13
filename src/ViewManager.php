@@ -4,12 +4,22 @@ namespace Aerni\LivewireForms;
 
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
+use Statamic\Facades\Path;
 
 class ViewManager
 {
-    public function viewPath(string $view): string
+    public function absoluteViewPath(string $path = ''): string
     {
-        return config('livewire-forms.view_path', 'livewire/forms')."/{$view}";
+        return rtrim(Path::assemble(
+            config('livewire.view_path', resource_path('views/livewire')),
+            config('livewire-forms.view_path', 'forms'),
+            $path,
+        ), '/');
+    }
+
+    public function viewPath(string $view = ''): string
+    {
+        return Str::after($this->absoluteViewPath($view), resource_path('views/'));
     }
 
     public function themeViewPath(string $theme, string $view): string
@@ -40,7 +50,7 @@ class ViewManager
             return false;
         }
 
-        return is_dir(resource_path("views/{$this->viewPath($theme)}"));
+        return is_dir($this->absoluteViewPath($theme));
     }
 
     public function defaultView(): string
@@ -55,7 +65,7 @@ class ViewManager
 
     public function views(): ?array
     {
-        $path = resource_path('views/'.config('livewire-forms.view_path'));
+        $path = $this->absoluteViewPath();
 
         if (! File::isDirectory($path)) {
             return null;
@@ -69,7 +79,7 @@ class ViewManager
 
     public function themes(): ?array
     {
-        $path = resource_path('views/'.config('livewire-forms.view_path'));
+        $path = $this->absoluteViewPath();
 
         if (! File::isDirectory($path)) {
             return null;
