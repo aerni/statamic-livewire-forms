@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Validator;
 use Livewire\Livewire;
 use Statamic\Facades\Form;
+use Statamic\Fields\Section;
 use Statamic\Providers\AddonServiceProvider;
 
 class ServiceProvider extends AddonServiceProvider
@@ -31,6 +32,13 @@ class ServiceProvider extends AddonServiceProvider
         __DIR__.'/../resources/dist/js' => 'js',
         __DIR__.'/../resources/dist/css' => 'css',
     ];
+
+    public function register(): void
+    {
+        $this->registerSerializableClasses([
+            Section::class,
+        ]);
+    }
 
     public function bootAddon()
     {
