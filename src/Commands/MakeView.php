@@ -7,6 +7,7 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 use Statamic\Console\RunsInPlease;
+use Statamic\Facades\Path;
 
 use function Laravel\Prompts\confirm;
 use function Laravel\Prompts\info;
@@ -36,6 +37,6 @@ class MakeView extends Command
 
     protected function getRelativePath($path): string
     {
-        return str_replace(base_path().'/', '', $path);
+        return Path::makeRelative($path);
     }
 }

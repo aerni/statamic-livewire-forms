@@ -19,7 +19,10 @@ class ViewManager
 
     public function viewPath(string $view = ''): string
     {
-        return Str::after($this->absoluteViewPath($view), resource_path('views/'));
+        return Str::after(
+            $this->absoluteViewPath($view),
+            Path::tidy(resource_path('views/'))
+        );
     }
 
     public function themeViewPath(string $theme, string $view): string
