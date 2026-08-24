@@ -13,7 +13,7 @@ use Statamic\Forms\SendEmails;
 
 trait HandlesSubmission
 {
-    protected Submission $submission;
+    protected ?Submission $submission = null;
 
     protected function handleSubmission(): self
     {
