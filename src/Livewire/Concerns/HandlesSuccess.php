@@ -9,7 +9,10 @@ trait HandlesSuccess
     protected function handleSuccess(): ?self
     {
         session()->flash('success', $this->successMessage());
-        session()->flash('submission', $this->submission);
+
+        if (isset($this->submission)) {
+            session()->flash('submission', $this->submission);
+        }
 
         if (! empty($this->redirect)) {
             return $this->redirect($this->redirect);
