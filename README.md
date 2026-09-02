@@ -281,6 +281,8 @@ Each Statamic fieldtype is mapped to a Livewire Forms field model. Models are re
 
 For instance, all the fields of type `\Statamic\Fieldtypes\Select::class` are bound to the `\Aerni\LivewireForms\Fields\Select::class` model. A field property is created for each model method ending with `Property`, e.g. `optionsProperty()` will generate an `options` property.
 
+If a fieldtype has no binding of its own, the binding of its closest parent fieldtype is used instead, e.g. Statamic's `YesNo` fieldtype (the underlying fieldtype of the `yes_no` form fieldtype) resolves to the model of the `Radio` fieldtype it extends.
+
 To change a field's default model, simply change the binding in the `models` property in your component:
 
 ```php
