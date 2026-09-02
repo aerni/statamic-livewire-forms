@@ -2,6 +2,8 @@
 
 namespace Aerni\LivewireForms\Livewire\Concerns;
 
+use Illuminate\Validation\ValidationException;
+use Statamic\Exceptions\FormRestrictedException;
 use Statamic\Exceptions\SilentFormFailureException;
 
 trait SubmitsForm
@@ -16,9 +18,11 @@ trait SubmitsForm
         $this->validate();
 
         try {
-            $this->handleSpam()->handleSubmission()->handleSuccess();
+            $this->handleSubmission()->handleSuccess();
         } catch (SilentFormFailureException) {
             $this->handleSuccess();
+        } catch (FormRestrictedException $exception) {
+            throw ValidationException::withMessages(['*' => $exception->getMessage()]);
         }
     }
 }
