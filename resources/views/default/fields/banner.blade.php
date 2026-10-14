@@ -10,9 +10,9 @@
             {{ $field->display }}
         </h3>
 
-        @if($field->text)
+        @if($field->content)
             <p class="text-sm text-gray-500">
-                {{ $field->text }}
+                {{ $field->content }}
             </p>
         @endif
     </div>

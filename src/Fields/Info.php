@@ -2,14 +2,16 @@
 
 namespace Aerni\LivewireForms\Fields;
 
-use Illuminate\Support\Arr;
+use Statamic\Facades\Icon;
 
-class FormBanner extends Field
+class Info extends Field
 {
     protected string $view = 'banner';
 
     protected function iconProperty(?string $icon = null): ?string
     {
-        return $icon ?? Arr::get($this->field->fieldtype()->extraRenderableFieldData(), 'icon');
+        $icon ??= $this->field->get('icon');
+
+        return $icon ? Icon::default()->get($icon) : null;
     }
 }
