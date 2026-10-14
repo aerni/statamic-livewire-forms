@@ -42,7 +42,7 @@ beforeEach(function () {
             ]]],
             ['handle' => 'intro', 'field' => ['type' => 'heading', 'display' => 'About you', 'subheading' => 'Tell us more']],
             ['handle' => 'terms', 'field' => ['type' => 'paragraph', 'text' => 'Some fine print']],
-            ['handle' => 'notice', 'field' => ['type' => 'banner', 'display' => 'Heads up', 'text' => 'Please read this']],
+            ['handle' => 'notice', 'field' => ['type' => 'banner', 'display' => 'Heads up', 'content' => 'Please read this']],
             ['handle' => 'gap', 'field' => ['type' => 'spacer']],
         ],
     ])->save();
@@ -73,7 +73,7 @@ it('resolves the field models of the new fieldtypes', function () {
         ->and($fields->get('address'))->toBeInstanceOf(Fields\Group::class)
         ->and($fields->get('intro'))->toBeInstanceOf(Fields\FormHeading::class)
         ->and($fields->get('terms'))->toBeInstanceOf(Fields\Html::class)
-        ->and($fields->get('notice'))->toBeInstanceOf(Fields\FormBanner::class);
+        ->and($fields->get('notice'))->toBeInstanceOf(Fields\Info::class);
 });
 
 it('persists a submission with the values of the new fieldtypes', function () {
