@@ -65,11 +65,20 @@ trait WithFields
         $fieldtype = $field->fieldtype()::class;
 
         $class = $this->models()->get($field->handle())
-            ?? $this->models()->get($fieldtype);
+            ?? $this->modelFromFieldtype($fieldtype);
 
         return $class
             ? $class::make($field)
             : throw new \Exception("The field model binding for fieldtype [{$fieldtype}] cannot be found.");
+    }
+
+    protected function modelFromFieldtype(string $fieldtype): ?string
+    {
+        /* Fall back to the model of a parent fieldtype, e.g. YesNo resolves to the model of Radio. */
+        return collect([$fieldtype, ...class_parents($fieldtype)])
+            ->map(fn ($class) => $this->models()->get($class))
+            ->filter()
+            ->first();
     }
 
     #[Computed]
