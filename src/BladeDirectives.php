@@ -2,7 +2,6 @@
 
 namespace Aerni\LivewireForms;
 
-use Aerni\LivewireForms\Facades\Captcha;
 use Illuminate\Support\Facades\Blade;
 
 class BladeDirectives
@@ -12,7 +11,7 @@ class BladeDirectives
      */
     public static function captchaKey(): string
     {
-        return Captcha::key();
+        return '<?php echo e(\\Aerni\\LivewireForms\\Facades\\Captcha::key()); ?>';
     }
 
     /**
