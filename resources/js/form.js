@@ -17,7 +17,7 @@ Alpine.data('form', () => ({
         }, {})
 
         return Object.entries(fields).reduce((fields, [key, field]) => {
-            const passesConditions = new FieldConditions().showField(field.properties.conditions, values)
+            const passesConditions = new FieldConditions().showField(field.properties.conditions, values, key)
 
             fields[key] = {
                 visible: passesConditions && !field.properties.hidden,
