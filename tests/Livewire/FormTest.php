@@ -21,7 +21,7 @@ beforeEach(function () {
 });
 
 afterEach(function () {
-    Blueprint::find('forms.contact')->delete();
+    Blueprint::find('forms.contact')?->delete();
     StatamicForm::find('contact')->delete();
 });
 

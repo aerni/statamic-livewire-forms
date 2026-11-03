@@ -22,6 +22,13 @@ class TestCase extends Orchestra
         ];
     }
 
+    protected function getPackageAliases($app)
+    {
+        return [
+            'Statamic' => \Statamic\Statamic::class,
+        ];
+    }
+
     protected function defineEnvironment($app)
     {
         $app->make(Manifest::class)->manifest = [
