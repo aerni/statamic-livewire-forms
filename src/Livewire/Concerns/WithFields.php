@@ -31,6 +31,15 @@ trait WithFields
 
     public function updatedFields(mixed $value, string $key): void
     {
+        /**
+         * When handling array fields like checkboxes, the $key can look like "services.value.0".
+         * This can cause issues with validation, since it targets a specific item instead of the whole array.
+         * The following code fixes this by pointing the $key to the full array "services.value" instead.
+         *
+         * Nested property paths like "items.value.0.amount" must keep their concrete key so that
+         * validateOnly can clear that specific error. We only strip a trailing numeric index, which
+         * also handles checkboxes nested inside grids ("items.value.0.options.1" → "items.value.0.options").
+         */
         $key = $this->realtimeValidationKey($key);
 
         $this->validateOnly($key);
@@ -44,15 +53,6 @@ trait WithFields
         }
     }
 
-    /**
-     * Map a Livewire fields.* update path to the validateOnly target.
-     *
-     * Trailing numeric indexes are checkbox/array item paths and must validate
-     * the parent array (e.g. "services.value.0" → "fields.services.value",
-     * "items.value.0.options.1" → "fields.items.value.0.options").
-     * Nested property paths keep their concrete key
-     * (e.g. "items.value.0.amount" → "fields.items.value.0.amount").
-     */
     protected function realtimeValidationKey(string $key): string
     {
         $parts = str($key)->explode('.');
