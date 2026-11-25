@@ -14,20 +14,20 @@ trait HandlesValues
     {
         return $this->fields
             ->filter(fn ($field) => $this->submittableFields[$field->handle])
-            ->map(fn ($field) => $this->submittableValue($field->value(), $field->handle));
+            ->map(fn ($field) => $this->submittableValue($field->value(), $this->submittableFields[$field->handle]));
     }
 
-    protected function submittableValue(mixed $value, string $path): mixed
+    protected function submittableValue(mixed $value, mixed $submittable): mixed
     {
         /* A non-group field has no children, so its value stays as it is. */
-        if (! is_array($value)) {
+        if (! is_array($value) || ! is_array($submittable)) {
             return $value;
         }
 
-        /* A nested field's flag key is the dotted path, like address.street. */
+        /* An included group lists each child. A missing child stays, and false drops it. */
         return collect($value)
-            ->filter(fn ($child, $handle) => $this->submittableFields["{$path}.{$handle}"] ?? true)
-            ->map(fn ($child, $handle) => $this->submittableValue($child, "{$path}.{$handle}"))
+            ->filter(fn ($child, $handle) => ($submittable[$handle] ?? true) !== false)
+            ->map(fn ($child, $handle) => $this->submittableValue($child, $submittable[$handle] ?? true))
             ->all();
     }
 

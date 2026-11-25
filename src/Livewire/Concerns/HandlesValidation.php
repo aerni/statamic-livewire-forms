@@ -22,7 +22,7 @@ trait HandlesValidation
                 ->filter(fn ($value, $field) => $this->submittableFields[$field])
                 ->map(fn ($field, $handle) => [
                     ...$field,
-                    'value' => $this->submittableValue($field['value'], $handle),
+                    'value' => $this->submittableValue($field['value'], $this->submittableFields[$handle]),
                 ])
                 ->all();
 

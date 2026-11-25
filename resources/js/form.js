@@ -14,34 +14,39 @@ Alpine.data('form', () => ({
 
         const values = Object.fromEntries(entries.map(([handle, field]) => [handle, field.value]))
 
-        return entries.reduce((processed, [handle, field]) => this.processField({
+        const processed = {}
+
+        this.$wire.submittableFields = Object.fromEntries(entries.map(([handle, field]) => [handle, this.processField({
             conditions: field.properties.conditions,
             hidden: field.properties.hidden,
             always_save: field.properties.always_save,
             fields: field.properties.fields,
             section: field.section,
-        }, handle, values, processed), {})
+        }, handle, values, processed)]))
+
+        return processed
     },
 
     processField(field, path, values, processed) {
         const passesConditions = new FieldConditions().showField(field.conditions, values, path)
+        const submittable = field.always_save || passesConditions
 
         processed[path] = {
             visible: passesConditions && !field.hidden,
-            submittable: field.always_save || passesConditions,
+            submittable,
             section: field.section ?? null,
         }
 
-        this.$wire.submittableFields[path] = processed[path].submittable
+        if (!field.fields) {
+            return submittable
+        }
 
-        field.fields?.forEach((child) => this.processField(
-            child,
-            `${path}.${child.handle}`,
-            values,
-            processed,
-        ))
+        const children = Object.fromEntries(field.fields.map((child) => [
+            child.handle,
+            this.processField(child, `${path}.${child.handle}`, values, processed),
+        ]))
 
-        return processed
+        return submittable ? children : false
     },
 
     processSections(fields) {

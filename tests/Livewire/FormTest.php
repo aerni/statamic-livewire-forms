@@ -162,9 +162,12 @@ it('applies conditions to fields inside a group', function () {
         ->assertSee("showField('address.street')", false)
         ->assertSee("showField('address.location.city')", false)
         ->set('submittableFields', [
-            'address' => true,
-            'address.street' => false,
-            'address.location.city' => false,
+            'address' => [
+                'street' => false,
+                'location' => [
+                    'city' => false,
+                ],
+            ],
             'honeypot' => true,
         ])
         ->set('fields.address.value', [
@@ -191,13 +194,45 @@ it('still validates a visible field inside a group', function () {
 
     Livewire::test(BaseForm::class, ['handle' => 'grouped'])
         ->set('submittableFields', [
-            'address' => true,
-            'address.street' => true,
+            'address' => [
+                'street' => true,
+            ],
             'honeypot' => true,
         ])
         ->set('fields.address.value', ['street' => ''])
         ->call('submit')
         ->assertHasErrors('fields.address.value.street');
+});
+
+it('drops a group when the group itself is excluded', function () {
+    StatamicForm::make('grouped')->formFields([
+        'fields' => [
+            ['handle' => 'name', 'field' => ['type' => 'short_answer']],
+            ['handle' => 'address', 'field' => ['type' => 'group', 'fields' => [
+                ['handle' => 'street', 'field' => ['type' => 'short_answer']],
+                ['handle' => 'city', 'field' => ['type' => 'short_answer']],
+            ]]],
+        ],
+    ])->save();
+
+    Livewire::test(BaseForm::class, ['handle' => 'grouped'])
+        ->set('submittableFields', [
+            'name' => true,
+            'address' => false,
+            'honeypot' => true,
+        ])
+        ->set('fields.name.value', 'Ada')
+        ->set('fields.address.value', [
+            'street' => '',
+            'city' => 'Paris',
+        ])
+        ->call('submit')
+        ->assertHasNoErrors();
+
+    $submission = StatamicForm::find('grouped')->submissions()->first();
+
+    expect($submission->get('name'))->toBe('Ada')
+        ->and($submission->get('address'))->toEqual([]);
 });
 
 function contactForm(): void
