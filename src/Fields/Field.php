@@ -32,11 +32,6 @@ abstract class Field implements Arrayable
         return [$this->key => $this->display];
     }
 
-    public function process(): mixed
-    {
-        return $this->field->setValue($this->value)->process()->value();
-    }
-
     public function value(mixed $value = null): mixed
     {
         return $this->fluentlyGetOrSet('value')

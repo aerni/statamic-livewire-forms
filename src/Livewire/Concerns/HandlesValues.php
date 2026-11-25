@@ -15,13 +15,6 @@ trait HandlesValues
         return $this->fields->map(fn ($field) => $field->value());
     }
 
-    protected function processedValues(): Collection
-    {
-        return $this->fields
-            ->filter(fn ($field) => $this->submittableFields[$field->handle])
-            ->map(fn ($field) => $field->process());
-    }
-
     protected function resetValues(): void
     {
         $this->fields->each(fn ($field) => $field->resetValue());

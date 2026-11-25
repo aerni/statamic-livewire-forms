@@ -43,12 +43,6 @@ it('can reset the value', function () {
     expect($this->field->value())->toBe(null);
 });
 
-it('can process the value', function () {
-    $this->field->value('Michael');
-
-    expect($this->field->process())->toBe('Michael');
-});
-
 it('can get the validation attributes', function () {
     expect($this->field->validationAttributes())->toBe(['fields.name.value' => 'Name']);
 });

@@ -207,11 +207,36 @@ it('maps the validation errors of the submit action to their Livewire error keys
 
     filledSurveyForm()
         ->call('submit')
-        ->assertHasErrors($expectedErrorKey);
+        ->assertOnlyHasErrors($expectedErrorKey);
 })->with([
     'field error' => [['name' => ['The name is invalid.']], 'fields.name.value'],
     'form-level error' => [['*' => ['This form must be submitted from an entry.']], '*'],
+    'file error' => [['resume.0' => ['The resume failed to upload.']], 'fields.resume.value'],
+    'indexed field error' => [['interests.0' => ['The interests are invalid.']], 'fields.interests.value'],
+    'nested field error' => [['address.street' => ['The street is invalid.']], 'fields.address.value.street'],
 ]);
+
+it('maps every indexed upload error onto the upload field', function () {
+    app()->bind(SubmitForm::class, fn () => new class extends SubmitForm
+    {
+        public function submit(array $data, array $files = []): SubmissionResult
+        {
+            throw ValidationException::withMessages([
+                'resume.0' => ['The resume must be a PDF.'],
+                'resume.1' => ['The resume failed to upload.'],
+            ]);
+        }
+    });
+
+    filledSurveyForm()
+        ->call('submit')
+        ->assertOnlyHasErrors([
+            'fields.resume.value' => [
+                'The resume must be a PDF.',
+                'The resume failed to upload.',
+            ],
+        ]);
+});
 
 function filledSurveyForm(array $values = []): \Livewire\Features\SupportTesting\Testable
 {

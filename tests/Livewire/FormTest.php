@@ -35,13 +35,13 @@ it('renders basic-form successfully', function () {
         ->assertStatus(200);
 });
 
-it('shows success and does not persist a submission when the honeypot is filled', function () {
+it('shows success and flashes the submission without persisting it when the honeypot is filled', function () {
     filledContactForm(['winnie' => 'spam'])
         ->call('submit')
         ->assertSuccessful()
         ->assertSee('The form was successfully submitted!');
 
-    expect(session('_flash.new'))->not->toContain('submission');
+    expect(session('_flash.new'))->toContain('submission');
     expect(StatamicForm::find('contact')->submissions())->toHaveCount(0);
 });
 
