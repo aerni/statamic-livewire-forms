@@ -10,7 +10,7 @@
             id="{{ $field->id }}"
             x-data="{
                 move(from, to) {
-                    const order = [...$wire.fields['{{ $field->handle }}'].value];
+                    const order = [...$wire.get('{{ $field->key }}')];
                     order.splice(to, 0, order.splice(from, 1)[0]);
                     $wire.set('{{ $field->key }}', order);
                 }

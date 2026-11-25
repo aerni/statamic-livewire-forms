@@ -2,4 +2,13 @@
 
 namespace Aerni\LivewireForms\Fields;
 
-class FormUpload extends Assets {}
+use Statamic\Forms\Uploaders\AssetsUploader;
+use Statamic\Forms\Uploaders\FilesUploader;
+
+class FormUpload extends Assets
+{
+    protected function uploader(): string
+    {
+        return $this->field->get('store') ? AssetsUploader::class : FilesUploader::class;
+    }
+}

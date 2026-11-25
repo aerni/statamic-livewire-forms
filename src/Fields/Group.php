@@ -3,7 +3,6 @@
 namespace Aerni\LivewireForms\Fields;
 
 use Illuminate\Support\Collection;
-use Illuminate\Support\Str;
 use Livewire\Livewire;
 use Statamic\Fields\Field as StatamicField;
 
@@ -22,7 +21,6 @@ class Group extends Field
         $model = invade(Livewire::current())->makeFieldFromModel($field);
 
         return $model->properties([
-            ...$model->properties(),
             'key' => "{$this->key}.{$field->handle()}",
             'id' => "{$this->id}-{$field->handle()}",
         ]);
@@ -39,12 +37,9 @@ class Group extends Field
             return parent::rulesProperty($rules);
         }
 
-        /* The group's rules also contain the rules of its nested fields, e.g. "group.name". */
-        return collect($this->field->rules())
-            ->mapWithKeys(fn ($rules, $handle) => [
-                $this->key.Str::after($handle, $this->handle) => $rules,
-            ])
-            ->toArray();
+        return $this->fields()
+            ->mapWithKeys(fn (Field $field) => $field->rules)
+            ->all();
     }
 
     public function validationAttributes(): array

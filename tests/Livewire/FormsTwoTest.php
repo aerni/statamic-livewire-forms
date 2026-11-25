@@ -50,11 +50,52 @@ beforeEach(function () {
 
 afterEach(function () {
     StatamicForm::find('survey')?->delete();
+    StatamicForm::find('catalog')?->delete();
 });
 
 it('renders a form containing every fieldtype', function () {
     Livewire::test(BaseForm::class, ['handle' => 'survey'])
         ->assertStatus(200);
+});
+
+it('renders every forms 2 fieldtype', function () {
+    StatamicForm::make('catalog')->formFields([
+        'fields' => [
+            ['handle' => 'full_name', 'field' => ['type' => 'name', 'display' => 'Full name']],
+            ['handle' => 'email', 'field' => ['type' => 'email', 'display' => 'Email']],
+            ['handle' => 'phone', 'field' => ['type' => 'phone', 'display' => 'Phone']],
+            ['handle' => 'website', 'field' => ['type' => 'website', 'display' => 'Website']],
+            ['handle' => 'age', 'field' => ['type' => 'number', 'display' => 'Age', 'min' => 0, 'max' => 120]],
+            ['handle' => 'price', 'field' => ['type' => 'currency', 'display' => 'Price', 'currency' => 'USD']],
+            ['handle' => 'country', 'field' => ['type' => 'dictionary', 'display' => 'Country', 'dictionary' => 'countries']],
+            ['handle' => 'when', 'field' => ['type' => 'time_picker', 'display' => 'When', 'seconds_enabled' => true]],
+            ['handle' => 'schedule', 'field' => ['type' => 'group', 'display' => 'Schedule', 'fields' => [
+                ['handle' => 'starts_at', 'field' => ['type' => 'time_picker', 'display' => 'Starts', 'validate' => 'required']],
+            ]]],
+            ['handle' => 'notice', 'field' => ['type' => 'banner', 'display' => 'Heads up', 'content' => 'Please **read** this', 'state' => 'warning']],
+            ['handle' => 'priorities', 'field' => ['type' => 'ranking', 'display' => 'Priorities', 'options' => ['speed' => 'Speed']]],
+        ],
+    ])->save();
+
+    $component = Livewire::test(BaseForm::class, ['handle' => 'catalog'])
+        ->assertSuccessful()
+        ->assertSee('autocomplete="name"', false)
+        ->assertSee('type="email"', false)
+        ->assertSee('type="tel"', false)
+        ->assertSee('type="url"', false)
+        ->assertSee('min="0"', false)
+        ->assertSee('max="120"', false)
+        ->assertSee('step="0.01"', false)
+        ->assertSee('step="1"', false)
+        ->assertSee('<strong>read</strong>', false)
+        ->assertSee('bg-yellow-50', false)
+        ->assertSee('$wire.get(', false);
+
+    $rules = $component->instance()->fields->get('schedule')->rules['fields.schedule.value.starts_at'];
+
+    expect($component->instance()->fields->get('price'))->toBeInstanceOf(Fields\FloatVal::class)
+        ->and($rules)->toContain('date_format:H:i')
+        ->and(collect($rules)->every(fn ($rule) => is_string($rule)))->toBeTrue();
 });
 
 it('resolves the field models of the new fieldtypes', function () {

@@ -18,6 +18,7 @@ return [
         Statamic\Fieldtypes\Date::class => Aerni\LivewireForms\Fields\Date::class,
         Statamic\Fieldtypes\Dictionary::class => Aerni\LivewireForms\Fields\Dictionary::class,
         Statamic\Fieldtypes\Files::class => Aerni\LivewireForms\Fields\Files::class,
+        Statamic\Fieldtypes\Floatval::class => Aerni\LivewireForms\Fields\FloatVal::class,
         Statamic\Fieldtypes\FormHeading::class => Aerni\LivewireForms\Fields\FormHeading::class,
         Statamic\Fieldtypes\FormParagraph::class => Aerni\LivewireForms\Fields\Html::class,
         Statamic\Fieldtypes\FormUpload::class => Aerni\LivewireForms\Fields\FormUpload::class,

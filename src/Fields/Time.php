@@ -13,6 +13,11 @@ class Time extends Field
         return 'time';
     }
 
+    protected function stepProperty(): ?int
+    {
+        return $this->field->get('seconds_enabled') ? 1 : null;
+    }
+
     /**
      * Statamic's TimeFieldtype rule object can't be serialized by Livewire,
      * which is why we swap it out for the equivalent string-based rule.

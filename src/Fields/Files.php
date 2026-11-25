@@ -2,4 +2,12 @@
 
 namespace Aerni\LivewireForms\Fields;
 
-class Files extends Assets {}
+use Statamic\Forms\Uploaders\FilesUploader;
+
+class Files extends Assets
+{
+    protected function uploader(): string
+    {
+        return FilesUploader::class;
+    }
+}
