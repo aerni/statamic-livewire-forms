@@ -10,25 +10,38 @@ Alpine.data('form', () => ({
     },
 
     processFields(fields) {
-        const values = Object.entries(fields).reduce((fields, [key, field]) => {
-            fields[key] = field.value
+        const entries = Object.entries(fields)
 
-            return fields
-        }, {})
+        const values = Object.fromEntries(entries.map(([handle, field]) => [handle, field.value]))
 
-        return Object.entries(fields).reduce((fields, [key, field]) => {
-            const passesConditions = new FieldConditions().showField(field.properties.conditions, values, key)
+        return entries.reduce((processed, [handle, field]) => this.processField({
+            conditions: field.properties.conditions,
+            hidden: field.properties.hidden,
+            always_save: field.properties.always_save,
+            fields: field.properties.fields,
+            section: field.section,
+        }, handle, values, processed), {})
+    },
 
-            fields[key] = {
-                visible: passesConditions && !field.properties.hidden,
-                submittable: field.properties.always_save || passesConditions,
-                section: field.section
-            }
+    processField(field, path, values, processed) {
+        const passesConditions = new FieldConditions().showField(field.conditions, values, path)
 
-            this.$wire.submittableFields[key] = fields[key].submittable
+        processed[path] = {
+            visible: passesConditions && !field.hidden,
+            submittable: field.always_save || passesConditions,
+            section: field.section ?? null,
+        }
 
-            return fields
-        }, {})
+        this.$wire.submittableFields[path] = processed[path].submittable
+
+        field.fields?.forEach((child) => this.processField(
+            child,
+            `${path}.${child.handle}`,
+            values,
+            processed,
+        ))
+
+        return processed
     },
 
     processSections(fields) {

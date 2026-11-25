@@ -29,17 +29,15 @@ trait HandlesSubmission
 
     protected function submittableData(): array
     {
-        return $this->fields
-            ->filter(fn ($field) => $this->submittableFields[$field->handle] && ! $field instanceof Assets)
-            ->map(fn ($field) => $field->value())
+        return $this->submittableValues()
+            ->reject(fn ($value, $handle) => $this->fields->get($handle) instanceof Assets)
             ->all();
     }
 
     protected function submittableFiles(): array
     {
-        return $this->fields
-            ->filter(fn ($field) => $this->submittableFields[$field->handle] && $field instanceof Assets)
-            ->map(fn ($field) => $field->value())
+        return $this->submittableValues()
+            ->filter(fn ($value, $handle) => $this->fields->get($handle) instanceof Assets)
             ->filter()
             ->all();
     }

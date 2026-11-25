@@ -9,6 +9,7 @@
         <div class="grid grid-cols-1 gap-4 md:grid-cols-12">
             @foreach($field->fields() as $groupField)
                 <div
+                    x-show="showField('{{ $groupField->field_path }}')"
                     wire:key="{{ $groupField->id }}"
                     class="flex flex-col gap-y-2 col-span-1
                         {{ $groupField->width === 25 ? 'md:col-span-3' : '' }}

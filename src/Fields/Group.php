@@ -23,7 +23,25 @@ class Group extends Field
         return $model->properties([
             'key' => "{$this->key}.{$field->handle()}",
             'id' => "{$this->id}-{$field->handle()}",
+            'field_path' => "{$this->fieldPath()}.{$field->handle()}",
         ]);
+    }
+
+    /**
+     * Nested fields the browser needs in order to evaluate their conditions.
+     */
+    protected function fieldsProperty(): array
+    {
+        return $this->fields()
+            ->map(fn (Field $field) => [
+                'handle' => $field->handle,
+                'conditions' => $field->conditions,
+                'hidden' => $field->hidden,
+                'always_save' => $field->always_save,
+                ...($field instanceof self ? ['fields' => $field->fields] : []),
+            ])
+            ->values()
+            ->all();
     }
 
     protected function defaultProperty(mixed $default = null): array

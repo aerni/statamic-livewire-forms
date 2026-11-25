@@ -46,6 +46,11 @@ abstract class Field implements Arrayable
         return $this;
     }
 
+    public function fieldPath(): string
+    {
+        return $this->properties['field_path'] ?? $this->handle;
+    }
+
     public function section(): ?string
     {
         return Livewire::current()->sections()

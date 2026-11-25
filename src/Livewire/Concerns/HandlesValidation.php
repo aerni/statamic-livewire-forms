@@ -18,9 +18,15 @@ trait HandlesValidation
              * Statamic's suggested validation pattern: https://statamic.dev/conditional-fields#validation
              * This allows us to conditionally apply validation to conditionally shown fields using the 'sometimes' rule.
              */
-            collect($validator->getValue('fields'))
+            $fields = collect($validator->getValue('fields'))
                 ->filter(fn ($value, $field) => $this->submittableFields[$field])
-                ->pipe(fn ($fields) => $validator->setValue('fields', $fields));
+                ->map(fn ($field, $handle) => [
+                    ...$field,
+                    'value' => $this->submittableValue($field['value'], $handle),
+                ])
+                ->all();
+
+            $validator->setValue('fields', $fields);
 
             /**
              * Validation errors in a Wizard form need special treatment.

@@ -18,6 +18,7 @@ afterEach(function () {
     StatamicForm::find('contact')?->delete();
     StatamicForm::find('other')?->delete();
     StatamicForm::find('survey')?->delete();
+    StatamicForm::find('grouped')?->delete();
 });
 
 it('renders dynamic-form successfully', function () {
@@ -135,6 +136,68 @@ it('maps every indexed upload error onto the upload field', function () {
                 'The resume failed to upload.',
             ],
         ]);
+});
+
+it('applies conditions to fields inside a group', function () {
+    StatamicForm::make('grouped')->formFields([
+        'fields' => [
+            ['handle' => 'address', 'field' => ['type' => 'group', 'fields' => [
+                ['handle' => 'city', 'field' => ['type' => 'short_answer']],
+                ['handle' => 'street', 'field' => [
+                    'type' => 'short_answer',
+                    'validate' => 'sometimes|required',
+                    'if' => ['city' => 'equals London'],
+                ]],
+                ['handle' => 'location', 'field' => ['type' => 'group', 'fields' => [
+                    ['handle' => 'city', 'field' => [
+                        'type' => 'short_answer',
+                        'if' => ['city' => 'equals London'],
+                    ]],
+                ]]],
+            ]]],
+        ],
+    ])->save();
+
+    Livewire::test(BaseForm::class, ['handle' => 'grouped'])
+        ->assertSee("showField('address.street')", false)
+        ->assertSee("showField('address.location.city')", false)
+        ->set('submittableFields', [
+            'address' => true,
+            'address.street' => false,
+            'address.location.city' => false,
+            'honeypot' => true,
+        ])
+        ->set('fields.address.value', [
+            'city' => 'Paris',
+            'street' => '',
+            'location' => ['city' => 'Paris'],
+        ])
+        ->call('submit')
+        ->assertHasNoErrors();
+
+    expect(StatamicForm::find('grouped')->submissions()->first()->get('address'))->toEqual([
+        'city' => 'Paris',
+    ]);
+});
+
+it('still validates a visible field inside a group', function () {
+    StatamicForm::make('grouped')->formFields([
+        'fields' => [
+            ['handle' => 'address', 'field' => ['type' => 'group', 'fields' => [
+                ['handle' => 'street', 'field' => ['type' => 'short_answer', 'validate' => 'required']],
+            ]]],
+        ],
+    ])->save();
+
+    Livewire::test(BaseForm::class, ['handle' => 'grouped'])
+        ->set('submittableFields', [
+            'address' => true,
+            'address.street' => true,
+            'honeypot' => true,
+        ])
+        ->set('fields.address.value', ['street' => ''])
+        ->call('submit')
+        ->assertHasErrors('fields.address.value.street');
 });
 
 function contactForm(): void
