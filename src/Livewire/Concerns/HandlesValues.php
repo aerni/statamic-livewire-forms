@@ -2,18 +2,11 @@
 
 namespace Aerni\LivewireForms\Livewire\Concerns;
 
-use Illuminate\Support\Collection;
-
 trait HandlesValues
 {
     use WithFileUploads;
 
     public array $submittableFields = [];
-
-    protected function values(): Collection
-    {
-        return $this->fields->map(fn ($field) => $field->value());
-    }
 
     protected function resetValues(): void
     {
