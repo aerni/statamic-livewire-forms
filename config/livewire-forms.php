@@ -19,6 +19,7 @@ return [
         Statamic\Fieldtypes\Dictionary::class => Aerni\LivewireForms\Fields\Dictionary::class,
         Statamic\Fieldtypes\Files::class => Aerni\LivewireForms\Fields\Files::class,
         Statamic\Fieldtypes\FormHeading::class => Aerni\LivewireForms\Fields\FormHeading::class,
+        Statamic\Fieldtypes\FormParagraph::class => Aerni\LivewireForms\Fields\Html::class,
         Statamic\Fieldtypes\FormUpload::class => Aerni\LivewireForms\Fields\FormUpload::class,
         Statamic\Fieldtypes\Group::class => Aerni\LivewireForms\Fields\Group::class,
         Statamic\Fieldtypes\Hidden::class => Aerni\LivewireForms\Fields\Hidden::class,
@@ -36,6 +37,7 @@ return [
         Statamic\Fieldtypes\Textarea::class => Aerni\LivewireForms\Fields\Textarea::class,
         Statamic\Fieldtypes\Time::class => Aerni\LivewireForms\Fields\Time::class,
         Statamic\Fieldtypes\Toggle::class => Aerni\LivewireForms\Fields\Toggle::class,
+        Statamic\Fieldtypes\YesNo::class => Aerni\LivewireForms\Fields\Radio::class,
     ],
 
     /*
