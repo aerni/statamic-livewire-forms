@@ -239,7 +239,7 @@ You may manually override a field's view by adding `view: {the_name_of_the_view}
 
 ## Components
 
-Sometimes, you need more control over your form. For instance, if you want to dynamically populate a select field's options. There are a couple of concepts that help you customize your form experience.
+Sometimes, you need more control over your form. For instance, if you want to dynamically populate a dropdown's options. There are a couple of concepts that help you customize your form experience.
 
 #### Creating a component
 
@@ -279,13 +279,13 @@ You can also explicitly load a custom component by name like you would with any 
 
 Each Statamic fieldtype is mapped to a Livewire Forms field model. Models are responsible for generating a field's properties like `view`, `display`, `instructions`, `options`, and so on. You can find the default mappings in `config/livewire-forms.php`.
 
-For instance, all the fields of type `\Statamic\Fieldtypes\Select::class` are bound to the `\Aerni\LivewireForms\Fields\Select::class` model. A field property is created for each model method ending with `Property`, e.g. `optionsProperty()` will generate an `options` property.
+For instance, all the fields of type `\Statamic\Forms\Fieldtypes\Dropdown::class` are bound to the `\Aerni\LivewireForms\Fields\Dropdown::class` model. A field property is created for each model method ending with `Property`, e.g. `optionsProperty()` will generate an `options` property.
 
 To change a field's default model, simply change the binding in the `models` property in your component:
 
 ```php
 protected array $models = [
-    \Statamic\Fieldtypes\Select::class => \App\Fields\Select::class,
+    \Statamic\Forms\Fieldtypes\Dropdown::class => \App\Fields\Dropdown::class,
 ];
 ```
 
@@ -293,7 +293,7 @@ If you want to change a model for a specific field only, simply use the field's 
 
 ```php
 protected array $models = [
-    'products' => \App\Fields\SelectProduct::class,
+    'products' => \App\Fields\ProductDropdown::class,
 ];
 ```
 
@@ -358,21 +358,21 @@ public function handle(FormSubmitted $event)
 
 ### Customization Example
 
-In the following example we want to dynamically generate the options of a select field based on the entries of a Statamic collection. We also want to change the view of the field because the design needs to be different to a regular select field. There are two ways to achieve our task. We can either create a `custom field model` or use the `hydratedFields` callback. Choose whichever route feels better to you.
+In the following example we want to dynamically generate the options of a dropdown based on the entries of a Statamic collection. We also want to change the view of the field because the design needs to be different to a regular dropdown. There are two ways to achieve our task. We can either create a `custom field model` or use the `hydratedFields` callback. Choose whichever route feels better to you.
 
 #### Using a custom field model
 
-We start by creating a new `SelectProduct` field model class that extends the default `Select` model class. We then override the `optionsProperty` method to return our options from a collection. We also assign a different view using the `$view` class property.
+We start by creating a new `ProductDropdown` field model class that extends the default `Dropdown` model class. We then override the `optionsProperty` method to return our options from a collection. We also assign a different view using the `$view` class property.
 
 ```php
 namespace App\Fields;
 
-use Aerni\LivewireForms\Fields\Select;
+use Aerni\LivewireForms\Fields\Dropdown;
 use Statamic\Facades\Entry;
 
-class SelectProduct extends Select
+class ProductDropdown extends Dropdown
 {
-    protected string $view = 'select_product';
+    protected string $view = 'product_dropdown';
 
     public function optionsProperty(): array
     {
@@ -383,7 +383,7 @@ class SelectProduct extends Select
 }
 ```
 
-Next, we need to tell the form which field we want to use the `SelectProduct` model for. In our case, we only want to use the `SelectProduct` model for the select field with the handle `products`.
+Next, we need to tell the form which field we want to use the `ProductDropdown` model for. In our case, we only want to use the `ProductDropdown` model for the dropdown with the handle `products`.
 
 ```php
 namespace App\Livewire;
@@ -393,7 +393,7 @@ use Aerni\LivewireForms\Livewire\Form;
 class ContactForm extends Form
 {
     protected array $models = [
-        'products' => \App\Fields\SelectProduct::class,
+        'products' => \App\Fields\ProductDropdown::class,
     ];
 }
 ```
@@ -417,7 +417,7 @@ class ContactForm extends Form
 
         $fields->get('products')
             ->options($options)
-            ->view('select_product');
+            ->view('product_dropdown');
     }
 }
 ```

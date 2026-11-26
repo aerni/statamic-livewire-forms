@@ -3,7 +3,7 @@
 namespace Aerni\LivewireForms\Livewire;
 
 use Aerni\LivewireForms\Facades\ViewManager;
-use Aerni\LivewireForms\Fields\Assets;
+use Aerni\LivewireForms\Fields\Upload;
 use Aerni\LivewireForms\Fields\Captcha;
 use Aerni\LivewireForms\Livewire\Concerns\SubmitsForm;
 use Aerni\LivewireForms\Livewire\Concerns\WithFields;
@@ -47,7 +47,7 @@ class BaseForm extends Component
         $styles = collect();
         $scripts = collect(['/vendor/livewire-forms/js/form.js']);
 
-        if ($this->fields->contains(fn ($field) => $field instanceof Assets)) {
+        if ($this->fields->contains(fn ($field) => $field instanceof Upload)) {
             $styles->push('/vendor/livewire-forms/css/filepond.css');
             $scripts->push('/vendor/livewire-forms/js/filepond.js');
         }

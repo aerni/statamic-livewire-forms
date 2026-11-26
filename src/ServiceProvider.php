@@ -13,6 +13,28 @@ use Illuminate\Support\Facades\Validator;
 use Livewire\Livewire;
 use Statamic\Facades\Form;
 use Statamic\Fields\Section;
+use Statamic\Forms\Fieldtypes\Checkboxes;
+use Statamic\Forms\Fieldtypes\Currency;
+use Statamic\Forms\Fieldtypes\DatePicker;
+use Statamic\Forms\Fieldtypes\Dictionary;
+use Statamic\Forms\Fieldtypes\Dropdown;
+use Statamic\Forms\Fieldtypes\Email;
+use Statamic\Forms\Fieldtypes\Group;
+use Statamic\Forms\Fieldtypes\ImageChoice;
+use Statamic\Forms\Fieldtypes\LongAnswer;
+use Statamic\Forms\Fieldtypes\MultiChoice;
+use Statamic\Forms\Fieldtypes\Name;
+use Statamic\Forms\Fieldtypes\Number;
+use Statamic\Forms\Fieldtypes\OpinionScale;
+use Statamic\Forms\Fieldtypes\Phone;
+use Statamic\Forms\Fieldtypes\Ranking;
+use Statamic\Forms\Fieldtypes\ShortAnswer;
+use Statamic\Forms\Fieldtypes\StarRating;
+use Statamic\Forms\Fieldtypes\TimePicker;
+use Statamic\Forms\Fieldtypes\Toggle;
+use Statamic\Forms\Fieldtypes\Upload;
+use Statamic\Forms\Fieldtypes\Website;
+use Statamic\Forms\Fieldtypes\YesNo;
 use Statamic\Providers\AddonServiceProvider;
 
 class ServiceProvider extends AddonServiceProvider
@@ -26,6 +48,11 @@ class ServiceProvider extends AddonServiceProvider
 
     protected $fieldtypes = [
         Fieldtypes\Captcha::class,
+    ];
+
+    protected $formFieldtypes = [
+        Fieldtypes\Forms\Captcha::class,
+        Fieldtypes\Forms\Hidden::class,
     ];
 
     protected $publishables = [
@@ -48,7 +75,8 @@ class ServiceProvider extends AddonServiceProvider
             ->bootValidators()
             ->bootLivewire()
             ->bootSelectableFieldtypes()
-            ->bootFormConfigFields();
+            ->bootFormConfigFields()
+            ->bootFieldConfigFields();
     }
 
     protected function bootFieldModels(): self
@@ -133,6 +161,57 @@ class ServiceProvider extends AddonServiceProvider
                 'instructions' => __('The users will be redirected to this URL after the form was submitted.'),
             ],
         ]);
+
+        return $this;
+    }
+
+    protected function bootFieldConfigFields(): self
+    {
+        /* Fieldtypes that show a label and help text get Hide Label and Help Text Position. */
+        foreach ([
+            Checkboxes::class,
+            Currency::class,
+            DatePicker::class,
+            Dictionary::class,
+            Dropdown::class,
+            Email::class,
+            Group::class,
+            ImageChoice::class,
+            LongAnswer::class,
+            MultiChoice::class,
+            Name::class,
+            Number::class,
+            OpinionScale::class,
+            Phone::class,
+            Ranking::class,
+            ShortAnswer::class,
+            StarRating::class,
+            TimePicker::class,
+            Toggle::class,
+            Upload::class,
+            Website::class,
+            YesNo::class,
+            Fieldtypes\Forms\Captcha::class,
+        ] as $fieldtype) {
+            $fieldtype::appendConfigFields([
+                'hide_display' => [
+                    'display' => __('Hide Label'),
+                    'instructions' => __("Don't show the label on the form."),
+                    'type' => 'toggle',
+                    'default' => false,
+                ],
+                'instructions_position' => [
+                    'display' => __('Help Text Position'),
+                    'instructions' => __('statamic::messages.fields_instructions_position_instructions'),
+                    'type' => 'button_group',
+                    'options' => [
+                        'above' => __('Above'),
+                        'below' => __('Below'),
+                    ],
+                    'default' => 'above',
+                ],
+            ]);
+        }
 
         return $this;
     }

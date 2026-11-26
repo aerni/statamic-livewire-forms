@@ -10,16 +10,25 @@ trait HandlesValues
 
     public array $submittableFields = [];
 
-    protected function values(): Collection
-    {
-        return $this->fields->map(fn ($field) => $field->value());
-    }
-
-    protected function processedValues(): Collection
+    protected function submittableValues(): Collection
     {
         return $this->fields
             ->filter(fn ($field) => $this->submittableFields[$field->handle])
-            ->map(fn ($field) => $field->process());
+            ->map(fn ($field) => $this->submittableValue($field->value(), $this->submittableFields[$field->handle]));
+    }
+
+    protected function submittableValue(mixed $value, mixed $submittable): mixed
+    {
+        /* A non-group field has no children, so its value stays as it is. */
+        if (! is_array($value) || ! is_array($submittable)) {
+            return $value;
+        }
+
+        /* An included group lists each child. A missing child stays, and false drops it. */
+        return collect($value)
+            ->filter(fn ($child, $handle) => ($submittable[$handle] ?? true) !== false)
+            ->map(fn ($child, $handle) => $this->submittableValue($child, $submittable[$handle] ?? true))
+            ->all();
     }
 
     protected function resetValues(): void

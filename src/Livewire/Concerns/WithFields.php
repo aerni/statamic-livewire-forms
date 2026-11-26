@@ -70,21 +70,46 @@ trait WithFields
 
         throw_if($this->form->fields()->isEmpty(), new FormHasNoFieldsException($this->handle));
 
+        $formFields = $this->form->formFields()->fields();
+
         return $this->form->fields()
-            ->map(fn ($field) => $this->makeFieldFromModel($field))
+            ->each(fn (StatamicField $field) => $field->setFormField($formFields->get($field->handle())))
+            ->map(fn (StatamicField $field) => $this->makeFieldFromModel($field))
             ->put($honeypot->handle, $honeypot);
     }
 
     protected function makeFieldFromModel(StatamicField $field): Field
     {
         $fieldtype = $field->fieldtype()::class;
+        $formFieldtype = $field->formField()?->fieldtype();
 
         $class = $this->models()->get($field->handle())
+            ?? ($formFieldtype ? $this->models()->get($formFieldtype::class) : null)
+            ?? $this->legacyFieldModel($field)
             ?? $this->models()->get($fieldtype);
 
         return $class
             ? $class::make($field)
             : throw new \Exception("The field model binding for fieldtype [{$fieldtype}] cannot be found.");
+    }
+
+    /**
+     * Legacy support: An imported fieldset or a nested upload can still use a normal blueprint field.
+     * It takes the model of the form field Statamic renders that type with.
+     */
+    protected function legacyFieldModel(StatamicField $field): ?string
+    {
+        $formFieldtype = match ($field->fieldtype()::class) {
+            \Statamic\Fieldtypes\Assets\Assets::class, \Statamic\Fieldtypes\Files::class => \Statamic\Forms\Fieldtypes\Upload::class,
+            \Statamic\Fieldtypes\Integer::class => \Statamic\Forms\Fieldtypes\Number::class,
+            \Statamic\Fieldtypes\Radio::class => \Statamic\Forms\Fieldtypes\MultiChoice::class,
+            \Statamic\Fieldtypes\Select::class => \Statamic\Forms\Fieldtypes\Dropdown::class,
+            \Statamic\Fieldtypes\Text::class => \Statamic\Forms\Fieldtypes\ShortAnswer::class,
+            \Statamic\Fieldtypes\Textarea::class => \Statamic\Forms\Fieldtypes\LongAnswer::class,
+            default => null,
+        };
+
+        return $this->models()->get($formFieldtype);
     }
 
     #[Computed]

@@ -9,14 +9,11 @@ use Statamic\Fieldtypes\Assets\MaxRule;
 use Statamic\Fieldtypes\Assets\MimesRule;
 use Statamic\Fieldtypes\Assets\MimetypesRule;
 use Statamic\Fieldtypes\Assets\MinRule;
-use Statamic\Fieldtypes\Files;
-use Statamic\Forms\Uploaders\AssetsUploader;
-use Statamic\Forms\Uploaders\FilesUploader;
 use Symfony\Component\Mime\MimeTypes;
 
-class Assets extends Field
+class Upload extends Field
 {
-    protected string $view = 'assets';
+    protected string $view = 'upload';
 
     protected function defaultProperty(mixed $default = null): array
     {
@@ -71,17 +68,5 @@ class Assets extends Field
             ->flatMap(fn ($rule) => invade($rule)->parameters)
             ->mapWithKeys(fn ($dimension) => [Str::before($dimension, '=') => Str::after($dimension, '=')])
             ->toArray();
-    }
-
-    public function process(): mixed
-    {
-        $this->value = collect($this->value)
-            ->when($this->field->fieldtype() instanceof Files,
-                fn ($files) => $files->map(fn ($file) => FilesUploader::field($this->field)->upload($file)),
-                fn ($files) => $files->map(fn ($file) => AssetsUploader::field($this->field)->upload($file)),
-            )
-            ->flatten();
-
-        return parent::process();
     }
 }

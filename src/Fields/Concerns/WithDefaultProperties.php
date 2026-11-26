@@ -2,6 +2,7 @@
 
 namespace Aerni\LivewireForms\Fields\Concerns;
 
+use Aerni\LivewireForms\Fields\Properties\WithAlwaysSave;
 use Aerni\LivewireForms\Fields\Properties\WithConditions;
 use Aerni\LivewireForms\Fields\Properties\WithDefault;
 use Aerni\LivewireForms\Fields\Properties\WithDisplay;
@@ -19,6 +20,7 @@ use Aerni\LivewireForms\Fields\Properties\WithWireModel;
 
 trait WithDefaultProperties
 {
+    use WithAlwaysSave;
     use WithConditions;
     use WithDefault;
     use WithDisplay;

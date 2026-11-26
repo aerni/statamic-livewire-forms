@@ -2,68 +2,80 @@
 
 namespace Aerni\LivewireForms\Livewire\Concerns;
 
-use Illuminate\Support\Facades\URL;
+use Aerni\LivewireForms\Fields\Upload;
+use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Str;
+use Illuminate\Validation\ValidationException;
 use Statamic\Contracts\Forms\Submission;
 use Statamic\Events\FormSubmitted;
-use Statamic\Events\SubmissionCreated;
-use Statamic\Events\SubmissionCreating;
-use Statamic\Exceptions\SilentFormFailureException;
-use Statamic\Facades\Site;
-use Statamic\Forms\SendEmails;
+use Statamic\Forms\SubmitForm;
 
 trait HandlesSubmission
 {
     protected ?Submission $submission = null;
 
-    protected function handleSubmission(): self
+    protected function handleFormEvents(SubmitForm $action): void
     {
-        return $this
-            ->makeSubmission()
-            ->handleFormEvents()
-            ->saveSubmission()
-            ->sendEmails();
+        Event::listen(FormSubmitted::class, function (FormSubmitted $event) use ($action) {
+            // Forms in the same request should not cross-fire each other's hooks and events.
+            if ($event->submission !== $action->submission()) {
+                return;
+            }
+
+            $this->formSubmitted($event->submission);
+            $this->dispatch('form-submitted', data: $event->submission->data());
+        });
     }
 
-    protected function makeSubmission(): self
+    protected function submittableData(): array
     {
-        $this->submission = $this->form->makeSubmission()->data($this->processedValues());
-
-        return $this;
+        return $this->submittableValues()
+            ->reject(fn ($value, $handle) => $this->fields->get($handle) instanceof Upload)
+            ->all();
     }
 
-    protected function handleFormEvents(): self
+    protected function submittableFiles(): array
     {
-        $this->formSubmitted($this->submission);
-
-        $this->dispatch('form-submitted', data: $this->submission->data());
-
-        throw_if(FormSubmitted::dispatch($this->submission) === false, new SilentFormFailureException);
-
-        return $this;
+        return $this->submittableValues()
+            ->filter(fn ($value, $handle) => $this->fields->get($handle) instanceof Upload)
+            ->filter()
+            ->all();
     }
 
-    protected function saveSubmission(): self
+    /**
+     * Rewrite Statamic's error keys to the Livewire field keys.
+     */
+    protected function withLivewireFieldKeys(ValidationException $exception): ValidationException
     {
-        /**
-         * When the submission is saved, the same events will be dispatched.
-         * We'll also fire them here if submissions are not configured to be stored
-         * so that developers may continue to listen and modify it as needed.
-         */
-        if ($this->form->store()) {
-            $this->submission->save();
-        } else {
-            SubmissionCreating::dispatch($this->submission);
-            SubmissionCreated::dispatch($this->submission);
-        }
+        $messages = collect($exception->errors())
+            ->reduce(function (array $messages, array $errors, string $key) {
+                $handle = Str::before($key, '.');
+                $tail = Str::after($key, '.');
+                $tailIsIndex = ctype_digit($tail);
+                $targetsField = ! str_contains($key, '.') || $tailIsIndex;
 
-        return $this;
-    }
+                if ($this->fields->has($handle) && $targetsField) {
+                    // `name` becomes fields.name.value. An upload field reports each file as `resume.0`,
+                    // and that index is dropped so it uses fields.resume.value too.
+                    $livewireKey = "fields.{$handle}.value";
+                } elseif ($this->fields->has($handle)) {
+                    // `address.street` keeps its tail.
+                    $livewireKey = "fields.{$handle}.value.{$tail}";
+                } else {
+                    // Any other key is left unchanged.
+                    $livewireKey = $key;
+                }
 
-    protected function sendEmails(): self
-    {
-        SendEmails::dispatch($this->submission, Site::findByUrl(URL::previous()));
+                // Messages that share a key are kept together.
+                $messages[$livewireKey] = [
+                    ...($messages[$livewireKey] ?? []),
+                    ...$errors,
+                ];
 
-        return $this;
+                return $messages;
+            }, []);
+
+        return ValidationException::withMessages($messages);
     }
 
     public function formSubmitted(Submission $submission): void

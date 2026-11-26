@@ -1,7 +1,7 @@
 <?php
 
 use Aerni\LivewireForms\Exceptions\ReadOnlyPropertyException;
-use Aerni\LivewireForms\Fields\Text;
+use Aerni\LivewireForms\Fields\ShortAnswer;
 use Livewire\Livewire;
 use Livewire\Mechanisms\HandleComponents\HandleComponents;
 use Statamic\Facades\Blueprint;
@@ -22,11 +22,11 @@ beforeEach(function () {
 
     array_push(app(HandleComponents::class)::$componentStack, $component);
 
-    $this->field = Text::make(StatamicForm::find('contact')->fields()->get('name'));
+    $this->field = ShortAnswer::make(StatamicForm::find('contact')->fields()->get('name'));
 });
 
 afterEach(function () {
-    Blueprint::find('forms.contact')->delete();
+    Blueprint::find('forms.contact')?->delete();
     StatamicForm::find('contact')->delete();
 });
 
@@ -41,12 +41,6 @@ it('can reset the value', function () {
     $this->field->resetValue();
 
     expect($this->field->value())->toBe(null);
-});
-
-it('can process the value', function () {
-    $this->field->value('Michael');
-
-    expect($this->field->process())->toBe('Michael');
 });
 
 it('can get the validation attributes', function () {

@@ -4,13 +4,16 @@ namespace Aerni\LivewireForms\Fields;
 
 use Aerni\LivewireForms\Fields\Properties\WithAutocomplete;
 use Aerni\LivewireForms\Fields\Properties\WithPlaceholder;
-use Aerni\LivewireForms\Fields\Properties\WithRows;
 
-class Textarea extends Field
+class Number extends Field
 {
     use WithAutocomplete;
     use WithPlaceholder;
-    use WithRows;
 
-    protected string $view = 'textarea';
+    protected string $view = 'number';
+
+    protected function inputTypeProperty(): string
+    {
+        return 'number';
+    }
 }

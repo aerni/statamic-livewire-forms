@@ -2,7 +2,7 @@
 
 namespace Aerni\LivewireForms\Livewire\Concerns;
 
-use Aerni\LivewireForms\Fields\Assets;
+use Aerni\LivewireForms\Fields\Upload;
 use Livewire\WithFileUploads as BaseWithFileUploads;
 
 trait WithFileUploads
@@ -11,7 +11,7 @@ trait WithFileUploads
 
     public function restoreUpload(string $tmpFilename): array
     {
-        $file = $this->fields->whereInstanceOf(Assets::class)
+        $file = $this->fields->whereInstanceOf(Upload::class)
             ->flatMap(fn ($field) => $field->value())
             ->first(fn ($field) => $tmpFilename === $field->getFilename());
 

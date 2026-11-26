@@ -57,6 +57,6 @@ it('can check if a view exists', function () {
 });
 
 it('can check if a theme view exists', function () {
-    expect(ViewManager::themeViewExists('default', 'fields.default'))->toBeTrue();
+    expect(ViewManager::themeViewExists('default', 'fields.short_answer'))->toBeTrue();
     expect(ViewManager::themeViewExists('default', 'fields.nope'))->toBeFalse();
 });

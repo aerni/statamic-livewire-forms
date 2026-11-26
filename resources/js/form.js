@@ -10,25 +10,43 @@ Alpine.data('form', () => ({
     },
 
     processFields(fields) {
-        const values = Object.entries(fields).reduce((fields, [key, field]) => {
-            fields[key] = field.value
+        const entries = Object.entries(fields)
 
-            return fields
-        }, {})
+        const values = Object.fromEntries(entries.map(([handle, field]) => [handle, field.value]))
 
-        return Object.entries(fields).reduce((fields, [key, field]) => {
-            const passesConditions = new FieldConditions().showField(field.properties.conditions, values, key)
+        const processed = {}
 
-            fields[key] = {
-                visible: passesConditions && !field.properties.hidden,
-                submittable: field.properties.always_save || passesConditions,
-                section: field.section
-            }
+        this.$wire.submittableFields = Object.fromEntries(entries.map(([handle, field]) => [handle, this.processField({
+            conditions: field.properties.conditions,
+            hidden: field.properties.hidden,
+            always_save: field.properties.always_save,
+            fields: field.properties.fields,
+            section: field.section,
+        }, handle, values, processed)]))
 
-            this.$wire.submittableFields[key] = fields[key].submittable
+        return processed
+    },
 
-            return fields
-        }, {})
+    processField(field, path, values, processed) {
+        const passesConditions = new FieldConditions().showField(field.conditions, values, path)
+        const submittable = field.always_save || passesConditions
+
+        processed[path] = {
+            visible: passesConditions && !field.hidden,
+            submittable,
+            section: field.section ?? null,
+        }
+
+        if (!field.fields) {
+            return submittable
+        }
+
+        const children = Object.fromEntries(field.fields.map((child) => [
+            child.handle,
+            this.processField(child, `${path}.${child.handle}`, values, processed),
+        ]))
+
+        return submittable ? children : false
     },
 
     processSections(fields) {

@@ -4,6 +4,10 @@
     @formView('messages.instructions')
 @endif
 
+@if($field->prepend)
+    <span class="text-sm text-gray-500">{{ $field->prepend }}</span>
+@endif
+
 <input
     id="{{ $field->id }}"
     name="{{ $field->id }}"
@@ -19,6 +23,18 @@
 
     @if($field->character_limit)
         maxlength="{{ $field->character_limit }}"
+    @endif
+
+    @if($field->min !== null && $field->min !== '')
+        min="{{ $field->min }}"
+    @endif
+
+    @if($field->max !== null && $field->max !== '')
+        max="{{ $field->max }}"
+    @endif
+
+    @if($field->step !== null && $field->step !== '')
+        step="{{ $field->step }}"
     @endif
 
     @if($field->wire_model)

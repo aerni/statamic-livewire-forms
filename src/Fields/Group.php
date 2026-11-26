@@ -1,0 +1,83 @@
+<?php
+
+namespace Aerni\LivewireForms\Fields;
+
+use Illuminate\Support\Collection;
+use Livewire\Livewire;
+use Statamic\Fields\Field as StatamicField;
+use Statamic\Forms\Fields\FormFields;
+
+class Group extends Field
+{
+    protected string $view = 'group';
+
+    public function fields(): Collection
+    {
+        return $this->field->fieldtype()->fields()->all()
+            ->pipe($this->setFormFields(...))
+            ->map(fn (StatamicField $field) => $this->makeNestedField($field));
+    }
+
+    protected function setFormFields(Collection $fields): Collection
+    {
+        $formFields = (new FormFields([
+            'sections' => [
+                ['fields' => $this->field->formField()->config()['fields'] ?? []],
+            ],
+        ]))->fields();
+
+        return $fields->each(fn (StatamicField $field) => $field->setFormField($formFields->get($field->handle())));
+    }
+
+    protected function makeNestedField(StatamicField $field): Field
+    {
+        $model = invade(Livewire::current())->makeFieldFromModel($field);
+
+        return $model->properties([
+            'key' => "{$this->key}.{$field->handle()}",
+            'id' => "{$this->id}-{$field->handle()}",
+            'field_path' => "{$this->fieldPath()}.{$field->handle()}",
+        ]);
+    }
+
+    /**
+     * Nested fields the browser needs in order to evaluate their conditions.
+     */
+    protected function fieldsProperty(): array
+    {
+        return $this->fields()
+            ->map(fn (Field $field) => [
+                'handle' => $field->handle,
+                'conditions' => $field->conditions,
+                'hidden' => $field->hidden,
+                'always_save' => $field->always_save,
+                ...($field instanceof self ? ['fields' => $field->fields] : []),
+            ])
+            ->values()
+            ->all();
+    }
+
+    protected function defaultProperty(mixed $default = null): array
+    {
+        return $default ?? $this->fields()->map(fn (Field $field) => $field->default)->toArray();
+    }
+
+    protected function rulesProperty(string|array|null $rules = null): array
+    {
+        if (! is_null($rules)) {
+            return parent::rulesProperty($rules);
+        }
+
+        return $this->fields()
+            ->mapWithKeys(fn (Field $field) => $field->rules)
+            ->all();
+    }
+
+    public function validationAttributes(): array
+    {
+        return [
+            $this->key => $this->display,
+            ...$this->fields()->mapWithKeys(fn (Field $field) => [$field->key => $field->display]),
+        ];
+    }
+}
