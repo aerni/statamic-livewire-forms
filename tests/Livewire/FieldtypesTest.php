@@ -55,7 +55,7 @@ it('renders every fieldtype', function () {
         'score' => Fields\OpinionScale::class,
         'priorities' => Fields\Ranking::class,
         'style' => Fields\ImageChoice::class,
-        'resume' => Fields\FormUpload::class,
+        'resume' => Fields\Upload::class,
         'address' => Fields\Group::class,
         'schedule' => Fields\Group::class,
         'full_name' => Fields\Text::class,

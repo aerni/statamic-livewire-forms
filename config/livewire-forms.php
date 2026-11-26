@@ -21,7 +21,7 @@ return [
         Statamic\Fieldtypes\Floatval::class => Aerni\LivewireForms\Fields\FloatVal::class,
         Statamic\Fieldtypes\FormHeading::class => Aerni\LivewireForms\Fields\FormHeading::class,
         Statamic\Fieldtypes\FormParagraph::class => Aerni\LivewireForms\Fields\Html::class,
-        Statamic\Fieldtypes\FormUpload::class => Aerni\LivewireForms\Fields\FormUpload::class,
+        Statamic\Fieldtypes\FormUpload::class => Aerni\LivewireForms\Fields\Upload::class,
         Statamic\Fieldtypes\Group::class => Aerni\LivewireForms\Fields\Group::class,
         Statamic\Fieldtypes\Hidden::class => Aerni\LivewireForms\Fields\Hidden::class,
         Statamic\Fieldtypes\Html::class => Aerni\LivewireForms\Fields\Html::class,

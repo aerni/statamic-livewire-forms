@@ -2,4 +2,7 @@
 
 namespace Aerni\LivewireForms\Fields;
 
-class Files extends Assets {}
+class Files extends Upload
+{
+    protected string $view = 'assets';
+}

@@ -2,7 +2,7 @@
 
 namespace Aerni\LivewireForms\Livewire\Concerns;
 
-use Aerni\LivewireForms\Fields\Assets;
+use Aerni\LivewireForms\Fields\Upload;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
@@ -30,14 +30,14 @@ trait HandlesSubmission
     protected function submittableData(): array
     {
         return $this->submittableValues()
-            ->reject(fn ($value, $handle) => $this->fields->get($handle) instanceof Assets)
+            ->reject(fn ($value, $handle) => $this->fields->get($handle) instanceof Upload)
             ->all();
     }
 
     protected function submittableFiles(): array
     {
         return $this->submittableValues()
-            ->filter(fn ($value, $handle) => $this->fields->get($handle) instanceof Assets)
+            ->filter(fn ($value, $handle) => $this->fields->get($handle) instanceof Upload)
             ->filter()
             ->all();
     }
