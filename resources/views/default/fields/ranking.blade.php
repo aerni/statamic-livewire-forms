@@ -23,7 +23,7 @@
                 aria-describedby="{{ $field->id }}-instructions"
             @endif
         >
-            @foreach($field->value ?? [] as $index => $key)
+            @foreach($field->value() ?? [] as $index => $key)
                 <li
                     wire:key="{{ $field->id }}-{{ $key }}"
                     class="flex items-center justify-between gap-x-3 px-3 py-2 bg-white border border-gray-300 rounded-md"
