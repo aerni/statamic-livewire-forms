@@ -93,6 +93,9 @@ it('renders captcha from the form field and leaves the response out of the submi
         'fields' => [
             ['handle' => 'name', 'field' => ['type' => 'short_answer']],
             ['handle' => 'challenge', 'field' => ['type' => 'captcha', 'display' => 'Captcha']],
+            ['handle' => 'details', 'field' => ['type' => 'group', 'fields' => [
+                ['handle' => 'nested', 'field' => ['type' => 'captcha', 'display' => 'Nested']],
+            ]]],
         ],
     ])->honeypot('winnie')->save();
 
@@ -101,17 +104,20 @@ it('renders captcha from the form field and leaves the response out of the submi
         ->set('submittableFields', [
             'name' => true,
             'challenge' => true,
+            'details' => ['nested' => true],
             'winnie' => true,
         ])
         ->set('fields.name.value', 'Ada')
         ->set('fields.challenge.value', 'token')
+        ->set('fields.details.value.nested', 'nested-token')
         ->call('submit')
         ->assertSuccessful();
 
     $submission = StatamicForm::find('gated')->submissions()->first();
 
     expect($submission->get('name'))->toBe('Ada')
-        ->and($submission->get('challenge'))->toBeNull();
+        ->and($submission->get('challenge'))->toBeNull()
+        ->and($submission->get('details'))->toEqual([]);
 
     StatamicForm::find('gated')->delete();
 });

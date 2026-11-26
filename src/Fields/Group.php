@@ -5,6 +5,7 @@ namespace Aerni\LivewireForms\Fields;
 use Illuminate\Support\Collection;
 use Livewire\Livewire;
 use Statamic\Fields\Field as StatamicField;
+use Statamic\Forms\Fields\FormFields;
 
 class Group extends Field
 {
@@ -13,7 +14,19 @@ class Group extends Field
     public function fields(): Collection
     {
         return $this->field->fieldtype()->fields()->all()
+            ->pipe($this->setFormFields(...))
             ->map(fn (StatamicField $field) => $this->makeNestedField($field));
+    }
+
+    protected function setFormFields(Collection $fields): Collection
+    {
+        $formFields = (new FormFields([
+            'sections' => [
+                ['fields' => $this->field->formField()->config()['fields'] ?? []],
+            ],
+        ]))->fields();
+
+        return $fields->each(fn (StatamicField $field) => $field->setFormField($formFields->get($field->handle())));
     }
 
     protected function makeNestedField(StatamicField $field): Field
