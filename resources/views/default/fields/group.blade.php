@@ -18,6 +18,7 @@
                         {{ $groupField->width === 66 ? 'md:col-span-8' : '' }}
                         {{ $groupField->width === 75 ? 'md:col-span-9' : '' }}
                         {{ $groupField->width === 100 ? 'md:col-span-12' : '' }}
+                        {{ $groupField->type === 'spacer' ? ($groupField->width === 100 ? 'hidden' : 'hidden md:flex') : '' }}
                     "
                 >
                     @formView($groupField->view, ['field' => $groupField])
