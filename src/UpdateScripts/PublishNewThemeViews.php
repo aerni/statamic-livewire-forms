@@ -10,7 +10,7 @@ class PublishNewThemeViews extends UpdateScript
 {
     public function shouldUpdate($newVersion, $oldVersion)
     {
-        return $this->isUpdatingTo('10.4.0');
+        return $this->isUpdatingTo('11.0.0');
     }
 
     public function update()
