@@ -50,6 +50,10 @@ class ServiceProvider extends AddonServiceProvider
         Fieldtypes\Captcha::class,
     ];
 
+    protected $formFieldtypes = [
+        Fieldtypes\Forms\Captcha::class,
+    ];
+
     protected $publishables = [
         __DIR__.'/../resources/dist/js' => 'js',
         __DIR__.'/../resources/dist/css' => 'css',
@@ -186,7 +190,7 @@ class ServiceProvider extends AddonServiceProvider
             Upload::class,
             Website::class,
             YesNo::class,
-            Fieldtypes\Captcha::class,
+            Fieldtypes\Forms\Captcha::class,
         ] as $fieldtype) {
             $fieldtype::appendConfigFields([
                 'hide_display' => [

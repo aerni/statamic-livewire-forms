@@ -35,7 +35,8 @@ class FieldSynth extends Synth
             $value[$key] = $hydrateChild($key, $child);
         }
 
-        $field = new StatamicField($value['handle'], $value['config']);
+        $field = (new StatamicField($value['handle'], $value['config']))
+            ->setFormField($this->context->component->form()->formFields()->field($value['handle']));
 
         return $meta['class']::make($field)
             ->properties($value['properties'])

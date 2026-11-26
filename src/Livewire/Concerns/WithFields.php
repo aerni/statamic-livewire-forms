@@ -70,16 +70,21 @@ trait WithFields
 
         throw_if($this->form->fields()->isEmpty(), new FormHasNoFieldsException($this->handle));
 
+        $formFields = $this->form->formFields()->fields();
+
         return $this->form->fields()
-            ->map(fn ($field) => $this->makeFieldFromModel($field))
+            ->each(fn (StatamicField $field) => $field->setFormField($formFields->get($field->handle())))
+            ->map(fn (StatamicField $field) => $this->makeFieldFromModel($field))
             ->put($honeypot->handle, $honeypot);
     }
 
     protected function makeFieldFromModel(StatamicField $field): Field
     {
         $fieldtype = $field->fieldtype()::class;
+        $formFieldtype = $field->formField()?->fieldtype();
 
         $class = $this->models()->get($field->handle())
+            ?? ($formFieldtype ? $this->models()->get($formFieldtype::class) : null)
             ?? $this->models()->get($fieldtype);
 
         return $class
