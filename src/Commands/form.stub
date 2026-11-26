@@ -39,8 +39,8 @@ class [class] extends BaseForm
     */
 
     // protected array $models = [
-    //     \Statamic\Fieldtypes\Select::class => \App\Fields\Select::class,
-    //     'product' => \App\Fields\SelectProduct::class,
+    //     \Statamic\Forms\Fieldtypes\Dropdown::class => \App\Fields\Dropdown::class,
+    //     'product' => \App\Fields\ProductDropdown::class,
     // ];
 
     /*

@@ -8,14 +8,14 @@ use Aerni\LivewireForms\Fields\Properties\WithOptions;
 use Aerni\LivewireForms\Fields\Properties\WithPlaceholder;
 use Illuminate\Support\Arr;
 
-class Select extends Field
+class Dropdown extends Field
 {
     use WithAutocomplete;
     use WithMultiple;
     use WithOptions;
     use WithPlaceholder;
 
-    protected string $view = 'select';
+    protected string $view = 'dropdown';
 
     protected function defaultProperty(mixed $default = null): string|array|null
     {
@@ -25,7 +25,7 @@ class Select extends Field
         /* A default is only valid if it exists in the options. */
         $default = collect($options)->only($default ?? [])->keys();
 
-        /* Return all defaults if the Select field has multiple enabled. */
+        /* Return all defaults when multiple values are allowed. */
         if ($this->multiple) {
             return $default->toArray();
         }

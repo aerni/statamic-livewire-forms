@@ -1,7 +1,7 @@
 <?php
 
 use Aerni\LivewireForms\Exceptions\ReadOnlyPropertyException;
-use Aerni\LivewireForms\Fields\Text;
+use Aerni\LivewireForms\Fields\ShortAnswer;
 use Livewire\Livewire;
 use Livewire\Mechanisms\HandleComponents\HandleComponents;
 use Statamic\Facades\Blueprint;
@@ -22,7 +22,7 @@ beforeEach(function () {
 
     array_push(app(HandleComponents::class)::$componentStack, $component);
 
-    $this->field = Text::make(StatamicForm::find('contact')->fields()->get('name'));
+    $this->field = ShortAnswer::make(StatamicForm::find('contact')->fields()->get('name'));
 });
 
 afterEach(function () {

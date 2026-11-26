@@ -2,9 +2,9 @@
 
 namespace Aerni\LivewireForms\Fields;
 
-class Date extends Field
+class DatePicker extends Field
 {
-    protected string $view = 'default';
+    protected string $view = 'date_picker';
 
     protected function inputTypeProperty(): string
     {

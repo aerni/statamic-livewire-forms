@@ -4,9 +4,9 @@ namespace Aerni\LivewireForms\Fields;
 
 use Statamic\Rules\TimeFieldtype;
 
-class Time extends Field
+class TimePicker extends Field
 {
-    protected string $view = 'default';
+    protected string $view = 'time_picker';
 
     protected function inputTypeProperty(): string
     {

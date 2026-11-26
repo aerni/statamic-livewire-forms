@@ -6,6 +6,7 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Livewire;
+use Statamic\Facades\Fieldset;
 use Statamic\Facades\Form as StatamicForm;
 use Statamic\Forms\DeleteTemporaryFiles;
 
@@ -29,27 +30,31 @@ it('renders every fieldtype', function () {
         ->assertSee('type="url"', false)
         ->assertSee('min="0"', false)
         ->assertSee('max="120"', false)
-        ->assertSee('step="0.01"', false)
+        ->assertSee('placeholder="0.00"', false)
+        ->assertSee('focus-within:border-indigo-500', false)
+        ->assertSee('USD', false)
         ->assertSee('step="1"', false)
         ->assertSee('<strong>read</strong>', false)
         ->assertSee('bg-yellow-50', false)
-        ->assertSee('$wire.get(', false);
+        ->assertSee('$wire.get(', false)
+        ->assertSee('Speed', false)
+        ->assertSee('Quality', false);
 
     $fields = $component->instance()->fields;
     $rules = $fields->get('schedule')->rules['fields.schedule.value.starts_at'];
 
     expect($fields->except('honeypot')->map(fn ($field) => $field::class)->all())->toEqual([
-        'name' => Fields\Text::class,
-        'about' => Fields\Textarea::class,
-        'topic' => Fields\Select::class,
-        'color' => Fields\Radio::class,
+        'name' => Fields\ShortAnswer::class,
+        'about' => Fields\LongAnswer::class,
+        'topic' => Fields\Dropdown::class,
+        'color' => Fields\MultiChoice::class,
         'interests' => Fields\Checkboxes::class,
         'newsletter' => Fields\Toggle::class,
-        'recommend' => Fields\Radio::class,
-        'birthday' => Fields\Date::class,
-        'alarm' => Fields\Time::class,
-        'age' => Fields\Integer::class,
-        'price' => Fields\FloatVal::class,
+        'recommend' => Fields\YesNo::class,
+        'birthday' => Fields\DatePicker::class,
+        'alarm' => Fields\TimePicker::class,
+        'age' => Fields\Number::class,
+        'price' => Fields\Currency::class,
         'country' => Fields\Dictionary::class,
         'rating' => Fields\StarRating::class,
         'score' => Fields\OpinionScale::class,
@@ -58,10 +63,10 @@ it('renders every fieldtype', function () {
         'resume' => Fields\Upload::class,
         'address' => Fields\Group::class,
         'schedule' => Fields\Group::class,
-        'full_name' => Fields\Text::class,
-        'email' => Fields\Text::class,
-        'phone' => Fields\Text::class,
-        'website' => Fields\Text::class,
+        'full_name' => Fields\Name::class,
+        'email' => Fields\Email::class,
+        'phone' => Fields\Phone::class,
+        'website' => Fields\Website::class,
         'intro' => Fields\FormHeading::class,
         'terms' => Fields\Html::class,
         'notice' => Fields\Info::class,
@@ -69,6 +74,64 @@ it('renders every fieldtype', function () {
     ])
         ->and($rules)->toContain('date_format:H:i')
         ->and(collect($rules)->every(fn ($rule) => is_string($rule)))->toBeTrue();
+});
+
+it('binds a currency field inside a group from the config', function () {
+    StatamicForm::make('priced')->formFields([
+        'fields' => [
+            ['handle' => 'details', 'field' => [
+                'type' => 'group',
+                'display' => 'Details',
+                'fields' => [
+                    ['handle' => 'budget', 'field' => [
+                        'type' => 'currency',
+                        'display' => 'Currency',
+                        'currency' => 'CHF',
+                    ]],
+                    ['handle' => 'costs', 'field' => [
+                        'type' => 'group',
+                        'display' => 'Costs',
+                        'fields' => [
+                            ['handle' => 'budget', 'field' => [
+                                'type' => 'currency',
+                                'display' => 'Nested currency',
+                                'currency' => 'EUR',
+                            ]],
+                        ],
+                    ]],
+                ],
+            ]],
+        ],
+    ])->save();
+
+    $markup = preg_replace('/wire:snapshot="[^"]*"/', '', Livewire::test(BaseForm::class, ['handle' => 'priced'])
+        ->call('$refresh')
+        ->html());
+
+    expect($markup)->toContain('details-budget-currency')
+        ->and($markup)->toContain('details-costs-budget-currency')
+        ->and(substr_count($markup, 'CHF'))->toBe(1)
+        ->and(substr_count($markup, 'EUR'))->toBe(1);
+
+    StatamicForm::find('priced')->delete();
+});
+
+it('omits a currency symbol that repeats the currency code', function () {
+    StatamicForm::make('priced')->formFields([
+        'fields' => [
+            ['handle' => 'budget', 'field' => [
+                'type' => 'currency',
+                'display' => 'Currency',
+                'currency' => 'CHF',
+            ]],
+        ],
+    ])->save();
+
+    $markup = preg_replace('/wire:snapshot="[^"]*"/', '', Livewire::test(BaseForm::class, ['handle' => 'priced'])->html());
+
+    expect(substr_count($markup, 'CHF'))->toBe(1);
+
+    StatamicForm::find('priced')->delete();
 });
 
 it('persists a submission with every fieldtype', function () {
@@ -139,4 +202,38 @@ it('uploads files through the upload fieldtype', function () {
 
     Storage::disk(config('statamic.system.file_uploads_disk', 'local'))
         ->assertExists("statamic/form-uploads/{$submission->id()}/resume/resume.pdf");
+});
+
+it('renders legacy fields imported from a fieldset', function () {
+    Fieldset::make('legacy_inputs')->setContents([
+        'title' => 'Legacy inputs',
+        'fields' => [
+            ['handle' => 'age', 'field' => ['type' => 'integer', 'display' => 'Age']],
+            ['handle' => 'color', 'field' => ['type' => 'radio', 'display' => 'Color', 'options' => ['red' => 'Red', 'blue' => 'Blue']]],
+            ['handle' => 'topic', 'field' => ['type' => 'select', 'display' => 'Topic', 'options' => ['support' => 'Support', 'sales' => 'Sales']]],
+            ['handle' => 'about', 'field' => ['type' => 'textarea', 'display' => 'About']],
+            ['handle' => 'note', 'field' => ['type' => 'text', 'display' => 'Note']],
+        ],
+    ])->save();
+
+    StatamicForm::make('imported')->formFields([
+        'fields' => [
+            ['import' => 'legacy_inputs'],
+        ],
+    ])->save();
+
+    $fields = Livewire::test(BaseForm::class, ['handle' => 'imported'])
+        ->assertSuccessful()
+        ->instance()->fields;
+
+    expect($fields->except('honeypot')->map(fn ($field) => $field::class)->all())->toEqual([
+        'age' => Fields\Number::class,
+        'color' => Fields\MultiChoice::class,
+        'topic' => Fields\Dropdown::class,
+        'about' => Fields\LongAnswer::class,
+        'note' => Fields\ShortAnswer::class,
+    ]);
+
+    StatamicForm::find('imported')?->delete();
+    Fieldset::find('legacy_inputs')?->delete();
 });

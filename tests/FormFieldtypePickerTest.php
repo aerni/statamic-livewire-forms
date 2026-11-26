@@ -2,7 +2,7 @@
 
 use Aerni\LivewireForms\Fields\Captcha as CaptchaField;
 use Aerni\LivewireForms\Fields\Hidden as HiddenField;
-use Aerni\LivewireForms\Fields\Text;
+use Aerni\LivewireForms\Fields\ShortAnswer;
 use Aerni\LivewireForms\Fieldtypes\Captcha as CaptchaFieldtype;
 use Aerni\LivewireForms\Fieldtypes\Forms\Captcha as CaptchaFormFieldtype;
 use Aerni\LivewireForms\Fieldtypes\Forms\Hidden as HiddenFormFieldtype;
@@ -69,17 +69,17 @@ it('keeps captcha and hidden as their original field types', function () {
 it('does not apply a model configured on the old fieldtype to the form field', function () {
     $provider = app()->getProvider(ServiceProvider::class);
     $published = [
-        CaptchaFieldtype::class => Text::class,
-        \Statamic\Fieldtypes\Hidden::class => Text::class,
+        CaptchaFieldtype::class => ShortAnswer::class,
+        \Statamic\Fieldtypes\Hidden::class => ShortAnswer::class,
     ];
 
     config(['livewire-forms.models' => $published]);
     invade($provider)->bootFieldModels();
 
     expect(config('livewire-forms.models')[CaptchaFormFieldtype::class])->toBe(CaptchaField::class)
-        ->and(config('livewire-forms.models')[CaptchaFieldtype::class])->toBe(Text::class)
+        ->and(config('livewire-forms.models')[CaptchaFieldtype::class])->toBe(ShortAnswer::class)
         ->and(config('livewire-forms.models')[HiddenFormFieldtype::class])->toBe(HiddenField::class)
-        ->and(config('livewire-forms.models')[\Statamic\Fieldtypes\Hidden::class])->toBe(Text::class);
+        ->and(config('livewire-forms.models')[\Statamic\Fieldtypes\Hidden::class])->toBe(ShortAnswer::class);
 
     config(['livewire-forms.models' => data_get(require __DIR__.'/../config/livewire-forms.php', 'models')]);
     invade($provider)->bootFieldModels();
