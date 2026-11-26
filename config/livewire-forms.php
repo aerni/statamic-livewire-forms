@@ -23,7 +23,7 @@ return [
         Statamic\Fieldtypes\FormParagraph::class => Aerni\LivewireForms\Fields\Html::class,
         Statamic\Fieldtypes\FormUpload::class => Aerni\LivewireForms\Fields\Upload::class,
         Statamic\Fieldtypes\Group::class => Aerni\LivewireForms\Fields\Group::class,
-        Statamic\Fieldtypes\Hidden::class => Aerni\LivewireForms\Fields\Hidden::class,
+        Aerni\LivewireForms\Fieldtypes\Forms\Hidden::class => Aerni\LivewireForms\Fields\Hidden::class,
         Statamic\Fieldtypes\Html::class => Aerni\LivewireForms\Fields\Html::class,
         Statamic\Fieldtypes\ImageChoice::class => Aerni\LivewireForms\Fields\ImageChoice::class,
         Statamic\Fieldtypes\Info::class => Aerni\LivewireForms\Fields\Info::class,

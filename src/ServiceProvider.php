@@ -52,6 +52,7 @@ class ServiceProvider extends AddonServiceProvider
 
     protected $formFieldtypes = [
         Fieldtypes\Forms\Captcha::class,
+        Fieldtypes\Forms\Hidden::class,
     ];
 
     protected $publishables = [
